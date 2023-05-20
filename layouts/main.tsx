@@ -27,7 +27,7 @@ const ROUTES: Route = {
 
     {
       path: '/guide',
-      name: '简易教程',
+      name: '入门指引',
       icon: <BulbOutlined />,
     },
     {

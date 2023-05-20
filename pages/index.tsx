@@ -168,8 +168,9 @@ const Index: React.FC = () => {
           {text} {`(${progress})`}
         </Text>
 
-        <Image className="ml-2 rounded-xl" width={400} src={img} />
+        <Image className="ml-2 rounded-xl" src={img} />
 
+        {hasTag && <a href={img} style={{ textDecoration: "underline" }} target="_blank">在浏览器中打开</a>}
         {hasTag && (
           <Tag
             Data={["V1", "V2", "V3", "V4"]}

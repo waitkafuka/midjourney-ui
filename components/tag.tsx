@@ -27,7 +27,7 @@ const App = ({ Data, onClick }: Props) => {
         {Data.map((tag) => (
           <CheckableTag
             className={
-              selectedTags.includes(tag) ? "bg-neutral-700" : "bg-neutral-200"
+              selectedTags.includes(tag) ? "bg-neutral-700" : "bg-neutral-200 bg-black"
             }
             key={tag}
             checked={selectedTags.includes(tag)}

@@ -1,5 +1,5 @@
 // Next.js API route support: https://nextjs.org/docs/api-routes/introduction
-import { Midjourney } from "midjourney";
+import { Midjourney } from "midjourney/";
 import { ResponseError } from "../../interfaces";
 export const config = {
   runtime: "edge",

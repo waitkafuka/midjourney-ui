@@ -6,7 +6,9 @@ import {
   SmileOutlined,
   GithubFilled,
   PictureFilled,
-
+  SendOutlined,
+  WechatOutlined,
+  BulbOutlined
 } from '@ant-design/icons'
 
 import { Route, MenuDataItem } from '@ant-design/pro-layout/lib/typing'
@@ -16,12 +18,22 @@ const ProLayout = dynamic(() => import('@ant-design/pro-layout'), {
 })
 
 const ROUTES: Route = {
-  path: '/',
   routes: [
     {
       path: '/',
-      name: 'MidJourney',
-      icon: <SmileOutlined />,
+      name: '绘画',
+      icon: <SendOutlined />,
+    },
+
+    {
+      path: '/guide',
+      name: '简易教程',
+      icon: <BulbOutlined />,
+    },
+    {
+      path: 'https://superx.chat/',
+      name: 'ChatGPT',
+      icon: <WechatOutlined />,
     },
   ],
 }
@@ -37,9 +49,23 @@ const menuHeaderRender = (
 )
 
 const menuItemRender = (options: MenuDataItem, element: React.ReactNode) => (
-  <Link href={options.path ?? '/'}>
-    {element}
-  </Link>
+  <>
+    {options.target ?
+      <a target='_blank' href={(options.path) ?? '/'} onClick={() => {
+        // if (options.target) {
+        //   window.location.href = options.target ?? '/';
+        // }
+      }}>
+        {element}
+      </a> :
+      <Link href={(options.path) ?? '/'} onClick={() => {
+        // if (options.target) {
+        //   window.location.href = options.target ?? '/';
+        // }
+      }}>
+        {element}
+      </Link>}
+  </>
 )
 
 export default function Main(children: JSX.Element) {
@@ -65,26 +91,32 @@ export default function Main(children: JSX.Element) {
     <ProConfigProvider
       dark={dark}
       hashed={false}>
+      {/* <ProLayout appList={[{
+        icon: <GithubFilled></GithubFilled>, title:"superx.chat", url:'https://'
+      }]}></ProLayout> */}
       <ProLayout
-        logo={"logo.png"}
-        title="AI Draw"
+        logo={"/mj/logo.png"}
+        title="superx.chat"
         style={{ minHeight: '100vh' }}
         route={ROUTES}
-        avatarProps={{
-          src: 'logo.png',
-          title: 'Eric',
+        // avatarProps={{
+        //   src: 'logo.png',
+        //   title: 'superx.chat',
+        // }}
+        onMenuHeaderClick={() => {
+          window.location.href = '/';
         }}
         actionsRender={(props) => {
           if (props.isMobile) return [];
           return [
-            <Link href="https://github.com/erictik/midjourney-ui" key="about">
-             <GithubFilled  style={{
-              fontSize: 24,
-             }}/>
-            </Link>,
+            // <Link href="https://github.com/erictik/midjourney-ui" key="about">
+            //  <GithubFilled  style={{
+            //   fontSize: 24,
+            //  }}/>
+            // </Link>,
           ];
         }}
-  
+
         menuItemRender={menuItemRender}
         menuFooterRender={(props) => {
           if (props?.collapsed) return undefined;
@@ -103,6 +135,6 @@ export default function Main(children: JSX.Element) {
       >
         {children}
       </ProLayout>
-    </ProConfigProvider>
+    </ProConfigProvider >
   )
 }

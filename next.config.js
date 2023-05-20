@@ -1,5 +1,6 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
+  basePath:'/mj',
   reactStrictMode: true,
   transpilePackages: ["antd"],
   trailingSlash: true,

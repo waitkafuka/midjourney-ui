@@ -10,7 +10,7 @@ const { TextArea } = Input;
 const { Text } = Typography;
 
 const Index: React.FC = () => {
-  const [inputValue, setInputValue] = useState("");
+  const [inputValue, setInputValue] = useState("mdjrny-v4 style portrait of female elf, intricate, elegant, highly detailed, digital painting, artstation, concept art, smooth, sharp focus, illustration, art by artgerm and greg rutkowski and alphonse mucha, 8k.");
   const [inputDisable, setInputDisable] = useState(false);
   const [messages, setMessages] = useState<Message[]>([]);
 
@@ -197,8 +197,10 @@ const Index: React.FC = () => {
         style={{
           height: "calc(100vh - 96px)",
         }}
+
         dataSource={messages}
         renderItem={renderMessage}
+        locale={{ emptyText: '使用当前绘画能力最强的 midjourney 来生成你的第一幅人工智能绘画作品。' }}
       />
       <div className="absolute z-10 w-3/4 xl:w-3/5 right-0 bottom-10 left-0 mx-auto ">
         <TextArea
@@ -215,7 +217,7 @@ const Index: React.FC = () => {
               e.preventDefault();
             }
           }}
-          placeholder="Start typing your main idea..."
+          placeholder="请输入你的 prompt.."
           autoSize={{ minRows: 1, maxRows: 6 }}
           style={{ paddingRight: 30 }}
         />

@@ -36,7 +36,107 @@
   --card-border-rgb: 131, 134, 135;
 }
 
+.send-prompt-btn {
+  color: #000;
+}
+
+.tag-unchecked {
+  background-color: #333;
+  color: #fff;
+}
+
+.tag-unchecked:hover {
+  /* opacity: .8; */
+}
+
+.img-list-box .ant-tag{
+  width: 50px;
+  text-align: center;
+  border-radius: 4px;
+}
+
+.operation-btn-space{
+  margin: 0 auto;
+  margin-bottom: 20px;
+}
+
+@media screen and (min-width: 769px) {
+  .ant-layout-content {
+    margin-top: 0;
+    padding: 15px 0 0 0 !important;
+  }
+
+  .list-input-container {
+    padding: 0 !important;
+  }
+
+  .img-list-box {
+    height: calc(100vh - 136px) !important;
+    padding: 0 15px;
+    margin: 0 auto;
+  }
+
+  .ant-spin-nested-loading {
+    max-width: 1000px;
+    margin: 0 auto;
+  }
+
+  .prompt-input-wrap {
+    position: absolute;
+    bottom: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+    max-width: 1000px;
+    width: 100%;
+  }
+}
+
+
+/**
+  * 在移动端
+  */
+@media (max-width: 768px) {
+  .ant-layout-content {
+    padding: 24px 10px !important;
+  }
+
+  .ant-layout-content {
+    margin-top: 0;
+    padding: 15px 0 0 0 !important;
+  }
+
+  .ant-layout-header {
+    position: fixed;
+  }
+
+  .ant-layout-content {
+    margin-top: 56px;
+    max-width: 100%;
+  }
+
+  .img-list-box {
+    height: calc(100vh - 136px - env(safe-area-inset-bottom)) !important;
+    padding: 0 15px;
+  }
+
+  .list-input-container {
+    padding: 0 !important;
+  }
+
+  .prompt-input-wrap {
+    position: fixed;
+    bottom: 20px;
+    bottom: calc(env(safe-area-inset-bottom) + 15px);
+    left: 15px;
+    right: 15px;
+  }
+}
+
 @media (prefers-color-scheme: dark) {
+  .send-prompt-btn {
+    color: #fff;
+  }
+
   :root {
     --foreground-rgb: 255, 255, 255;
     --background-start-rgb: 80, 80, 80;
@@ -127,12 +227,17 @@ a {
   margin-bottom: 16px;
 }
 
-.markdown-body h2{
+.markdown-body h2 {
   padding-bottom: 0.3em;
   font-size: 1.5em;
   border-bottom: 1px solid var(--color-border-muted);
 }
 
-.bg-black{
+.bg-black {
   background-color: #1d1d1d !important;
+}
+
+.ant-tag-checkable:not(.ant-tag-checkable-checked):hover {
+  color: #fff;
+  background-color: #000 !important;
 }

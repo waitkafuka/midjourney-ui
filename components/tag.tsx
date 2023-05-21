@@ -23,11 +23,11 @@ const App = ({ Data, onClick }: Props) => {
 
   return (
     <>
-      <Space className="ml-5" size={16} wrap>
+      <Space className="operation-btn-space" size={16} wrap>
         {Data.map((tag) => (
           <CheckableTag
             className={
-              selectedTags.includes(tag) ? "bg-neutral-700" : "bg-neutral-200 bg-black"
+              selectedTags.includes(tag) ? "tag-checked" : "tag-unchecked"
             }
             key={tag}
             checked={selectedTags.includes(tag)}

@@ -20,7 +20,7 @@ const Index: React.FC = () => {
 
     return (
         <div className="markdown-body">
-            <h2 dir="auto">示例</h2>
+            <h2>示例</h2>
             {imgList.map(({ prompt, image }) => {
                 return <>
                     <blockquote>
@@ -29,6 +29,10 @@ const Index: React.FC = () => {
 
                     <p dir="auto"><img alt="midjourney" src={image} /></p></>
             })}
+            <h2>指令解释</h2>
+            图片生成之后，界面上有 V1-V4，U1-U4 8 个按钮。其中数字 1-4 指的是图片编号，第几张图片。  <br />
+            V指的是：Variation，指针对这张图片进行变体；  <br />
+            U指的是：Upscale，指针对这张图片放大和填充更多细节。当你挑出满意的图片之后可以使用 U 指令进行单张图片的细化；
             {/* <p>更多用法，请询问 ChatGPT</p> */}
         </div>
     );

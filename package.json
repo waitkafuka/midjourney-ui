@@ -36,10 +36,12 @@
   "dependencies": {
     "@ant-design/pro-components": "^2.4.9",
     "@ant-design/pro-layout": "^7.10.3",
+    "@reduxjs/toolkit": "1.9.5",
     "axios": "^1.3.6",
     "eventsource-parser": "^1.0.0",
     "midjourney": "2.1.30",
-    "next": "^13.1.1"
+    "next": "^13.1.1",
+    "react-redux": "8.0.5"
   },
   "keywords": [
     "midjourney-api",

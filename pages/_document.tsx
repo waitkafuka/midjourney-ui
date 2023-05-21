@@ -24,16 +24,13 @@ export default class MyDocument extends Document {
         <Head >
           <link
             rel="icon"
-            href="/favicon.png"
-          />
-          <meta
-            name="viewport"
-            content="width=device-width,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no"
+            href="/mj/logo.png"
           />
         </Head>
         <body>
           <Main />
           <NextScript />
+          <script async src="/baidutongji.js"></script>
         </body>
       </Html>
     );

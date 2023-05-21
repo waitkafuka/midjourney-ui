@@ -1,6 +1,11 @@
 import dynamic from 'next/dynamic'
 import Link from 'next/link'
 import React, { useEffect, useState } from 'react';
+import { Button } from 'antd';
+import Head from 'next/head';
+import store from '../store'
+import { Dropdown } from 'antd';
+import type { MenuProps } from 'antd';
 
 import {
   SmileOutlined,
@@ -13,6 +18,7 @@ import {
 
 import { Route, MenuDataItem } from '@ant-design/pro-layout/lib/typing'
 import { PageContainer, ProConfigProvider } from '@ant-design/pro-components';
+import { requestAliyun } from '../request/http';
 const ProLayout = dynamic(() => import('@ant-design/pro-layout'), {
   ssr: false,
 })
@@ -32,6 +38,7 @@ const ROUTES: Route = {
     },
     {
       path: 'https://superx.chat/',
+      target: '_blank',
       name: 'ChatGPT',
       icon: <WechatOutlined />,
     },
@@ -70,6 +77,43 @@ const menuItemRender = (options: MenuDataItem, element: React.ReactNode) => (
 
 export default function Main(children: JSX.Element) {
   const [dark, setDark] = useState(false);
+  const [user, setUser] = useState({} as any);
+  // const user = useSelector((state: any) => state.user.info);
+  store.subscribe(() => {
+    setUser(store.getState().user.info)
+
+  })
+
+  const items: MenuProps['items'] = [
+    {
+      key: '2',
+      label: (
+        <Button type="text" block onClick={async () => {
+          window.location.href = `https://superx.chat/pay.html?email=${user.email}`;
+        }}>
+          开通包月
+        </Button>
+      ),
+    },
+    {
+      key: '1',
+      label: (
+        <Button type="text" block onClick={async () => {
+          if (user.email) {
+            // 退出登录
+            await requestAliyun(`logout`, null, 'GET');
+            store.dispatch({
+              type: 'user/setUserInfo',
+              payload: {}
+            })
+          }
+        }}>
+          退出
+        </Button>
+      ),
+    },
+
+  ];
   useEffect(() => {
     // Check the theme when the user first visits the page
     if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
@@ -88,53 +132,80 @@ export default function Main(children: JSX.Element) {
   }, []);
 
   return (
-    <ProConfigProvider
-      dark={dark}
-      hashed={false}>
-      {/* <ProLayout appList={[{
+    <>
+      <Head>
+        <meta
+          name="description"
+          content="ChatGPT原版镜像。国内可快速访问。比官方ChatGPT更好用，速度更快，错误更少，模型能力完全一致。"
+        />
+        <meta
+          name="keywords"
+          content="ChatGPT,国内ChatGPT,ChatGPT免注册,ChatGPT在线体验,ChatGPT免登录,ChatGPT镜像,ChatGPT国内镜像"
+        />
+        <meta
+          name="viewport"
+          content="width=device-width,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no"
+        />
+      </Head>
+      <ProConfigProvider
+        dark={dark}
+        hashed={false}>
+        {/* <ProLayout appList={[{
         icon: <GithubFilled></GithubFilled>, title:"superx.chat", url:'https://'
       }]}></ProLayout> */}
-      <ProLayout
-        logo={"/mj/logo.png"}
-        title="superx.chat"
-        style={{ minHeight: '100vh' }}
-        route={ROUTES}
-        // avatarProps={{
-        //   src: 'logo.png',
-        //   title: 'superx.chat',
-        // }}
-        onMenuHeaderClick={() => {
-          window.location.href = '/';
-        }}
-        actionsRender={(props) => {
-          if (props.isMobile) return [];
-          return [
-            // <Link href="https://github.com/erictik/midjourney-ui" key="about">
-            //  <GithubFilled  style={{
-            //   fontSize: 24,
-            //  }}/>
-            // </Link>,
-          ];
-        }}
+        <ProLayout
+          logo={"/mj/logo.png"}
+          title="superx.chat"
+          style={{ minHeight: '100vh' }}
+          route={ROUTES}
+          // avatarProps={{
+          //   src: 'logo.png',
+          //   title: 'superx.chat',
+          // }}
+          onMenuHeaderClick={() => {
+            window.location.href = '/';
+          }}
+          actionsRender={(props) => {
+            if (props.isMobile) return [];
+            return [
+              // <Link href="https://superx.chat/login" key="about">
+              //   登录
+              //   {/* <GithubFilled  style={{
+              //   fontSize: 24,
+              //  }}/> */}
+              // </Link>,
+            ];
+          }}
 
-        menuItemRender={menuItemRender}
-        menuFooterRender={(props) => {
-          if (props?.collapsed) return undefined;
-          return (
-            <p
-              style={{
-                textAlign: 'center',
-                paddingBlockStart: 12,
-              }}
-            >
-              Power by Midjourney
-            </p>
-          );
-        }}
-        menuHeaderRender={menuHeaderRender}
-      >
-        {children}
-      </ProLayout>
-    </ProConfigProvider >
+          menuItemRender={menuItemRender}
+          menuFooterRender={(props) => {
+            if (props?.collapsed) return undefined;
+            return (
+              <>
+                {user && user.email ? <Dropdown menu={{ items }} placement="top" arrow={{ pointAtCenter: true }}>
+                  <Button block>{user.email}</Button>
+                </Dropdown> : <Button block onClick={() => {
+                  window.location.href = 'https://superx.chat/login?redirect=/mj'
+                }}>
+                  登录
+                </Button>}
+
+                <p
+                  style={{
+                    textAlign: 'center',
+                    paddingBlockStart: 12,
+                  }}
+                >
+                  Power by Midjourney
+                </p>
+              </>
+            );
+          }}
+          menuHeaderRender={menuHeaderRender}
+        >
+          {children}
+        </ProLayout>
+      </ProConfigProvider >
+    </>
   )
 }

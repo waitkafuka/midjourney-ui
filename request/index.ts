@@ -12,6 +12,9 @@ const streamFetch = async (
     },
     body,
   });
+  if(!response.ok) {
+    throw new Error(`HTTP error! status: ${response.status}`);
+  }
   const reader = response.body?.getReader();
   let buffer = "";
   if (reader) {
@@ -39,6 +42,7 @@ const streamFetch = async (
       buffer = buffer.slice(startIdx);
     }
   } else {
+    alert('接口超时，请重新发起请求。如要刷新页面，请提前下载您的图片。')
     console.log("Response body is null");
   }
 };

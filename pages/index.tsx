@@ -335,7 +335,7 @@ const Index: React.FC = () => {
               e.preventDefault();
             }
           }}
-          placeholder="请输入你的 prompt...（例如：a cat。支持中文。如果您输入中文，生成时系统将自动为您翻译为英文。可以使用ChatGPT生成你的prompt。）"
+          placeholder="请描述你要绘画的作品。（例如：a cat。midjourney本身不支持中文，但您仍然可以输入中文，生成时系统将自动为您翻译为英文。可以使用ChatGPT生成你的提示词prompt。）"
           autoSize={{ minRows: 1, maxRows: 6 }}
           style={{ paddingRight: 30 }}
         />

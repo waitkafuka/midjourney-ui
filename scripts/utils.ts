@@ -20,3 +20,13 @@ export const downloadFile = (url: string, filename: string = 'midjourney.png') =
     };
     img.src = url;
 }
+
+/**
+ * 检测字符串是否包含中文
+ * @param str 
+ * @returns 
+ */
+export const hasChinese = function (str: string) {
+    var reg = /[\u4E00-\u9FA5\uF900-\uFA2D]/;
+    return reg.test(str);
+}

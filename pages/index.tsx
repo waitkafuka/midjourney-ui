@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Input, Button, List, Image, Typography, message } from "antd";
+import { Input, Button, List, Image, Typography, message, Modal } from "antd";
 import { SendOutlined } from "@ant-design/icons";
 import { Imagine, Upscale, Variation } from "../request";
 import { MJMessage } from "midjourney";
@@ -9,7 +9,7 @@ import { requestAliyun } from "../request/http";
 import { setUserInfo } from '../store/userInfo';
 import { useSelector, useDispatch } from 'react-redux';
 import { notification } from 'antd';
-import { downloadFile } from '../scripts/utils';
+import { downloadFile, hasChinese } from '../scripts/utils';
 import { NEXT_PUBLIC_IMAGE_PREFIX } from '../scripts/config';
 
 const { TextArea } = Input;
@@ -56,6 +56,34 @@ const Index: React.FC = () => {
     };
 
     if (newMessage.text) {
+      //检测内容是否包含中文
+      if (hasChinese(newMessage.text)) {
+        //提示用户是否进行翻译
+        // const isFanyi = await new Promise((resolve) => {
+        //   Modal.confirm({
+        //     content: '检测到您输入的内容包含中文，midjourney无法支持中文提示词，是否自动进行翻译？',
+        //     cancelText: '不翻译',
+        //     okText: '翻译',
+        //     onOk: () => {
+        //       console.log('确认');
+        //       resolve(true);
+        //     },
+        //     onCancel: () => {
+        //       console.log('Cancel');
+        //       resolve(false)
+        //     },
+        //   });
+        // })
+        // if (isFanyi) {
+        // 调用api翻译为英文
+        message.info('midjourney无法支持中文提示词，将为您自动翻译为英文...');
+        const { result } = await requestAliyun('translate', { content: newMessage.text });
+        console.log('翻译结果', result);
+        newMessage.text = result;
+        setInputValue(result);
+        // }
+      }
+      // return;
       const oldMessages = messages;
       setInputDisable(true);
       setMessages([...oldMessages, newMessage]);
@@ -307,7 +335,7 @@ const Index: React.FC = () => {
               e.preventDefault();
             }
           }}
-          placeholder="请输入你的 prompt...（例如：a cat。prompt必须是英文，请尽量详细。可以使用ChatGPT生成你的prompt。）"
+          placeholder="请输入你的 prompt...（例如：a cat。支持中文。如果您输入中文，生成时系统将自动为您翻译为英文。可以使用ChatGPT生成你的prompt。）"
           autoSize={{ minRows: 1, maxRows: 6 }}
           style={{ paddingRight: 30 }}
         />

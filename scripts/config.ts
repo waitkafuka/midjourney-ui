@@ -1,0 +1,1 @@
+export const NEXT_PUBLIC_IMAGE_PREFIX = 'https://oss-cdn.superx.chat/'

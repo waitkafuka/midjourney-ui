@@ -9,11 +9,13 @@ import { requestAliyun } from "../request/http";
 import { setUserInfo } from '../store/userInfo';
 import { useSelector, useDispatch } from 'react-redux';
 import { notification } from 'antd';
-
+import { downloadFile } from '../scripts/utils';
+import { NEXT_PUBLIC_IMAGE_PREFIX } from '../scripts/config';
 
 const { TextArea } = Input;
 const { Text } = Typography;
 const defaultPrompt = ''
+const defaultTips = "正在生成，大约需要 1-2 分钟，请耐心等待..."
 
 const Index: React.FC = () => {
   const [inputValue, setInputValue] = useState(defaultPrompt);
@@ -49,7 +51,7 @@ const Index: React.FC = () => {
     let newMessage: Message = {
       text: inputValue.trim(),
       hasTag: false,
-      progress: "排队中，等待服务器响应。生成大约需要 1-2 分钟，请耐心等待...",
+      progress: defaultTips,
       img: defaultImg,
     };
 
@@ -105,7 +107,7 @@ const Index: React.FC = () => {
     let newMessage: Message = {
       text: `${pormpt} upscale U${index}`,
       hasTag: false,
-      progress: "排队中，等待服务器响应。生成大约需要 1-2 分钟，请耐心等待...",
+      progress: defaultTips,
       img: defaultImg,
     };
 
@@ -140,7 +142,7 @@ const Index: React.FC = () => {
     let newMessage: Message = {
       text: `${content} variation V${index}`,
       hasTag: false,
-      progress: "排队中，等待服务器响应。生成大约需要 1-2 分钟，请耐心等待...",
+      progress: defaultTips,
       img: defaultImg,
     };
 
@@ -213,10 +215,10 @@ const Index: React.FC = () => {
     progress,
     content,
   }: Message) => {
-    if (process.env.NEXT_PUBLIC_IMAGE_PREFIX) {
+    if (NEXT_PUBLIC_IMAGE_PREFIX) {
       img = img.replace(
         "https://cdn.discordapp.com/",
-        process.env.NEXT_PUBLIC_IMAGE_PREFIX
+        NEXT_PUBLIC_IMAGE_PREFIX
       );
     }
     return (
@@ -235,7 +237,7 @@ const Index: React.FC = () => {
 
           <Image className="rounded-xl" src={img} />
 
-          {(img && img !== defaultImg) && <a href={img} style={{ textDecoration: "underline" }} target="_blank">下载（服务器未保存您的记录，请注意及时下载图片！）</a>}
+          {(img && img !== defaultImg) && <div><a href={img} style={{ textDecoration: "underline" }} target="_blank">查看大图</a> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href='javascript:;' style={{ textDecoration: "underline" }} onClick={() => { downloadFile(img) }}>下载图片（服务器未保存您的记录，请及时下载图片！）</a></div>}
           {hasTag && (
             <Tag
               Data={["V1", "V2", "V3", "V4"]}
@@ -274,7 +276,6 @@ const Index: React.FC = () => {
 
   //页面初始化
   useEffect(() => {
-
     getUserInfo();
   }, []);
 

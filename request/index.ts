@@ -14,7 +14,7 @@ const streamFetch = async (
     body,
   });
   if (!response.ok) {
-    notification.warning({
+    notification.info({
       message: "提示",
       description: `接口超时，请重新发起请求。如要刷新页面，请提前下载您的图片。response.status: ${response.status}`,
       duration: 0,

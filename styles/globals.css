@@ -44,7 +44,9 @@
   background-color: #333;
   color: #fff;
 }
-
+.ant-list-item a{
+  display: inline;
+}
 .tag-unchecked:hover {
   /* opacity: .8; */
 }
@@ -53,6 +55,13 @@
   width: 50px;
   text-align: center;
   border-radius: 4px;
+}
+.img-list-box .ant-image{
+  /* margin: 0 auto ; */
+}
+
+.img-list-box .ant-image img{
+  max-width: 500px;
 }
 
 .operation-btn-space {
@@ -176,10 +185,16 @@ a {
 @tailwind components;
 @tailwind utilities;
 
+.ant-notification-notice-close {
+  color: #000 !important;
+}
+
 @media (prefers-color-scheme: dark) {
   html {
     color-scheme: dark;
   }
+
+
 
   span.anticon.anticon-loading svg {
     color: #fff;

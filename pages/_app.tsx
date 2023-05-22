@@ -11,7 +11,6 @@ import { notification } from 'antd';
 export default function App({ Component, pageProps }: AppProps) {
   notification.config({
     placement: 'top',
-    bottom: 50,
     duration: 5,
     // rtl: true,
   })

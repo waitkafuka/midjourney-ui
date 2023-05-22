@@ -1,13 +1,5 @@
 import React, { useState } from "react";
 import { Input, Button, List, Image, Typography } from "antd";
-import { SendOutlined } from "@ant-design/icons";
-import { Imagine, Upscale, Variation } from "../request";
-import { MJMessage } from "midjourney";
-import { Message } from "../interfaces/message";
-import Tag from "../components/tag";
-
-const { TextArea } = Input;
-const { Text } = Typography;
 
 const Index: React.FC = () => {
     const [imgList] = useState<Array<any>>([{
@@ -16,18 +8,22 @@ const Index: React.FC = () => {
     }, {
         prompt: 'mdjrny-v4 style whimsical fantasy elegant rose floral botany maximalism with a wave of flowers garden flowing flowers floating in misty soft pink, aqua, soft apricot, smoke fractal, moody and big scale realistic flowers, octane render, by josephine wall art, isabelle menin, Jean, amy brown.',
         image: 'https://cdn.superx.chat/stuff/flowers.png',
+    },
+    {
+        prompt: 'an asian woman poses for a portrait, in the style of luminous shadows, dark white and beige, onii kei , fluid photography, realistic yet romantic, smooth lines, angura kei',
+        image: 'https://cdn.superx.chat/stuff/human.png',
     },]);
 
     return (
         <div className="markdown-body">
             <h2>示例</h2>
             {imgList.map(({ prompt, image }) => {
-                return <>
+                return <div key={image}>
                     <blockquote>
                         <p dir="auto">{prompt}</p>
                     </blockquote>
 
-                    <p dir="auto"><img alt="midjourney" src={image} /></p></>
+                    <p dir="auto"><img alt="midjourney" src={image} /></p></div>
             })}
             <h2>指令解释</h2>
             图片生成之后，界面上有 V1-V4，U1-U4 8 个按钮。其中数字 1-4 指的是图片编号，第几张图片。  <br />

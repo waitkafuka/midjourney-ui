@@ -30,7 +30,7 @@ export default class MyDocument extends Document {
         <body>
           <Main />
           <NextScript />
-          <script async src="/baidutongji.js"></script>
+          <script async src="/mj/baidutongji.js"></script>
         </body>
       </Html>
     );

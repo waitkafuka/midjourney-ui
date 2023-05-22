@@ -1,4 +1,5 @@
 import { MJMessage } from "midjourney";
+import { notification } from "antd";
 
 const streamFetch = async (
   url: string,
@@ -12,7 +13,12 @@ const streamFetch = async (
     },
     body,
   });
-  if(!response.ok) {
+  if (!response.ok) {
+    notification.warning({
+      message: "提示",
+      description: `接口超时，请重新发起请求。如要刷新页面，请提前下载您的图片。response.status: ${response.status}`,
+      duration: 0,
+    })
     throw new Error(`HTTP error! status: ${response.status}`);
   }
   const reader = response.body?.getReader();
@@ -42,7 +48,6 @@ const streamFetch = async (
       buffer = buffer.slice(startIdx);
     }
   } else {
-    alert('接口超时，请重新发起请求。如要刷新页面，请提前下载您的图片。')
     console.log("Response body is null");
   }
 };

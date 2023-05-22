@@ -27,7 +27,7 @@ const ROUTES: Route = {
   routes: [
     {
       path: '/',
-      name: '绘画',
+      name: '开始绘画',
       icon: <SendOutlined />,
     },
 
@@ -185,7 +185,7 @@ export default function Main(children: JSX.Element) {
                 {user && user.email ? <Dropdown menu={{ items }} placement="top" arrow={{ pointAtCenter: true }}>
                   <Button block>{user.email}</Button>
                 </Dropdown> : <Button block onClick={() => {
-                  window.location.href = 'https://superx.chat/login?redirect=/mj'
+                  window.location.href = `https://superx.chat/${process.env.NODE_ENV === 'development' ? 'login' : 'login.html'}?redirect=/mj`
                 }}>
                   登录
                 </Button>}

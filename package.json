@@ -41,6 +41,7 @@
     "eventsource-parser": "^1.0.0",
     "midjourney": "2.1.30",
     "next": "^13.1.1",
+    "react-markdown": "8.0.7",
     "react-redux": "8.0.5"
   },
   "keywords": [

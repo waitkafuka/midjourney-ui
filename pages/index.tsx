@@ -314,7 +314,7 @@ const Index: React.FC = () => {
           className="absolute"
           type="primary"
           onClick={handleMessageSend}
-          loading={!inputDisable}
+          loading={inputDisable}
           icon={<SendOutlined className="send-prompt-btn" />}
           title="Send"
           style={{

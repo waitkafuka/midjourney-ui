@@ -3,6 +3,7 @@
   "rules": {
     // Additional, per-project rules...
     "@next/next/no-img-element": "off",
-    "react/no-children-prop": "off"
+    "react/no-children-prop": "off",
+    "@next/next/no-css-tags": "off",
   }
 }

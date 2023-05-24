@@ -2,7 +2,7 @@
 import type { AppProps } from 'next/app';
 import MainLayout from '../layouts/main'
 import '../public/antd.min.css';
-import '../styles/globals.css'
+import '../styles/globals.scss'
 import { Provider } from "react-redux";
 import store from '../store'
 import withTheme from '../theme';

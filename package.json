@@ -40,9 +40,11 @@
     "axios": "^1.3.6",
     "eventsource-parser": "^1.0.0",
     "midjourney": "2.1.30",
+    "moment": "2.29.4",
     "next": "^13.1.1",
     "react-markdown": "8.0.7",
-    "react-redux": "8.0.5"
+    "react-redux": "8.0.5",
+    "sass": "1.62.1"
   },
   "keywords": [
     "midjourney-api",

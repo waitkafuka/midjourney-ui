@@ -1,10 +1,9 @@
 import dynamic from 'next/dynamic'
 import Link from 'next/link'
 import React, { useEffect, useState } from 'react';
-import { Button } from 'antd';
+import { Button, Dropdown } from 'antd';
 import Head from 'next/head';
 import store from '../store'
-import { Dropdown } from 'antd';
 import type { MenuProps } from 'antd';
 
 import {
@@ -13,7 +12,8 @@ import {
   PictureFilled,
   SendOutlined,
   WechatOutlined,
-  BulbOutlined
+  BulbOutlined,
+  PictureOutlined
 } from '@ant-design/icons'
 
 import { Route, MenuDataItem } from '@ant-design/pro-layout/lib/typing'
@@ -30,7 +30,11 @@ const ROUTES: Route = {
       name: '开始绘画',
       icon: <SendOutlined />,
     },
-
+    {
+      path: '/mypaintings',
+      name: '我的作品',
+      icon: <i className='iconfont icon-huihua'></i>,
+    },
     {
       path: '/guide',
       name: '入门指引',

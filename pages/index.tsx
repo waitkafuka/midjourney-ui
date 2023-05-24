@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Input, Button, List, Image, Typography, message, Modal } from "antd";
+import { Input, Button, List, Image, Typography, message, Modal, Spin } from "antd";
 import { SendOutlined } from "@ant-design/icons";
 import { Imagine, Upscale, Variation } from "../request";
 import { MJMessage } from "midjourney";
@@ -20,6 +20,7 @@ const defaultTips = "正在生成，大约需要 1-2 分钟，请耐心等待...
 const Index: React.FC = () => {
   const [inputValue, setInputValue] = useState(defaultPrompt);
   const [inputDisable, setInputDisable] = useState(false);
+  const [isTranslating, setIsTranslating] = useState(false);
   const [messages, setMessages] = useState<Message[]>([]);
   const user = useSelector((state: any) => state.user.info);
   const dispatch = useDispatch();
@@ -41,7 +42,7 @@ const Index: React.FC = () => {
       return false;
     }
     if (!(user.token_type === 0 || user.token_type === 3)) {
-      messageApi.error('目前 midjourney 绘画功能仍在内测阶段，尚未开放售卖。仅对之前已经购买过的网站包月用户开放试用权限。敬请期待。', 10);
+      messageApi.error('目前 midjourney 绘画功能仍在内测阶段，尚未开放售卖。仅对已购买过本站包月会员用户开放试用权限。', 10);
       return false;
     }
     return true;
@@ -76,14 +77,29 @@ const Index: React.FC = () => {
         // })
         // if (isFanyi) {
         // 调用api翻译为英文
-        message.info('midjourney无法支持中文提示词，将为您自动翻译为英文...');
-        const { result } = await requestAliyun('translate', { content: newMessage.text });
+        // message.info('midjourney无法支持中文提示词，正在为您翻译为英文...');
+        setIsTranslating(true);
+        let result = {} as any;
+        try {
+          result = await requestAliyun('translate', { content: newMessage.text });
+
+        } catch (error) {
+          messageApi.error('翻译出错，请稍后重试，请确保您的输入词中不包含政治、色情、暴力等词汇', 10);
+          setIsTranslating(false);
+          return;
+        }
+        if (result.code !== 0) {
+          messageApi.error(result.message, 10);
+          setIsTranslating(false);
+          return;
+        }
+        result = result.data;
+        setIsTranslating(false);
         console.log('翻译结果', result);
         newMessage.text = result;
         setInputValue(result);
         // }
       }
-      // return;
       const oldMessages = messages;
       setInputDisable(true);
       setMessages([...oldMessages, newMessage]);
@@ -310,6 +326,17 @@ const Index: React.FC = () => {
   return (
     <div className="w-full mx-auto px-4 h-full overflow-y-hidden list-input-container">
       {contextHolder}
+      <Modal
+        title="翻译中"
+        style={{ top: 20 }}
+        open={isTranslating}
+        closable={false}
+        cancelText=""
+        okText=""
+        footer={null}
+      >
+        <p><Spin /> midjourney无法支持中文提示词，正在为您翻译为英文...</p>
+      </Modal>
       <List
         className="mx-auto justify-start overflow-y-auto img-list-box"
         style={{

@@ -1,13 +1,8 @@
 
-const localIp = '127.0.0.1';
 declare const window: Window & { browserFinger: string }
-// chat接口的vercel地址
-export let dbApiServerBaseUrlVercel = process.env.NODE_ENV === 'development' ? `http://${localIp}:5312` : 'https://chatdb.youyi.asia';
-export let dbApiServerBaseUrlAliyun = '';
 
 //请求服务器
-export const request = async function (path: string, data: any, method = "POST", headers = {}, isReuqestAliyun = false) {
-    let url = `${isReuqestAliyun ? dbApiServerBaseUrlAliyun : dbApiServerBaseUrlVercel}/api/${path}`;
+export const request = async function (path: string, data: any, method = "POST", headers = {},) {
     const options: RequestInit = {
         headers: {
             "Content-Type": "application/json",
@@ -22,12 +17,17 @@ export const request = async function (path: string, data: any, method = "POST",
     if (method === 'GET') {
         delete options.body;
     }
-    let result = await fetch(url, options);
+    let result = await fetch(path, options);
     return await result.json();
 }
 
 //请求国内服务器
 export const requestAliyun = async function (path: string, data?: any, method = "POST", headers = {}) {
-    return request(path, data, method, headers, true);
+    return request(`/api/${path}`, data, method, headers);
+}
+
+//请求国内服务器
+export const requestAliyunMJ = async function (path: string, data?: any, method = "POST", headers = {}) {
+    return request(`/mj/api/${path}`, data, method, headers);
 }
 

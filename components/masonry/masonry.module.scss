@@ -1,0 +1,51 @@
+.masonry-list-container {
+  margin: 0 auto;
+  position: relative;
+}
+.masonry-item {
+  // width: 100%;
+  // border: 1px solid #f0f0f0;
+  border-radius: 5px;
+  overflow: hidden;
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  color: rgba(0, 0, 0, 0.88);
+  font-size: 14px;
+  line-height: 1.5714285714285714;
+  list-style: none;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, 'Noto Sans', sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
+  position: relative;
+  background: #ffffff;
+  border-radius: 8px;
+  position: absolute;
+  transition: all .3s;
+  .masonry-cover-img {
+    width: 100%;
+  }
+  .masonry-meta {
+    padding: 10px 15px;
+  }
+  .masonry-action-wrap {
+    border-top: 1px solid #e6e6e6;
+    padding: 10px 20px;
+    display: flex;
+    justify-content: center;
+    .masonry-action-box {
+      cursor: pointer;
+      width: 100%;
+      text-align: center;
+    }
+    svg {
+      width: 25px;
+    }
+  }
+  .prompt {
+    //最多两行，超出部分省略号
+    overflow: hidden;
+    text-overflow: ellipsis;
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 2;
+  }
+}

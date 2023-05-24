@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { Input, Button, List, Image, Typography } from "antd";
 
-const Index: React.FC = () => {
+const Guide: React.FC = () => {
     const [imgList] = useState<Array<any>>([{
         prompt: 'mdjrny-v4 style portrait of female elf, intricate, elegant, highly detailed, digital painting, artstation, concept art, smooth, sharp focus, illustration, art by artgerm and greg rutkowski and alphonse mucha, 8k.',
         image: 'https://cdn.superx.chat/stuff/elf2.png',
@@ -34,4 +34,4 @@ const Index: React.FC = () => {
     );
 };
 
-export default Index;
+export default Guide;

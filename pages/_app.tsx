@@ -21,14 +21,12 @@ export default function App({ Component, pageProps }: AppProps) {
   //获取用户信息
   const getUserInfo = async () => {
     const data = await requestAliyun('userinfo', null, 'GET');
-    console.log('data', data);
     store.dispatch(setUserInfo(data.user || {}))
     // dispatch(setUserInfo(data.user || {}))
   };
 
   useEffect(() => {
     getUserInfo();
-    console.log('theme', theme);
   }, [])
 
   return (<Provider store={store}>

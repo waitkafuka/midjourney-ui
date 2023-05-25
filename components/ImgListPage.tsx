@@ -9,7 +9,7 @@ interface ImgListPageProps {
 }
 
 //由于setstate是异步的，所以需要一个变量来判断是否正在请求数据
-const ImgListPage = ({type}: ImgListPageProps) => {
+const ImgListPage = ({ type }: ImgListPageProps) => {
     let isLockRequest = false;
     let pageIndex = 0;
     const [imgList, setImgList] = useState<ImgCardModel[]>([])
@@ -33,10 +33,12 @@ const ImgListPage = ({type}: ImgListPageProps) => {
         pageIndex++;
         const result = await requestAliyunMJ(type === ImgPageType.MY ? 'my-paintings' : 'public-paintings', { pageIndex })
         //追加之前去除重复数据
-
-        const newImgList = result.rows.filter((item: any) => {
-            return imgList.findIndex((img: any) => img.id === item.id) === -1
-        })
+        let newImgList: any = [];
+        if (result.rows) {
+            newImgList = result.rows.filter((item: any) => {
+                return imgList.findIndex((img: any) => img.id === item.id) === -1
+            })
+        }
 
         setImgList(list => [...list, ...newImgList])
 

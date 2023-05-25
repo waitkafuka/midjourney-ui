@@ -280,7 +280,7 @@ const Index: React.FC = () => {
 
           <Image className="rounded-xl" src={img} />
 
-          {(img && img !== defaultImg) && <div><a href={img} style={{ textDecoration: "underline" }} target="_blank">查看大图</a> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href='javascript:;' style={{ textDecoration: "underline" }} onClick={() => { downloadFile(img) }}>下载图片（服务器未保存您的记录，请及时下载图片！）</a></div>}
+          {(img && img !== defaultImg) && <div><a href={img} style={{ textDecoration: "underline" }} target="_blank">查看大图</a> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href='javascript:;' style={{ textDecoration: "underline" }} onClick={() => { downloadFile(img) }}>下载图片（服务器未保存您的记录，请及时下载图片！）</a> <a href="javascript:;">图片将默认匿名展示在“艺术公园”中，如果您不希望展示，可进入“我的作品”进行关闭。</a> </div>}
           {hasTag && (
             <Tag
               Data={["V1", "V2", "V3", "V4"]}

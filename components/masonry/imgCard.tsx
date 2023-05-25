@@ -37,7 +37,7 @@ const getRatio = (prompt: string): { width: number, height: number } => {
 }
 
 const App = ({ model, columnWidth, onImgDeleted, type }: Props) => {
-    const { img_url, prompt, create_time, id } = model;
+    const { img_url, prompt, create_time, id, is_public } = model;
 
     const deleteImg = (id: number) => {
         confirm({
@@ -94,12 +94,12 @@ const App = ({ model, columnWidth, onImgDeleted, type }: Props) => {
                     }}>
                         <CopyOutlined key="copy" title="复制提示词" />
                     </div>
-                    <div className={css["masonry-action-item"]} onClick={() => {
+                    {/* <div className={css["masonry-action-item"]} onClick={() => {
                         //路由到编辑页面
                         Router.push(`/?prompt=${encodeURIComponent(prompt)}`);
                     }}>
                         <EditOutlined key="edit" title="重新生成" />
-                    </div>
+                    </div> */}
                     <div className={css["masonry-action-item"]} onClick={() => {
                         downloadFile(HDsrc)
                     }}>
@@ -110,11 +110,14 @@ const App = ({ model, columnWidth, onImgDeleted, type }: Props) => {
                     }}>
                         <DeleteOutlined title="删除" />
                     </div>}
-                    {/* <div className={css["masonry-action-item"]} onClick={() => {
+                    {type === ImgPageType.MY && <div className={css["masonry-action-item"]} onClick={() => {
                         //分享
                     }}>
-                        <Switch checkedChildren="公开" unCheckedChildren="关闭" defaultChecked />
-                    </div> */}
+                        <Switch checkedChildren="分享" unCheckedChildren="关闭" defaultChecked={is_public === 0} onChange={async v => {
+                            await requestAliyunMJ('edit-painting-state', { id, isPublic: v ? 0 : 1 });
+                        }} />
+                    </div>
+                    }
                     <div style={{ display: "none" }}>{moment(create_time).format('YYYY-MM-DD HH:mm:ss')}</div>
                 </div>
             </div>

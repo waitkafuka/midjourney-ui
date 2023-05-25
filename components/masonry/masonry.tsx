@@ -3,23 +3,27 @@ import { ImgCardModel } from '../../scripts/types'
 import { use, useEffect, useMemo, useState, useRef } from 'react'
 import css from './masonry.module.scss'
 import { Spin } from 'antd';
+import Link from 'next/link'
 
 interface Props {
     list: ImgCardModel[],
     onPageRequest: () => void,
     isDataLoading: boolean,
-    totalCount: number
+    totalCount: number,
+    onImgDeleted: (id: number) => void,
+    style: React.CSSProperties
 }
 
 const columnWidth = 300;
 const gap = 20;
 let timer: NodeJS.Timeout | null = null;
 
-const App = ({ list, onPageRequest, isDataLoading, totalCount }: Props) => {
+const App = ({ list, onPageRequest, onImgDeleted, isDataLoading, totalCount, style }: Props) => {
     const [columns, setColumns] = useState(0);
     const [maxColumnHeight, setMaxColumnHeight] = useState(0);
     //加个ref，这是为了解决在scroll事件中无法获取到最新的state的值
     const hasMoreRef = useRef(true);
+
 
     const recalcColumns = () => {
         //获取容器的宽度
@@ -124,15 +128,17 @@ const App = ({ list, onPageRequest, isDataLoading, totalCount }: Props) => {
 
     return <>
         {/* style={{ height: "calc(100vh - 56px)" }} */}
-        <div className="masonry-list-wrapper" style={{ height: "calc(100vh)", overflow: "scroll" }}>
+        {list.length === 0 && <div className={css['no-more-tips']}>暂无数据，<Link href='/'> 开始绘画！ </Link>  </div>}
+
+        <div className="masonry-list-wrapper" style={{ height: "calc(100vh - 56px - 15px)", overflow: "scroll", boxSizing: "border-box", paddingTop: '20px', ...style, }}>
             {/* height: `${maxColumnHeight}px` */}
-            <div className={css["masonry-list-container"]} style={{ width: `${containerWidth}px`, height: `${maxColumnHeight}px` }}>
-                {list.map((imgCardInfo: ImgCardModel) => <ImgCard key={imgCardInfo.id} model={imgCardInfo} columnWidth={columnWidth} />)}
+            <><div className={css["masonry-list-container"]} style={{ width: `${containerWidth}px`, height: `${maxColumnHeight}px`, minHeight: "100vh" }}>
+                {list.map((imgCardInfo: ImgCardModel) => <ImgCard onImgDeleted={onImgDeleted} key={imgCardInfo.id} model={imgCardInfo} columnWidth={columnWidth} />)}
             </div>
-            {isDataLoading && <div className='loaing-box' style={{ textAlign: 'center', padding: "15px" }}>
-                <Spin></Spin>
-            </div>}
-            {!hasMore && <div>没有更多了</div>}
+                {isDataLoading && <div className='loaing-box' style={{ textAlign: 'center', padding: "15px" }}>
+                    <Spin></Spin>
+                </div>}
+                {!hasMore && !isDataLoading && <div className={css['no-more-tips']}>没有更多了</div>}</>
         </div >
     </>
 };

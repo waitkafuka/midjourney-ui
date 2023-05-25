@@ -1,4 +1,10 @@
+import { message } from 'antd';
 export const downloadFile = (url: string, filename: string = 'midjourney.png') => {
+    message.info('正在下载图片...', 200);
+    const regex = /\/([\w-]+\.(png|jpg|jpeg|gif|webp))/;
+    const execResult = regex.exec(url);
+    let fileName = execResult ? execResult[1] : 'midjourney.png';
+    fileName = fileName.replace('waitkafuka_', '')
     const canvas = document.createElement("canvas");
     document.body.appendChild(canvas);
     canvas.style.display = 'none';
@@ -11,12 +17,13 @@ export const downloadFile = (url: string, filename: string = 'midjourney.png') =
         cxt?.drawImage(img, 0, 0);
         const image = canvas.toDataURL("image/png")
         const dlLink = document.createElement('a');
-        dlLink.download = 'midjourney.png';
+        dlLink.download = fileName;
         dlLink.href = image;
         document.body.appendChild(dlLink);
         dlLink.click();
         document.body.removeChild(dlLink);
         document.body.removeChild(canvas);
+        message.destroy();
     };
     img.src = url;
 }

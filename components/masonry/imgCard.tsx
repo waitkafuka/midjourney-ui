@@ -1,14 +1,20 @@
 import React, { useState, useMemo, useEffect } from "react";
-import { Space, Tag, Tooltip, Card } from "antd";
-import { CopyOutlined } from '@ant-design/icons'
+import { Space, Tag, Tooltip, Card, Image, message, Modal, Switch } from "antd";
+import { CopyOutlined, CloudDownloadOutlined, EditOutlined, DeleteOutlined } from '@ant-design/icons'
 const { Meta } = Card;
 import moment from 'moment';
 import { ImgCardModel } from "../../scripts/types";
+import ClipboardJS from 'clipboard';
 import css from './masonry.module.scss'
+import { downloadFile } from '../../scripts/utils';
+import Router from "next/router";
+import { requestAliyunMJ } from "../../request/http";
+const { confirm } = Modal;
 
 interface Props {
     model: ImgCardModel,
     columnWidth: number,
+    onImgDeleted: (id: number) => void,
 }
 
 
@@ -30,23 +36,88 @@ const getRatio = (prompt: string): { width: number, height: number } => {
 }
 
 
-const App = ({ model, columnWidth }: Props) => {
+
+
+const App = ({ model, columnWidth, onImgDeleted }: Props) => {
     const { img_url, prompt, create_time } = model;
+
+    const deleteImg = (id: number) => {
+        confirm({
+            content: '确定删除吗？',
+            okText: '确定',
+            cancelText: '取消',
+            async onOk() {
+                await requestAliyunMJ('delete-painting', { id });
+                message.success('删除成功');
+                //从列表中移除
+                onImgDeleted(id);
+            },
+            onCancel() {
+                console.log('Cancel');
+            },
+        });
+    }
+
     const height = useMemo(() => {
         const ratio = getRatio(prompt);
         return Math.floor(baseWidth * ratio.height / ratio.width);
     }, [prompt])
 
+    const onImgClick = () => {
+        // window.open(src, '_blank')
+    }
+
+    const src = useMemo(() => {
+        return img_url ? `${basePath}${img_url}?width=${baseWidth}&height=${height}` : defaultImg
+    }, [img_url, height])
+
+    const HDsrc = useMemo(() => {
+        return `${basePath}${img_url}`
+    }, [img_url])
+
+    //初始化
+    useEffect(() => {
+        new ClipboardJS('.copy-action');
+    })
+
     return <>
         <div className={`${css['masonry-item']} masonry-item`} style={{ width: `${columnWidth}px` }}>
-            <img style={{ height: `${columnWidth * height / baseWidth}px` }} className={css["masonry-cover-img"]} src={img_url ? `${basePath}${img_url}?width=${baseWidth}&height=${height}` : defaultImg} alt="" />
+            {img_url ? <a href={HDsrc} target="_blank">
+                <img onClick={onImgClick} style={{ height: `${columnWidth * height / baseWidth}px` }} className={css["masonry-cover-img"]} src={src} alt="" />
+            </a> : <img style={{ height: `${columnWidth * 360 / 358}px` }} src={defaultImg} />}
 
             <div className={css["masonry-meta"]}>
                 <p className={css["prompt"]} title={prompt}>{prompt}</p>
             </div>
             <div className={css["masonry-action-wrap"]}>
                 <div className={css["masonry-action-box"]}>
-                    <CopyOutlined key="copy" title="复制提示词" />
+                    <div className={`${css["masonry-action-item"]} copy-action`} data-clipboard-text={prompt} onClick={() => {
+                        message.success('prompt已复制')
+                    }}>
+                        <CopyOutlined key="copy" title="复制提示词" />
+                    </div>
+                    {/* <div className={css["masonry-action-item"]} onClick={() => {
+                        //路由到编辑页面
+                        Router.push(`/?prompt=${encodeURIComponent(prompt)}`);
+                    }}>
+                        <EditOutlined key="edit" title="重新生成" />
+                    </div> */}
+                    <div className={css["masonry-action-item"]} onClick={() => {
+                        downloadFile(HDsrc)
+                    }}>
+                        <CloudDownloadOutlined title="下载" />
+                    </div>
+                    <div className={css["masonry-action-item"]} onClick={() => {
+                        deleteImg(model.id);
+                    }}>
+                        <DeleteOutlined title="删除" />
+                    </div>
+                    <div className={css["masonry-action-item"]} onClick={() => {
+                        //分享
+                    }}>
+                        <Switch checkedChildren="公开" unCheckedChildren="关闭" defaultChecked />
+                    </div>
+                    <div style={{ display: "none" }}>{moment(create_time).format('YYYY-MM-DD HH:mm:ss')}</div>
                 </div>
             </div>
         </div>

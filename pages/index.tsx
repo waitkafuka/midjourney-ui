@@ -6,7 +6,6 @@ import { MJMessage } from "midjourney";
 import { Message } from "../interfaces/message";
 import Tag from "../components/tag";
 import { requestAliyun } from "../request/http";
-import { setUserInfo } from '../store/userInfo';
 import { useSelector, useDispatch } from 'react-redux';
 import { notification } from 'antd';
 import { downloadFile, hasChinese } from '../scripts/utils';
@@ -120,7 +119,7 @@ const Index: React.FC = () => {
               return;
             }
 
-            console.log(data);
+            console.log('imagin return data:', data);
             newMessage.img = data.uri;
             if (data.id) {
               newMessage.hasTag = true;
@@ -309,18 +308,22 @@ const Index: React.FC = () => {
     );
   };
 
-  //获取用户信息
-  const getUserInfo = async () => {
-    const data = await requestAliyun('userinfo', null, 'GET');
-    console.log('data', data);
-    dispatch(setUserInfo(data.user || {}))
+ 
+  //定义一个方法，取出链接参数中的prompt，放在 Input 中
+  const getPrompt = () => {
+    //从链接中取出prompt参数
+    const urlSearchParam = new URLSearchParams(window.location.search);
+    const prompt = urlSearchParam.get("prompt");
+    //如果prompt存在，就把它放在Input中
 
+    if (prompt) {
+      setInputValue(decodeURIComponent(prompt));
+    }
   };
-
 
   //页面初始化
   useEffect(() => {
-    getUserInfo();
+    getPrompt();
   }, []);
 
   return (

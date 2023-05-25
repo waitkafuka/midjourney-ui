@@ -12,6 +12,16 @@ const Painting: React.FC = () => {
     const [imgList, setImgList] = useState<ImgCardModel[]>([])
     const [count, setCount] = useState(0)
     const [isDataLoading, setIsDataLoading] = useState(false);
+    const onImgDeleted = (id: number) => {
+        console.log('onDeleteImg', id);
+        // 找到要删除的元素的index
+        const index = imgList.findIndex(item => item.id === id);
+        // 从列表中移除
+        imgList.splice(index, 1);
+        //重新渲染
+        setImgList([...imgList]);
+    }
+
     //查询用户的作品列表
     const queryImgList = async () => {
         if (isLockRequest) return
@@ -46,7 +56,7 @@ const Painting: React.FC = () => {
     }, [])
     return (
         <div className="">
-            <Masonry list={imgList} onPageRequest={queryImgList} isDataLoading={isDataLoading} totalCount={count} />
+            <Masonry onImgDeleted={onImgDeleted} style={{ paddingTop: "20px" }} list={imgList} onPageRequest={queryImgList} isDataLoading={isDataLoading} totalCount={count} />
         </div>
     );
 };

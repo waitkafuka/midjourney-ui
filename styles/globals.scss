@@ -250,3 +250,28 @@ a {
 }
 
 
+:where(.css-dev-only-do-not-override-yp8pcc)button.ant-btn-primary{
+  background-color: #3c3c3d;
+}
+
+:where(.css-dev-only-do-not-override-yp8pcc)button.ant-btn-primary:not(:disabled):hover{
+  background-color: #1a1a1b;
+}
+
+:where(.css-dev-only-do-not-override-yp8pcc).ant-btn-default:not(:disabled):hover{
+  color:#333;
+  border-color: #999;
+}
+
+.ant-switch .ant-switch-inner{
+  border: 1px solid #555;
+
+}
+
+.ant-switch .ant-switch-inner .ant-switch-inner-unchecked{
+  color: #888;
+}
+
+.ant-switch .ant-switch-handle::before{
+  box-shadow: 0 2px 4px 0 rgb(27 32 28 / 50%);
+}

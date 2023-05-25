@@ -35,11 +35,11 @@ const ROUTES: Route = {
       name: '我的作品',
       icon: <i className='iconfont icon-huihua'></i>,
     },
-    {
-      path: '/paintings',
-      name: '艺术公园',
-      icon: <i className='iconfont icon-fengjing-01'></i>,
-    },
+    // {
+    //   path: '/paintings',
+    //   name: '艺术公园',
+    //   icon: <i className='iconfont icon-fengjing-01'></i>,
+    // },
     {
       path: '/guide',
       name: '入门指引',
@@ -194,7 +194,7 @@ export default function Main(children: JSX.Element) {
                 {user && user.email ? <Dropdown menu={{ items }} placement="top" arrow={{ pointAtCenter: true }}>
                   <Button block>{user.email}</Button>
                 </Dropdown> : <Button block onClick={() => {
-                  window.location.href = `https://superx.chat/${process.env.NODE_ENV === 'development' ? 'login' : 'login.html'}?redirect=/mj`
+                  window.location.href = `/${process.env.NODE_ENV === 'development' ? 'login' : 'login.html'}?redirect=/uedmj`
                 }}>
                   登录
                 </Button>}

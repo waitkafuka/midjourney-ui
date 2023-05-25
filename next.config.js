@@ -1,10 +1,10 @@
 /** @type {import('next').NextConfig} */
 const isDev = process.env.NODE_ENV === 'development';
 const nextConfig = {
-  basePath: '/mj',
+  basePath: '/uedmj',
   reactStrictMode: true,
   transpilePackages: ['antd'],
-  assetPrefix: isDev ? '' : 'https://cdn.superx.chat/mj/',
+  assetPrefix: isDev ? '' : 'https://cdn.superx.chat/uedmj/',
   trailingSlash: true,
   async rewrites() {
     return [

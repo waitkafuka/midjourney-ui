@@ -4,3 +4,8 @@ export interface ImgCardModel {
     prompt: string,
     create_time: Date
 }
+
+export enum ImgPageType {
+    PUBLIC = 'public',
+    MY = 'private'
+}

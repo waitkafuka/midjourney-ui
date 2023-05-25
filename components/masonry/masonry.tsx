@@ -1,5 +1,5 @@
 import ImgCard from './imgCard';
-import { ImgCardModel } from '../../scripts/types'
+import { ImgCardModel, ImgPageType } from '../../scripts/types'
 import { use, useEffect, useMemo, useState, useRef } from 'react'
 import css from './masonry.module.scss'
 import { Spin } from 'antd';
@@ -11,14 +11,15 @@ interface Props {
     isDataLoading: boolean,
     totalCount: number,
     onImgDeleted: (id: number) => void,
-    style: React.CSSProperties
+    style: React.CSSProperties,
+    type: ImgPageType
 }
 
 const columnWidth = 300;
 const gap = 20;
 let timer: NodeJS.Timeout | null = null;
 
-const App = ({ list, onPageRequest, onImgDeleted, isDataLoading, totalCount, style }: Props) => {
+const App = ({ type, list, onPageRequest, onImgDeleted, isDataLoading, totalCount, style }: Props) => {
     const [columns, setColumns] = useState(0);
     const [maxColumnHeight, setMaxColumnHeight] = useState(0);
     //加个ref，这是为了解决在scroll事件中无法获取到最新的state的值
@@ -87,7 +88,7 @@ const App = ({ list, onPageRequest, onImgDeleted, isDataLoading, totalCount, sty
             // console.log(hasMoreRef.current);
 
             if (((scrollTop + clientHeight) >= (scrollHeight - 100)) && hasMoreRef.current) {
-                console.log('scrolling,到底部了');
+                // console.log('scrolling,到底部了');
                 onPageRequest();
             }
         };
@@ -113,8 +114,6 @@ const App = ({ list, onPageRequest, onImgDeleted, isDataLoading, totalCount, sty
 
     //是否还有更多数据
     const hasMore = useMemo(() => {
-        console.log('totalCount', totalCount);
-        console.log('list.length', list.length);
         let isMore = totalCount > list.length
         hasMoreRef.current = isMore;
         return isMore;
@@ -133,7 +132,7 @@ const App = ({ list, onPageRequest, onImgDeleted, isDataLoading, totalCount, sty
         <div className="masonry-list-wrapper" style={{ height: "calc(100vh - 56px - 15px)", overflow: "scroll", boxSizing: "border-box", paddingTop: '20px', ...style, }}>
             {/* height: `${maxColumnHeight}px` */}
             <><div className={css["masonry-list-container"]} style={{ width: `${containerWidth}px`, height: `${maxColumnHeight}px`, minHeight: "100vh" }}>
-                {list.map((imgCardInfo: ImgCardModel) => <ImgCard onImgDeleted={onImgDeleted} key={imgCardInfo.id} model={imgCardInfo} columnWidth={columnWidth} />)}
+                {list.map((imgCardInfo: ImgCardModel) => <ImgCard type={type} onImgDeleted={onImgDeleted} key={imgCardInfo.id} model={imgCardInfo} columnWidth={columnWidth} />)}
             </div>
                 {isDataLoading && <div className='loaing-box' style={{ textAlign: 'center', padding: "15px" }}>
                     <Spin></Spin>

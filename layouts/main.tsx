@@ -36,6 +36,11 @@ const ROUTES: Route = {
       icon: <i className='iconfont icon-huihua'></i>,
     },
     {
+      path: '/paintings',
+      name: '艺术公园',
+      icon: <i className='iconfont icon-fengjing-01'></i>,
+    },
+    {
       path: '/guide',
       name: '入门指引',
       icon: <BulbOutlined />,

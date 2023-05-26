@@ -13,7 +13,8 @@ import {
   SendOutlined,
   WechatOutlined,
   BulbOutlined,
-  PictureOutlined
+  PictureOutlined,
+  ShoppingCartOutlined
 } from '@ant-design/icons'
 
 import { Route, MenuDataItem } from '@ant-design/pro-layout/lib/typing'
@@ -50,6 +51,12 @@ const ROUTES: Route = {
       target: '_blank',
       name: 'ChatGPT',
       icon: <WechatOutlined />,
+    },
+    {
+      path: 'https://superx.chat/pay.html',
+      target: '_blank',
+      name: '开通包月',
+      icon: <ShoppingCartOutlined />,
     },
   ],
 }

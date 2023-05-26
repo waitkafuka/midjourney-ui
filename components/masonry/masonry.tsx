@@ -142,7 +142,7 @@ const App = ({ type, list, onPageRequest, onImgDeleted, isDataLoading, totalCoun
                 {isDataLoading && <div className='loaing-box' style={{ textAlign: 'center', padding: "15px" }}>
                     <Spin></Spin>
                 </div>}
-                {!hasMore && !isDataLoading && <div className={css['no-more-tips']}>没有更多了</div>}</>
+                {!hasMore && !isDataLoading && totalCount !== 0 && <div className={css['no-more-tips']}>没有更多了</div>}</>
         </div >
     </>
 };

@@ -338,7 +338,7 @@ const Index: React.FC = () => {
         okText=""
         footer={null}
       >
-        <p><Spin /> midjourney无法支持中文提示词，正在为您翻译为英文...</p>
+        <p><Spin />正在为您翻译为英文...</p>
       </Modal>
       <List
         className="mx-auto justify-start overflow-y-auto img-list-box"

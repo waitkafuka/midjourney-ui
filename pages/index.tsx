@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { use, useEffect, useState, useRef } from "react";
 import { Input, Button, List, Image, Typography, message, Modal, Spin } from "antd";
 import { SendOutlined } from "@ant-design/icons";
 import { Imagine, Upscale, Variation } from "../request";
@@ -10,14 +10,26 @@ import { useSelector, useDispatch } from 'react-redux';
 import { notification } from 'antd';
 import { downloadFile, hasChinese } from '../scripts/utils';
 import { NEXT_PUBLIC_IMAGE_PREFIX } from '../scripts/config';
+import Link from "next/link";
 
 const { TextArea } = Input;
 const { Text } = Typography;
-const defaultPrompt = ''
 const defaultTips = "正在生成，大约需要 1-2 分钟，请耐心等待..."
+const cache: {
+  inputValue: string,
+  inputDisable: boolean | null,
+  messages: Message[],
+  isTranslating: boolean | null,
+} = {
+  inputValue: '',
+  inputDisable: null,
+  messages: [],
+  isTranslating: null,
+}
 
 const Index: React.FC = () => {
-  const [inputValue, setInputValue] = useState(defaultPrompt);
+  const [inputValue, setInputValue] = useState('');
+  const inputValueRef = useRef(inputValue);
   const [inputDisable, setInputDisable] = useState(false);
   const [isTranslating, setIsTranslating] = useState(false);
   const [messages, setMessages] = useState<Message[]>([]);
@@ -58,23 +70,6 @@ const Index: React.FC = () => {
     if (newMessage.text) {
       //检测内容是否包含中文
       if (hasChinese(newMessage.text)) {
-        //提示用户是否进行翻译
-        // const isFanyi = await new Promise((resolve) => {
-        //   Modal.confirm({
-        //     content: '检测到您输入的内容包含中文，midjourney无法支持中文提示词，是否自动进行翻译？',
-        //     cancelText: '不翻译',
-        //     okText: '翻译',
-        //     onOk: () => {
-        //       console.log('确认');
-        //       resolve(true);
-        //     },
-        //     onCancel: () => {
-        //       console.log('Cancel');
-        //       resolve(false)
-        //     },
-        //   });
-        // })
-        // if (isFanyi) {
         // 调用api翻译为英文
         // message.info('midjourney无法支持中文提示词，正在为您翻译为英文...');
         setIsTranslating(true);
@@ -280,11 +275,11 @@ const Index: React.FC = () => {
 
           <Image className="rounded-xl" src={img} />
 
-          {(img && img !== defaultImg) && <div><a href={img} style={{ textDecoration: "underline" }} target="_blank">查看大图</a> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href='javascript:;' style={{ textDecoration: "underline" }} onClick={() => { downloadFile(img) }}>下载图片（服务器未保存您的记录，请及时下载图片！）</a> <a href="javascript:;">图片将默认匿名展示在“艺术公园”中，如果您不希望展示，可进入“我的作品”进行关闭。</a> </div>}
+          {(img && img !== defaultImg) && <div><a href={img} style={{ textDecoration: "underline" }} target="_blank">查看大图</a> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href='javascript:;' style={{ textDecoration: "underline" }} onClick={() => { downloadFile(img) }}>下载图片 </a> 图片将默认匿名展示在“艺术公园”中，如果您不希望展示，可进入“<Link href="/mypaintings">我的作品</Link>”进行关闭。 </div>}
           {hasTag && (
             <Tag
-              Data={["V1", "V2", "V3", "V4"]}
-              type="variation"
+              Data={["U1", "U2", "U3", "U4"]}
+              type="upscale"
               onClick={(tag) => {
                 scrollToBottom();
                 tagClick(String(content), String(msgID), String(msgHash), tag)
@@ -294,8 +289,8 @@ const Index: React.FC = () => {
           )}
           {hasTag && (
             <Tag
-              Data={["U1", "U2", "U3", "U4"]}
-              type="upscale"
+              Data={["V1", "V2", "V3", "V4"]}
+              type="variation"
               onClick={(tag) => {
                 scrollToBottom();
                 tagClick(String(content), String(msgID), String(msgHash), tag)
@@ -308,7 +303,7 @@ const Index: React.FC = () => {
     );
   };
 
- 
+
   //定义一个方法，取出链接参数中的prompt，放在 Input 中
   const getPrompt = () => {
     //从链接中取出prompt参数
@@ -321,9 +316,14 @@ const Index: React.FC = () => {
     }
   };
 
+  useEffect(() => {
+    inputValueRef.current = inputValue;
+  }, [inputValue]);
+
   //页面初始化
   useEffect(() => {
     getPrompt();
+    // 加载的时候，如果有缓存，就把缓存的数据赋值给页面
   }, []);
 
   return (

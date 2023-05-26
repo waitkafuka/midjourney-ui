@@ -1,4 +1,6 @@
+import Link from 'next/link';
 import { useEffect, useState } from 'react';
+
 
 function Counter() {
     const [list, setList] = useState<number[]>([]);
@@ -19,6 +21,8 @@ function Counter() {
         <div>
             <p>You clicked {list} times</p>
             <button onClick={handleClick}>Click me</button>
+            test2
+            <Link href="/test1">切换路由</Link>
         </div>
     );
 }

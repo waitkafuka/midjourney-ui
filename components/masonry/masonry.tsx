@@ -13,7 +13,7 @@ interface Props {
     totalCount: number,
     onImgDeleted: (id: number) => void,
     style: React.CSSProperties,
-    type: ImgPageType
+    type: ImgPageType,
 }
 
 const columnWidth = 300;
@@ -130,10 +130,10 @@ const App = ({ type, list, onPageRequest, onImgDeleted, isDataLoading, totalCoun
     return <>
         {/* style={{ height: "calc(100vh - 56px)" }} */}
         {/* 未登录，我的页面显示登录按钮 */}
-        {type === ImgPageType.MY && (!user || !user.email) && <div className={css['no-more-tips']}>您还未登录，请先<a href={`/${process.env.NODE_ENV === 'development' ? 'login' : 'login.html'}?redirect=/mj`}> 登录 </a>  </div>}
-        {type === ImgPageType.MY && (user.email) && list.length === 0 && <div className={css['no-more-tips']}>暂无数据，<Link href='/'> 开始绘画！ </Link>  </div>}
-        {type === ImgPageType.PUBLIC && list.length === 0 && <div className={css['no-more-tips']}>暂无数据，<Link href='/'> 开始绘画！ </Link>  </div>}
-
+        {!isDataLoading && <> {type === ImgPageType.MY && (!user || !user.email) && <div className={css['no-more-tips']}>您还未登录，请先<a href={`/${process.env.NODE_ENV === 'development' ? 'login' : 'login.html'}?redirect=/mj`}> 登录 </a>  </div>}
+            {type === ImgPageType.MY && (user.email) && list.length === 0 && <div className={css['no-more-tips']}>暂无数据，<Link href='/'> 开始绘画！ </Link>  </div>}
+            {type === ImgPageType.PUBLIC && list.length === 0 && <div className={css['no-more-tips']}>暂无数据，<Link href='/'> 开始绘画！ </Link>  </div>}
+        </>}
         <div className="masonry-list-wrapper" style={{ height: "calc(100vh - 56px - 15px)", overflow: "scroll", boxSizing: "border-box", paddingTop: '20px', ...style, }}>
             {/* height: `${maxColumnHeight}px` */}
             <><div className={css["masonry-list-container"]} style={{ width: `${containerWidth}px`, height: `${maxColumnHeight}px`, minHeight: "100vh" }}>

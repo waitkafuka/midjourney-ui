@@ -11,8 +11,11 @@ import { useEffect } from 'react';
 import { requestAliyun } from "../request/http";
 import { useSelector, useDispatch } from 'react-redux';
 import { setUserInfo } from '../store/userInfo';
+import { useRouter } from 'next/router';
+import { KeepAliveProvider } from 'next-easy-keepalive';
 
 export default function App({ Component, pageProps }: AppProps) {
+  const router = useRouter();
   notification.config({
     placement: 'top',
     duration: 5,
@@ -30,17 +33,11 @@ export default function App({ Component, pageProps }: AppProps) {
   }, [])
 
   return (<Provider store={store}>
-    <ConfigProvider
-      theme={{
-        token: {
-          colorPrimary: '#000000',
-        },
-      }}
-    >
+    <KeepAliveProvider router={router}>
       {withTheme(
         MainLayout(<Component {...pageProps} />)
       )}
-    </ConfigProvider>
+    </KeepAliveProvider>
   </Provider>
   )
 

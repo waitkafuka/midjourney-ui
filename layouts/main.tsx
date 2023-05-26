@@ -47,17 +47,22 @@ const ROUTES: Route = {
       icon: <BulbOutlined />,
     },
     {
+      path: '/cookbook',
+      name: '风格大全',
+      icon: <i className='iconfont icon-canshushezhi'></i>,
+    },
+    {
       path: 'https://superx.chat/',
       target: '_blank',
       name: 'ChatGPT',
       icon: <WechatOutlined />,
     },
-    {
-      path: 'https://superx.chat/pay.html',
-      target: '_blank',
-      name: '开通包月',
-      icon: <ShoppingCartOutlined />,
-    },
+    // {
+    //   path: 'https://superx.chat/pay.html',
+    //   target: '_blank',
+    //   name: '开通包月',
+    //   icon: <ShoppingCartOutlined />,
+    // },
   ],
 }
 

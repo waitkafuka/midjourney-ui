@@ -41,10 +41,14 @@
       width: 100%;
       text-align: center;
       display: flex;
+      justify-content: center;
       .masonry-action-item {
         position: relative;
         flex-grow: 1;
         width: 25%;
+        display: flex;
+        justify-content: center;
+        align-items: center;
         &:first-child::before {
           display: none;
         }

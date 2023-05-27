@@ -37,8 +37,6 @@ U指的是：Upscale，指针对这张图片放大和填充更多细节。当你
 --ar w:h	控制图片尺寸比例，w是宽，h是高，例--ar 16:9
 ## 其他参数
 `
-console.log('text', text);
-
 const Guide: React.FC = () => {
     return (
         <div style={{ paddingLeft: "15px" }} className='markdown-body'>

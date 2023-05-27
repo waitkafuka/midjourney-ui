@@ -17,7 +17,7 @@ interface Props {
 }
 
 const columnWidth = 300;
-const gap = 20;
+const gap = 25;
 let timer: NodeJS.Timeout | null = null;
 
 const App = ({ type, list, onPageRequest, onImgDeleted, isDataLoading, totalCount, style }: Props) => {
@@ -34,6 +34,7 @@ const App = ({ type, list, onPageRequest, onImgDeleted, isDataLoading, totalCoun
         let containerWidth = wrap?.offsetWidth;
         //两边留 20px 的间距
         containerWidth = containerWidth ? containerWidth - (gap * 2) : 0;
+        // containerWidth = containerWidth ? containerWidth - (gap * 2) : 0;
         //计算列数
         const columns = Math.floor(containerWidth / (columnWidth + gap));
         setColumns(columns);

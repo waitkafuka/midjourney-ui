@@ -251,17 +251,17 @@ a {
 }
 
 
-:where(.css-dev-only-do-not-override-yp8pcc)button.ant-btn-primary{
-  background-color: #3c3c3d;
+button.ant-btn-primary{
+  background-color: #3c3c3d !important;
 }
 
-:where(.css-dev-only-do-not-override-yp8pcc)button.ant-btn-primary:not(:disabled):hover{
-  background-color: #1a1a1b;
+button.ant-btn-primary:not(:disabled):hover{
+  background-color: #1a1a1b !important;
 }
 
-:where(.css-dev-only-do-not-override-yp8pcc).ant-btn-default:not(:disabled):hover{
-  color:#333;
-  border-color: #999;
+.ant-btn-default:not(:disabled):hover{
+  color:#333 !important;
+  border-color: #999 !important;
 }
 
 .ant-switch .ant-switch-inner{

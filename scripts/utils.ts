@@ -37,3 +37,24 @@ export const hasChinese = function (str: string) {
     var reg = /[\u4E00-\u9FA5\uF900-\uFA2D]/;
     return reg.test(str);
 }
+
+/**
+ * 从prompt中提取图片的宽高比
+ */
+export const getRatio = (prompt: string): { width: number, height: number } => {
+    const regex = /--ar\s+(\d+):(\d+)/;
+    const match = regex.exec(prompt);
+    return {
+        width: match ? parseInt(match[1]) : 1,
+        height: match ? parseInt(match[2]) : 1
+    }
+}
+
+/**
+ * 根据图片的宽高比，和图片的宽度，计算出图片的高度
+ * @param ratio
+ * @param width
+ */
+export const getHeight = (ratio: { width: number, height: number }, baseWidth: number) => {
+    return Math.floor(baseWidth / ratio.width * ratio.height) ;
+}

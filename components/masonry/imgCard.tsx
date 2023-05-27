@@ -1,6 +1,6 @@
 import React, { useState, useMemo, useEffect } from "react";
 import { Space, Tag, Tooltip, Card, Image, message, Modal, Switch } from "antd";
-import { CopyOutlined, CloudDownloadOutlined, EditOutlined, DeleteOutlined } from '@ant-design/icons'
+import { CopyOutlined, CloudDownloadOutlined, EditOutlined, DeleteOutlined, LikeOutlined } from '@ant-design/icons'
 const { Meta } = Card;
 import moment from 'moment';
 import { ImgCardModel } from "../../scripts/types";
@@ -11,6 +11,7 @@ import Router from "next/router";
 import { requestAliyunMJ } from "../../request/http";
 const { confirm } = Modal;
 import { ImgPageType } from "../../scripts/types";
+import { getRatio, getHeight } from "../../scripts/utils";
 
 interface Props {
     model: ImgCardModel,
@@ -27,14 +28,7 @@ const basePath = 'https://oss-cdn.superx.chat'
 // 以此宽度进行图片按比例裁剪。mj的图片地址可以支持width和height参数
 const baseWidth = 500;
 //从提示词中提取宽高比例
-const getRatio = (prompt: string): { width: number, height: number } => {
-    const regex = /--ar\s+(\d+):(\d+)/;
-    const match = regex.exec(prompt);
-    return {
-        width: match ? parseInt(match[1]) : 1,
-        height: match ? parseInt(match[2]) : 1
-    }
-}
+
 
 const App = ({ model, columnWidth, onImgDeleted, type }: Props) => {
     const { img_url, prompt, create_time, id, is_public } = model;
@@ -58,7 +52,7 @@ const App = ({ model, columnWidth, onImgDeleted, type }: Props) => {
 
     const height = useMemo(() => {
         const ratio = getRatio(prompt);
-        return Math.floor(baseWidth * ratio.height / ratio.width);
+        return getHeight(ratio, baseWidth);
     }, [prompt])
 
     const onImgClick = () => {
@@ -94,13 +88,18 @@ const App = ({ model, columnWidth, onImgDeleted, type }: Props) => {
                     }}>
                         <CopyOutlined key="copy" title="复制提示词" />
                     </div>
-                    {/* <div className={css["masonry-action-item"]} onClick={() => {
+                    {/* 编辑按钮 */}
+                    {type === ImgPageType.MY && <div className={css["masonry-action-item"]} onClick={() => {
                         //路由到编辑页面
                         Router.push(`/?prompt=${encodeURIComponent(prompt)}`);
                     }}>
                         <EditOutlined key="edit" title="重新生成" />
-                    </div> */}
+                    </div>}
                     <div className={css["masonry-action-item"]} onClick={() => {
+                        if (!img_url) {
+                            message.error('图片未生成')
+                            return;
+                        };
                         downloadFile(HDsrc)
                     }}>
                         <CloudDownloadOutlined title="下载" />
@@ -110,14 +109,20 @@ const App = ({ model, columnWidth, onImgDeleted, type }: Props) => {
                     }}>
                         <DeleteOutlined title="删除" />
                     </div>}
-                    {type === ImgPageType.MY && <div className={css["masonry-action-item"]} onClick={() => {
+                    {/* {type !== ImgPageType.MY && <div className={css["masonry-action-item"]} onClick={() => {
+                        const url = 1
+                    }}>
+                        <LikeOutlined title="点赞" />
+                        {/* <LikeOutlined title="点赞" style={{color:"#ff2626"}} /> 
+                    </div>*/}
+                    {/* {type === ImgPageType.MY && <div className={css["masonry-action-item"]} onClick={() => {
                         //分享
                     }}>
                         <Switch checkedChildren="分享" unCheckedChildren="关闭" defaultChecked={is_public === 0} onChange={async v => {
                             await requestAliyunMJ('edit-painting-state', { id, isPublic: v ? 0 : 1 });
                         }} />
                     </div>
-                    }
+                    } */}
                     <div style={{ display: "none" }}>{moment(create_time).format('YYYY-MM-DD HH:mm:ss')}</div>
                 </div>
             </div>

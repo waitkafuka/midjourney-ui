@@ -1,30 +1,26 @@
 import Link from 'next/link';
 import router from 'next/router';
 import { useEffect, useState } from 'react';
-
-import { CacheablePage } from '../components/cacheAblePage';
-import { useKeepAlive } from 'next-easy-keepalive';
+function replaceLastElement(arr: number[], newElement: number) {
+    // 返回更新后的数组
+}
 function Counter() {
-    const { useMemState, useNotBackEffect, useBackActive } = useKeepAlive('Counter');
-    const [list, setList] = useMemState<number[]>([], 'list');
-
+    const [list, setList] = useState<number[]>([1, 2, 3]);
     function handleClick() {
-        console.log(list);
-        setList(v => [...v, Math.random()]);
+        // setInterval(() => {
+            // setList(arr => {
+            //     // arr[arr.length - 1] = Math.random(); // 替换最后一个元素
+            //     return [...arr, Math.random()];
+            // });
+            setList([...list, Math.random()]);
+        // }, 1000);
     }
-
-    useNotBackEffect(() => {
-        console.log('history pop')
-    }, []);
 
     /**
      * The useBackActive hook is only executed on first render when going back.
      * Like the useEffect hook, the second takes an array of dependencies.
      * The hook runs again when the value changes.
      */
-    useBackActive(() => {
-        console.log('history push')
-    }, []);
 
     useEffect(() => {
         // setInterval(() => {

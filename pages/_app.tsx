@@ -8,7 +8,7 @@ import store from '../store'
 import withTheme from '../theme';
 import { notification, ConfigProvider, theme } from 'antd';
 import { useEffect } from 'react';
-import { requestAliyun } from "../request/http";
+import { requestAliyun, requestAliyunMJ } from "../request/http";
 import { useSelector, useDispatch } from 'react-redux';
 import { setUserInfo } from '../store/userInfo';
 import { useRouter } from 'next/router';
@@ -28,8 +28,23 @@ export default function App({ Component, pageProps }: AppProps) {
     // dispatch(setUserInfo(data.user || {}))
   };
 
+  // 获取用户点赞列表
+  const getThumbUpList = async () => {
+    const data = await requestAliyunMJ('my-thumb-up-list', null, 'GET');
+    console.log('getThumbUpList', data);
+
+    if (data.code == 0) {
+      store.dispatch({
+        type: 'user/setThumbUpList',
+        payload: data.data.rows.map((item: any) => item.img_id)
+      })
+    };
+
+  }
+
   useEffect(() => {
     getUserInfo();
+    getThumbUpList();
   }, [])
 
   return (<Provider store={store}>

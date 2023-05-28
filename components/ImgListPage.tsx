@@ -40,6 +40,7 @@ const ImgListPage = ({ type }: ImgListPageProps) => {
             })
         }
 
+        // setImgList([...clist, ...newImgList])
         setImgList(list => [...list, ...newImgList])
 
         // setCount(Math.random())
@@ -47,6 +48,19 @@ const ImgListPage = ({ type }: ImgListPageProps) => {
         isLockRequest = false;
         setIsDataLoading(false)
     }
+
+    const onImgThumbUpActionDone = (id: number, action: string) => {
+        const index = imgList.findIndex(item => item.id === id);
+        if (index === -1) return;
+        const img = imgList[index];
+        if (action === 'add') {
+            img.thumb_up_count++;
+        } else {
+            img.thumb_up_count--;
+        }
+        setImgList([...imgList]);
+    }
+
 
     // 页面初始化
     useEffect(() => {
@@ -56,7 +70,7 @@ const ImgListPage = ({ type }: ImgListPageProps) => {
     }, [])
     return (
         <div className="">
-            <Masonry type={type} onImgDeleted={onImgDeleted} style={{ paddingTop: "20px" }} list={imgList} onPageRequest={queryImgList} isDataLoading={isDataLoading} totalCount={count} />
+            <Masonry onImgThumbUpActionDone={onImgThumbUpActionDone} type={type} onImgDeleted={onImgDeleted} style={{ paddingTop: "20px" }} list={imgList} onPageRequest={queryImgList} isDataLoading={isDataLoading} totalCount={count} />
         </div>
     );
 };

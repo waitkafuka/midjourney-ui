@@ -16,14 +16,13 @@ const imgList = [{
     image: 'https://cdn.superx.chat/stuff/human.png',
 },];
 const text = `
-# midjourney入门指引
 ## 介绍
 midjourney 是一款当今较为领先的一款人工智能绘画程序。输入你想要绘制的内容提示词，midjourney将为你绘制出来指定的图片。
 ## 示例
 ${imgList.map(({ prompt, image }) => {
     return `> ${prompt}  
 
-![](${image})  
+[![](${image})](${image}) 
 
     `
 }).join('\n')}
@@ -41,12 +40,17 @@ const Guide: React.FC = () => {
     return (
         <div style={{ paddingLeft: "15px" }} className='markdown-body'>
             <style>
-                {`img{
-                    width: 100%;
+                {`.markdown-body img{
+                    max-width: 600px;
                 }`}
             </style>
+            <h1>midjourney入门指引</h1>
+
+            <h3>强烈建议你在开始之前，先看一下这篇教程：<a href="https://learningprompt.wiki/docs/midjourney-learning-path" target="_blank">https://learningprompt.wiki/docs/midjourney-learning-path</a></h3>
+
             <ReactMarkdown children={text} remarkPlugins={[remarkGfm]} />
-            其他更多参数请参考：<Link href="/cookbook/">风格大全</Link>
+            其他更多参数请参考：<Link href="/cookbook/">风格大全</Link> <br />
+            关于更详细的学习教程，请点击：<a href="https://learningprompt.wiki/docs/midjourney-learning-path" target='_blank'>这里</a>
         </div >
     );
 };

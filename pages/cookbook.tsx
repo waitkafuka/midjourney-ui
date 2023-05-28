@@ -321,8 +321,9 @@ const text = `
 const cookbook = () => {
     return (
         <div style={{ paddingLeft: "15px" }} className='markdown-body'>
-            
+
             <ReactMarkdown children={text} remarkPlugins={[remarkGfm]} />
+            关于更详细的学习教程，请点击：<a href="https://learningprompt.wiki/docs/midjourney-learning-path" target='_blank'>这里</a>
         </div >
     )
 }

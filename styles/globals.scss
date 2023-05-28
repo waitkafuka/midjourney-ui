@@ -276,3 +276,9 @@ button.ant-btn-primary:not(:disabled):hover{
 .ant-switch .ant-switch-handle::before{
   box-shadow: 0 2px 4px 0 rgb(27 32 28 / 50%);
 }
+.no-content-tips {
+  text-align: center;
+  padding: 10px;
+  font-size: 13px;
+  color: #cecece;
+}

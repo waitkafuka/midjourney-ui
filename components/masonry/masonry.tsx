@@ -132,7 +132,7 @@ const App = ({ type, list, onPageRequest, onImgDeleted, isDataLoading, totalCoun
     return <>
         {/* style={{ height: "calc(100vh - 56px)" }} */}
         {/* 未登录，我的页面显示登录按钮 */}
-        {!isDataLoading && <> {type === ImgPageType.MY && (!user || !user.email) && <div className={css['no-more-tips']}>您还未登录，请先<a href={`/${process.env.NODE_ENV === 'development' ? 'login' : 'login/'}?redirect=/mj`}> 登录 </a>  </div>}
+        {!isDataLoading && <> {type === ImgPageType.MY && (!user || !user.email) && <div className={css['no-more-tips']}>您还未登录，请先<a href={`/${process.env.NODE_ENV === 'development' ? 'login' : 'login/'}?redirect=/art`}> 登录 </a>  </div>}
             {type === ImgPageType.MY && (user.email) && list.length === 0 && <div className={css['no-more-tips']}>暂无数据，<Link href='/'> 开始绘画！ </Link>  </div>}
             {type === ImgPageType.PUBLIC && list.length === 0 && <div className={css['no-more-tips']}>暂无数据，<Link href='/'> 开始绘画！ </Link>  </div>}
         </>}

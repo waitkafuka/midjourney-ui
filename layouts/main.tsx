@@ -175,7 +175,7 @@ export default function Main(children: JSX.Element) {
         icon: <GithubFilled></GithubFilled>, title:"superx.chat", url:'https://'
       }]}></ProLayout> */}
         <ProLayout
-          logo={"/mj/logo.png"}
+          logo={"/art/logo.png"}
           title="superx.chat"
           style={{ minHeight: '100vh' }}
           route={ROUTES}
@@ -206,7 +206,7 @@ export default function Main(children: JSX.Element) {
                 {user && user.email ? <Dropdown menu={{ items }} placement="top" arrow={{ pointAtCenter: true }}>
                   <Button block>{user.email}</Button>
                 </Dropdown> : <Button block onClick={() => {
-                  window.location.href = `https://superx.chat/${process.env.NODE_ENV === 'development' ? 'login' : 'login/'}?redirect=/mj`
+                  window.location.href = `https://superx.chat/${process.env.NODE_ENV === 'development' ? 'login' : 'login/'}?redirect=/art`
                 }}>
                   登录
                 </Button>}

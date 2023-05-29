@@ -24,14 +24,14 @@ export default class MyDocument extends Document {
         <Head >
           <link
             rel="icon"
-            href="/mj/logo.png"
+            href="/art/logo.png"
           />
           <link rel="stylesheet" href="//at.alicdn.com/t/c/font_4080772_udf90wavud.css" />
         </Head>
         <body>
           <Main />
           <NextScript />
-          <script async src="/mj/baidutongji.js"></script>
+          <script async src="/art/baidutongji.js"></script>
         </body>
       </Html>
     );

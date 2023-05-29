@@ -7,6 +7,7 @@ const userSlice = createSlice({
     avatar: '',
     nickname_bg_color: 'rgb(70, 108, 212)',
     isShowUserProfileEditDialog: false,
+    thumbUpList: [] as number[], // 点赞过的图片 ID 列表
   },
   reducers: {
     setUserInfo: (state, action) => {
@@ -33,6 +34,20 @@ const userSlice = createSlice({
     },
     hideUserProfileEditDialog: (state) => {
       state.isShowUserProfileEditDialog = false;
+    },
+    setThumbUpList: (state, action) => {
+      state.thumbUpList = action.payload;
+    },
+    thumbUp: (state, action) => {
+      state.thumbUpList.push(action.payload as number);
+      state.thumbUpList = JSON.parse(JSON.stringify(state.thumbUpList));
+    },
+    cancelThumbUp: (state, action) => {
+      let index = state.thumbUpList.indexOf(action.payload as number);
+      if (index !== -1) {
+        state.thumbUpList.splice(index, 1);
+      state.thumbUpList = JSON.parse(JSON.stringify(state.thumbUpList));
+      }
     }
 
   },

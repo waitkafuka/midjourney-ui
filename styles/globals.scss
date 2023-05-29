@@ -61,7 +61,7 @@
   margin-bottom: 20px;
 }
 
-@media screen and (min-width: 769px) {
+@media screen and (min-width: 768px) {
   .ant-layout-content {
     margin-top: 0;
     padding: 15px 0 0 0 !important;
@@ -85,10 +85,9 @@
   .prompt-input-wrap {
     position: absolute;
     bottom: 20px;
-    left: 50%;
-    transform: translateX(-50%);
-    max-width: 1000px;
-    width: 80%;
+    left: 20px;
+    right: 20px;
+    z-index: 100;
   }
 }
 
@@ -98,6 +97,15 @@
 @media (max-width: 768px) {
   .ant-layout-content {
     padding: 24px 10px !important;
+  }
+
+  .workspace-img-container{
+    width: 100% !important;
+    height: auto !important;
+    min-height: 200px;
+    img{
+      width: 100%;
+    }
   }
 
   .ant-layout-content {
@@ -124,11 +132,12 @@
   }
 
   .prompt-input-wrap {
-    position: fixed;
+    position: absolute;
     bottom: 20px;
     bottom: calc(env(safe-area-inset-bottom) + 15px);
     left: 15px;
     right: 15px;
+    z-index: 100;
   }
 }
 
@@ -166,6 +175,7 @@ a {
 @import 'tailwindcss/base';
 @import 'tailwindcss/components';
 @import 'tailwindcss/utilities';
+
 
 @tailwind base;
 @tailwind components;
@@ -240,9 +250,14 @@ a {
   background-color: #1d1d1d !important;
 }
 
+.ant-tag-checkable{
+  width: 40px;
+  text-align: center;
+}
+
 .ant-tag-checkable:not(.ant-tag-checkable-checked):hover {
   color: #fff;
-  background-color: #000 !important;
+  background-color: #252525 !important;
 }
 
 .anticon.anticon-loading svg {
@@ -250,17 +265,17 @@ a {
 }
 
 
-:where(.css-dev-only-do-not-override-yp8pcc)button.ant-btn-primary{
-  background-color: #3c3c3d;
+button.ant-btn-primary{
+  background-color: #3c3c3d !important;
 }
 
-:where(.css-dev-only-do-not-override-yp8pcc)button.ant-btn-primary:not(:disabled):hover{
-  background-color: #1a1a1b;
+button.ant-btn-primary:not(:disabled):hover{
+  background-color: #1a1a1b !important;
 }
 
-:where(.css-dev-only-do-not-override-yp8pcc).ant-btn-default:not(:disabled):hover{
-  color:#333;
-  border-color: #999;
+.ant-btn-default:not(:disabled):hover{
+  color:#333 !important;
+  border-color: #999 !important;
 }
 
 .ant-switch .ant-switch-inner{
@@ -274,4 +289,45 @@ a {
 
 .ant-switch .ant-switch-handle::before{
   box-shadow: 0 2px 4px 0 rgb(27 32 28 / 50%);
+}
+
+.workspace-img-container{
+  width: 100%;
+  padding: 20px 0;
+  box-sizing: content-box !important;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: relative;
+  .no-content-tips{
+    position: absolute;
+    bottom: -25px;
+  }
+  img{
+    max-width: 100%;
+    border-radius: 5px;
+  }
+}
+.no-content-tips{
+  text-align: center;
+  padding: 20px;
+  color: #999;
+  font-size: 14px;
+}
+
+.workspace-img-wrap{
+  line-height: 1.6;
+  padding: 20px;
+  padding-bottom: 110px;
+  position: relative;
+  z-index: 10;
+  .prompt-text{
+
+  }
+}
+.workspace-img-wrap .img-list-item{
+  margin-top: 20px;
+  &:first-child{
+    margin-top: 0;
+  }
 }

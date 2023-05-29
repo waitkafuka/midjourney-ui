@@ -13,7 +13,8 @@ import {
   SendOutlined,
   WechatOutlined,
   BulbOutlined,
-  PictureOutlined
+  PictureOutlined,
+  ShoppingCartOutlined
 } from '@ant-design/icons'
 
 import { Route, MenuDataItem } from '@ant-design/pro-layout/lib/typing'
@@ -46,11 +47,22 @@ const ROUTES: Route = {
       icon: <BulbOutlined />,
     },
     {
+      path: '/cookbook',
+      name: '参数大全',
+      icon: <i className='iconfont icon-canshushezhi'></i>,
+    },
+    {
       path: 'https://superx.chat/',
       target: '_blank',
       name: 'ChatGPT',
       icon: <WechatOutlined />,
     },
+    // {
+    //   path: 'https://superx.chat/pay/',
+    //   target: '_blank',
+    //   name: '开通包月',
+    //   icon: <ShoppingCartOutlined />,
+    // },
   ],
 }
 
@@ -98,7 +110,7 @@ export default function Main(children: JSX.Element) {
       key: '2',
       label: (
         <Button type="text" block onClick={async () => {
-          window.location.href = `https://superx.chat/pay.html?email=${user.email}`;
+          window.location.href = `https://superx.chat/pay/?email=${user.email}`;
         }}>
           开通包月
         </Button>
@@ -194,7 +206,7 @@ export default function Main(children: JSX.Element) {
                 {user && user.email ? <Dropdown menu={{ items }} placement="top" arrow={{ pointAtCenter: true }}>
                   <Button block>{user.email}</Button>
                 </Dropdown> : <Button block onClick={() => {
-                  window.location.href = `/${process.env.NODE_ENV === 'development' ? 'login' : 'login.html'}?redirect=/uedmj`
+                  window.location.href = `https://superx.chat/${process.env.NODE_ENV === 'development' ? 'login' : 'login/'}?redirect=/art`
                 }}>
                   登录
                 </Button>}

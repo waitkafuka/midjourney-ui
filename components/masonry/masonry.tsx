@@ -4,6 +4,7 @@ import { use, useEffect, useMemo, useState, useRef } from 'react'
 import css from './masonry.module.scss'
 import { Spin } from 'antd';
 import Link from 'next/link'
+import { useSelector } from 'react-redux';
 
 interface Props {
     list: ImgCardModel[],
@@ -12,16 +13,18 @@ interface Props {
     totalCount: number,
     onImgDeleted: (id: number) => void,
     style: React.CSSProperties,
-    type: ImgPageType
+    type: ImgPageType,
+    onImgThumbUpActionDone: (id: number, action: string) => void,
 }
 
 const columnWidth = 300;
-const gap = 20;
+const gap = 25;
 let timer: NodeJS.Timeout | null = null;
 
-const App = ({ type, list, onPageRequest, onImgDeleted, isDataLoading, totalCount, style }: Props) => {
+const App = ({ type, list, onPageRequest, onImgDeleted, isDataLoading, totalCount, style, onImgThumbUpActionDone }: Props) => {
     const [columns, setColumns] = useState(0);
     const [maxColumnHeight, setMaxColumnHeight] = useState(0);
+    const user = useSelector((state: any) => state.user.info);
     //加个ref，这是为了解决在scroll事件中无法获取到最新的state的值
     const hasMoreRef = useRef(true);
 
@@ -32,6 +35,7 @@ const App = ({ type, list, onPageRequest, onImgDeleted, isDataLoading, totalCoun
         let containerWidth = wrap?.offsetWidth;
         //两边留 20px 的间距
         containerWidth = containerWidth ? containerWidth - (gap * 2) : 0;
+        // containerWidth = containerWidth ? containerWidth - (gap * 2) : 0;
         //计算列数
         const columns = Math.floor(containerWidth / (columnWidth + gap));
         setColumns(columns);
@@ -127,17 +131,20 @@ const App = ({ type, list, onPageRequest, onImgDeleted, isDataLoading, totalCoun
 
     return <>
         {/* style={{ height: "calc(100vh - 56px)" }} */}
-        {list.length === 0 && <div className={css['no-more-tips']}>暂无数据，<Link href='/'> 开始绘画！ </Link>  </div>}
-
+        {/* 未登录，我的页面显示登录按钮 */}
+        {!isDataLoading && <> {type === ImgPageType.MY && (!user || !user.email) && <div className={css['no-more-tips']}>您还未登录，请先<a href={`/${process.env.NODE_ENV === 'development' ? 'login' : 'login/'}?redirect=/art`}> 登录 </a>  </div>}
+            {type === ImgPageType.MY && (user.email) && list.length === 0 && <div className={css['no-more-tips']}>暂无数据，<Link href='/'> 开始绘画！ </Link>  </div>}
+            {type === ImgPageType.PUBLIC && list.length === 0 && <div className={css['no-more-tips']}>暂无数据，<Link href='/'> 开始绘画！ </Link>  </div>}
+        </>}
         <div className="masonry-list-wrapper" style={{ height: "calc(100vh - 56px - 15px)", overflow: "scroll", boxSizing: "border-box", paddingTop: '20px', ...style, }}>
             {/* height: `${maxColumnHeight}px` */}
             <><div className={css["masonry-list-container"]} style={{ width: `${containerWidth}px`, height: `${maxColumnHeight}px`, minHeight: "100vh" }}>
-                {list.map((imgCardInfo: ImgCardModel) => <ImgCard type={type} onImgDeleted={onImgDeleted} key={imgCardInfo.id} model={imgCardInfo} columnWidth={columnWidth} />)}
+                {list.map((imgCardInfo: ImgCardModel) => <ImgCard onImgThumbUpActionDone={onImgThumbUpActionDone} type={type} onImgDeleted={onImgDeleted} key={imgCardInfo.id} model={imgCardInfo} columnWidth={columnWidth} />)}
             </div>
                 {isDataLoading && <div className='loaing-box' style={{ textAlign: 'center', padding: "15px" }}>
                     <Spin></Spin>
                 </div>}
-                {!hasMore && !isDataLoading && <div className={css['no-more-tips']}>没有更多了</div>}</>
+                {!hasMore && !isDataLoading && totalCount !== 0 && <div className={css['no-more-tips']}>没有更多了</div>}</>
         </div >
     </>
 };

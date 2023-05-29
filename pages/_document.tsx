@@ -26,7 +26,7 @@ export default class MyDocument extends Document {
             rel="icon"
             href="/art/logo.png"
           />
-          <link rel="stylesheet" href="//at.alicdn.com/t/c/font_4080772_96k6bph70c.css" />
+          <link rel="stylesheet" href="//at.alicdn.com/t/c/font_4080772_udf90wavud.css" />
         </Head>
         <body>
           <Main />

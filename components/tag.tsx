@@ -26,7 +26,7 @@ const App = ({ Data, onClick, type }: Props) => {
     <>
       <Space className="operation-btn-space" size={16} wrap>
         {Data.map((tag, index) => (
-          <Tooltip key={tag} placement="top" title={type === 'upscale' ? `提高第${index + 1}张图片的分辨率` : `以第${index + 1}张图片创作变体`} arrow={true}>
+          <Tooltip key={tag} placement="top" title={type === 'upscale' ? `高清绘制第${index + 1}张图片` : `以第${index + 1}张图片为基础创作四张变体`} arrow={true}>
             <CheckableTag
               className={
                 selectedTags.includes(tag) ? "tag-checked" : "tag-unchecked"

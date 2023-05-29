@@ -313,12 +313,86 @@ const Index: React.FC = () => {
   }, []);
 
   return (
-    <div>
+    <div className="w-full mx-auto px-4 h-full overflow-y-hidden list-input-container">
+      {contextHolder}
+      {/* <Spin>{paintingTip}</Spin> */}
+      <Modal
+        title="翻译中"
+        style={{ top: 20 }}
+        open={isTranslating}
+        closable={false}
+        cancelText=""
+        okText=""
+        footer={null}
+      >
+        <div><Spin />正在为您翻译为英文...</div>
+      </Modal>
+      {/* <List
+        className="mx-auto justify-start overflow-y-auto img-list-box"
+        style={{
+          height: "calc(100vh - 96px)",
+        }}
 
+        dataSource={messages}
+        renderItem={renderMessage}
+        locale={{ emptyText: '使用 midjourney 来生成你的第一幅人工智能绘画作品。' }}
+      /> */}
+      {messages.length > 0 ? <div className="workspace-img-wrap img-list-box" style={{
+        height: "calc(100vh - 96px)", overflowY: "auto"
+      }}>
+        {/* 图片结果列表容器 */}
+        {messages.map(({ text, img, progress, hasTag, content, msgID, msgHash }, index) => <div className="img-list-item" key={progress}>
+          <div> {text} {`(${progress})`}</div>
+          <div className="workspace-img-container" style={{ width: `${baseWidth}px`, height: getImgCalcHeight(img, text) }}>
+            {img ? <>
+              <img src={thumbUrl(img, text)} style={{ cursor: isDone(progress) ? 'zoom-in' : 'auto' }} onClick={() => {
+                if (isDone(progress)) {
+                  window.open(img, '_blank');
+                }
+              }} />
+              {img && <p className="no-content-tips" style={{ fontSize: "13px" }}>图片默认公开展示在“艺术公园”，可在左侧“我的作品”中进行管理。</p>}
+
+            </> : <Spin tip="正在生成，大约需要 1-2 分钟，请耐心等待..."></Spin>}
+            {/* 隐藏一个原图，这是为了提前缓存，以便在后面点击查看大图的时候能够更快加载 */}
+            <img src={img} style={{ display: 'none' }} />
+          </div>
+          {/* ，如果您不希望展示，可进入“<Link href="/mypaintings">我的作品</Link>”进行关闭。 */}
+          {(img && img !== defaultImg) && <div style={{ marginTop: "15px" }}><a href={img} style={{ textDecoration: "underline" }} target="_blank">查看大图</a> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a style={{ textDecoration: "underline" }} onClick={() => { downloadFile(img) }}>下载图片 </a> </div>}
+          {hasTag && (
+            <>
+              <div style={{ marginTop: "10px" }}>
+                <Tag
+                  Data={["U1", "U2", "U3", "U4"]}
+                  type="upscale"
+                  onClick={(tag) => {
+                    scrollToBottom();
+                    tagClick(String(content), String(msgID), String(msgHash), tag)
+                  }
+                  }
+                />
+              </div>
+              <Tag
+                Data={["V1", "V2", "V3", "V4"]}
+                type="variation"
+                onClick={(tag) => {
+                  scrollToBottom();
+                  tagClick(String(content), String(msgID), String(msgHash), tag)
+                }
+                }
+              />
+              <p style={{ marginTop: "0px" }}>如果您觉得某张图片还不错，别忘了点 U+编号，获取高清图片~ </p>
+
+            </>
+          )}
+        </div>)}
+      </div> : <>
+        <p className="no-content-tips">使用 midjourney 来生成你的第一幅人工智能绘画作品。</p>
+        {!user.email && <p className="no-content-tips">您尚未登录，请先<a href="/login/?redirect=/mj" style={{ fontSize: "14px", textDecoration: "underline" }}> 登录</a></p>}
+      </>}
       <div className="prompt-input-wrap">
         <TextArea
           className="w-full"
-          disabled={true}
+          disabled={inputDisable}
           value={inputValue}
           onChange={(e) => setInputValue(e.target.value)}
           onKeyDown={(e) => {
@@ -339,7 +413,6 @@ const Index: React.FC = () => {
           type="primary"
           onClick={handleMessageSend}
           loading={inputDisable}
-          disabled={true}
           icon={<SendOutlined className="send-prompt-btn" />}
           title="Send"
           style={{
@@ -352,121 +425,7 @@ const Index: React.FC = () => {
           }}
         />
       </div>
-      <div className="no-content-tips">当前使用人数过多，服务器已无法继续提供服务。图片渲染需要耗费大量计算资源，请稍后再试。</div>
     </div>
-    // <div className="w-full mx-auto px-4 h-full overflow-y-hidden list-input-container">
-    //   {contextHolder}
-    //   {/* <Spin>{paintingTip}</Spin> */}
-    //   <Modal
-    //     title="翻译中"
-    //     style={{ top: 20 }}
-    //     open={isTranslating}
-    //     closable={false}
-    //     cancelText=""
-    //     okText=""
-    //     footer={null}
-    //   >
-    //     <div><Spin />正在为您翻译为英文...</div>
-    //   </Modal>
-    //   {/* <List
-    //     className="mx-auto justify-start overflow-y-auto img-list-box"
-    //     style={{
-    //       height: "calc(100vh - 96px)",
-    //     }}
-
-    //     dataSource={messages}
-    //     renderItem={renderMessage}
-    //     locale={{ emptyText: '使用 midjourney 来生成你的第一幅人工智能绘画作品。' }}
-    //   /> */}
-    //   {messages.length > 0 ? <div className="workspace-img-wrap img-list-box" style={{
-    //     height: "calc(100vh - 96px)", overflowY: "auto"
-    //   }}>
-    //     {/* 图片结果列表容器 */}
-    //     {messages.map(({ text, img, progress, hasTag, content, msgID, msgHash }, index) => <div className="img-list-item" key={progress}>
-    //       <div> {text} {`(${progress})`}</div>
-    //       <div className="workspace-img-container" style={{ width: `${baseWidth}px`, height: getImgCalcHeight(img, text) }}>
-    //         {img ? <>
-    //           <img src={thumbUrl(img, text)} style={{ cursor: isDone(progress) ? 'zoom-in' : 'auto' }} onClick={() => {
-    //             if (isDone(progress)) {
-    //               window.open(img, '_blank');
-    //             }
-    //           }} />
-    //           {img && <p className="no-content-tips" style={{ fontSize: "13px" }}>图片默认公开展示在“艺术公园”，可在左侧“我的作品”中进行管理。</p>}
-
-    //         </> : <Spin tip="正在生成，大约需要 1-2 分钟，请耐心等待..."></Spin>}
-    //         {/* 隐藏一个原图，这是为了提前缓存，以便在后面点击查看大图的时候能够更快加载 */}
-    //         <img src={img} style={{ display: 'none' }} />
-    //       </div>
-    //       {/* ，如果您不希望展示，可进入“<Link href="/mypaintings">我的作品</Link>”进行关闭。 */}
-    //       {(img && img !== defaultImg) && <div style={{ marginTop: "15px" }}><a href={img} style={{ textDecoration: "underline" }} target="_blank">查看大图</a> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a style={{ textDecoration: "underline" }} onClick={() => { downloadFile(img) }}>下载图片 </a> </div>}
-    //       {hasTag && (
-    //         <>
-    //           <div style={{ marginTop: "10px" }}>
-    //             <Tag
-    //               Data={["U1", "U2", "U3", "U4"]}
-    //               type="upscale"
-    //               onClick={(tag) => {
-    //                 scrollToBottom();
-    //                 tagClick(String(content), String(msgID), String(msgHash), tag)
-    //               }
-    //               }
-    //             />
-    //           </div>
-    //           <Tag
-    //             Data={["V1", "V2", "V3", "V4"]}
-    //             type="variation"
-    //             onClick={(tag) => {
-    //               scrollToBottom();
-    //               tagClick(String(content), String(msgID), String(msgHash), tag)
-    //             }
-    //             }
-    //           />
-    //           <p style={{ marginTop: "0px" }}>如果您觉得某张图片还不错，别忘了点 U+编号，获取高清图片~ </p>
-
-    //         </>
-    //       )}
-    //     </div>)}
-    //   </div> : <>
-    //     <p className="no-content-tips">使用 midjourney 来生成你的第一幅人工智能绘画作品。</p>
-    //     {!user.email && <p className="no-content-tips">您尚未登录，请先<a href="/login/?redirect=/mj" style={{ fontSize: "14px", textDecoration: "underline" }}> 登录</a></p>}
-    //   </>}
-    //   <div className="prompt-input-wrap">
-    //     <TextArea
-    //       className="w-full"
-    //       disabled={inputDisable}
-    //       value={inputValue}
-    //       onChange={(e) => setInputValue(e.target.value)}
-    //       onKeyDown={(e) => {
-    //         if (e.key === "Enter" && e.shiftKey) {
-    //           setInputValue(`${inputValue}\n`);
-    //           e.preventDefault();
-    //         } else if (e.key === "Enter") {
-    //           handleMessageSend();
-    //           e.preventDefault();
-    //         }
-    //       }}
-    //       placeholder="请描述你要绘画的作品。（例如：a cat。midjourney本身不支持中文，但您仍然可以输入中文，生成时系统将自动为您翻译为英文。可以使用ChatGPT生成你的提示词prompt。）"
-    //       autoSize={{ minRows: 1, maxRows: 6 }}
-    //       style={{ paddingRight: 30 }}
-    //     />
-    //     <Button
-    //       className="absolute"
-    //       type="primary"
-    //       onClick={handleMessageSend}
-    //       loading={inputDisable}
-    //       icon={<SendOutlined className="send-prompt-btn" />}
-    //       title="Send"
-    //       style={{
-    //         position: "absolute",
-    //         bottom: 0,
-    //         right: 0,
-    //         background: "transparent",
-    //         border: "none",
-    //         boxShadow: "none",
-    //       }}
-    //     />
-    //   </div>
-    // </div>
   );
 };
 

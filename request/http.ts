@@ -28,6 +28,6 @@ export const requestAliyun = async function (path: string, data?: any, method = 
 
 //请求国内服务器
 export const requestAliyunMJ = async function (path: string, data?: any, method = "POST", headers = {}) {
-    return request(`/mj/api/${path}`, data, method, headers);
+    return request(`/art/api/${path}`, data, method, headers);
 }
 

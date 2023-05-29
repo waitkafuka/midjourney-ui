@@ -53,13 +53,13 @@ const streamFetch = async (
 };
 
 export const Imagine = (body: string, loading?: (uri: MJMessage) => void) => {
-  return streamFetch("/mj/api/imagine", body, loading);
+  return streamFetch("/art/api/imagine", body, loading);
 };
 
 export const Upscale = (body: string, loading?: (uri: MJMessage) => void) => {
-  return streamFetch("/mj/api/upscale", body, loading);
+  return streamFetch("/art/api/upscale", body, loading);
 };
 
 export const Variation = (body: string, loading?: (uri: MJMessage) => void) => {
-  return streamFetch("/mj/api/variation", body, loading);
+  return streamFetch("/art/api/variation", body, loading);
 };

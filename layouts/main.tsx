@@ -163,7 +163,7 @@ export default function Main(children: JSX.Element) {
         icon: <GithubFilled></GithubFilled>, title:"superx.chat", url:'https://'
       }]}></ProLayout> */}
         <ProLayout
-          logo={"/mj/logo.png"}
+          logo={"/art/logo.png"}
           title="superx.chat"
           style={{ minHeight: '100vh' }}
           route={ROUTES}

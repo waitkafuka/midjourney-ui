@@ -27,8 +27,7 @@ const thumbUrl = (img: string, text: string) => {
   if (img.endsWith('.png')) {
     const ratio = getRatio(text);
     const height = getHeight(ratio, baseWidth);
-    console.log('计算缩略图1：', `${img}?width=${baseWidth}&height=${height}`);
-    return `${img}?width=${baseWidth}&height=${height}`;
+    return `${img}?x-oss-process=style/scale_500`;
   } else {
     console.log('计算缩略图2：', img);
     return img;

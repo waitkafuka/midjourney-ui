@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { Input, Button, List, Image, Typography } from "antd";
-import { requestAliyunMJ } from "../request/http";
+import { requestAliyunArt } from "../request/http";
 import Masonry from "../components/masonry/masonry";
 import { ImgCardModel, ImgPageType } from '../scripts/types'
 
@@ -31,7 +31,7 @@ const ImgListPage = ({ type }: ImgListPageProps) => {
         isLockRequest = true
         setIsDataLoading(true)
         pageIndex++;
-        const result = await requestAliyunMJ(type === ImgPageType.MY ? 'my-paintings' : 'public-paintings', { pageIndex })
+        const result = await requestAliyunArt(type === ImgPageType.MY ? 'my-paintings' : 'public-paintings', { pageIndex })
         //追加之前去除重复数据
         let newImgList: any = [];
         if (result.rows) {

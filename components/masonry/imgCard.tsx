@@ -3,12 +3,12 @@ import { Space, Tag, Tooltip, Card, Image, message, Modal, Switch } from "antd";
 import { CopyOutlined, CloudDownloadOutlined, EditOutlined, DeleteOutlined, LikeOutlined, LikeFilled } from '@ant-design/icons'
 const { Meta } = Card;
 import moment from 'moment';
-import { ImgCardModel } from "../../scripts/types";
+import { ImgCardModel,PaintingType } from "../../scripts/types";
 import ClipboardJS from 'clipboard';
 import css from './masonry.module.scss'
 import { downloadFile } from '../../scripts/utils';
 import Router from "next/router";
-import { requestAliyunMJ } from "../../request/http";
+import { requestAliyunArt } from "../../request/http";
 const { confirm } = Modal;
 import { ImgPageType } from "../../scripts/types";
 import { getRatio, getHeight } from "../../scripts/utils";
@@ -17,11 +17,13 @@ import store from "../../store";
 import Link from "next/link";
 
 interface Props {
+    // 实例模型
     model: ImgCardModel,
     columnWidth: number,
-    onImgDeleted: (id: number) => void,
+    onImgDeleted?: (id: number) => void,
+    // 类型，我的页面还是公开页面
     type: ImgPageType,
-    onImgThumbUpActionDone: (id: number, action: string) => void,
+    onImgThumbUpActionDone?: (id: number, action: string) => void,
 }
 
 const defaultImg = 'data:image/png;base64,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'
@@ -35,7 +37,7 @@ const baseWidth = 500;
 
 
 const App = ({ model, columnWidth, onImgDeleted, type, onImgThumbUpActionDone }: Props) => {
-    const { img_url, prompt, create_time, id, is_public, thumb_up_count } = model;
+    const { img_url, prompt, create_time, id, is_public, thumb_up_count,painting_type } = model;
     const userThumbUpList = useSelector((state: any) => state.user.thumbUpList);
     const user = useSelector((state: any) => state.user.info);
     const [isShare, setIsShare] = useState(is_public === 0);
@@ -46,10 +48,10 @@ const App = ({ model, columnWidth, onImgDeleted, type, onImgThumbUpActionDone }:
             okText: '确定',
             cancelText: '取消',
             async onOk() {
-                await requestAliyunMJ('delete-painting', { id });
+                await requestAliyunArt('delete-painting', { id });
                 message.success('删除成功');
                 //从列表中移除
-                onImgDeleted(id);
+                onImgDeleted && onImgDeleted(id);
             },
             onCancel() {
                 console.log('Cancel');
@@ -67,7 +69,7 @@ const App = ({ model, columnWidth, onImgDeleted, type, onImgThumbUpActionDone }:
     }
 
     const src = useMemo(() => {
-        return img_url ? `${basePath}${img_url}?width=${baseWidth}&height=${height}` : defaultImg
+        return img_url ? `${basePath}${img_url}?x-oss-process=style/scale_500` : defaultImg
     }, [img_url, height])
 
     const HDsrc = useMemo(() => {
@@ -125,7 +127,7 @@ const App = ({ model, columnWidth, onImgDeleted, type, onImgThumbUpActionDone }:
                         console.log('id:', id);
                         const hasThumbUp = userThumbUpList.includes(id);
                         const url = hasThumbUp ? 'cancel-thumb-up' : 'thumb-up';
-                        const result = await requestAliyunMJ(url, { id });
+                        const result = await requestAliyunArt(url, { id });
                         console.log('user:', user);
 
                         if (!user || !user.email) {
@@ -137,7 +139,7 @@ const App = ({ model, columnWidth, onImgDeleted, type, onImgThumbUpActionDone }:
                             // message.success('点赞成功');
                             store.dispatch({ type: hasThumbUp ? 'user/cancelThumbUp' : 'user/thumbUp', payload: id });
                             //通知给父页面，更新list
-                            onImgThumbUpActionDone(id, hasThumbUp ? 'cancel' : 'add');
+                            onImgThumbUpActionDone && onImgThumbUpActionDone(id, hasThumbUp ? 'cancel' : 'add');
                         } else {
                             message.error(result.message);
                         }
@@ -164,7 +166,7 @@ const App = ({ model, columnWidth, onImgDeleted, type, onImgThumbUpActionDone }:
                                     okText: '确定',
                                     cancelText: '取消',
                                     async onOk() {
-                                        await requestAliyunMJ('edit-painting-state', { id, isPublic: checked ? 0 : 1 });
+                                        await requestAliyunArt('edit-painting-state', { id, isPublic: checked ? 0 : 1 });
                                         setIsShare(false)
                                     },
                                     onCancel() {
@@ -173,7 +175,7 @@ const App = ({ model, columnWidth, onImgDeleted, type, onImgThumbUpActionDone }:
                                     },
                                 });
                             } else {
-                                await requestAliyunMJ('edit-painting-state', { id, isPublic: 0 });
+                                await requestAliyunArt('edit-painting-state', { id, isPublic: 0 });
                                 setIsShare(true)
                             }
                         }} />

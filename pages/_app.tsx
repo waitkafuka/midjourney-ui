@@ -8,7 +8,7 @@ import store from '../store'
 import withTheme from '../theme';
 import { notification, ConfigProvider, theme } from 'antd';
 import { useEffect } from 'react';
-import { requestAliyun, requestAliyunMJ } from "../request/http";
+import { requestAliyun, requestAliyunArt } from "../request/http";
 import { useSelector, useDispatch } from 'react-redux';
 import { setUserInfo } from '../store/userInfo';
 import { useRouter } from 'next/router';
@@ -30,7 +30,7 @@ export default function App({ Component, pageProps }: AppProps) {
 
   // 获取用户点赞列表
   const getThumbUpList = async () => {
-    const data = await requestAliyunMJ('my-thumb-up-list', null, 'GET');
+    const data = await requestAliyunArt('my-thumb-up-list', null, 'GET');
     console.log('getThumbUpList', data);
 
     if (data.code == 0) {

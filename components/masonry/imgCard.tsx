@@ -67,7 +67,7 @@ const App = ({ model, columnWidth, onImgDeleted, type, onImgThumbUpActionDone }:
     }
 
     const src = useMemo(() => {
-        return img_url ? `${basePath}${img_url}?width=${baseWidth}&height=${height}` : defaultImg
+        return img_url ? `${basePath}${img_url}?x-oss-process=style/scale_500` : defaultImg
     }, [img_url, height])
 
     const HDsrc = useMemo(() => {

@@ -9,7 +9,7 @@ import { requestAliyun } from "../request/http";
 import { useSelector, useDispatch } from 'react-redux';
 import { notification } from 'antd';
 import { downloadFile, hasChinese } from '../scripts/utils';
-import { NEXT_PUBLIC_IMAGE_PREFIX } from '../scripts/config';
+import { NEXT_PUBLIC_IMAGE_PREFIX, DISCORD_IMG_PROXY } from '../scripts/config';
 import { getRatio, getHeight, getRandomPaintingTip } from "../scripts/utils";
 import Link from "next/link";
 
@@ -148,10 +148,14 @@ const Index: React.FC = () => {
             console.log('imagin dataing:', data);
             newMessage.img = data.uri.replace(
               "https://cdn.discordapp.com/",
-              NEXT_PUBLIC_IMAGE_PREFIX
+              DISCORD_IMG_PROXY
             );
             if (data.id) {
               newMessage.hasTag = true;
+              newMessage.img = data.uri.replace(
+                "https://cdn.discordapp.com/",
+                NEXT_PUBLIC_IMAGE_PREFIX
+              );
             }
 
             newMessage.msgHash = data.hash;
@@ -232,10 +236,14 @@ const Index: React.FC = () => {
         (data: MJMessage) => {
           newMessage.img = data.uri.replace(
             "https://cdn.discordapp.com/",
-            NEXT_PUBLIC_IMAGE_PREFIX
+            DISCORD_IMG_PROXY
           );
           if (data.uri.endsWith(".png")) {
             newMessage.hasTag = true;
+            newMessage.img = data.uri.replace(
+              "https://cdn.discordapp.com/",
+              NEXT_PUBLIC_IMAGE_PREFIX
+            );
           }
           console.log('variation dataing:', data);
           newMessage.msgHash = data.hash;

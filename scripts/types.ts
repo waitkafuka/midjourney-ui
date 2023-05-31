@@ -1,6 +1,6 @@
 export interface ImgCardModel {
     id: number,
-    img_url: string,
+    img_url: string | null,
     prompt: string,
     create_time: Date,
     is_public: number,
@@ -10,7 +10,8 @@ export interface ImgCardModel {
 
 export enum ImgPageType {
     PUBLIC = 'public',
-    MY = 'private'
+    MY = 'private',
+    DALLE_PAINTING = 'dalle_painting',
 }
 
 export enum PaintingType {

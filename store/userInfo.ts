@@ -3,7 +3,9 @@ import { createSlice, configureStore } from '@reduxjs/toolkit';
 const userSlice = createSlice({
   name: 'user',
   initialState: {
-    info: {},
+    info: {
+      point_count: 0,
+    },
     avatar: '',
     nickname_bg_color: 'rgb(70, 108, 212)',
     isShowUserProfileEditDialog: false,
@@ -46,8 +48,11 @@ const userSlice = createSlice({
       let index = state.thumbUpList.indexOf(action.payload as number);
       if (index !== -1) {
         state.thumbUpList.splice(index, 1);
-      state.thumbUpList = JSON.parse(JSON.stringify(state.thumbUpList));
+        state.thumbUpList = JSON.parse(JSON.stringify(state.thumbUpList));
       }
+    },
+    pointChange: (state, action) => {
+      state.info.point_count = action.payload;
     }
 
   },

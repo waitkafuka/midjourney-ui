@@ -30,6 +30,13 @@ const ROUTES: Route = {
       path: '/',
       name: '开始绘画',
       icon: <SendOutlined />,
+      children: [{
+        path: '/dalle',
+        name: 'DALL-E',
+      }, {
+        path: '/mj',
+        name: 'Midjourney',
+      }]
     },
     {
       path: '/mypaintings',

@@ -36,6 +36,7 @@ const PaingPoint = ({ }) => {
     const getUserInfo = async () => {
         const data = await requestAliyun('userinfo', null, 'GET');
         store.dispatch(setUserInfo(data.user || {}))
+        setIsShowBuyPoint(false);
         // dispatch(setUserInfo(data.user || {}))
     };
 

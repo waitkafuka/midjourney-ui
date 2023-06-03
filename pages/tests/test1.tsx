@@ -26,7 +26,9 @@ function Counter() {
         let ele = {
             src: srcs[index % 3]
         };
-        setList([...l,ele])
+        setInterval(() => {
+            setList([...l, ele])
+        }, 1000);
     }
 
     useEffect(() => {

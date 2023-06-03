@@ -9,7 +9,7 @@ import type { MenuProps } from 'antd';
 import {
   SmileOutlined,
   GithubFilled,
-  WhatsAppOutlined,
+  SketchOutlined,
   SendOutlined,
   WechatOutlined,
   BulbOutlined,
@@ -65,11 +65,11 @@ const ROUTES: Route = {
       name: 'ChatGPT',
       icon: <WechatOutlined />,
     },
-    // {
-    //   path: '/contact',
-    //   name: '联系我们',
-    //   icon: <WhatsAppOutlined />,
-    // },
+    {
+      path: '/activity',
+      name: '首届绘画大赛',
+      icon: <SketchOutlined />,
+    },
     // {
     //   path: 'https://superx.chat/pay/',
     //   target: '_blank',

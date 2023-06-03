@@ -3,7 +3,7 @@ import { Space, Tag, Tooltip, Card, Image, message, Modal, Switch } from "antd";
 import { CopyOutlined, CloudDownloadOutlined, EditOutlined, DeleteOutlined, LikeOutlined, LikeFilled } from '@ant-design/icons'
 const { Meta } = Card;
 import moment from 'moment';
-import { ImgCardModel,PaintingType } from "../../scripts/types";
+import { ImgCardModel, PaintingType } from "../../scripts/types";
 import ClipboardJS from 'clipboard';
 import css from './masonry.module.scss'
 import { downloadFile } from '../../scripts/utils';
@@ -37,7 +37,7 @@ const baseWidth = 500;
 
 
 const App = ({ model, columnWidth, onImgDeleted, type, onImgThumbUpActionDone }: Props) => {
-    const { img_url, prompt, create_time, id, is_public, thumb_up_count,painting_type } = model;
+    const { img_url, prompt, create_time, id, is_public, thumb_up_count, painting_type } = model;
     const userThumbUpList = useSelector((state: any) => state.user.thumbUpList);
     const user = useSelector((state: any) => state.user.info);
     const [isShare, setIsShare] = useState(is_public === 0);
@@ -151,7 +151,7 @@ const App = ({ model, columnWidth, onImgDeleted, type, onImgThumbUpActionDone }:
                         <p style={{ position: "relative", fontSize: "12px", marginLeft: "4px", top: "2px" }}>{thumb_up_count}</p>
                         {/* <LikeOutlined title="点赞" style={{color:"#ff2626"}} /> */}
                     </div>}
-                    {/* {type === ImgPageType.MY && <div className={css["masonry-action-item"]} onClick={() => {
+                    {type === ImgPageType.MY && <div className={css["masonry-action-item"]} onClick={() => {
                         //分享
                     }}>
                         <Switch style={{ minWidth: "60px", marginLeft: "10px" }} checked={isShare} checkedChildren="分享" unCheckedChildren="关闭" defaultChecked={is_public === 0} onClick={async checked => {
@@ -161,10 +161,10 @@ const App = ({ model, columnWidth, onImgDeleted, type, onImgThumbUpActionDone }:
                                 confirm({
                                     title: '确定关闭分享吗？',
                                     content: <>关闭分享后，将无法参与点赞送包月会员的活动哦~ <br />
-                                        每月点赞最多的前 5 名作品的作者将获得<b> 3 个月ChatGPT</b>包月会员资格 <br />
-                                        5-10 名将获得 <b>1 个月ChatGPT</b>包月会员资格。<br />
-                                        每月 1 日公布上月获胜者。<br />
-                                        详情请参考：<Link href="/activity" style={{ color: "#333 !important", textDecoration: "underline" }}>首届 midjourney 人工智能绘画大赛</Link></>,
+                                        每月点赞最多的前 5 名作品的作者将获得<b> 200 个绘画点数</b> <br />
+                                        5-10 名将获得 <b> 100 个绘画点数</b><br />
+                                        按月统计，每月 1 日公布上月获胜者。<br />
+                                        详情请参考：<Link href="/activity" style={{ color: "#333333", textDecoration: "underline" }}>首届 midjourney 人工智能绘画大赛</Link></>,
                                     okText: '确定',
                                     cancelText: '取消',
                                     async onOk() {
@@ -182,7 +182,7 @@ const App = ({ model, columnWidth, onImgDeleted, type, onImgThumbUpActionDone }:
                             }
                         }} />
                     </div>
-                    } */}
+                    }
                     <div style={{ display: "none" }}>{moment(create_time).format('YYYY-MM-DD HH:mm:ss')}</div>
                 </div>
             </div>

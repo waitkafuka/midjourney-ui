@@ -163,8 +163,9 @@ const Index: React.FC = () => {
             newMessage.msgID = data.id;
             newMessage.progress = data.progress;
             newMessage.content = data.content;
-            setMessages(omsg => replaceLastElement(omsg, newMessage));
-            // setMessages([...oldMessages, newMessage]);
+            const oldMessages = messages;
+            // setMessages(omsg => replaceLastElement(omsg, newMessage));
+            setMessages([...oldMessages, newMessage]);
           }
         );
       } catch (error) {
@@ -205,7 +206,9 @@ const Index: React.FC = () => {
           newMessage.msgID = data.id;
           newMessage.content = data.content;
           newMessage.progress = data.progress;
-          setMessages(omsg => replaceLastElement(omsg, newMessage));
+          const oldMessages = messages;
+          // setMessages(omsg => replaceLastElement(omsg, newMessage));
+          setMessages([...oldMessages, newMessage]);
         }
       );
     } catch (error) {
@@ -247,7 +250,9 @@ const Index: React.FC = () => {
           newMessage.msgID = data.id;
           newMessage.content = data.content;
           newMessage.progress = data.progress;
-          setMessages(omsg => replaceLastElement(omsg, newMessage));
+          const oldMessages = messages;
+          // setMessages(omsg => replaceLastElement(omsg, newMessage));
+          setMessages([...oldMessages, newMessage]);
         }
       );
     } catch (error) {
@@ -390,11 +395,12 @@ const Index: React.FC = () => {
         height: "calc(100vh - 96px)", overflowY: "auto"
       }}>
         {/* 图片结果列表容器 */}
-        {messages.map(({ text, img, progress, hasTag, content, msgID, msgHash }, index) => <div className="img-list-item" key={progress}>
+        {messages.map(({ text, img, progress, hasTag, content, msgID, msgHash }, index) => <div className="img-list-item" key={img}>
           <div> {text} {`(${progress})`}</div>
           <div className="workspace-img-container" style={{ width: `${baseWidth}px`, height: getImgCalcHeight(img, text) }}>
            
-              <DynamicImg src={thumbUrl(img, text)} style={{ cursor: isDone(progress) ? 'zoom-in' : 'auto' }} onClick={() => {
+              <img src={img} style={{ cursor: isDone(progress) ? 'zoom-in' : 'auto' }} onClick={() => {
+              // <img src={thumbUrl(img, text)} style={{ cursor: isDone(progress) ? 'zoom-in' : 'auto' }} onClick={() => {
                 if (isDone(progress)) {
                   window.open(img, '_blank');
                 }

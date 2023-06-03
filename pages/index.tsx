@@ -14,6 +14,7 @@ import { getRatio, getHeight, getRandomPaintingTip } from "../scripts/utils";
 import Link from "next/link";
 import PaintingPoint from "../components/paintingPoint";
 import store from "../store";
+import DynamicImg from "../components/DynamicImg";
 
 const baseWidth = 500;
 const { TextArea } = Input;
@@ -392,15 +393,15 @@ const Index: React.FC = () => {
         {messages.map(({ text, img, progress, hasTag, content, msgID, msgHash }, index) => <div className="img-list-item" key={progress}>
           <div> {text} {`(${progress})`}</div>
           <div className="workspace-img-container" style={{ width: `${baseWidth}px`, height: getImgCalcHeight(img, text) }}>
-            {img ? <>
-              <img src={thumbUrl(img, text)} style={{ cursor: isDone(progress) ? 'zoom-in' : 'auto' }} onClick={() => {
+           
+              <DynamicImg src={thumbUrl(img, text)} style={{ cursor: isDone(progress) ? 'zoom-in' : 'auto' }} onClick={() => {
                 if (isDone(progress)) {
                   window.open(img, '_blank');
                 }
               }} />
               {img && <p className="no-content-tips" style={{ fontSize: "13px" }}>图片默认公开展示在“艺术公园”，可在左侧“我的作品”中进行管理。</p>}
 
-            </> : <Spin tip="正在生成，大约需要 1-2 分钟，请耐心等待..."></Spin>}
+             {!img && <Spin tip="正在生成，大约需要 1-2 分钟，请耐心等待..."></Spin>}
             {/* 隐藏一个原图，这是为了提前缓存，以便在后面点击查看大图的时候能够更快加载 */}
             <img src={img} style={{ display: 'none' }} />
           </div>
@@ -435,7 +436,7 @@ const Index: React.FC = () => {
         </div>)}
       </div> : <>
         <p className="no-content-tips">使用 midjourney 来生成你的第一幅人工智能绘画作品。</p>
-        {!user.email && <p className="no-content-tips">您尚未登录，请先<a href="/login/?redirect=/mj" style={{ fontSize: "14px", textDecoration: "underline" }}> 登录</a></p>}
+        {!user.email && <p className="no-content-tips">您尚未登录，请先<a href="/login/?redirect=/art" style={{ fontSize: "14px", textDecoration: "underline" }}> 登录</a></p>}
       </>}
       <div className="prompt-input-wrap">
         <TextArea

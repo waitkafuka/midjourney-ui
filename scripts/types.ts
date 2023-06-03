@@ -6,6 +6,7 @@ export interface ImgCardModel {
     is_public: number,
     thumb_up_count: number,
     painting_type: PaintingType,
+    img_base_path?: string,
 }
 
 export enum ImgPageType {

@@ -9,7 +9,7 @@ import type { MenuProps } from 'antd';
 import {
   SmileOutlined,
   GithubFilled,
-  PictureFilled,
+  WhatsAppOutlined,
   SendOutlined,
   WechatOutlined,
   BulbOutlined,
@@ -20,6 +20,7 @@ import {
 import { Route, MenuDataItem } from '@ant-design/pro-layout/lib/typing'
 import { PageContainer, ProConfigProvider } from '@ant-design/pro-components';
 import { requestAliyun } from '../request/http';
+import Router from "next/router";
 const ProLayout = dynamic(() => import('@ant-design/pro-layout'), {
   ssr: false,
 })
@@ -31,12 +32,12 @@ const ROUTES: Route = {
       name: '开始绘画',
       icon: <SendOutlined />,
       children: [{
+        path: '/',
+        name: 'Midjourney',
+      }, {
         path: '/dalle',
         name: 'DALL-E',
-      }, {
-        path: '/mj',
-        name: 'Midjourney',
-      }]
+      }, ,]
     },
     {
       path: '/mypaintings',
@@ -64,6 +65,11 @@ const ROUTES: Route = {
       name: 'ChatGPT',
       icon: <WechatOutlined />,
     },
+    // {
+    //   path: '/contact',
+    //   name: '联系我们',
+    //   icon: <WhatsAppOutlined />,
+    // },
     // {
     //   path: 'https://superx.chat/pay/',
     //   target: '_blank',
@@ -109,20 +115,43 @@ export default function Main(children: JSX.Element) {
   // const user = useSelector((state: any) => state.user.info);
   store.subscribe(() => {
     setUser(store.getState().user.info)
-
   })
 
   const items: MenuProps['items'] = [
+    // {
+    //   key: '2',
+    //   label: (
+    //     <Button type="text" block onClick={async () => {
+    //       window.location.href = `https://superx.chat/pay/?email=${user.email}`;
+    //     }}>
+    //       开通包月
+    //     </Button>
+    //   ),
+    // },
+    {
+      key: '3',
+      label: (
+        <Button type="text" block onClick={async () => {
+          store.dispatch({
+            type: 'user/setIsShowBuyPointDialog',
+            payload: true
+          })
+        }}>
+          购买点数
+        </Button>
+      ),
+    },
     {
       key: '2',
       label: (
         <Button type="text" block onClick={async () => {
-          window.location.href = `https://superx.chat/pay/?email=${user.email}`;
+          Router.push('/contact');
         }}>
-          开通包月
+          联系我们
         </Button>
       ),
     },
+
     {
       key: '1',
       label: (

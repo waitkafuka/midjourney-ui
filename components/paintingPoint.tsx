@@ -14,45 +14,74 @@ interface ImgListPageProps {
 
 //由于setstate是异步的，所以需要一个变量来判断是否正在请求数据
 const PaingPoint = ({ }) => {
-    const [isShowBuyPoint, setIsShowBuyPoint] = useState(false);
     const [qrCodeSrc, setQrCodeSrc] = useState<string>('');
     const user = useSelector((state: any) => state.user.info);
+    const isShowBuyPointDialog = useSelector((state: any) => state.user.isShowBuyPointDialog);
 
-    const showBuyModal = async () => {
+    const setModalQrcode = async () => {
         //获取用户邮箱
         const email = user.email;
         if (!email) {
             // message.error('请先登录');
             // setTimeout(() => {
-            window.location.href = '/login';
+            // window.location.href = '/login';
             return;
             // }, 1000);
         };
         const base64Url = await QRCode.toDataURL(`https://superx.chat/pay/?email=${email}&pkgId=10`)
         setQrCodeSrc(base64Url);
-        setIsShowBuyPoint(true);
     }
+
+
+    const showBuyModal = async () => {
+        store.dispatch({
+            type: 'user/setIsShowBuyPointDialog',
+            payload: true
+        })
+    }
+
+    useEffect(() => {
+        if (isShowBuyPointDialog) {
+            if (!user.email) {
+                window.location.href = '/login?redirect=/art';
+            }
+        }
+    }, [isShowBuyPointDialog])
+
     //获取用户信息
     const getUserInfo = async () => {
         const data = await requestAliyun('userinfo', null, 'GET');
         store.dispatch(setUserInfo(data.user || {}))
-        setIsShowBuyPoint(false);
+        store.dispatch({
+            type: 'user/setIsShowBuyPointDialog',
+            payload: false
+        })
         // dispatch(setUserInfo(data.user || {}))
     };
+
+    //初始化
+    useEffect(() => {
+        setModalQrcode();
+    }, [user]);
 
     return (
         <div className="">
             <Modal
                 title="购买点数"
                 style={{ top: 20 }}
-                open={isShowBuyPoint}
+                open={isShowBuyPointDialog}
                 destroyOnClose={true}
-                // closable={true}
+                closable={true}
                 cancelText="取消"
                 maskClosable={false}
                 okText="支付完成"
                 onOk={getUserInfo}
-                onCancel={() => { setIsShowBuyPoint(false) }}
+                onCancel={() => {
+                    store.dispatch({
+                        type: 'user/setIsShowBuyPointDialog',
+                        payload: false
+                    })
+                }}
             // footer={null}
             >
                 <div style={{ display: "flex" }}>
@@ -63,7 +92,7 @@ const PaingPoint = ({ }) => {
                     <div style={{ display: "flex", flexGrow: 1, lineHeight: 1.6, alignItems: "center", justifyContent: "center", flexDirection: "column" }}>
                         <div>1000 个点数 / 68 元</div>
                         <div>每张图消耗 8 个点数</div>
-                        <div>midjourney和dalle均可使用</div>
+                        <div>midjourney和dalle均可使用，点数永久有效</div>
                     </div>
                 </div>
             </Modal>

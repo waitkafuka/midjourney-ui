@@ -95,6 +95,7 @@ const App = ({ model, columnWidth, onImgDeleted, type, onImgThumbUpActionDone }:
             </div>
             <div className={css["masonry-action-wrap"]}>
                 <div className={css["masonry-action-box"]}>
+                    {/* 复制提示词 */}
                     <div className={`${css["masonry-action-item"]} copy-action`} data-clipboard-text={prompt} onClick={() => {
                         message.success('prompt已复制')
                     }}>

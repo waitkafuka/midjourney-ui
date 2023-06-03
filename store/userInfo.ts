@@ -6,6 +6,8 @@ const userSlice = createSlice({
     info: {
       point_count: 0,
     },
+    //显示购买弹窗
+    isShowBuyPointDialog: false,
     avatar: '',
     nickname_bg_color: 'rgb(70, 108, 212)',
     isShowUserProfileEditDialog: false,
@@ -39,6 +41,9 @@ const userSlice = createSlice({
     },
     setThumbUpList: (state, action) => {
       state.thumbUpList = action.payload;
+    },
+    setIsShowBuyPointDialog(state, action) {
+      state.isShowBuyPointDialog = action.payload;
     },
     thumbUp: (state, action) => {
       state.thumbUpList.push(action.payload as number);

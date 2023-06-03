@@ -1,5 +1,5 @@
 import { Button, Input, Modal, Select, Space, Spin, message } from 'antd';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { hasChinese } from '../scripts/utils';
 import { requestAliyun, requestAliyunArt } from '../request/http';
 const prompts = ['a bowl of soup that is also a portal to another dimension, digital art',
@@ -16,7 +16,6 @@ import PaintingPoint from '../components/paintingPoint';
 import { PAINTING_POINTS_ONE_TIME, defaultImg } from '../scripts/config';
 import { useSelector } from 'react-redux';
 import store from '../store';
-import { TRUE } from 'sass';
 
 
 const Dalle: React.FC = () => {
@@ -24,6 +23,7 @@ const Dalle: React.FC = () => {
     const [isTranslating, setIsTranslating] = useState(false);
     const [isGenerating, setIsGenerating] = useState(false);
     const [imgList, setImgList] = useState<ImgCardModel[]>([])
+    const [demoImgList, setDemoImgList] = useState<ImgCardModel[]>([])
     const user = useSelector((state: any) => state.user.info)
 
     //随机一个prompt
@@ -37,6 +37,9 @@ const Dalle: React.FC = () => {
         let prompt = text;
         if (user.point_count < PAINTING_POINTS_ONE_TIME) {
             message.error('点数不足，请先充值');
+            return;
+        }
+        if (!prompt) {
             return;
         }
         //判断点数是否足够
@@ -68,6 +71,9 @@ const Dalle: React.FC = () => {
         }
         // 调用api生成图片
         setIsGenerating(true);
+        //如果长度大于 10，移除开头的 10 个
+        console.log(imgList.length);
+
         const paintInfo = await requestAliyunArt('dalle-painting', { caption: prompt })
         if (paintInfo.code !== 0) {
             message.error(paintInfo.message);
@@ -103,6 +109,11 @@ const Dalle: React.FC = () => {
             if (result.data.status === 'Succeeded') {
                 break;
             }
+            if (result.data.status === 'Failed') {
+                message.error('生成失败，点数已返还，请刷新重试。', 10);
+                setIsGenerating(false);
+                return;
+            }
             if (count > 60) {
                 message.error('生成超时，请稍后重试', 10);
                 return;
@@ -131,8 +142,38 @@ const Dalle: React.FC = () => {
         //点数减少
         store.dispatch({ type: 'user/pointChange', payload: user.point_count - PAINTING_POINTS_ONE_TIME })
         // 显示图片
-        setImgList(list => [imgCard, ...list.slice(1)])
+        setImgList(list => [imgCard, ...list.slice(11)])
     }
+
+    const buildDalleDemoImgs = () => {
+        const imgSrcs = ['A synthwave style sunset above the reflecting water of the sea, digital art',
+            'A hand drawn sketch of a Porsche 911',
+            'High quality photo of a monkey astronaut',
+            'A photo of Michelangelo\'s sculpture of David wearing headphones djing',
+            'A photo of a white fur monster standing in a purple room',
+            'An expressive oil painting of a basketball player dunking, depicted as an explosion of a nebula',
+            'An armchair in the shape of an avocado',
+            '3D render of a cute tropical fish in an aquarium on a dark blue background, digital art'];
+
+        const imgBasePath = 'https://cdn.superx.chat/stuff/dalle'
+        const imgCards: ImgCardModel[] = imgSrcs.map((src, index) => {
+            return {
+                id: index,
+                img_url: `/${src}.webp`,
+                prompt: src,
+                create_time: new Date(),
+                img_base_path: imgBasePath,
+                is_public: 0,
+                thumb_up_count: 0,
+                painting_type: PaintingType.DALLE,
+            }
+        })
+        setDemoImgList(imgCards);
+    }
+    //页面初始化
+    useEffect(() => {
+        buildDalleDemoImgs();
+    }, [])
     return (
         <div style={{ padding: "20px" }}>
             <Modal
@@ -170,8 +211,8 @@ const Dalle: React.FC = () => {
                 <div className='painting-result-wrap'>
                     {
                         imgList.map(model => {
-                            return <div style={{ margin: "15px" }}>
-                                <PureImgCard isLoading={true} showThumbImg={false} columnWidth={500} key={model.id} model={model} hasDelete={true} onImgDeleted={(id) => {
+                            return <div style={{ margin: "15px" }} key={model.img_url}>
+                                <PureImgCard imgBasePath={model.img_base_path} isLoading={true} showThumbImg={false} columnWidth={300} key={model.id} model={model} hasDelete={true} onImgDeleted={(id) => {
                                     console.log('imgid1:', id);
                                     setImgList(list => list.filter(item => item.id !== id));
                                 }} />
@@ -179,6 +220,22 @@ const Dalle: React.FC = () => {
                         })
                     }
                 </div>
+                {/* demo展示区 */}
+                {/* <p>示例作品：</p> */}
+                {imgList.length === 0 &&
+                    <div className='painting-result-wrap'>
+                        {
+                            demoImgList.map(model => {
+                                return <div style={{ margin: "15px" }} key={model.img_url}>
+                                    <PureImgCard imgBasePath={model.img_base_path} isLoading={true} showThumbImg={false} columnWidth={300} key={model.id} model={model} hasDelete={true} onImgDeleted={(id) => {
+                                        console.log('imgid1:', id);
+                                        setImgList(list => list.filter(item => item.id !== id));
+                                    }} />
+                                </div>
+                            })
+                        }
+                    </div>
+                }
 
             </div>
         </div >

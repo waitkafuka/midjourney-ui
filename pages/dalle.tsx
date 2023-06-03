@@ -222,12 +222,12 @@ const Dalle: React.FC = () => {
                 </div>
                 {/* demo展示区 */}
                 {/* <p>示例作品：</p> */}
-                {imgList.length === 0 &&
+                {/* {imgList.length === 0 &&
                     <div className='painting-result-wrap'>
                         {
                             demoImgList.map(model => {
                                 return <div style={{ margin: "15px" }} key={model.img_url}>
-                                    <PureImgCard imgBasePath={model.img_base_path} isLoading={true} showThumbImg={false} columnWidth={300} key={model.id} model={model} hasDelete={true} onImgDeleted={(id) => {
+                                    <PureImgCard imgBasePath={model.img_base_path} isLoading={true} showThumbImg={false} columnWidth={300} key={model.id} model={model} hasDelete={false} onImgDeleted={(id) => {
                                         console.log('imgid1:', id);
                                         setImgList(list => list.filter(item => item.id !== id));
                                     }} />
@@ -235,7 +235,7 @@ const Dalle: React.FC = () => {
                             })
                         }
                     </div>
-                }
+                } */}
 
             </div>
         </div >

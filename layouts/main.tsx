@@ -253,7 +253,7 @@ export default function Main(children: JSX.Element) {
                     paddingBlockStart: 12,
                   }}
                 >
-                  Power by Midjourney
+                  Power by Midjourney + DALLE2
                 </p>
               </>
             );

@@ -250,13 +250,8 @@ export default function Main(children: JSX.Element) {
           route={ROUTES}
           openKeys={openKeys}
           // defaultOpenKeys={['start']}
-          
           onOpenChange={(keys) => {
-            console.log('keys', keys);
-            console.log('keys1', typeof keys);
-
             setOpenKeys(keys);
-
           }}
           // defaultOpenKeys={openKeys}
           // avatarProps={{

@@ -33,15 +33,17 @@ const ROUTES: Route = {
       icon: <SendOutlined />,
       key: 'start',
       // flatMenu: true,
-      children: [{
-        path: '/',
-        name: 'Midjourney',
-        key: "midjourney",
-      }, {
-        path: '/dalle',
-        name: 'DALL-E',
-        key: "dalle",
-      },]
+      // children: [{
+      //   path: '/',
+      //   name: 'Midjourney',
+      //   key: "midjourney",
+      // },
+      // {
+      //   path: '/dalle',
+      //   name: 'DALL-E',
+      //   key: "dalle",
+      // },
+      // ]
     },
     {
       path: '/mypaintings',
@@ -49,12 +51,12 @@ const ROUTES: Route = {
       key: 'mypaintings',
       icon: <i className='iconfont icon-huihua'></i>,
     },
-    {
-      path: '/paintings',
-      name: '艺术公园',
-      key: 'paintings',
-      icon: <i className='iconfont icon-fengjing-01'></i>,
-    },
+    // {
+    //   path: '/paintings',
+    //   name: '艺术公园',
+    //   key: 'paintings',
+    //   icon: <i className='iconfont icon-fengjing-01'></i>,
+    // },
     {
       name: '教程',
       key: "guideParent",
@@ -90,12 +92,12 @@ const ROUTES: Route = {
       key: 'chatgpt',
       icon: <WechatOutlined />,
     },
-    {
-      path: '/activity',
-      name: '首届绘画大赛',
-      key: 'activity',
-      icon: <SketchOutlined />,
-    },
+    // {
+    //   path: '/activity',
+    //   name: '首届绘画大赛',
+    //   key: 'activity',
+    //   icon: <SketchOutlined />,
+    // },
     // {
     //   path: 'https://superx.chat/pay/',
     //   target: '_blank',
@@ -292,7 +294,7 @@ export default function Main(children: JSX.Element) {
                     paddingBlockStart: 12,
                   }}
                 >
-                  Power by Midjourney + DALLE2
+                  Power by Midjourney
                 </p>
               </>
             );

@@ -365,9 +365,7 @@ const Index: React.FC = () => {
     //   <div className="no-content-tips">当前使用人数过多，服务器已无法继续提供服务。图片渲染需要耗费大量计算资源，请稍后再试。</div>
     // </div>
     <div className="w-full mx-auto px-4 h-full overflow-y-hidden list-input-container">
-      <div style={{ padding: "20px" }}>
-        <div style={{ float: "right" }}><PaintingPoint></PaintingPoint></div>
-      </div>
+      <div className='dalle-point-box'><PaintingPoint></PaintingPoint></div>
       {contextHolder}
       {/* <Spin>{paintingTip}</Spin> */}
       <Modal
@@ -398,16 +396,16 @@ const Index: React.FC = () => {
         {messages.map(({ text, img, progress, hasTag, content, msgID, msgHash }, index) => <div className="img-list-item" key={img}>
           <div> {text} {`(${progress})`}</div>
           <div className="workspace-img-container" style={{ width: `${baseWidth}px`, height: getImgCalcHeight(img, text) }}>
-           
-              <img src={img} style={{ cursor: isDone(progress) ? 'zoom-in' : 'auto' }} onClick={() => {
-              // <img src={thumbUrl(img, text)} style={{ cursor: isDone(progress) ? 'zoom-in' : 'auto' }} onClick={() => {
-                if (isDone(progress)) {
-                  window.open(img, '_blank');
-                }
-              }} />
-              {img && <p className="no-content-tips" style={{ fontSize: "13px" }}>图片默认公开展示在“艺术公园”，可在左侧“我的作品”中进行管理。</p>}
 
-             {!img && <Spin tip="正在生成，大约需要 1-2 分钟，请耐心等待..."></Spin>}
+            <img src={img} style={{ cursor: isDone(progress) ? 'zoom-in' : 'auto' }} onClick={() => {
+              // <img src={thumbUrl(img, text)} style={{ cursor: isDone(progress) ? 'zoom-in' : 'auto' }} onClick={() => {
+              if (isDone(progress)) {
+                window.open(img, '_blank');
+              }
+            }} />
+            {img && <p className="no-content-tips" style={{ fontSize: "13px" }}>图片默认公开展示在“艺术公园”，可在左侧“我的作品”中进行管理。</p>}
+
+            {!img && <Spin tip="正在生成，大约需要 1-2 分钟，请耐心等待..."></Spin>}
             {/* 隐藏一个原图，这是为了提前缓存，以便在后面点击查看大图的时候能够更快加载 */}
             <img src={img} style={{ display: 'none' }} />
           </div>
@@ -441,7 +439,7 @@ const Index: React.FC = () => {
           )}
         </div>)}
       </div> : <>
-        <p className="no-content-tips">使用 midjourney 来生成你的第一幅人工智能绘画作品。</p>
+        <p className="no-content-tips">使用 midjourney 生成你的第一幅人工智能绘画作品。</p>
         {!user.email && <p className="no-content-tips">您尚未登录，请先<a href="/login/?redirect=/art" style={{ fontSize: "14px", textDecoration: "underline" }}> 登录</a></p>}
       </>}
       <div className="prompt-input-wrap">

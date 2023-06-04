@@ -322,6 +322,7 @@ button.ant-btn-primary:not(:disabled):hover {
   padding: 20px;
   color: #999;
   font-size: 14px;
+  margin-top: 30px;
 }
 
 .workspace-img-wrap {
@@ -345,4 +346,17 @@ button.ant-btn-primary:not(:disabled):hover {
   flex-wrap: wrap;
   justify-content: center;
   margin-top: 15px;
+}
+
+.dalle-input-box {
+  position: absolute;
+  bottom: 20px;
+  left: 20px;
+  right: 20px;
+}
+
+.dalle-point-box {
+  position: absolute;
+  right: 20px;
+  top: 15px;
 }

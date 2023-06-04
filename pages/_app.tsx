@@ -31,7 +31,6 @@ export default function App({ Component, pageProps }: AppProps) {
   // 获取用户点赞列表
   const getThumbUpList = async () => {
     const data = await requestAliyunArt('my-thumb-up-list', null, 'GET');
-    console.log('getThumbUpList', data);
 
     if (data.code == 0) {
       store.dispatch({

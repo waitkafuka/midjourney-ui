@@ -142,7 +142,7 @@ const Dalle: React.FC = () => {
         //点数减少
         store.dispatch({ type: 'user/pointChange', payload: user.point_count - PAINTING_POINTS_ONE_TIME })
         // 显示图片
-        setImgList(list => [imgCard, ...list.slice(11)])
+        setImgList(list => [imgCard, ...list.slice(1)])
     }
 
     const buildDalleDemoImgs = () => {
@@ -175,7 +175,7 @@ const Dalle: React.FC = () => {
         buildDalleDemoImgs();
     }, [])
     return (
-        <div style={{ padding: "20px" }}>
+        <div style={{ padding: "20px", paddingTop: "0" }}>
             <Modal
                 title="翻译中"
                 style={{ top: 20 }}
@@ -189,24 +189,8 @@ const Dalle: React.FC = () => {
             </Modal>
 
             <div>
-                <div style={{ color: "#777", fontSize: "13px" }}>
-                    从一个详细的描述开始 <Button size='small' onClick={randomPrompt}>随机一个prompt</Button>
-                    <div style={{ float: "right" }}><PaintingPoint></PaintingPoint></div>
-                </div>
-                <div style={{ marginTop: "20px" }}>
-                    <Space.Compact style={{ width: '100%' }}>
-                        <Input placeholder="请详细描述您要绘画的作品" onKeyDown={(e) => {
-                            if (e.key === "Enter") {
-                                doGeneration();
-                                e.preventDefault();
-                            }
-                        }}
-                            value={text} onChange={(e) => {
-                                setText(e.target.value)
-                            }} />
-                        <Button type="primary" loading={isGenerating} onClick={doGeneration}>开始生成</Button>
-                    </Space.Compact>
-                </div>
+                <div className='dalle-point-box'><PaintingPoint></PaintingPoint></div>
+                {imgList.length === 0 && <p className="no-content-tips">DALL·E 2 是和 ChatGPT 同属于OpenAI 公司的另一款人工智能绘画作品，适合各种艺术类风格的绘画。</p>}
                 {/* 结果展示区 */}
                 <div className='painting-result-wrap'>
                     {
@@ -219,6 +203,25 @@ const Dalle: React.FC = () => {
                             </div>
                         })
                     }
+                </div>
+                <div className='dalle-input-box'>
+                    <div style={{ color: "#777", fontSize: "13px" }}>
+                        从一个详细的描述开始 <Button size='small' onClick={randomPrompt}>随机一个prompt</Button>
+                    </div>
+                    <div style={{ marginTop: "20px" }}>
+                        <Space.Compact style={{ width: '100%' }}>
+                            <Input placeholder="请详细描述您要绘画的作品" onKeyDown={(e) => {
+                                if (e.key === "Enter") {
+                                    doGeneration();
+                                    e.preventDefault();
+                                }
+                            }}
+                                value={text} onChange={(e) => {
+                                    setText(e.target.value)
+                                }} />
+                            <Button type="primary" loading={isGenerating} onClick={doGeneration}>开始生成</Button>
+                        </Space.Compact>
+                    </div>
                 </div>
                 {/* demo展示区 */}
                 {/* <p>示例作品：</p> */}

@@ -17,7 +17,7 @@ import {
   ShoppingCartOutlined
 } from '@ant-design/icons'
 
-import { Route, MenuDataItem } from '@ant-design/pro-layout/lib/typing'
+import { Route, MenuDataItem, WithFalse } from '@ant-design/pro-layout/lib/typing'
 import { PageContainer, ProConfigProvider } from '@ant-design/pro-components';
 import { requestAliyun } from '../request/http';
 import Router from "next/router";
@@ -31,43 +31,69 @@ const ROUTES: Route = {
       path: '/',
       name: '开始绘画',
       icon: <SendOutlined />,
+      key: 'start',
+      // flatMenu: true,
       children: [{
         path: '/',
         name: 'Midjourney',
+        key: "midjourney",
       }, {
         path: '/dalle',
         name: 'DALL-E',
-      }, ,]
+        key: "dalle",
+      },]
     },
     {
       path: '/mypaintings',
       name: '我的作品',
+      key: 'mypaintings',
       icon: <i className='iconfont icon-huihua'></i>,
     },
     {
       path: '/paintings',
       name: '艺术公园',
+      key: 'paintings',
       icon: <i className='iconfont icon-fengjing-01'></i>,
     },
     {
-      path: '/guide',
-      name: '入门指引',
+      name: '教程',
+      key: "guideParent",
       icon: <BulbOutlined />,
+      children: [
+        {
+          key: 'guide',
+          path: '/guide',
+          name: '入门指引',
+          icon: <BulbOutlined />,
+        },
+        {
+          path: '/cookbook',
+          name: '参数大全',
+          key: 'cookbook',
+          icon: <i className='iconfont icon-canshushezhi'></i>,
+        }]
     },
-    {
-      path: '/cookbook',
-      name: '参数大全',
-      icon: <i className='iconfont icon-canshushezhi'></i>,
-    },
+    // {
+    //   path: '/guide',
+    //   name: '入门指引',
+    //   icon: <BulbOutlined />,
+    // },
+    // {
+    //   path: '/cookbook',
+    //   name: '参数大全',
+    //   icon: <i className='iconfont icon-canshushezhi'></i>,
+    // },
     {
       path: 'https://superx.chat/',
       target: '_blank',
       name: 'ChatGPT',
+      key: 'chatgpt',
       icon: <WechatOutlined />,
     },
     {
       path: '/activity',
       name: '首届绘画大赛',
+      key: 'activity',
       icon: <SketchOutlined />,
     },
     // {
@@ -93,6 +119,8 @@ const menuItemRender = (options: MenuDataItem, element: React.ReactNode) => (
   <>
     {options.target ?
       <a target='_blank' href={(options.path) ?? '/'} onClick={() => {
+        console.log('1213', options);
+
         // if (options.target) {
         //   window.location.href = options.target ?? '/';
         // }
@@ -110,12 +138,14 @@ const menuItemRender = (options: MenuDataItem, element: React.ReactNode) => (
 )
 
 export default function Main(children: JSX.Element) {
+  const [openKeys, setOpenKeys] = useState<WithFalse<string[]>>(['start']);
   const [dark, setDark] = useState(false);
   const [user, setUser] = useState({} as any);
   // const user = useSelector((state: any) => state.user.info);
   store.subscribe(() => {
     setUser(store.getState().user.info)
   })
+
 
   const items: MenuProps['items'] = [
     // {
@@ -171,7 +201,10 @@ export default function Main(children: JSX.Element) {
     },
 
   ];
+
+  //页面初始化
   useEffect(() => {
+    setOpenKeys(['start']);
     // Check the theme when the user first visits the page
     if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
       setDark(true);
@@ -215,6 +248,17 @@ export default function Main(children: JSX.Element) {
           title="superx.chat"
           style={{ minHeight: '100vh' }}
           route={ROUTES}
+          openKeys={openKeys}
+          // defaultOpenKeys={['start']}
+          
+          onOpenChange={(keys) => {
+            console.log('keys', keys);
+            console.log('keys1', typeof keys);
+
+            setOpenKeys(keys);
+
+          }}
+          // defaultOpenKeys={openKeys}
           // avatarProps={{
           //   src: 'logo.png',
           //   title: 'superx.chat',

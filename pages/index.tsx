@@ -1,17 +1,20 @@
 import React, { use, useEffect, useState, useRef, useMemo } from "react";
-import { Input, Button, List, Image, Typography, message, Modal, Spin } from "antd";
-import { SendOutlined } from "@ant-design/icons";
+import { Input, Button, List, Image, Typography, message, Modal, Spin, Upload } from "antd";
+import { SendOutlined, UploadOutlined } from "@ant-design/icons";
 import { Imagine, Upscale, Variation } from "../request";
 import { MJMessage } from "midjourney";
 import { Message } from "../interfaces/message";
 import Tag from "../components/tag";
 import { requestAliyun } from "../request/http";
 import { useSelector, useDispatch } from 'react-redux';
-import { notification } from 'antd';
 import { downloadFile, hasChinese } from '../scripts/utils';
-import { NEXT_PUBLIC_IMAGE_PREFIX, DISCORD_IMG_PROXY } from '../scripts/config';
-import { getRatio, getHeight, getRandomPaintingTip } from "../scripts/utils";
-import Link from "next/link";
+import { NEXT_PUBLIC_IMAGE_PREFIX, PAINTING_POINTS_ONE_TIME } from '../scripts/config';
+import { getRatio, getHeight } from "../scripts/utils";
+import PaintingPoint from "../components/paintingPoint";
+import store from "../store";
+import AliyunOSSUploader from "../components/OssUploader";
+import { ossImgBaseURL } from '../scripts/config'
+const imgExp = /<([^<>]+)>/g;
 
 const baseWidth = 500;
 const { TextArea } = Input;
@@ -27,7 +30,6 @@ const thumbUrl = (img: string, text: string) => {
   if (img.endsWith('.png')) {
     const ratio = getRatio(text);
     const height = getHeight(ratio, baseWidth);
-    console.log('计算缩略图1：', `${img}?width=${baseWidth}&height=${height}`);
     return `${img}?x-oss-process=style/scale_500`;
   } else {
     console.log('计算缩略图2：', img);
@@ -53,6 +55,7 @@ const Index: React.FC = () => {
   const inputValueRef = useRef(inputValue);
   const [inputDisable, setInputDisable] = useState(false);
   const [isTranslating, setIsTranslating] = useState(false);
+  const [referImg, setReferImg] = useState('');
   //测试
   // const [messages, setMessages] = useState<Message[]>([{
   //   text: '测试',
@@ -68,7 +71,6 @@ const Index: React.FC = () => {
   const defaultImg = ''
   const [paintingTip, setPaintingTip] = useState<string>('');
 
-
   const scrollToBottom = () => {
     setTimeout(() => {
       const chat = document.querySelector(".img-list-box");
@@ -83,9 +85,10 @@ const Index: React.FC = () => {
       message.error('用户尚未登录', 5);
       return false;
     }
-    if (!(user.token_type === 0 || user.token_type === 3)) {
-      message.error('目前 midjourney 绘画功能仍在内测阶段，尚未开放售卖。仅对已购买过本站包月会员用户开放试用权限。', 10);
-      return false;
+    //检查点数是否足够
+    if (user.point_count < PAINTING_POINTS_ONE_TIME) {
+      message.error('点数不足，请先充值');
+      return;
     }
     return true;
   }
@@ -105,8 +108,10 @@ const Index: React.FC = () => {
         // message.info('midjourney无法支持中文提示词，正在为您翻译为英文...');
         setIsTranslating(true);
         let result = {} as any;
+        let imgStrArray = newMessage.text.match(imgExp)||[];
         try {
-          result = await requestAliyun('translate', { content: newMessage.text });
+          
+          result = await requestAliyun('translate', { content: newMessage.text.replace(imgExp, '') });
 
         } catch (error) {
           messageApi.error('翻译出错，请稍后重试，请确保您的输入词中不包含政治、色情、暴力等词汇', 10);
@@ -121,7 +126,7 @@ const Index: React.FC = () => {
         result = result.data;
         setIsTranslating(false);
         console.log('翻译结果', result);
-        newMessage.text = result;
+        newMessage.text = `${imgStrArray.join(' ')} ${result}`;
         setInputValue(result);
         // }
       }
@@ -148,22 +153,22 @@ const Index: React.FC = () => {
             console.log('imagin dataing:', data);
             newMessage.img = data.uri.replace(
               "https://cdn.discordapp.com/",
-              DISCORD_IMG_PROXY
+              NEXT_PUBLIC_IMAGE_PREFIX
             );
             if (data.id) {
               newMessage.hasTag = true;
-              newMessage.img = data.uri.replace(
-                "https://cdn.discordapp.com/",
-                NEXT_PUBLIC_IMAGE_PREFIX
-              );
+              //扣减点数
+              store.dispatch({ type: 'user/pointChange', payload: user.point_count - PAINTING_POINTS_ONE_TIME })
+
             }
 
             newMessage.msgHash = data.hash;
             newMessage.msgID = data.id;
             newMessage.progress = data.progress;
             newMessage.content = data.content;
-            setMessages(omsg => replaceLastElement(omsg, newMessage));
-            // setMessages([...oldMessages, newMessage]);
+            const oldMessages = messages;
+            // setMessages(omsg => replaceLastElement(omsg, newMessage));
+            setMessages([...oldMessages, newMessage]);
           }
         );
       } catch (error) {
@@ -204,7 +209,9 @@ const Index: React.FC = () => {
           newMessage.msgID = data.id;
           newMessage.content = data.content;
           newMessage.progress = data.progress;
-          setMessages(omsg => replaceLastElement(omsg, newMessage));
+          const oldMessages = messages;
+          // setMessages(omsg => replaceLastElement(omsg, newMessage));
+          setMessages([...oldMessages, newMessage]);
         }
       );
     } catch (error) {
@@ -236,21 +243,19 @@ const Index: React.FC = () => {
         (data: MJMessage) => {
           newMessage.img = data.uri.replace(
             "https://cdn.discordapp.com/",
-            DISCORD_IMG_PROXY
+            NEXT_PUBLIC_IMAGE_PREFIX
           );
           if (data.uri.endsWith(".png")) {
             newMessage.hasTag = true;
-            newMessage.img = data.uri.replace(
-              "https://cdn.discordapp.com/",
-              NEXT_PUBLIC_IMAGE_PREFIX
-            );
           }
           console.log('variation dataing:', data);
           newMessage.msgHash = data.hash;
           newMessage.msgID = data.id;
           newMessage.content = data.content;
           newMessage.progress = data.progress;
-          setMessages(omsg => replaceLastElement(omsg, newMessage));
+          const oldMessages = messages;
+          // setMessages(omsg => replaceLastElement(omsg, newMessage));
+          setMessages([...oldMessages, newMessage]);
         }
       );
     } catch (error) {
@@ -321,7 +326,49 @@ const Index: React.FC = () => {
   }, []);
 
   return (
+    // <div>
+
+    //   <div className="prompt-input-wrap">
+    //     <TextArea
+    //       className="w-full"
+    //       disabled={true}
+    //       value={inputValue}
+    //       onChange={(e) => setInputValue(e.target.value)}
+    //       onKeyDown={(e) => {
+    //         if (e.key === "Enter" && e.shiftKey) {
+    //           setInputValue(`${inputValue}\n`);
+    //           e.preventDefault();
+    //         } else if (e.key === "Enter") {
+    //           handleMessageSend();
+    //           e.preventDefault();
+    //         }
+    //       }}
+    //       placeholder="请描述你要绘画的作品。（例如：a cat。midjourney本身不支持中文，但您仍然可以输入中文，生成时系统将自动为您翻译为英文。可以使用ChatGPT生成你的提示词prompt。）"
+    //       autoSize={{ minRows: 1, maxRows: 6 }}
+    //       style={{ paddingRight: 30 }}
+    //     />
+    //     <Button
+    //       className="absolute"
+    //       type="primary"
+    //       onClick={handleMessageSend}
+    //       loading={inputDisable}
+    //       disabled={true}
+    //       icon={<SendOutlined className="send-prompt-btn" />}
+    //       title="Send"
+    //       style={{
+    //         position: "absolute",
+    //         bottom: 0,
+    //         right: 0,
+    //         background: "transparent",
+    //         border: "none",
+    //         boxShadow: "none",
+    //       }}
+    //     />
+    //   </div>
+    //   <div className="no-content-tips">当前使用人数过多，服务器已无法继续提供服务。图片渲染需要耗费大量计算资源，请稍后再试。</div>
+    // </div>
     <div className="w-full mx-auto px-4 h-full overflow-y-hidden list-input-container">
+      <div className='dalle-point-box'><PaintingPoint></PaintingPoint></div>
       {contextHolder}
       {/* <Spin>{paintingTip}</Spin> */}
       <Modal
@@ -333,7 +380,7 @@ const Index: React.FC = () => {
         okText=""
         footer={null}
       >
-        <div><Spin />正在为您翻译为英文...</div>
+        <div><Spin />正在翻译为英文...</div>
       </Modal>
       {/* <List
         className="mx-auto justify-start overflow-y-auto img-list-box"
@@ -349,18 +396,19 @@ const Index: React.FC = () => {
         height: "calc(100vh - 96px)", overflowY: "auto"
       }}>
         {/* 图片结果列表容器 */}
-        {messages.map(({ text, img, progress, hasTag, content, msgID, msgHash }, index) => <div className="img-list-item" key={progress}>
+        {messages.map(({ text, img, progress, hasTag, content, msgID, msgHash }, index) => <div className="img-list-item" key={img}>
           <div> {text} {`(${progress})`}</div>
           <div className="workspace-img-container" style={{ width: `${baseWidth}px`, height: getImgCalcHeight(img, text) }}>
-            {img ? <>
-              <img src={thumbUrl(img, text)} style={{ cursor: isDone(progress) ? 'zoom-in' : 'auto' }} onClick={() => {
-                if (isDone(progress)) {
-                  window.open(img, '_blank');
-                }
-              }} />
-              {img && <p className="no-content-tips" style={{ fontSize: "13px" }}>图片默认公开展示在“艺术公园”，可在左侧“我的作品”中进行管理。</p>}
 
-            </> : <Spin tip="正在生成，大约需要 1-2 分钟，请耐心等待..."></Spin>}
+            <img src={img} style={{ cursor: isDone(progress) ? 'zoom-in' : 'auto' }} onClick={() => {
+              // <img src={thumbUrl(img, text)} style={{ cursor: isDone(progress) ? 'zoom-in' : 'auto' }} onClick={() => {
+              if (isDone(progress)) {
+                window.open(img, '_blank');
+              }
+            }} />
+            {img && <p className="no-content-tips" style={{ fontSize: "13px" }}>图片默认公开展示在“艺术公园”，可在左侧“我的作品”中进行管理。</p>}
+
+            {!img && <Spin tip="正在生成，大约需要 1-2 分钟，请耐心等待..."></Spin>}
             {/* 隐藏一个原图，这是为了提前缓存，以便在后面点击查看大图的时候能够更快加载 */}
             <img src={img} style={{ display: 'none' }} />
           </div>
@@ -394,10 +442,33 @@ const Index: React.FC = () => {
           )}
         </div>)}
       </div> : <>
-        <p className="no-content-tips">使用 midjourney 来生成你的第一幅人工智能绘画作品。</p>
-        {!user.email && <p className="no-content-tips">您尚未登录，请先<a href="/login/?redirect=/mj" style={{ fontSize: "14px", textDecoration: "underline" }}> 登录</a></p>}
+        <p className="no-content-tips">使用 midjourney 生成你的第一幅人工智能绘画作品。</p>
+        {/* <p className="no-content-tips">请勿使用违禁词汇，违者将被封号。</p> */}
+        {!user.email && <p className="no-content-tips">您尚未登录，请先<a href="/login/?redirect=/art" style={{ fontSize: "14px", textDecoration: "underline" }}> 登录</a></p>}
       </>}
       <div className="prompt-input-wrap">
+        <AliyunOSSUploader buttonText="上传参考图" onChange={fileList => {
+          if (fileList.length > 0) {
+            setReferImg(`https:${ossImgBaseURL}${fileList[0].url}`);
+            const exp = /<.*?>/;
+            //用正则表达式替换掉输入框中的图片地址，图片地址用<>包裹
+            //判断inputValue 中是否有图片地址
+            if (exp.test(inputValue)) {
+              //如果有，替换掉
+              setInputValue(inputValue.replace(exp, `<${referImg}>`))
+            } else {
+              //如果没有，加到开头
+              setInputValue(`<${referImg}> ${inputValue}`);
+            }
+          } else {
+            setReferImg('')
+            setInputValue(v => v.replace(/<\s*([^<>]+)\s*>/g, ''))
+            // setInputValue(v => v.replace(`<${referImg}> `, ''))
+          }
+        }}></AliyunOSSUploader>
+        {referImg && <div style={{ margin: "10px 0" }}>
+          参考图已上传：<a href={referImg} target="_blank">{referImg}</a>，将在此图基础上，结合您的提示词生成新的作品。
+        </div>}
         <TextArea
           className="w-full"
           disabled={inputDisable}

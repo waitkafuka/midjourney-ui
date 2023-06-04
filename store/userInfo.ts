@@ -3,7 +3,11 @@ import { createSlice, configureStore } from '@reduxjs/toolkit';
 const userSlice = createSlice({
   name: 'user',
   initialState: {
-    info: {},
+    info: {
+      point_count: 0,
+    },
+    //显示购买弹窗
+    isShowBuyPointDialog: false,
     avatar: '',
     nickname_bg_color: 'rgb(70, 108, 212)',
     isShowUserProfileEditDialog: false,
@@ -38,6 +42,9 @@ const userSlice = createSlice({
     setThumbUpList: (state, action) => {
       state.thumbUpList = action.payload;
     },
+    setIsShowBuyPointDialog(state, action) {
+      state.isShowBuyPointDialog = action.payload;
+    },
     thumbUp: (state, action) => {
       state.thumbUpList.push(action.payload as number);
       state.thumbUpList = JSON.parse(JSON.stringify(state.thumbUpList));
@@ -46,8 +53,11 @@ const userSlice = createSlice({
       let index = state.thumbUpList.indexOf(action.payload as number);
       if (index !== -1) {
         state.thumbUpList.splice(index, 1);
-      state.thumbUpList = JSON.parse(JSON.stringify(state.thumbUpList));
+        state.thumbUpList = JSON.parse(JSON.stringify(state.thumbUpList));
       }
+    },
+    pointChange: (state, action) => {
+      state.info.point_count = action.payload;
     }
 
   },

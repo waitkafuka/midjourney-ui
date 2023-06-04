@@ -21,13 +21,14 @@ export const request = async function (path: string, data: any, method = "POST",
     return await result.json();
 }
 
+
 //请求国内服务器
 export const requestAliyun = async function (path: string, data?: any, method = "POST", headers = {}) {
     return request(`/api/${path}`, data, method, headers);
 }
 
 //请求国内服务器
-export const requestAliyunMJ = async function (path: string, data?: any, method = "POST", headers = {}) {
+export const requestAliyunArt = async function (path: string, data?: any, method = "POST", headers = {}) {
     return request(`/art/api/${path}`, data, method, headers);
 }
 

@@ -22,6 +22,11 @@
   --card-border-rgb: 131, 134, 135;
 }
 
+a:hover {
+  color: #cfd0d0;
+  text-decoration: underline;
+}
+
 .send-prompt-btn {
   color: #000;
 }
@@ -99,11 +104,11 @@
     padding: 24px 10px !important;
   }
 
-  .workspace-img-container{
+  .workspace-img-container {
     width: 100% !important;
     height: auto !important;
     min-height: 200px;
-    img{
+    img {
       width: 100%;
     }
   }
@@ -164,7 +169,7 @@ h2,
 .ant-form-text,
 .ant-divider-inner-text,
 a {
-  color: rgb(var(--foreground-rgb)) !important;
+  color: rgb(var(--foreground-rgb));
 }
 
 a {
@@ -175,7 +180,6 @@ a {
 @import 'tailwindcss/base';
 @import 'tailwindcss/components';
 @import 'tailwindcss/utilities';
-
 
 @tailwind base;
 @tailwind components;
@@ -250,7 +254,7 @@ a {
   background-color: #1d1d1d !important;
 }
 
-.ant-tag-checkable{
+.ant-tag-checkable {
   width: 40px;
   text-align: center;
 }
@@ -264,34 +268,44 @@ a {
   color: #000;
 }
 
-
-button.ant-btn-primary{
+button.ant-btn-primary {
   background-color: #3c3c3d !important;
 }
 
-button.ant-btn-primary:not(:disabled):hover{
+button.ant-btn-primary:not(:disabled):hover {
   background-color: #1a1a1b !important;
 }
 
-.ant-btn-default:not(:disabled):hover{
-  color:#333 !important;
+.ant-modal-confirm-btns .ant-btn-default:not(:disabled):hover {
+  color: #333 !important;
+}
+
+//在日间模式下
+@media (prefers-color-scheme: light) {
+  button.ant-btn-default:not(:disabled):hover {
+    color: #333 !important;
+    border-color: #999 !important;
+  }
+}
+
+.ant-btn-default:not(:disabled):hover {
+  color: #e3e3e3 !important;
   border-color: #999 !important;
 }
 
-.ant-switch .ant-switch-inner{
+.ant-switch .ant-switch-inner {
   border: 1px solid #555;
-
 }
 
-.ant-switch .ant-switch-inner .ant-switch-inner-unchecked{
+.ant-switch .ant-switch-inner .ant-switch-inner-unchecked {
   color: #888;
 }
 
-.ant-switch .ant-switch-handle::before{
+.ant-switch .ant-switch-handle::before {
   box-shadow: 0 2px 4px 0 rgb(27 32 28 / 50%);
 }
 
-.workspace-img-container{
+.workspace-img-container {
   width: 100%;
   padding: 20px 0;
   box-sizing: content-box !important;
@@ -299,35 +313,55 @@ button.ant-btn-primary:not(:disabled):hover{
   justify-content: center;
   align-items: center;
   position: relative;
-  .no-content-tips{
+  .no-content-tips {
     position: absolute;
     bottom: -25px;
   }
-  img{
+  img {
     max-width: 100%;
     border-radius: 5px;
   }
 }
-.no-content-tips{
+.no-content-tips {
   text-align: center;
   padding: 20px;
   color: #999;
   font-size: 14px;
+  margin-top: 30px;
 }
 
-.workspace-img-wrap{
+.workspace-img-wrap {
   line-height: 1.6;
   padding: 20px;
   padding-bottom: 110px;
   position: relative;
   z-index: 10;
-  .prompt-text{
-
+  .prompt-text {
   }
 }
-.workspace-img-wrap .img-list-item{
+.workspace-img-wrap .img-list-item {
   margin-top: 20px;
-  &:first-child{
+  &:first-child {
     margin-top: 0;
   }
+}
+
+.painting-result-wrap {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  margin-top: 15px;
+}
+
+.dalle-input-box {
+  position: absolute;
+  bottom: 20px;
+  left: 20px;
+  right: 20px;
+}
+
+.dalle-point-box {
+  position: absolute;
+  right: 20px;
+  top: 15px;
 }

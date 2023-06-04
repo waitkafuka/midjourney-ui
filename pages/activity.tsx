@@ -21,9 +21,10 @@ const cookbook = () => {
 每月1日统计上月获奖人员，1 日晚 8 点公布获奖名单。前 1-5 名选手，将获得 200 绘画点数奖励，前 6-10 名选手，将获得 100 绘画点数奖励。
 每月选出冠军一名，额外赠送 ChatGPT 包月会员一份。
 
-## 本站公众号
-[![](https://cdn.superx.chat/stuff/qrcode.jpg)](https://cdn.superx.chat/stuff/qrcode.jpg)
+
 `
+// ## 本站公众号
+// [![](https://cdn.superx.chat/stuff/qrcode.jpg)](https://cdn.superx.chat/stuff/qrcode.jpg)
 // ## 微信群
 // ![](https://cdn.superx.chat/stuff/group.png)
 

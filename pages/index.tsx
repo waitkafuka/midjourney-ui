@@ -1,20 +1,20 @@
 import React, { use, useEffect, useState, useRef, useMemo } from "react";
-import { Input, Button, List, Image, Typography, message, Modal, Spin } from "antd";
-import { SendOutlined } from "@ant-design/icons";
+import { Input, Button, List, Image, Typography, message, Modal, Spin, Upload } from "antd";
+import { SendOutlined, UploadOutlined } from "@ant-design/icons";
 import { Imagine, Upscale, Variation } from "../request";
 import { MJMessage } from "midjourney";
 import { Message } from "../interfaces/message";
 import Tag from "../components/tag";
 import { requestAliyun } from "../request/http";
 import { useSelector, useDispatch } from 'react-redux';
-import { notification } from 'antd';
 import { downloadFile, hasChinese } from '../scripts/utils';
 import { NEXT_PUBLIC_IMAGE_PREFIX, PAINTING_POINTS_ONE_TIME } from '../scripts/config';
-import { getRatio, getHeight, getRandomPaintingTip } from "../scripts/utils";
-import Link from "next/link";
+import { getRatio, getHeight } from "../scripts/utils";
 import PaintingPoint from "../components/paintingPoint";
 import store from "../store";
-import DynamicImg from "../components/DynamicImg";
+import AliyunOSSUploader from "../components/OssUploader";
+import { ossImgBaseURL } from '../scripts/config'
+const imgExp = /<([^<>]+)>/g;
 
 const baseWidth = 500;
 const { TextArea } = Input;
@@ -55,6 +55,7 @@ const Index: React.FC = () => {
   const inputValueRef = useRef(inputValue);
   const [inputDisable, setInputDisable] = useState(false);
   const [isTranslating, setIsTranslating] = useState(false);
+  const [referImg, setReferImg] = useState('');
   //测试
   // const [messages, setMessages] = useState<Message[]>([{
   //   text: '测试',
@@ -107,8 +108,10 @@ const Index: React.FC = () => {
         // message.info('midjourney无法支持中文提示词，正在为您翻译为英文...');
         setIsTranslating(true);
         let result = {} as any;
+        let imgStrArray = newMessage.text.match(imgExp)||[];
         try {
-          result = await requestAliyun('translate', { content: newMessage.text });
+          
+          result = await requestAliyun('translate', { content: newMessage.text.replace(imgExp, '') });
 
         } catch (error) {
           messageApi.error('翻译出错，请稍后重试，请确保您的输入词中不包含政治、色情、暴力等词汇', 10);
@@ -123,7 +126,7 @@ const Index: React.FC = () => {
         result = result.data;
         setIsTranslating(false);
         console.log('翻译结果', result);
-        newMessage.text = result;
+        newMessage.text = `${imgStrArray.join(' ')} ${result}`;
         setInputValue(result);
         // }
       }
@@ -440,9 +443,32 @@ const Index: React.FC = () => {
         </div>)}
       </div> : <>
         <p className="no-content-tips">使用 midjourney 生成你的第一幅人工智能绘画作品。</p>
+        {/* <p className="no-content-tips">请勿使用违禁词汇，违者将被封号。</p> */}
         {!user.email && <p className="no-content-tips">您尚未登录，请先<a href="/login/?redirect=/art" style={{ fontSize: "14px", textDecoration: "underline" }}> 登录</a></p>}
       </>}
       <div className="prompt-input-wrap">
+        <AliyunOSSUploader buttonText="上传参考图" onChange={fileList => {
+          if (fileList.length > 0) {
+            setReferImg(`https:${ossImgBaseURL}${fileList[0].url}`);
+            const exp = /<.*?>/;
+            //用正则表达式替换掉输入框中的图片地址，图片地址用<>包裹
+            //判断inputValue 中是否有图片地址
+            if (exp.test(inputValue)) {
+              //如果有，替换掉
+              setInputValue(inputValue.replace(exp, `<${referImg}>`))
+            } else {
+              //如果没有，加到开头
+              setInputValue(`<${referImg}> ${inputValue}`);
+            }
+          } else {
+            setReferImg('')
+            setInputValue(v => v.replace(/<\s*([^<>]+)\s*>/g, ''))
+            // setInputValue(v => v.replace(`<${referImg}> `, ''))
+          }
+        }}></AliyunOSSUploader>
+        {referImg && <div style={{ margin: "10px 0" }}>
+          参考图已上传：<a href={referImg} target="_blank">{referImg}</a>，将在此图基础上，结合您的提示词生成新的作品。
+        </div>}
         <TextArea
           className="w-full"
           disabled={inputDisable}

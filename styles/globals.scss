@@ -22,6 +22,11 @@
   --card-border-rgb: 131, 134, 135;
 }
 
+a:hover {
+  color: #cfd0d0;
+  text-decoration: underline;
+}
+
 .send-prompt-btn {
   color: #000;
 }

@@ -108,9 +108,9 @@ const Index: React.FC = () => {
         // message.info('midjourney无法支持中文提示词，正在为您翻译为英文...');
         setIsTranslating(true);
         let result = {} as any;
-        let imgStrArray = newMessage.text.match(imgExp)||[];
+        let imgStrArray = newMessage.text.match(imgExp) || [];
         try {
-          
+
           result = await requestAliyun('translate', { content: newMessage.text.replace(imgExp, '') });
 
         } catch (error) {
@@ -447,18 +447,22 @@ const Index: React.FC = () => {
         {!user.email && <p className="no-content-tips">您尚未登录，请先<a href="/login/?redirect=/art" style={{ fontSize: "14px", textDecoration: "underline" }}> 登录</a></p>}
       </>}
       <div className="prompt-input-wrap">
-        <AliyunOSSUploader buttonText="上传参考图" onChange={fileList => {
+        <AliyunOSSUploader buttonText="添加参考图" onChange={fileList => {
           if (fileList.length > 0) {
-            setReferImg(`https:${ossImgBaseURL}${fileList[0].url}`);
-            const exp = /<.*?>/;
-            //用正则表达式替换掉输入框中的图片地址，图片地址用<>包裹
-            //判断inputValue 中是否有图片地址
-            if (exp.test(inputValue)) {
-              //如果有，替换掉
-              setInputValue(inputValue.replace(exp, `<${referImg}>`))
-            } else {
-              //如果没有，加到开头
-              setInputValue(`<${referImg}> ${inputValue}`);
+            //只在上传完成后做操作
+            if (fileList[0].status === 'done') {
+              const imgUrl = `https:${ossImgBaseURL}${fileList[0].url}`
+              setReferImg(imgUrl);
+              const exp = /<.*?>/;
+              //用正则表达式替换掉输入框中的图片地址，图片地址用<>包裹
+              //判断inputValue 中是否有图片地址
+              if (exp.test(inputValue)) {
+                //如果有，替换掉
+                setInputValue(inputValue.replace(exp, `<${imgUrl}>`))
+              } else {
+                //如果没有，加到开头
+                setInputValue(`<${imgUrl}> ${inputValue}`);
+              }
             }
           } else {
             setReferImg('')
@@ -466,8 +470,8 @@ const Index: React.FC = () => {
             // setInputValue(v => v.replace(`<${referImg}> `, ''))
           }
         }}></AliyunOSSUploader>
-        {referImg && <div style={{ margin: "10px 0" }}>
-          参考图已上传：<a href={referImg} target="_blank">{referImg}</a>，将在此图基础上，结合您的提示词生成新的作品。
+        {referImg && <div style={{ margin: "10px 0" }} className="refer-img-box">
+          参考图已添加：<a href={referImg} target="_blank">{referImg}</a>，将在此图基础上，结合您的提示词生成新的作品。
         </div>}
         <TextArea
           className="w-full"

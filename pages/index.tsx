@@ -153,6 +153,13 @@ const Index: React.FC = () => {
               return;
             }
 
+            //mj 服务崩溃
+            if (data.code === 40024) {
+              message.error(data.message, 20);
+              setInputDisable(false);
+              return;
+            }
+
             console.log('imagin dataing:', data);
             newMessage.img = data.uri.replace(
               "https://cdn.discordapp.com/",
@@ -425,19 +432,19 @@ const Index: React.FC = () => {
 
             {!img && <Spin tip="正在生成，大约需要 1-2 分钟"></Spin>}
             {/* 隐藏一个原图，这是为了提前缓存，以便在后面点击查看大图的时候能够更快加载 */}
-            <img src={img} style={{ display: 'none' }} />
+            {/* <img src={img} style={{ display: 'none' }} /> */}
           </div>
-          {(img && showPublicTips) && <p className="no-content-tips" style={{ position: "static", marginTop: "0px", fontSize: "13px", textAlign: "left", padding: "0" }}>图片默认公开展示在“艺术公园”，可在左侧“我的作品”中进行管理。<Button style={{ fontSize: "12px" }} size="small" onClick={() => {
+          {(img && showPublicTips) && <p className="no-content-tips" style={{ position: "static", marginTop: "0px", marginBottom: "15px", fontSize: "13px", textAlign: "left", padding: "0" }}>图片默认公开展示在“艺术公园”，可在左侧“我的作品”中进行管理。<Button style={{ fontSize: "12px" }} size="small" onClick={() => {
             localStorage.setItem("showPublicTips", 'false');
             setShowPublicTips(false);
           }}>不再提示</Button></p>}
 
           {/* ，如果您不希望展示，可进入“<Link href="/mypaintings">我的作品</Link>”进行关闭。 */}
-          {(img && img !== defaultImg) && <Space.Compact style={{ width: '100%', marginTop: "15px" }}>
+          {(img && img !== defaultImg) && <Space.Compact style={{ width: '100%', marginTop: "0px" }}>
             <Button onClick={() => {
               window.open(img, '_blank');
             }}>查看大图</Button>
-            <Button onClick={() => { downloadFile(img) }}>下载图片</Button>
+            <Button onClick={() => { downloadFile(img) }}>下载原图</Button>
           </Space.Compact>}
           {hasTag && (
             <>

@@ -14,6 +14,7 @@ import PaintingPoint from "../components/paintingPoint";
 import store from "../store";
 import AliyunOSSUploader from "../components/OssUploader";
 import { ossImgBaseURL } from '../scripts/config'
+import { isPromptValid } from "../scripts/utils";
 const imgExp = /<([^<>]+)>/g;
 
 const baseWidth = 500;
@@ -97,11 +98,17 @@ const Index: React.FC = () => {
   }
   const handleMessageSend = async () => {
     if (!checkUserAuth()) return;
+    //校验提示词是否合法
     let newMessage: Message = {
       text: inputValue.trim(),
       hasTag: false,
       progress: defaultTips,
       img: defaultImg,
+    };
+    const promptValidResult = isPromptValid(inputValue.trim());
+    if (promptValidResult !== true) {
+      message.error(promptValidResult, 10);
+      return;
     };
 
     if (newMessage.text) {

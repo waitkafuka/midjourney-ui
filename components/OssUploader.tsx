@@ -50,7 +50,6 @@ const AliyunOSSUploader: React.FC<AliyunOSSUploadProps> = ({ value, onChange, bu
     };
 
     const getOSSSignature = async () => {
-        console.log('getOSSSignature');
         const { data } = await requestAliyun('get-oss-signature');
         return data;
     }

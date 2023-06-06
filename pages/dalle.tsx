@@ -206,9 +206,9 @@ const Dalle: React.FC = () => {
                 </div>
                 <div className='dalle-input-box'>
                     <div style={{ color: "#777", fontSize: "13px" }}>
-                        从一个详细的描述开始 <Button size='small' onClick={randomPrompt}>随机一个prompt</Button>
+                        <Button size='small' onClick={randomPrompt}>随机一个prompt</Button> 
                     </div>
-                    <div style={{ marginTop: "20px" }}>
+                    <div style={{ marginTop: "0px" }}>
                         <Space.Compact style={{ width: '100%' }}>
                             <Input placeholder="请详细描述您要绘画的作品" onKeyDown={(e) => {
                                 if (e.key === "Enter") {

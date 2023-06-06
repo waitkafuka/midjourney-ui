@@ -1,5 +1,5 @@
 import React, { use, useEffect, useState, useRef, useMemo } from "react";
-import { Input, Button, List, Image, Typography, message, Modal, Spin, Upload } from "antd";
+import { Input, Button, List, Image, Typography, message, Modal, Spin, Upload, Space, Divider } from "antd";
 import { SendOutlined, UploadOutlined } from "@ant-design/icons";
 import { Imagine, Upscale, Variation } from "../request";
 import { MJMessage } from "midjourney";
@@ -56,14 +56,17 @@ const Index: React.FC = () => {
   const [inputDisable, setInputDisable] = useState(false);
   const [isTranslating, setIsTranslating] = useState(false);
   const [referImg, setReferImg] = useState('');
+  const [showTips, setShowTips] = useState(true);
+  const [showPublicTips, setShowPublicTips] = useState(true);
+
   //测试
-  // const [messages, setMessages] = useState<Message[]>([{
-  //   text: '测试',
-  //   img: 'https://img.alicdn.com/imgextra/i4/2200758132660/O1CN01Q4Z2QI1qZQ8QYQY5B_!!2200758132660.jpg',
-  //   progress: 'done',
-  //   hasTag: true,
-  // }]);
-  const [messages, setMessages] = useState<Message[]>([]);
+  const [messages, setMessages] = useState<Message[]>([{
+    text: '测试',
+    img: 'https://oss-cdn.superx.chat/attachments/1100632439031877675/1109823643304853564/waitkafuka_an_asian_woman_poses_for_a_portrait_in_the_style_of__61423d59-7663-42d4-b972-eb4a2cf1e6d6.png?x-oss-process=style/scale_500',
+    progress: 'done',
+    hasTag: true,
+  }]);
+  // const [messages, setMessages] = useState<Message[]>([]);
   const user = useSelector((state: any) => state.user.info);
   const dispatch = useDispatch();
   const [messageApi, contextHolder] = message.useMessage();
@@ -319,11 +322,23 @@ const Index: React.FC = () => {
     inputValueRef.current = inputValue;
   }, [inputValue]);
 
+  const checkTips = () => {
+    //查看是否有showTips参数，如果有，就显示提示
+    const localShowTips = localStorage.getItem("showTips");
+    if (localShowTips === 'false') {
+      setShowTips(false)
+    }
+
+    const localShowPublicTips = localStorage.getItem("showPublicTips");
+    if (localShowPublicTips === 'false') {
+      setShowPublicTips(false)
+    }
+  }
+
   //页面初始化
   useEffect(() => {
     getPrompt();
-    // 加载的时候，如果有缓存，就把缓存的数据赋值给页面
-
+    checkTips();
   }, []);
 
   return (
@@ -407,17 +422,26 @@ const Index: React.FC = () => {
                 window.open(img, '_blank');
               }
             }} />
-            {img && <p className="no-content-tips" style={{ fontSize: "13px" }}>图片默认公开展示在“艺术公园”，可在左侧“我的作品”中进行管理。</p>}
 
-            {!img && <Spin tip="正在生成，大约需要 1-2 分钟，请耐心等待..."></Spin>}
+            {!img && <Spin tip="正在生成，大约需要 1-2 分钟"></Spin>}
             {/* 隐藏一个原图，这是为了提前缓存，以便在后面点击查看大图的时候能够更快加载 */}
             <img src={img} style={{ display: 'none' }} />
           </div>
+          {(img && showPublicTips) && <p className="no-content-tips" style={{ position: "static", marginTop: "0px", fontSize: "13px", textAlign: "left", padding: "0" }}>图片默认公开展示在“艺术公园”，可在左侧“我的作品”中进行管理。<Button style={{ fontSize: "12px" }} size="small" onClick={() => {
+            localStorage.setItem("showPublicTips", 'false');
+            setShowPublicTips(false);
+          }}>不再提示</Button></p>}
+
           {/* ，如果您不希望展示，可进入“<Link href="/mypaintings">我的作品</Link>”进行关闭。 */}
-          {(img && img !== defaultImg) && <div style={{ marginTop: "15px" }}><a href={img} style={{ textDecoration: "underline" }} target="_blank">查看大图</a> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a style={{ textDecoration: "underline" }} onClick={() => { downloadFile(img) }}>下载图片 </a> </div>}
+          {(img && img !== defaultImg) && <Space.Compact style={{ width: '100%', marginTop: "15px" }}>
+            <Button onClick={() => {
+              window.open(img, '_blank');
+            }}>查看大图</Button>
+            <Button onClick={() => { downloadFile(img) }}>下载图片</Button>
+          </Space.Compact>}
           {hasTag && (
             <>
-              <div style={{ marginTop: "10px" }}>
+              <div style={{ marginTop: "15px" }}>
                 <Tag
                   Data={["U1", "U2", "U3", "U4"]}
                   type="upscale"
@@ -437,9 +461,14 @@ const Index: React.FC = () => {
                 }
                 }
               />
-              <p style={{ marginTop: "0px" }}>如果您觉得某张图片还不错，别忘了点 U+编号，获取高清图片~ </p>
+              {showTips && <p className="no-content-tips" style={{ marginTop: "0px", fontSize: "13px", textAlign: "left", padding: "0" }}>如果您觉得某张图片还不错，可以点击： U+“图片编号”，获取高清图片~ <Button style={{ fontSize: "12px" }} size='small' onClick={() => {
+                localStorage.setItem('showTips', 'false')
+                setShowTips(false)
+              }}>不再提示</Button></p>
+              }
             </>
           )}
+          <Divider></Divider>
         </div>)}
       </div> : <>
         <p className="no-content-tips">使用 midjourney 生成你的第一幅人工智能绘画作品。</p>

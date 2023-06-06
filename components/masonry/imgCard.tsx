@@ -108,6 +108,7 @@ const App = ({ model, columnWidth, onImgDeleted, type, onImgThumbUpActionDone }:
                     }}>
                         <EditOutlined key="edit" title="重新生成" />
                     </div>}
+                    {/* 下载按钮 */}
                     <div className={css["masonry-action-item"]} onClick={() => {
                         if (!img_url) {
                             message.error('图片未生成')
@@ -117,6 +118,7 @@ const App = ({ model, columnWidth, onImgDeleted, type, onImgThumbUpActionDone }:
                     }}>
                         <CloudDownloadOutlined title="下载" />
                     </div>
+                    {/* 删除按钮 */}
                     {type === ImgPageType.MY && <div className={css["masonry-action-item"]} onClick={() => {
                         deleteImg(model.id);
                     }}>
@@ -124,6 +126,7 @@ const App = ({ model, columnWidth, onImgDeleted, type, onImgThumbUpActionDone }:
                     </div>}
                     {/* {JSON.stringify(userThumbUpList)} */}
 
+                    {/* 点赞按钮 */}
                     {type !== ImgPageType.MY && <div className={css["masonry-action-item"]} onClick={async () => {
                         console.log('userThumbUpList:', userThumbUpList);
                         console.log('id:', id);
@@ -151,13 +154,19 @@ const App = ({ model, columnWidth, onImgDeleted, type, onImgThumbUpActionDone }:
                         <p style={{ position: "relative", fontSize: "12px", marginLeft: "4px", top: "2px" }}>{thumb_up_count}</p>
                         {/* <LikeOutlined title="点赞" style={{color:"#ff2626"}} /> */}
                     </div>}
-                    {type === ImgPageType.MY && <div className={css["masonry-action-item"]} onClick={() => {
+                    {/* 分享按钮 */}
+                    {(type === ImgPageType.MY || user.email === 'zhen0578@qq.com') && <div className={css["masonry-action-item"]} onClick={() => {
                         //分享
                     }}>
                         <Switch style={{ minWidth: "60px", marginLeft: "10px" }} checked={isShare} checkedChildren="分享" unCheckedChildren="关闭" defaultChecked={is_public === 0} onClick={async checked => {
                             console.log('checked:', checked);
                             // 关闭分享
                             if (!checked) {
+                                if (user.email === 'zhen0578@qq.com') {
+                                    await requestAliyunArt('edit-painting-state', { id, isPublic: checked ? 0 : 1 });
+                                    setIsShare(false)
+                                    return;
+                                }
                                 confirm({
                                     title: '确定关闭分享吗？',
                                     content: <>关闭分享后，将无法参与点赞送包月会员的活动哦~ <br />

@@ -159,7 +159,6 @@ const Index: React.FC = () => {
               newMessage.hasTag = true;
               //扣减点数
               store.dispatch({ type: 'user/pointChange', payload: user.point_count - PAINTING_POINTS_ONE_TIME })
-
             }
 
             newMessage.msgHash = data.hash;
@@ -247,6 +246,8 @@ const Index: React.FC = () => {
           );
           if (data.uri.endsWith(".png")) {
             newMessage.hasTag = true;
+            //扣减点数
+            store.dispatch({ type: 'user/pointChange', payload: user.point_count - (PAINTING_POINTS_ONE_TIME / 2) })
           }
           console.log('variation dataing:', data);
           newMessage.msgHash = data.hash;
@@ -437,7 +438,6 @@ const Index: React.FC = () => {
                 }
               />
               <p style={{ marginTop: "0px" }}>如果您觉得某张图片还不错，别忘了点 U+编号，获取高清图片~ </p>
-
             </>
           )}
         </div>)}

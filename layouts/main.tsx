@@ -32,14 +32,14 @@ const ROUTES: Route = {
       name: '开始绘画',
       icon: <SendOutlined />,
       key: 'start',
-      // flatMenu: true,
+      flatMenu: true,
       children: [{
         path: '/',
-        name: 'Midjourney',
+        name: '绘画模型-Midjourney',
         key: "midjourney",
       }, {
         path: '/dalle',
-        name: 'DALL-E',
+        name: '绘画模型-DALL·E',
         key: "dalle",
       },]
     },

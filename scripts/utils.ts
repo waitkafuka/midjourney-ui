@@ -36,19 +36,39 @@ export const downloadFile = (url: string, filename: string = 'midjourney.png') =
 /**
  * 判断mj prompt是否合法
  */
-export const isPromptValid = (prompt: string) => {
+export const isPromptValid = (prompt: string): { isValid: boolean, message: string } => {
+    function validateText() {
+        const invalidPattern = / -\w+/g;
+        const hasInvalid = invalidPattern.test(prompt);
+        if (hasInvalid) {
+            return {
+                isValid: false,
+                message: '参数不合法，参数前面必须是：--，不能是： -',
+            };
+        }
+        return {
+            isValid: true,
+            message: ""
+        }
+    }
     function checkAr() {
-        if (prompt.indexOf('--ar') === -1) return true;
+        if (prompt.indexOf('--ar') === -1) return { isValid: true, message: "" };
         const regex = /--ar\s+(\d+):(\d+)/;
         const match = regex.exec(prompt);
         if (match) {
             const width = parseInt(match[1]);
             const height = parseInt(match[2]);
             if (width > 0 && height > 0) {
-                return true;
+                return {
+                    isValid: true,
+                    message: ''
+                };
             }
         }
-        return 'ar 参数不合法，正确写法是：--ar m:n。例如：--ar 16:9';
+        return {
+            isValid: false,
+            message: 'ar 参数不合法，正确写法是：--ar m:n。例如：--ar 16:9'
+        };
     }
     //检查除了链接之外是否为空
     function checkLink() {
@@ -56,14 +76,24 @@ export const isPromptValid = (prompt: string) => {
         const regex = /<[^>]*>/g;
         const match = prompt.replace(regex, '');
         if (match.trim().length > 0) {
-            return true;
+            return {
+                isValid: true,
+                message: ""
+            };
         }
-        return '除了垫图之外提示词不能为空哦';
+        return {
+            isValid: false,
+            message: '除了垫图之外提示词不能为空哦',
+        };
     }
 
-    if (checkAr() !== true) return checkAr();
-    if (checkLink() !== true) return checkLink();
-    return true;
+    if (!validateText().isValid) return validateText();
+    if (!checkAr().isValid) return checkAr();
+    if (!checkLink().isValid) return checkLink();
+    return {
+        isValid: true,
+        message: ''
+    };
 }
 
 /**

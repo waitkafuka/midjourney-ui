@@ -106,8 +106,8 @@ const Index: React.FC = () => {
       img: defaultImg,
     };
     const promptValidResult = isPromptValid(inputValue.trim());
-    if (promptValidResult !== true) {
-      message.error(promptValidResult, 10);
+    if (promptValidResult.isValid !== true) {
+      message.error(promptValidResult.message, 10);
       return;
     };
 

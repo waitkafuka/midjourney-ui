@@ -110,7 +110,7 @@ const Dalle: React.FC = () => {
                 break;
             }
             if (result.data.status === 'Failed') {
-                message.error('生成失败，点数已返还，请刷新重试。', 10);
+                message.error('生成失败，点数已返还，请确保您的输入词不含色情、暴力等敏感词汇，并刷新重试。', 10);
                 setIsGenerating(false);
                 return;
             }

@@ -3,6 +3,7 @@ import { Space, Tag, Tooltip, Card, Image, message, Modal, Switch } from "antd";
 import { CopyOutlined, CloudDownloadOutlined, EditOutlined, DeleteOutlined, LikeOutlined, LikeFilled } from '@ant-design/icons'
 const { Meta } = Card;
 import moment from 'moment';
+require('moment/locale/zh-cn');
 import { ImgCardModel, PaintingType } from "../../scripts/types";
 import ClipboardJS from 'clipboard';
 import css from './masonry.module.scss'
@@ -86,11 +87,16 @@ const App = ({ model, columnWidth, onImgDeleted, type, onImgThumbUpActionDone }:
         <div className={`${css['masonry-item']} masonry-item`} style={{ width: `${columnWidth}px` }} id={`i${id}`}>
             <div style={{ position: "absolute", left: "0", top: '-1px' }}>
                 {/* data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAABQAAAAEABAMAAAAehcbXAAAAHlBMVEX//2ZC//9R2Uv/bjs7Rv///2ZC//9R2kz/bjw8Rv+T0BPCAAAABXRSTlPf39/f3yHgI24AAAHRSURBVHgBYmQYYCA4ou0ftZ8pdADBKBgFTAOZ+kfBKGAaDQJAu3QsAAAAgADMnyXJCLp7NoYhIAKCgAgIAiIgCIiAICACgoAICAIiIAiIgCAgAoKACAgCIiAIiIAgIAKCgAgIAiIgCIiACAgCIiAIiIAgIAKCgAgIAiIgCIiAICACgoAICAIiIAiIgCAgAoKACAgCIiAIiIAgIAKCgAiIgCAgAoKACAgCIiAIiIAgIAKCgAgIAiIgCIiAICACgoAICAIiIAiIgCAgAoKACAgCIiACgoAICAIiIAiIgCAgAoKACAgCIiAIiIAgIAKCgAgIAiIgCIiAICACgoAICCsgCIiAICACgoAICAIiIAiIgCAgAoKACAgCIiAIiIAgIAKCgAgIAiIgCIiAICACgoAICAIiIAKCgAgIAiIgCIiAICACgoAICAIiIAiIgCAgAoKACAgCIiAIiIAgIAKCgAgIAiIgCIiACAgCIiAIiIAgIAKCgAgIAiIgCIiAICACgoAICAIiIAiIgCAgAoKACAgCIiAIiIAgIAKCgAiIgCAgAoKACAgCIiAIiIAgIAKCgAgIAiIgCIiAICACgoAICAIiIAiIgCAgAoKACAgCIiACBo4KVgKCYkXIHT4AAAAASUVORK5CYII=" */}
-                {model.painting_type === 'dalle' ? <Tag color="#606C5D">
+                {/* {model.painting_type === 'dalle' ? <Tag color="rgba(96 108 93/70%)" >
                     DALL·E
-                </Tag> : <Tag color="#4C4C6D">
+                </Tag> : <Tag color="rgba(76 76 109/70%)">
                     Midjourney
-                </Tag>}
+                </Tag>} */}
+            </div>
+            <div style={{ position: "absolute", right: "-8px", top: "-1px" }}>
+                <Tag color={model.painting_type === 'mj' ? 'rgba(76 76 109/70%)' : 'rgba(96 108 93/70%)'}>
+                    {moment.duration(moment().diff(model.create_time, "minutes"), 'minutes').humanize()}前
+                </Tag>
             </div>
             {img_url ? <a href={HDsrc} target="_blank">
                 <img onClick={onImgClick} style={{ height: `${columnWidth * height / baseWidth}px` }} className={css["masonry-cover-img"]} src={src} alt="" />
@@ -124,7 +130,7 @@ const App = ({ model, columnWidth, onImgDeleted, type, onImgThumbUpActionDone }:
                         };
                         downloadFile(HDsrc)
                     }}>
-                        <CloudDownloadOutlined title="下载" />
+                        <CloudDownloadOutlined title="下载原图" />
                     </div>
                     {/* 删除按钮 */}
                     {type === ImgPageType.MY && <div className={css["masonry-action-item"]} onClick={() => {

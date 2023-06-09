@@ -26,7 +26,15 @@ export default class MyDocument extends Document {
             rel="icon"
             href="/art/logo.png"
           />
+          <title>AI绘画, Midjourney绘画, 人工智能绘画</title>
+          <meta name="keywords" content="AI绘画, Midjourney绘画, 人工智能绘画, Dalle 绘画, Stable Diffusion" />
+          <meta name="description" content="AI绘画, Midjourney绘画, 人工智能绘画, Stable Diffusion。使用人工智能+描述词画出你想要绘制的图像。" />
+          <meta
+            name="viewport"
+            content="width=device-width,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no"
+          />
           <link rel="stylesheet" href="//at.alicdn.com/t/c/font_4080772_udf90wavud.css" />
+
         </Head>
         <body>
           <Main />

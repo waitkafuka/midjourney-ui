@@ -125,8 +125,6 @@ const menuItemRender = (options: MenuDataItem, element: React.ReactNode) => (
   <>
     {options.target ?
       <a target='_blank' href={(options.path) ?? '/'} onClick={() => {
-        console.log('1213', options);
-
         // if (options.target) {
         //   window.location.href = options.target ?? '/';
         // }
@@ -229,20 +227,6 @@ export default function Main(children: JSX.Element) {
 
   return (
     <>
-      <Head>
-        <meta
-          name="description"
-          content="ChatGPT原版镜像。国内可快速访问。比官方ChatGPT更好用，速度更快，错误更少，模型能力完全一致。"
-        />
-        <meta
-          name="keywords"
-          content="ChatGPT,国内ChatGPT,ChatGPT免注册,ChatGPT在线体验,ChatGPT免登录,ChatGPT镜像,ChatGPT国内镜像"
-        />
-        <meta
-          name="viewport"
-          content="width=device-width,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no"
-        />
-      </Head>
       <ProConfigProvider
         dark={dark}
         hashed={false}>

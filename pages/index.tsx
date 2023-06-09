@@ -59,6 +59,7 @@ const Index: React.FC = () => {
   const [referImg, setReferImg] = useState('');
   const [showTips, setShowTips] = useState(true);
   const [showPublicTips, setShowPublicTips] = useState(true);
+  const [clientIndex, setClientIndex] = useState(0)
 
   //测试
   // const [messages, setMessages] = useState<Message[]>([{
@@ -146,7 +147,7 @@ const Index: React.FC = () => {
       setMessages(msgs => [...msgs, newMessage]);
       try {
         await Imagine(
-          JSON.stringify({ prompt: newMessage.text }),
+          JSON.stringify({ prompt: newMessage.text, clientIndex }),
           (data: any) => {
             if (data.code === 40015) {
               //未登录
@@ -216,7 +217,7 @@ const Index: React.FC = () => {
     setMessages(omsg => [...omsg, newMessage]);
     try {
       await Upscale(
-        JSON.stringify({ content: pormpt, index, msgId, msgHash }),
+        JSON.stringify({ content: pormpt, index, msgId, msgHash, clientIndex }),
         (data: MJMessage) => {
           console.log('upscale dataing:', data);
           newMessage.img = data.uri.replace(
@@ -257,7 +258,7 @@ const Index: React.FC = () => {
     setMessages(omsg => [...omsg, newMessage]);
     try {
       await Variation(
-        JSON.stringify({ content, index, msgId, msgHash }),
+        JSON.stringify({ content, index, msgId, msgHash, clientIndex }),
         (data: MJMessage) => {
           newMessage.img = data.uri.replace(
             "https://cdn.discordapp.com/",
@@ -359,12 +360,18 @@ const Index: React.FC = () => {
     }
   }
 
+  //随机一个 0-2 的随机数
+  const setRandomClientIndex = () => {
+    const rand = Math.floor(Math.random() * 3);
+    setClientIndex(rand);
+  };
+
   //页面初始化
   useEffect(() => {
     getPrompt();
     checkTips();
     setBDVid();
-
+    setRandomClientIndex();
   }, []);
 
   return (

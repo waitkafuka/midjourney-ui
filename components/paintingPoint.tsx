@@ -7,6 +7,7 @@ import QRCode from 'qrcode';
 import { useSelector } from "react-redux";
 import store from "../store";
 import { setUserInfo } from "../store/userInfo";
+import { getQueryString } from "../scripts/utils";
 
 interface ImgListPageProps {
     type: ImgPageType
@@ -28,7 +29,7 @@ const PaingPoint = ({ }) => {
             return;
             // }, 1000);
         };
-        const base64Url = await QRCode.toDataURL(`https://superx.chat/pay/?email=${email}&pkgId=10`)
+        const base64Url = await QRCode.toDataURL(`https://superx.chat/pay/?email=${email}&pkgId=10&bd_vid=${sessionStorage.getItem('bd_vid') || ''}`)
         setQrCodeSrc(base64Url);
     }
 
@@ -43,7 +44,7 @@ const PaingPoint = ({ }) => {
     useEffect(() => {
         if (isShowBuyPointDialog) {
             if (!user.email) {
-                window.location.href = '/login?redirect=/art';
+                window.location.href = `/login?redirect=${encodeURIComponent(`/art?bd_vid=${getQueryString('bd_vid')}`)}`;
             }
         }
     }, [isShowBuyPointDialog])

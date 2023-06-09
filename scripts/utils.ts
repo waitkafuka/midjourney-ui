@@ -34,26 +34,25 @@ export const downloadFile = (url: string, filename: string = 'midjourney.png') =
 }
 
 /**
- * 判断mj prompt是否合法
+ * 判断mj prompt参数是否合法
  */
-export const isPromptValid = (prompt: string): { isValid: boolean, message: string } => {
-    function validateText() {
+export const isPromptValid = (prompt: string): { isValid: boolean, message?: string } => {
+    function validateArgs() {
         const invalidPattern = / -\w+/g;
         const hasInvalid = invalidPattern.test(prompt);
         if (hasInvalid) {
             return {
                 isValid: false,
-                message: '参数不合法，参数前面必须是：--，不能是： -',
+                message: '参数不合法，参数前面必须是：--，不能是：-',
             };
         }
         return {
             isValid: true,
-            message: ""
         }
     }
     function checkAr() {
         if (prompt.indexOf('--ar') === -1) return { isValid: true, message: "" };
-        const regex = /--ar\s+(\d+):(\d+)/;
+        const regex = /--ar\s+(\d+):(\d+(?=\s|$))/;
         const match = regex.exec(prompt);
         if (match) {
             const width = parseInt(match[1]);
@@ -61,13 +60,12 @@ export const isPromptValid = (prompt: string): { isValid: boolean, message: stri
             if (width > 0 && height > 0) {
                 return {
                     isValid: true,
-                    message: ''
                 };
             }
         }
         return {
             isValid: false,
-            message: 'ar 参数不合法，正确写法是：--ar m:n。例如：--ar 16:9'
+            message: 'ar 参数不合法，正确写法是：--ar m:n。例如：--ar 16:9，数字后需要有空格，不能有其他字符。'
         };
     }
     //检查除了链接之外是否为空
@@ -78,7 +76,6 @@ export const isPromptValid = (prompt: string): { isValid: boolean, message: stri
         if (match.trim().length > 0) {
             return {
                 isValid: true,
-                message: ""
             };
         }
         return {
@@ -87,13 +84,21 @@ export const isPromptValid = (prompt: string): { isValid: boolean, message: stri
         };
     }
 
-    if (!validateText().isValid) return validateText();
+    if (!validateArgs().isValid) return validateArgs();
     if (!checkAr().isValid) return checkAr();
     if (!checkLink().isValid) return checkLink();
     return {
         isValid: true,
-        message: ''
     };
+}
+
+/**
+ * 从链接中获取指定参数
+ */
+export const getQueryString = (name: string) => {
+    const regex = new RegExp(`${name}=([^&]*)`);
+    const match = regex.exec(window.location.search);
+    return match ? match[1] : '';
 }
 
 /**

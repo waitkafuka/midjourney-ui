@@ -80,6 +80,11 @@ const AliyunOSSUploader: React.FC<AliyunOSSUploadProps> = ({ value, onChange, bu
         const filename = Date.now() + random + suffix;
         // @ts-ignore
         file.url = OSSData.dir + filename;
+        //判断文件是否超过大小
+        if (file.size > 1024 * 1024 * 5) {
+            message.error('文件不能超过5M');
+            return false;
+        }
 
         return file;
     };

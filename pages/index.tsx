@@ -7,7 +7,7 @@ import { Message } from "../interfaces/message";
 import Tag from "../components/tag";
 import { requestAliyun } from "../request/http";
 import { useSelector, useDispatch } from 'react-redux';
-import { downloadFile, hasChinese } from '../scripts/utils';
+import { downloadFile, getQueryString, hasChinese } from '../scripts/utils';
 import { NEXT_PUBLIC_IMAGE_PREFIX, PAINTING_POINTS_ONE_TIME } from '../scripts/config';
 import { getRatio, getHeight } from "../scripts/utils";
 import PaintingPoint from "../components/paintingPoint";
@@ -110,6 +110,8 @@ const Index: React.FC = () => {
       message.error(promptValidResult.message, 10);
       return;
     };
+    // alert('通过')
+    // return;
 
     if (newMessage.text) {
       //检测内容是否包含中文
@@ -349,10 +351,20 @@ const Index: React.FC = () => {
     }
   }
 
+  const setBDVid = () => {
+    //从链接中获取bd_vid参数
+    const bd_vid = getQueryString('bd_vid');
+    if (bd_vid) {
+      sessionStorage.setItem('bd_vid', bd_vid)
+    }
+  }
+
   //页面初始化
   useEffect(() => {
     getPrompt();
     checkTips();
+    setBDVid();
+
   }, []);
 
   return (
@@ -426,7 +438,7 @@ const Index: React.FC = () => {
         height: "calc(100vh - 96px)", overflowY: "auto"
       }}>
         {/* 图片结果列表容器 */}
-        {messages.map(({ text, img, progress, hasTag, content, msgID, msgHash }, index) => <div className="img-list-item" key={img}>
+        {messages.map(({ text, img, progress, hasTag, content, msgID, msgHash }, index) => <div className="img-list-item" key={index}>
           <div> {text} {`(${progress})`}</div>
           <div className="workspace-img-container" style={{ width: `${baseWidth}px`, height: getImgCalcHeight(img, text) }}>
 
@@ -437,7 +449,7 @@ const Index: React.FC = () => {
               }
             }} />
 
-            {!img && <Spin tip="正在生成，大约需要 1-2 分钟"></Spin>}
+            {!img && <Spin tip="绘画中，正常 1 分钟内可完成，如遇排队，可能需要 1-2 分钟。"></Spin>}
             {/* 隐藏一个原图，这是为了提前缓存，以便在后面点击查看大图的时候能够更快加载 */}
             {/* <img src={img} style={{ display: 'none' }} /> */}
           </div>

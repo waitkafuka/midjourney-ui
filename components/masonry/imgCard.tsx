@@ -84,6 +84,14 @@ const App = ({ model, columnWidth, onImgDeleted, type, onImgThumbUpActionDone }:
 
     return <>
         <div className={`${css['masonry-item']} masonry-item`} style={{ width: `${columnWidth}px` }} id={`i${id}`}>
+            <div style={{ position: "absolute", left: "0", top: '-1px' }}>
+                {/* data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAABQAAAAEABAMAAAAehcbXAAAAHlBMVEX//2ZC//9R2Uv/bjs7Rv///2ZC//9R2kz/bjw8Rv+T0BPCAAAABXRSTlPf39/f3yHgI24AAAHRSURBVHgBYmQYYCA4ou0ftZ8pdADBKBgFTAOZ+kfBKGAaDQJAu3QsAAAAgADMnyXJCLp7NoYhIAKCgAgIAiIgCIiAICACgoAICAIiIAiIgCAgAoKACAgCIiAIiIAgIAKCgAgIAiIgCIiACAgCIiAIiIAgIAKCgAgIAiIgCIiAICACgoAICAIiIAiIgCAgAoKACAgCIiAIiIAgIAKCgAiIgCAgAoKACAgCIiAIiIAgIAKCgAgIAiIgCIiAICACgoAICAIiIAiIgCAgAoKACAgCIiACgoAICAIiIAiIgCAgAoKACAgCIiAIiIAgIAKCgAgIAiIgCIiAICACgoAICCsgCIiAICACgoAICAIiIAiIgCAgAoKACAgCIiAIiIAgIAKCgAgIAiIgCIiAICACgoAICAIiIAKCgAgIAiIgCIiAICACgoAICAIiIAiIgCAgAoKACAgCIiAIiIAgIAKCgAgIAiIgCIiACAgCIiAIiIAgIAKCgAgIAiIgCIiAICACgoAICAIiIAiIgCAgAoKACAgCIiAIiIAgIAKCgAiIgCAgAoKACAgCIiAIiIAgIAKCgAgIAiIgCIiAICACgoAICAIiIAiIgCAgAoKACAgCIiACBo4KVgKCYkXIHT4AAAAASUVORK5CYII=" */}
+                {model.painting_type === 'dalle' ? <Tag color="#606C5D">
+                    DALL·E
+                </Tag> : <Tag color="#4C4C6D">
+                    Midjourney
+                </Tag>}
+            </div>
             {img_url ? <a href={HDsrc} target="_blank">
                 <img onClick={onImgClick} style={{ height: `${columnWidth * height / baseWidth}px` }} className={css["masonry-cover-img"]} src={src} alt="" />
             </a> : <img style={{ height: `${columnWidth * 360 / 358}px` }} src={defaultImg} />}

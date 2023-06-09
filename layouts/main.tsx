@@ -38,19 +38,22 @@ const ROUTES: Route = {
         name: '绘画模型-Midjourney',
         key: "midjourney",
       }, {
-        path: '/dalle',
+        path: '/art/dalle',
+        target: "_blank",
         name: '绘画模型-DALL·E',
         key: "dalle",
       },]
     },
     {
-      path: '/mypaintings',
+      path: '/art/mypaintings',
+      target: '_blank',
       name: '我的作品',
       key: 'mypaintings',
       icon: <i className='iconfont icon-huihua'></i>,
     },
     {
-      path: '/paintings',
+      path: '/art/paintings',
+      target: '_blank',
       name: '艺术公园',
       key: 'paintings',
       icon: <i className='iconfont icon-fengjing-01'></i>,
@@ -62,12 +65,14 @@ const ROUTES: Route = {
       children: [
         {
           key: 'guide',
-          path: '/guide',
+          path: '/art/guide',
+          target: "_blank",
           name: '入门指引',
           icon: <BulbOutlined />,
         },
         {
-          path: '/cookbook',
+          path: '/art/cookbook',
+          target: "_blank",
           name: '参数大全',
           key: 'cookbook',
           icon: <i className='iconfont icon-canshushezhi'></i>,
@@ -91,7 +96,8 @@ const ROUTES: Route = {
       icon: <WechatOutlined />,
     },
     {
-      path: '/activity',
+      path: '/art/activity',
+      target: "_blank",
       name: '首届绘画大赛',
       key: 'activity',
       icon: <SketchOutlined />,

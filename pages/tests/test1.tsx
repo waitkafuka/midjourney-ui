@@ -1,12 +1,7 @@
-import Link from 'next/link';
-import router from 'next/router';
 import { useEffect, useState } from 'react';
-function replaceLastElement(arr: number[], newElement: number) {
-    // 返回更新后的数组
-}
-import DynamicImg from '../../components/DynamicImg';
+// 返回更新后的数组
 let index = 0;
-function Counter() {
+function test() {
     const [list, setList] = useState<{ src: string }[]>([]);
     const [src, setSrc] = useState<string>('');
     const srcs = ['https://oss-cdn.superx.chat/attachments/1100632439031877675/1112222441457070090/waitkafuka_Light_beige_suit__white_shirt__light_blue_tie__red_b_daeb41d7-21f7-4a7b-8925-601d0b76557f.png?x-oss-process=style/scale_500',
@@ -15,37 +10,34 @@ function Counter() {
 
 
     //随机设置一张图片地址
-    const randowm = () => {
+    const randomSrc1 = () => {
         //从 0-2 按顺序切换
         index++;
-        console.log('index1', index);
-        console.log('index', index % 3);
-
-        // setSrc(srcs[index % 3])
-        const l = list;
-        let ele = {
-            src: srcs[index % 3]
-        };
-        setInterval(() => {
-            setList([...l, ele])
-        }, 1000);
+        setSrc(srcs[index % 3])
+    }
+    //用数组随机设置一张图片地址
+    const randomSrc2 = () => {
+        //从 0-2 按顺序切换
+        index++;
+        setList([{ src: srcs[index % 3] }])
     }
 
     useEffect(() => {
-        randowm();
     }, [])
 
     return (
 
         <div>
+            <img src={src}></img>
             {list.map((item, index) => {
-                return <DynamicImg key={item.src} src={item.src}></DynamicImg>
+                return <img key={1} data-d={index} src={item.src}></img>
             })}
 
-            < button onClick={randowm}>切换图片</button>
+            < button onClick={randomSrc1}>切换图片1</button>
+            < button onClick={randomSrc2}>切换图片2</button>
             {src}
         </div >
     );
 }
 
-export default Counter;
+export default test;

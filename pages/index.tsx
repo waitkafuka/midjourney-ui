@@ -1,5 +1,5 @@
 import React, { use, useEffect, useState, useRef, useMemo } from "react";
-import { Input, Button, List, Image, Typography, message, Modal, Spin, Upload, Space, Divider } from "antd";
+import { Input, Button, List, Image, Typography, message, Modal, Spin, Upload, Space, Divider, Checkbox } from "antd";
 import { SendOutlined, UploadOutlined } from "@ant-design/icons";
 import { Imagine, Upscale, Variation } from "../request";
 import { MJMessage } from "midjourney";
@@ -13,7 +13,7 @@ import { getRatio, getHeight } from "../scripts/utils";
 import PaintingPoint from "../components/paintingPoint";
 import store from "../store";
 import AliyunOSSUploader from "../components/OssUploader";
-import { ossImgBaseURL } from '../scripts/config'
+import { ossUploadedImgBaseURL } from '../scripts/config'
 import { isPromptValid } from "../scripts/utils";
 const imgExp = /<([^<>]+)>/g;
 
@@ -60,11 +60,12 @@ const Index: React.FC = () => {
   const [showTips, setShowTips] = useState(true);
   const [showPublicTips, setShowPublicTips] = useState(true);
   const [clientIndex, setClientIndex] = useState(0)
+  const [showOperationtTips, setShowOperationtTips] = useState(false);
 
   //测试
   // const [messages, setMessages] = useState<Message[]>([{
   //   text: '测试',
-  //   img: 'https://oss-cdn.superx.chat/attachments/1100632439031877675/1109823643304853564/waitkafuka_an_asian_woman_poses_for_a_portrait_in_the_style_of__61423d59-7663-42d4-b972-eb4a2cf1e6d6.png?x-oss-process=style/scale_500',
+  //   img: 'https://oss-cdn-h.superx.chat/attachments/1100632439031877675/1109823643304853564/waitkafuka_an_asian_woman_poses_for_a_portrait_in_the_style_of__61423d59-7663-42d4-b972-eb4a2cf1e6d6.png?x-oss-process=style/scale_500',
   //   progress: 'done',
   //   hasTag: true,
   // }]);
@@ -82,7 +83,7 @@ const Index: React.FC = () => {
       if (chat) {
         chat.scrollTop = chat.scrollHeight;
       }
-    }, 1000);
+    }, 500);
   };
 
   const checkUserAuth = () => {
@@ -99,6 +100,10 @@ const Index: React.FC = () => {
   }
   const handleMessageSend = async () => {
     if (!checkUserAuth()) return;
+    //弹窗提示操作指南
+    if (localStorage.getItem('noAllowOperationTips') !== 'true') {
+      setShowOperationtTips(true);
+    }
     //校验提示词是否合法
     let newMessage: Message = {
       text: inputValue.trim(),
@@ -420,6 +425,39 @@ const Index: React.FC = () => {
       <div className='dalle-point-box'><PaintingPoint></PaintingPoint></div>
       {contextHolder}
       {/* <Spin>{paintingTip}</Spin> */}
+      {/* 操作提示弹窗 */}
+      <Modal
+        title="使用指南"
+        style={{ top: 20, width: "500px" }}
+        open={showOperationtTips}
+        destroyOnClose={true}
+        closable={true}
+        maskClosable={false}
+        okText="确定"
+        footer={[
+          <Button key="ok" type="primary" onClick={() => { setShowOperationtTips(false) }}>
+            确定
+          </Button>,
+        ]}
+      // footer={null}
+      >
+        <div style={{ lineHeight: "1.6" }}>
+          <p>1. 每次绘图消耗 8 个点数；点一次 V（变体），消耗 4 个点数；点 U（放大单图）不消耗点数。</p>
+          <p>2. 由于midjourney有内容风控，如果超过 3 分钟无结果，请检查您的提示词内容是否有敏感内容，参数是否有误。可以更换提示词再试。</p>
+          <p>3. 绘图过程中请不要刷新页面</p>
+          <p>4. 绘画作品默认公开分享在“艺术公园”，供点赞和交流（排名有奖励），如需关闭，可在“我的作品”中进行关闭分享</p>
+          <p>5. 为保护隐私，有参考图的作品默认不会分享。如需分享，同样可以在“我的作品”中打开分享</p>
+          {/* <p>6. 为使您可以绘制出高质量的作品，本站左侧提供了入门和提升教程，您可以一边阅读一边对比尝试</p> */}
+        </div>
+
+        <div style={{ marginTop: "20px", textAlign: "right" }}>
+          <Checkbox onChange={e => {
+            const checked = e.target.checked;
+            checked ? localStorage.setItem('noAllowOperationTips', 'true') : localStorage.removeItem('noAllowOperationTips')
+          }}>不再提示</Checkbox>
+        </div>
+      </Modal>
+      {/* 翻译中 */}
       <Modal
         title="翻译中"
         style={{ top: 20 }}
@@ -441,79 +479,86 @@ const Index: React.FC = () => {
         renderItem={renderMessage}
         locale={{ emptyText: '使用 midjourney 来生成你的第一幅人工智能绘画作品。' }}
       /> */}
-      {messages.length > 0 ? <div className="workspace-img-wrap img-list-box" style={{
-        height: "calc(100vh - 96px)", overflowY: "auto"
-      }}>
-        {/* 图片结果列表容器 */}
-        {messages.map(({ text, img, progress, hasTag, content, msgID, msgHash }, index) => <div className="img-list-item" key={index}>
-          <div> {text} {`(${progress})`}</div>
-          <div className="workspace-img-container" style={{ width: `${baseWidth}px`, height: getImgCalcHeight(img, text) }}>
+      {
+        messages.length > 0 ? <div className="workspace-img-wrap img-list-box" style={{
+          height: "calc(100vh - 96px)", overflowY: "auto"
+        }}>
+          {/* 图片结果列表容器 */}
+          {messages.map(({ text, img, progress, hasTag, content, msgID, msgHash }, index) => <div className="img-list-item" key={index}>
+            <div> {text} {`(${progress})`}</div>
+            <div className="workspace-img-container" style={{ width: `${baseWidth}px`, height: getImgCalcHeight(img, text) }}>
 
-            <img src={img} style={{ cursor: isDone(progress) ? 'zoom-in' : 'auto' }} onClick={() => {
-              // <img src={thumbUrl(img, text)} style={{ cursor: isDone(progress) ? 'zoom-in' : 'auto' }} onClick={() => {
-              if (isDone(progress)) {
-                window.open(img, '_blank');
+              {img && <img src={img} style={{ cursor: isDone(progress) ? 'zoom-in' : 'auto' }} onClick={() => {
+                // <img src={thumbUrl(img, text)} style={{ cursor: isDone(progress) ? 'zoom-in' : 'auto' }} onClick={() => {
+                if (isDone(progress)) {
+                  window.open(img, '_blank');
+                }
+              }} />
               }
-            }} />
 
-            {!img && <Spin tip="绘画中，正常 1 分钟内可完成，如遇排队，可能需要 1-2 分钟。"></Spin>}
-            {/* 隐藏一个原图，这是为了提前缓存，以便在后面点击查看大图的时候能够更快加载 */}
-            {/* <img src={img} style={{ display: 'none' }} /> */}
-          </div>
-          {(img && showPublicTips) && <p className="no-content-tips" style={{ position: "static", marginTop: "0px", marginBottom: "15px", fontSize: "13px", textAlign: "left", padding: "0" }}>图片默认公开展示在“艺术公园”，可在左侧“我的作品”中进行管理。<Button style={{ fontSize: "12px" }} size="small" onClick={() => {
-            localStorage.setItem("showPublicTips", 'false');
-            setShowPublicTips(false);
-          }}>不再提示</Button></p>}
+              {/* {!img && <Spin tip="绘画中，正常 1 分钟内可完成，如遇排队，可能需要 1-2 分钟。"></Spin>} */}
+              {!img && <div style={{ textAlign: "center" }}>
+                <img style={{ width: "130px" }} src="https://cdn.superx.chat/stuff/default.svg" alt="" /> <br />
+                <div style={{ marginTop: "10px", display: "flex", textAlign: "center", justifyContent: "center" }}><Spin tip=""></Spin>  <span style={{ color: "#888", fontSize: "13px" }}>正在努力绘画...</span></div>
+              </div>}
+              {/* 隐藏一个原图，这是为了提前缓存，以便在后面点击查看大图的时候能够更快加载 */}
+              {/* <img src={img} style={{ display: 'none' }} /> */}
+            </div>
+            {(img && showPublicTips) && <p className="no-content-tips" style={{ position: "static", marginTop: "0px", marginBottom: "15px", fontSize: "13px", textAlign: "left", padding: "0" }}>图片默认公开展示在“艺术公园”，可在左侧“我的作品”中进行管理。<Button style={{ fontSize: "12px" }} size="small" onClick={() => {
+              localStorage.setItem("showPublicTips", 'false');
+              setShowPublicTips(false);
+            }}>不再提示</Button></p>}
 
-          {/* ，如果您不希望展示，可进入“<Link href="/mypaintings">我的作品</Link>”进行关闭。 */}
-          {(img && img !== defaultImg) && <Space.Compact style={{ width: '100%', marginTop: "0px" }}>
-            <Button onClick={() => {
-              window.open(img, '_blank');
-            }}>查看大图</Button>
-            <Button onClick={() => { downloadFile(img) }}>下载原图</Button>
-          </Space.Compact>}
-          {hasTag && (
-            <>
-              <div style={{ marginTop: "15px" }}>
+            {/* ，如果您不希望展示，可进入“<Link href="/mypaintings">我的作品</Link>”进行关闭。 */}
+            {(img && img !== defaultImg) && <Space.Compact style={{ width: '100%', marginTop: "0px" }}>
+              <Button onClick={() => {
+                window.open(img, '_blank');
+              }}>查看大图</Button>
+              <Button onClick={() => { downloadFile(img) }}>下载原图</Button>
+            </Space.Compact>}
+            {hasTag && (
+              <>
+                <div style={{ marginTop: "15px" }}>
+                  <Tag
+                    Data={["U1", "U2", "U3", "U4"]}
+                    type="upscale"
+                    onClick={(tag) => {
+                      scrollToBottom();
+                      tagClick(String(content), String(msgID), String(msgHash), tag)
+                    }
+                    }
+                  />
+                </div>
                 <Tag
-                  Data={["U1", "U2", "U3", "U4"]}
-                  type="upscale"
+                  Data={["V1", "V2", "V3", "V4"]}
+                  type="variation"
                   onClick={(tag) => {
                     scrollToBottom();
                     tagClick(String(content), String(msgID), String(msgHash), tag)
                   }
                   }
                 />
-              </div>
-              <Tag
-                Data={["V1", "V2", "V3", "V4"]}
-                type="variation"
-                onClick={(tag) => {
-                  scrollToBottom();
-                  tagClick(String(content), String(msgID), String(msgHash), tag)
+                {showTips && <p className="no-content-tips" style={{ marginTop: "0px", fontSize: "13px", textAlign: "left", padding: "0" }}>如果您觉得某张图片还不错，可以点击： U+“图片编号”，获取高清图片~ <Button style={{ fontSize: "12px" }} size='small' onClick={() => {
+                  localStorage.setItem('showTips', 'false')
+                  setShowTips(false)
+                }}>不再提示</Button></p>
                 }
-                }
-              />
-              {showTips && <p className="no-content-tips" style={{ marginTop: "0px", fontSize: "13px", textAlign: "left", padding: "0" }}>如果您觉得某张图片还不错，可以点击： U+“图片编号”，获取高清图片~ <Button style={{ fontSize: "12px" }} size='small' onClick={() => {
-                localStorage.setItem('showTips', 'false')
-                setShowTips(false)
-              }}>不再提示</Button></p>
-              }
-            </>
-          )}
-          <Divider></Divider>
-        </div>)}
-      </div> : <>
-        <p className="no-content-tips">使用 midjourney 生成你的第一幅人工智能绘画作品。</p>
-        {/* <p className="no-content-tips">请勿使用违禁词汇，违者将被封号。</p> */}
-        {!user.email && <p className="no-content-tips">您尚未登录，请先<a href="/login/?redirect=/art" style={{ fontSize: "14px", textDecoration: "underline" }}> 登录</a></p>}
-      </>}
+              </>
+            )}
+            <Divider></Divider>
+          </div>)}
+        </div> : <>
+          <p className="no-content-tips">使用 midjourney 生成你的第一幅人工智能绘画作品。</p>
+          {/* <p className="no-content-tips">请勿使用违禁词汇，违者将被封号。</p> */}
+          {!user.email && <p className="no-content-tips">您尚未登录，请先<a href="/login/?redirect=/art" style={{ fontSize: "14px", textDecoration: "underline" }}> 登录</a></p>}
+        </>
+      }
       <div className="prompt-input-wrap">
         <AliyunOSSUploader buttonText="添加参考图" onChange={fileList => {
           if (fileList.length > 0) {
             //只在上传完成后做操作
             if (fileList[0].status === 'done') {
-              const imgUrl = `https:${ossImgBaseURL}${fileList[0].url}`
+              const imgUrl = `https:${ossUploadedImgBaseURL}${fileList[0].url}`
               setReferImg(imgUrl);
               const exp = /<.*?>/;
               //用正则表达式替换掉输入框中的图片地址，图片地址用<>包裹
@@ -549,7 +594,7 @@ const Index: React.FC = () => {
               e.preventDefault();
             }
           }}
-          placeholder="请描述你要绘画的作品。（例如：a cat。midjourney本身不支持中文，但您仍然可以输入中文，生成时系统将自动为您翻译为英文。可以使用ChatGPT生成你的提示词prompt。）"
+          placeholder="请详细描述你要生成的图片，如：一只猫在草地上玩耍。"
           autoSize={{ minRows: 1, maxRows: 6 }}
           style={{ paddingRight: 30 }}
         />
@@ -570,7 +615,7 @@ const Index: React.FC = () => {
           }}
         />
       </div>
-    </div>
+    </div >
   );
 };
 

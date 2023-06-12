@@ -31,7 +31,7 @@ const defaultImg = 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAMIAAADDCAYAAA
 
 const { CheckableTag } = Tag;
 
-const basePath = 'https://oss-cdn.superx.chat'
+const basePath = 'https://oss-cdn-h.superx.chat'
 // 以此宽度进行图片按比例裁剪。mj的图片地址可以支持width和height参数
 const baseWidth = 500;
 //从提示词中提取宽高比例

@@ -36,7 +36,7 @@ const { CheckableTag } = Tag;
 const baseWidth = 500;
 //从提示词中提取宽高比例
 
-const App = ({ model, columnWidth = 400, onImgDeleted, isLoading, hasDelete, showThumbImg, imgBasePath = 'https://oss-cdn.superx.chat' }: Props) => {
+const App = ({ model, columnWidth = 400, onImgDeleted, isLoading, hasDelete, showThumbImg, imgBasePath = 'https://oss-cdn-h.superx.chat' }: Props) => {
     const { img_url, prompt, create_time, id, is_public, thumb_up_count, painting_type } = model;
     const userThumbUpList = useSelector((state: any) => state.user.thumbUpList);
     const user = useSelector((state: any) => state.user.info);

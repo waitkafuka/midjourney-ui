@@ -16,7 +16,7 @@ const streamFetch = async (
   if (!response.ok) {
     notification.info({
       message: "提示",
-      description: `接口超时，请重新发起请求。如要刷新页面，请提前下载您的图片。response.status: ${response.status}`,
+      description: `接口超时，请检查：1.参考词没有敏感内容 2.参考词中的参数格式是否正确，请查阅左侧参数手册 3.参考图没有涉黄涉暴。您可以更换参考词、参数、参考图重新再试。status: ${response.status}`,
       duration: 0,
     })
     throw new Error(`HTTP error! status: ${response.status}`);

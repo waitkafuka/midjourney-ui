@@ -1,10 +1,10 @@
 import React, { use, useEffect, useState, useRef, useMemo } from "react";
-import { Input, Button, List, Image, Typography, message, Modal, Spin, Upload, Space, Divider, Checkbox } from "antd";
-import { SendOutlined, UploadOutlined } from "@ant-design/icons";
+import { Input, Button, Table, Image, Typography, message, Modal, Spin, Upload, Space, Divider, Checkbox, Tooltip, Tag, Switch } from "antd";
+import { SendOutlined, UploadOutlined, QuestionCircleOutlined } from "@ant-design/icons";
 import { Imagine, Upscale, Variation } from "../request";
 import { MJMessage } from "midjourney";
 import { Message } from "../interfaces/message";
-import Tag from "../components/tag";
+import MyTag from "../components/tag";
 import { requestAliyun } from "../request/http";
 import { useSelector, useDispatch } from 'react-redux';
 import { downloadFile, getQueryString, hasChinese } from '../scripts/utils';
@@ -15,6 +15,7 @@ import store from "../store";
 import AliyunOSSUploader from "../components/OssUploader";
 import { ossUploadedImgBaseURL } from '../scripts/config'
 import { isPromptValid } from "../scripts/utils";
+import type { ColumnsType } from "antd/es/table";
 const imgExp = /<([^<>]+)>/g;
 
 const baseWidth = 500;
@@ -61,6 +62,7 @@ const Index: React.FC = () => {
   const [showPublicTips, setShowPublicTips] = useState(true);
   const [clientIndex, setClientIndex] = useState(0)
   const [showOperationtTips, setShowOperationtTips] = useState(false);
+  const [isShowParamsTips, setIsShowParamsTips] = useState(false);
 
   //测试
   // const [messages, setMessages] = useState<Message[]>([{
@@ -85,6 +87,70 @@ const Index: React.FC = () => {
       }
     }, 500);
   };
+
+  interface DataType {
+    name: string;
+    describe: string;
+  }
+
+  const columns: ColumnsType<DataType> = [
+    {
+      title: '参数',
+      dataIndex: 'name',
+      key: 'name',
+      render: (text) => <span>{text}</span>,
+    },
+    {
+      title: '描述',
+      dataIndex: 'describe',
+      key: 'describe',
+    },
+
+  ];
+
+  const data: DataType[] = [
+    {
+      name: '--ar n:m',
+      describe: "图片尺寸宽:高（Aspect Ratios），例如：--ar 16:9"
+    },
+    {
+      name: '--chaos 0-100',
+      describe: "变异程度，默认 0。数字越大，图片想象力越发散，例如：--chaos 50"
+    },
+    {
+      name: '--iw 0-2',
+      describe: "参考图权重，值越大，参考图的权重越大，默认 1。例如：--iw 1.25（仅在v5或者niji5模型下有效）"
+    },
+    {
+      name: '--no 元素',
+      describe: "排除某些元素，例如：--no plants，生成图中将不包含plants"
+    },
+    {
+      name: '--q <.25、.5、1>',
+      describe: "指定生成图的质量，默认 1。例如：--q .5（仅在v4、5，niji5下有效）"
+    },
+    {
+      name: '--style raw ',
+      describe: "减少 midjourney 的艺术加工，生成更摄影化的图片。例如：--style raw（只在v5.1下有效）"
+    },
+    {
+      name: '--style <cute, expressive, original, or scenic>',
+      describe: "设置动漫风格：可爱、表现力、原始、或者风景。例如：--style cute（只在--niji 5下有效）"
+    },
+    {
+      name: '--s（或--stylize） 数字',
+      describe: "设置midjourney的艺术加工权重，默认 100。取值范围 0-1000（v4、v5），626-60000（v3），niji模式下无效"
+    },
+    {
+      name: '--niji',
+      describe: "模型设置。设置为日本动漫风格模型，例如：--niji，也可以写成：--niji 5（目前 5 可以省略）"
+    },
+    {
+      name: '--v <1-5> ',
+      describe: "模型设置。设置模型版本，例如：--v 5"
+    },
+
+  ];
 
   const checkUserAuth = () => {
     if (!user || !user.email) {
@@ -422,6 +488,8 @@ const Index: React.FC = () => {
     //   <div className="no-content-tips">当前使用人数过多，服务器已无法继续提供服务。图片渲染需要耗费大量计算资源，请稍后再试。</div>
     // </div>
     <div className="w-full mx-auto px-4 h-full overflow-y-hidden list-input-container">
+
+
       <div className='dalle-point-box'><PaintingPoint></PaintingPoint></div>
       {contextHolder}
       {/* <Spin>{paintingTip}</Spin> */}
@@ -519,7 +587,7 @@ const Index: React.FC = () => {
             {hasTag && (
               <>
                 <div style={{ marginTop: "15px" }}>
-                  <Tag
+                  <MyTag
                     Data={["U1", "U2", "U3", "U4"]}
                     type="upscale"
                     onClick={(tag) => {
@@ -529,7 +597,7 @@ const Index: React.FC = () => {
                     }
                   />
                 </div>
-                <Tag
+                <MyTag
                   Data={["V1", "V2", "V3", "V4"]}
                   type="variation"
                   onClick={(tag) => {
@@ -554,29 +622,44 @@ const Index: React.FC = () => {
         </>
       }
       <div className="prompt-input-wrap">
-        <AliyunOSSUploader buttonText="添加参考图" onChange={fileList => {
-          if (fileList.length > 0) {
-            //只在上传完成后做操作
-            if (fileList[0].status === 'done') {
-              const imgUrl = `https:${ossUploadedImgBaseURL}${fileList[0].url}`
-              setReferImg(imgUrl);
-              const exp = /<.*?>/;
-              //用正则表达式替换掉输入框中的图片地址，图片地址用<>包裹
-              //判断inputValue 中是否有图片地址
-              if (exp.test(inputValue)) {
-                //如果有，替换掉
-                setInputValue(inputValue.replace(exp, `<${imgUrl}>`))
-              } else {
-                //如果没有，加到开头
-                setInputValue(`<${imgUrl}> ${inputValue}`);
+        <div style={{ display: "flex", alignItems: "center" }}>
+          <AliyunOSSUploader buttonText="添加参考图" onChange={fileList => {
+            if (fileList.length > 0) {
+              //只在上传完成后做操作
+              if (fileList[0].status === 'done') {
+                const imgUrl = `https:${ossUploadedImgBaseURL}${fileList[0].url}`
+                setReferImg(imgUrl);
+                const exp = /<.*?>/;
+                //用正则表达式替换掉输入框中的图片地址，图片地址用<>包裹
+                //判断inputValue 中是否有图片地址
+                if (exp.test(inputValue)) {
+                  //如果有，替换掉
+                  setInputValue(inputValue.replace(exp, `<${imgUrl}>`))
+                } else {
+                  //如果没有，加到开头
+                  setInputValue(`<${imgUrl}> ${inputValue}`);
+                }
               }
+            } else {
+              setReferImg('')
+              setInputValue(v => v.replace(/<\s*([^<>]+)\s*>/g, ''))
+              // setInputValue(v => v.replace(`<${referImg}> `, ''))
             }
-          } else {
-            setReferImg('')
-            setInputValue(v => v.replace(/<\s*([^<>]+)\s*>/g, ''))
-            // setInputValue(v => v.replace(`<${referImg}> `, ''))
-          }
-        }}></AliyunOSSUploader>
+          }}></AliyunOSSUploader>
+          {/* 参数手册 */}
+          <div style={{ position: "relative" }}>
+            <div style={{ width: "100%", maxWidth: "800px", position: "fixed", left: "50%", transform: "translateX(-50%)", top: "0", display: `${isShowParamsTips ? 'block' : 'none'}` }}>
+              <Table columns={columns} dataSource={data} pagination={false} />
+              <div style={{ marginTop: "10px" }}>
+                示例：a white cat --niji --ar 4:3 --style cute（参数放在最后，空格分隔，不要加任何多余符号，如句号、小数点等。）
+              </div>
+            </div>
+            <span style={{ marginLeft: "20px", cursor: "pointer", fontSize: "13px" }}>参数手册 <Switch size="small" onChange={v => {
+              setIsShowParamsTips(v);
+            }} /> </span>
+          </div>
+        </div>
+
         {referImg && <div style={{ margin: "10px 0" }} className="refer-img-box">
           参考图已添加：<a href={referImg} target="_blank">{referImg}</a>，将在此图基础上，结合您的提示词生成新的作品。
         </div>}

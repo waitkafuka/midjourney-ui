@@ -26,7 +26,7 @@ a:hover {
   color: #cfd0d0;
 }
 
-.refer-img-box{
+.refer-img-box {
   font-size: 13px;
 }
 
@@ -292,6 +292,22 @@ button.ant-btn-primary:not(:disabled):hover {
   button.ant-btn-default:not(:disabled):hover {
     color: #333 !important;
     border-color: #999 !important;
+  }
+  button.ant-btn-primary {
+    background-color: #fff !important;
+    border-color: rgb(217, 217, 217) !important;
+    border-width: 1px !important;
+    border-style: solid !important;
+  }
+  button.ant-btn-primary:not(:disabled):hover {
+    background-color: #fff !important;
+    border-color: rgb(217, 217, 217) !important;
+    border-width: 1px !important;
+    border-style: solid !important;
+    opacity: .5;
+  }
+  .refer-img-box {
+    color: #666;
   }
 }
 

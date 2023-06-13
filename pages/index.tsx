@@ -263,7 +263,7 @@ const Index: React.FC = () => {
         );
       } catch (error) {
         console.log('生成出错了：', error);
-        message.error('出错了:' + error)
+        message.error('出错了:' + error, 120000)
         setInputDisable(false);
       }
       setInputValue("");
@@ -553,7 +553,7 @@ const Index: React.FC = () => {
         }}>
           {/* 图片结果列表容器 */}
           {messages.map(({ text, img, progress, hasTag, content, msgID, msgHash }, index) => <div className="img-list-item" key={index}>
-            <div> {text} {`(${progress})`}</div>
+            <div> {text.replace(/- <@\d+>\s*\([^)]*\)/g, '')} {`(${progress === 'done' ? '完成' : progress})`}</div>
             <div className="workspace-img-container" style={{ width: `${baseWidth}px`, height: getImgCalcHeight(img, text) }}>
 
               {img && <img src={img} style={{ cursor: isDone(progress) ? 'zoom-in' : 'auto' }} onClick={() => {

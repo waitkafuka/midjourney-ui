@@ -115,7 +115,7 @@ export const hasChinese = function (str: string) {
  * 从prompt中提取图片的宽高比
  */
 export const getRatio = (prompt: string): { width: number, height: number } => {
-    const regex = /--(aspect|ar)\s+(\d+):(\d+)/;
+    const regex = / --(aspect|ar)\s+(\d+):(\d+)/;
     const match = regex.exec(prompt);
     return {
         width: match ? parseInt(match[2]) : 1,

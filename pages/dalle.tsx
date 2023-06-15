@@ -211,7 +211,7 @@ const Dalle: React.FC = () => {
                     </div>
                     <div style={{ marginTop: "0px" }}>
                         <Space.Compact style={{ width: '100%' }}>
-                            <Input placeholder="请详细描述您要绘画的作品" onKeyDown={(e) => {
+                            <Input placeholder="请尽量详细描述你要生成的作品" onKeyDown={(e) => {
                                 if (e.key === "Enter") {
                                     doGeneration();
                                     e.preventDefault();

@@ -1,6 +1,6 @@
 import React, { use, useEffect, useState, useRef, useMemo } from "react";
 import { Input, Button, Table, Image, Typography, message, Modal, Spin, Upload, Space, Divider, Checkbox, Tooltip, Tag, Switch } from "antd";
-import { SendOutlined, UploadOutlined, QuestionCircleOutlined } from "@ant-design/icons";
+import { SendOutlined, UploadOutlined, QuestionCircleOutlined, CloseCircleOutlined } from "@ant-design/icons";
 import { Imagine, Upscale, Variation } from "../request";
 import { MJMessage } from "midjourney";
 import { Message } from "../interfaces/message";
@@ -63,6 +63,7 @@ const Index: React.FC = () => {
   const [clientIndex, setClientIndex] = useState(0)
   const [showOperationtTips, setShowOperationtTips] = useState(false);
   const [isShowParamsTips, setIsShowParamsTips] = useState(false);
+  const [showQrcodeModal, setShowQrcodeModal] = useState(true);
 
   //测试
   // const [messages, setMessages] = useState<Message[]>([{
@@ -437,11 +438,18 @@ const Index: React.FC = () => {
     setClientIndex(rand);
   };
 
+  const showQRcode = () => {
+    if (localStorage.getItem('noAllowQrcode') === 'true') {
+      setShowQrcodeModal(false)
+    }
+  }
+
   //页面初始化
   useEffect(() => {
     getPrompt();
     checkTips();
     setBDVid();
+    showQRcode();
     setRandomClientIndex();
   }, []);
 
@@ -537,6 +545,14 @@ const Index: React.FC = () => {
       >
         <div><Spin />正在翻译为英文...</div>
       </Modal>
+      <div className="qr-code-modal" style={{ display: showQrcodeModal ? 'block' : 'none' }}>
+        <CloseCircleOutlined onClick={() => {
+          setShowQrcodeModal(false)
+          localStorage.setItem('noAllowQrcode', 'true')
+        }} />
+        <p>加入绘画交流群：</p>
+        <img src="//cdn.superx.chat/stuff/1.png" alt="" />
+      </div>
       {/* <List
         className="mx-auto justify-start overflow-y-auto img-list-box"
         style={{

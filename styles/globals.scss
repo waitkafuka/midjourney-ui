@@ -104,6 +104,16 @@ a:hover {
 }
 
 /**
+  * 小于 1000 像素时
+  */
+
+@media (max-width: 1000px) {
+  .qr-code-modal {
+    display: none !important;
+  }
+}
+
+/**
   * 在移动端
   */
 @media (max-width: 768px) {
@@ -201,6 +211,13 @@ a {
     color-scheme: dark;
   }
 
+  div.qr-code-modal {
+    background-color: #000;
+    .anticon-close-circle {
+      color: #fff;
+    }
+  }
+
   span.anticon.anticon-loading svg {
     color: #fff;
   }
@@ -287,6 +304,30 @@ button.ant-btn-primary:not(:disabled):hover {
   color: #333 !important;
 }
 
+.qr-code-modal {
+  position: fixed;
+  left: 28px;
+  z-index: 10000;
+  bottom: 100px;
+  width: 200px;
+  background-color: #fff;
+  padding: 10px;
+  .anticon-close-circle {
+    position: absolute;
+    right: 5px;
+    top: 5px;
+    font-size: 15px;
+    cursor: pointer;
+  }
+  p {
+    font-size: 13px;
+    margin-bottom: 10px;
+  }
+  img {
+    width: 100%;
+  }
+}
+
 //在日间模式下
 @media (prefers-color-scheme: light) {
   button.ant-btn-default:not(:disabled):hover {
@@ -304,7 +345,7 @@ button.ant-btn-primary:not(:disabled):hover {
     border-color: rgb(217, 217, 217) !important;
     border-width: 1px !important;
     border-style: solid !important;
-    opacity: .5;
+    opacity: 0.5;
   }
   .refer-img-box {
     color: #666;

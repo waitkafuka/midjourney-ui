@@ -339,12 +339,14 @@ button.ant-btn-primary:not(:disabled):hover {
     border-color: rgb(217, 217, 217) !important;
     border-width: 1px !important;
     border-style: solid !important;
+    color: #454545;
   }
   button.ant-btn-primary:not(:disabled):hover {
     background-color: #fff !important;
     border-color: rgb(217, 217, 217) !important;
     border-width: 1px !important;
     border-style: solid !important;
+    color: #454545;
     opacity: 0.5;
   }
   .refer-img-box {
@@ -405,9 +407,9 @@ button.ant-btn-primary:not(:disabled):hover {
 }
 .workspace-img-wrap .img-list-item {
   margin-top: 20px;
-  &:first-child {
-    margin-top: 0;
-  }
+  // &:first-child {
+  //   margin-top: 20px;
+  // }
 }
 
 .painting-result-wrap {

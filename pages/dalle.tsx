@@ -1,5 +1,6 @@
 import { Button, Input, Modal, Select, Space, Spin, message } from 'antd';
 import { useEffect, useState } from 'react';
+import { SendOutlined } from '@ant-design/icons';
 import { hasChinese } from '../scripts/utils';
 import { requestAliyun, requestAliyunArt } from '../request/http';
 const prompts = ['a bowl of soup that is also a portal to another dimension, digital art',
@@ -206,7 +207,7 @@ const Dalle: React.FC = () => {
                 </div>
                 <div className='dalle-input-box'>
                     <div style={{ color: "#777", fontSize: "13px" }}>
-                        <Button size='small' onClick={randomPrompt}>随机一个prompt</Button> 
+                        <Button size='small' onClick={randomPrompt}>随机一个prompt</Button>
                     </div>
                     <div style={{ marginTop: "0px" }}>
                         <Space.Compact style={{ width: '100%' }}>
@@ -219,7 +220,8 @@ const Dalle: React.FC = () => {
                                 value={text} onChange={(e) => {
                                     setText(e.target.value)
                                 }} />
-                            <Button type="primary" loading={isGenerating} onClick={doGeneration}>开始生成</Button>
+
+                            <Button type="primary" icon={<SendOutlined className="send-prompt-btn" />} loading={isGenerating} onClick={doGeneration}></Button>
                         </Space.Compact>
                     </div>
                 </div>

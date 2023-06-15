@@ -663,40 +663,45 @@ const Index: React.FC = () => {
         {referImg && <div style={{ margin: "10px 0" }} className="refer-img-box">
           参考图已添加：<a href={referImg} target="_blank">{referImg}</a>，将在此图基础上，结合您的提示词生成新的作品。
         </div>}
-        <TextArea
-          className="w-full"
-          disabled={inputDisable}
-          value={inputValue}
-          onChange={(e) => setInputValue(e.target.value)}
-          onKeyDown={(e) => {
-            if (e.key === "Enter" && e.shiftKey) {
-              setInputValue(`${inputValue}\n`);
-              e.preventDefault();
-            } else if (e.key === "Enter") {
-              handleMessageSend();
-              e.preventDefault();
-            }
-          }}
-          placeholder="请详细描述你要生成的图片，如：一只猫在草地上玩耍。"
-          autoSize={{ minRows: 1, maxRows: 6 }}
-          style={{ paddingRight: 30 }}
-        />
-        <Button
-          className="absolute"
-          type="primary"
-          onClick={handleMessageSend}
-          loading={inputDisable}
-          icon={<SendOutlined className="send-prompt-btn" />}
-          title="Send"
-          style={{
-            position: "absolute",
-            bottom: 0,
-            right: 0,
-            background: "transparent",
-            border: "none",
-            boxShadow: "none",
-          }}
-        />
+
+
+        <Space.Compact style={{ width: '100%' }}>
+          <TextArea
+            className="w-full"
+            disabled={inputDisable}
+            value={inputValue}
+            onChange={(e) => setInputValue(e.target.value)}
+            onKeyDown={(e) => {
+              if (e.key === "Enter" && e.shiftKey) {
+                setInputValue(`${inputValue}\n`);
+                e.preventDefault();
+              } else if (e.key === "Enter") {
+                handleMessageSend();
+                e.preventDefault();
+              }
+            }}
+            placeholder="请详细描述你要生成的图片，如：一只猫在草地上玩耍。"
+            autoSize={{ minRows: 1, maxRows: 6 }}
+            style={{ paddingRight: 30 }}
+          />
+          <Button
+            className="absolute"
+            type="primary"
+            onClick={handleMessageSend}
+            loading={inputDisable}
+            icon={<SendOutlined className="send-prompt-btn" />}
+            title="Send"
+            style={{
+              position: "absolute",
+              bottom: 0,
+              right: 0,
+              background: "transparent",
+              border: "none",
+              boxShadow: "none",
+            }}
+          />
+        </Space.Compact>
+
       </div>
     </div >
   );

@@ -28,7 +28,7 @@ const ProLayout = dynamic(() => import('@ant-design/pro-layout'), {
 const ROUTES: Route = {
   routes: [
     {
-      path: '/',
+      path: '/art/',
       name: '开始绘画',
       icon: <SendOutlined />,
       key: 'start',

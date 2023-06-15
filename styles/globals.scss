@@ -304,10 +304,11 @@ button.ant-btn-primary:not(:disabled):hover {
     border-color: rgb(217, 217, 217) !important;
     border-width: 1px !important;
     border-style: solid !important;
+    box-shadow: none;
   }
   button.ant-btn-primary:not(:disabled):hover {
     background-color: #fff !important;
-    border-color: rgb(217, 217, 217) !important;
+    border-color: #454545 !important;
     border-width: 1px !important;
     border-style: solid !important;
     opacity: 0.5;

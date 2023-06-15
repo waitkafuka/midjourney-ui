@@ -293,6 +293,12 @@ button.ant-btn-primary:not(:disabled):hover {
     color: #333 !important;
     border-color: #999 !important;
   }
+  .ant-btn-primary {
+    color: #333;
+  }
+  .ant-btn-primary:not(:disabled):hover {
+    color: #555;
+  }
   button.ant-btn-primary {
     background-color: #fff !important;
     border-color: rgb(217, 217, 217) !important;
@@ -304,7 +310,7 @@ button.ant-btn-primary:not(:disabled):hover {
     border-color: rgb(217, 217, 217) !important;
     border-width: 1px !important;
     border-style: solid !important;
-    opacity: .5;
+    opacity: 0.5;
   }
   .refer-img-box {
     color: #666;

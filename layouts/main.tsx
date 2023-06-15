@@ -32,31 +32,23 @@ const ROUTES: Route = {
       name: '开始绘画',
       icon: <SendOutlined />,
       key: 'start',
-      flatMenu: true,
+      flatMenu: false,
       children: [{
+        path: '/art/sd',
+        target: "_blank",
+        name: 'Stable Diffusion',
+        key: "stablediffusion",
+      }, {
         path: '/',
-        name: '绘画模型-Midjourney',
+        target: "_blank",
+        name: 'Midjourney',
         key: "midjourney",
       }, {
         path: '/art/dalle',
         target: "_blank",
-        name: '绘画模型-DALL·E',
+        name: 'DALL·E',
         key: "dalle",
       },]
-    },
-    {
-      path: '/art/mypaintings',
-      target: '_blank',
-      name: '我的作品',
-      key: 'mypaintings',
-      icon: <i className='iconfont icon-huihua'></i>,
-    },
-    {
-      path: '/art/paintings',
-      target: '_blank',
-      name: '艺术公园',
-      key: 'paintings',
-      icon: <i className='iconfont icon-fengjing-01'></i>,
     },
     {
       name: '教程',
@@ -78,6 +70,21 @@ const ROUTES: Route = {
           icon: <i className='iconfont icon-canshushezhi'></i>,
         }]
     },
+    {
+      path: '/art/mypaintings',
+      target: '_blank',
+      name: '我的作品',
+      key: 'mypaintings',
+      icon: <i className='iconfont icon-huihua'></i>,
+    },
+    {
+      path: '/art/paintings',
+      target: '_blank',
+      name: '艺术公园',
+      key: 'paintings',
+      icon: <i className='iconfont icon-fengjing-01'></i>,
+    },
+
     // {
     //   path: '/guide',
     //   name: '入门指引',

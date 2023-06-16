@@ -271,7 +271,7 @@ const Index: React.FC = () => {
         );
       } catch (error) {
         console.log('生成出错了：', error);
-        message.error('出错了:' + error, 120000)
+        message.error('出错了:' + error, 20000)
         setInputDisable(false);
       }
       setInputValue("");

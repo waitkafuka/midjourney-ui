@@ -33,8 +33,8 @@ const Dalle: React.FC = () => {
         setText(text)
     }
 
-    //开始生成
-    const doGeneration = async () => {
+    //开始生成1
+    const doGenerationAuzre = async () => {
         let prompt = text;
         if (user.point_count < PAINTING_POINTS_ONE_TIME) {
             message.error('点数不足，请先充值');
@@ -146,6 +146,90 @@ const Dalle: React.FC = () => {
         setImgList(list => [imgCard, ...list.slice(1)])
     }
 
+    //开始生成2
+    const doGenerationOpenAi = async () => {
+        let prompt = text;
+        if (user.point_count < PAINTING_POINTS_ONE_TIME) {
+            message.error('点数不足，请先充值');
+            return;
+        }
+        if (!prompt) {
+            return;
+        }
+        //判断点数是否足够
+        // if (user.)
+        console.log(prompt)
+        // 判断是否有中文，如果有中文，翻译成英文
+        if (hasChinese(prompt)) {
+            // 调用api翻译为英文
+            // message.info('midjourney无法支持中文提示词，正在为您翻译为英文...');
+            setIsTranslating(true);
+            let result = {} as any;
+            try {
+                result = await requestAliyun('translate', { content: prompt });
+
+            } catch (error) {
+                message.error('翻译出错，请稍后重试，请确保您的输入词中不包含政治、色情、暴力等词汇', 10);
+                setIsTranslating(false);
+                return;
+            }
+            if (result.code !== 0) {
+                message.error(result.message, 10);
+                setIsTranslating(false);
+                return;
+            }
+            prompt = result.data;
+            setIsTranslating(false);
+            console.log('翻译结果', result);
+            setText(prompt);
+        }
+        // 调用api生成图片
+        setIsGenerating(true);
+        //如果长度大于 10，移除开头的 10 个
+        console.log(imgList.length);
+        //创建一个图片卡片
+        const imgCardPlaceHolder: ImgCardModel = {
+            id: Math.random(),
+            img_url: null,
+            prompt: prompt,
+            create_time: new Date(),
+            is_public: 0,
+            thumb_up_count: 0,
+            painting_type: PaintingType.DALLE,
+        }
+
+        const result = await requestAliyunArt('openai-dalle-painting', { caption: prompt })
+        if (result.code !== 0) {
+            message.error(result.message);
+            setIsGenerating(false);
+            return;
+        }
+        console.log('生成结果', result);
+
+        const id = result.data.id;
+
+        setImgList([imgCardPlaceHolder, ...imgList])
+
+        //创建一个图片对象
+        setIsGenerating(false);
+        const { data } = result;
+        //这里替换的时候一定要不能带上/
+        const img_url = data.img_url.replace('https://oaidalleapiprodscus.blob.core.windows.net', '');
+        const imgCard: ImgCardModel = {
+            id: id,
+            img_url: img_url,
+            prompt: data.prompt,
+            create_time: new Date(),
+            is_public: 0,
+            thumb_up_count: 0,
+            painting_type: PaintingType.DALLE,
+        }
+        //点数减少
+        store.dispatch({ type: 'user/pointChange', payload: user.point_count - PAINTING_POINTS_ONE_TIME })
+        // 显示图片
+        setImgList(list => [imgCard, ...list.slice(1)])
+    }
+
     const buildDalleDemoImgs = () => {
         const imgSrcs = ['A synthwave style sunset above the reflecting water of the sea, digital art',
             'A hand drawn sketch of a Porsche 911',
@@ -213,15 +297,14 @@ const Dalle: React.FC = () => {
                         <Space.Compact style={{ width: '100%' }}>
                             <Input placeholder="请尽量详细描述你要生成的作品" onKeyDown={(e) => {
                                 if (e.key === "Enter") {
-                                    doGeneration();
+                                    doGenerationAuzre();
                                     e.preventDefault();
                                 }
                             }}
                                 value={text} onChange={(e) => {
                                     setText(e.target.value)
                                 }} />
-
-                            <Button type="primary" icon={<SendOutlined className="send-prompt-btn" />} loading={isGenerating} onClick={doGeneration}></Button>
+                            <Button type="primary" loading={isGenerating} onClick={doGenerationAuzre}>开始生成</Button>
                         </Space.Compact>
                     </div>
                 </div>

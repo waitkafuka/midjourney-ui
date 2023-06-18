@@ -271,7 +271,7 @@ const Index: React.FC = () => {
         );
       } catch (error) {
         console.log('生成出错了：', error);
-        message.error('出错了:' + error, 120000)
+        message.error('出错了:' + error, 30000)
         setInputDisable(false);
       }
       setInputValue("");
@@ -314,7 +314,7 @@ const Index: React.FC = () => {
       );
     } catch (error) {
       console.log('upscale出错了：', error);
-      message.error('出错了:' + error)
+      message.error('出错了:' + error, 30000)
       setInputDisable(false);
     }
 
@@ -360,7 +360,7 @@ const Index: React.FC = () => {
       );
     } catch (error) {
       console.log('variation出错了：', error);
-      message.error('出错了:' + error)
+      message.error('出错了:' + error, 30000)
       setInputDisable(false);
     }
 

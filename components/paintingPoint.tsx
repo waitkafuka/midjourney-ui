@@ -94,6 +94,7 @@ const PaingPoint = ({ }) => {
                         <div>1000 个点数 / 68 元</div>
                         <div>每张图消耗 8 个点数</div>
                         <div>midjourney和dalle均可使用，点数永久有效</div>
+                        <div>（四宫格算一张图）</div>
                     </div>
                 </div>
             </Modal>

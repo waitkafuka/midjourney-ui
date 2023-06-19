@@ -139,7 +139,7 @@ const App = ({ type, list, onPageRequest, onImgDeleted, isDataLoading, totalCoun
         <div className="masonry-list-wrapper" style={{ height: "calc(100vh - 56px - 15px)", overflow: "scroll", boxSizing: "border-box", paddingTop: '20px', ...style, }}>
             {/* height: `${maxColumnHeight}px` */}
             <><div className={css["masonry-list-container"]} style={{ width: `${containerWidth}px`, height: `${maxColumnHeight}px`, minHeight: "100vh" }}>
-                {list.map((imgCardInfo: ImgCardModel) => <ImgCard onImgThumbUpActionDone={onImgThumbUpActionDone} type={type} onImgDeleted={onImgDeleted} key={imgCardInfo.id} model={imgCardInfo} columnWidth={columnWidth} />)}
+                {list.map((imgCardInfo: ImgCardModel) => <ImgCard paint_params={JSON.parse(imgCardInfo.paint_params || '{}')} onImgThumbUpActionDone={onImgThumbUpActionDone} type={type} onImgDeleted={onImgDeleted} key={imgCardInfo.id} model={imgCardInfo} columnWidth={columnWidth} />)}
             </div>
                 {isDataLoading && <div className='loaing-box' style={{ textAlign: 'center', padding: "15px" }}>
                     <Spin></Spin>

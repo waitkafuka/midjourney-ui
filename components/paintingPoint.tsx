@@ -90,11 +90,11 @@ const PaingPoint = ({ }) => {
                         <img src={qrCodeSrc} />
                         <div style={{ display: "flex", alignItems: "center", justifyContent: "center" }}><img style={{ marginRight: "5px", width: "20px" }} src="https://cdn.superx.chat/wechatlogo.png" />请使用微信扫码支付</div>
                     </div>
-                    <div style={{ display: "flex", flexGrow: 1, lineHeight: 1.6, alignItems: "center", justifyContent: "center", flexDirection: "column" }}>
+                    <div style={{ display: "flex", flexGrow: 1, lineHeight: 1.6, textAlign: "center", alignItems: "center", justifyContent: "center", flexDirection: "column" }}>
                         <div>1000 个点数 / 68 元</div>
-                        <div>每张图消耗 8 个点数</div>
-                        <div>midjourney和dalle均可使用，点数永久有效</div>
-                        <div>（四宫格算一张图）</div>
+                        <div>可应用于 Stable Diffusion、Midjourney、DALLE，点数永久有效。</div>
+                        <div>每张图消耗 8 个点数（SD 根据参数消耗不同点数）</div>
+                        <div>（ midjourney四宫格算一张图）</div>
                     </div>
                 </div>
             </Modal>

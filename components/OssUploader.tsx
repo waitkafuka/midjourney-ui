@@ -1,6 +1,6 @@
 import { SendOutlined, UploadOutlined } from "@ant-design/icons";
 import { Button, Form, message, Upload } from 'antd';
-import type { UploadFile } from 'antd/es/upload/interface';
+import type { RcFile, UploadFile } from 'antd/es/upload/interface';
 import type { UploadProps } from 'antd';
 import { useEffect, useState } from "react";
 import { requestAliyun } from "../request/http";
@@ -19,14 +19,19 @@ interface AliyunOSSUploadProps {
     value?: UploadFile[];
     onChange?: (fileList: UploadFile[]) => void;
     buttonText: string;
+    listType?: 'text' | 'picture' | 'picture-card' | 'picture-circle'
 }
 
 
-const AliyunOSSUploader: React.FC<AliyunOSSUploadProps> = ({ value, onChange, buttonText }) => {
+const AliyunOSSUploader: React.FC<AliyunOSSUploadProps> = ({ value, listType = 'text', onChange, buttonText }) => {
     const [OSSData, setOSSData] = useState<OSSDataType>();
 
     const handleChange: UploadProps['onChange'] = ({ fileList }) => {
         console.log('handle change Aliyun OSS:', fileList);
+        fileList = fileList.map((file) => {
+            file.url = `https://oss-cdn.superx.chat/${file.url}`;
+            return file;
+        });
         onChange?.([...fileList]);
     };
 
@@ -38,6 +43,8 @@ const AliyunOSSUploader: React.FC<AliyunOSSUploadProps> = ({ value, onChange, bu
         }
     };
 
+
+    //上传第二步
     const getExtraData: UploadProps['data'] = (file) => {
         console.log('getExtraData', file);
         return {
@@ -49,6 +56,7 @@ const AliyunOSSUploader: React.FC<AliyunOSSUploadProps> = ({ value, onChange, bu
 
     };
 
+    //页面初始化的时候加载
     const getOSSSignature = async () => {
         const { data } = await requestAliyun('get-oss-signature');
         return data;
@@ -63,17 +71,15 @@ const AliyunOSSUploader: React.FC<AliyunOSSUploadProps> = ({ value, onChange, bu
         }
     };
 
+    //上传第一步
     const beforeUpload: UploadProps['beforeUpload'] = async (file) => {
         console.log('beforeUpload', file, OSSData);
 
         if (!OSSData) return false;
-
         const expire = Number(OSSData.expire) * 1000;
-
         if (expire < Date.now()) {
             await init();
         }
-
         const suffix = file.name.slice(file.name.lastIndexOf('.'));
         //生成 6 位随机数字
         const random = Math.floor(Math.random() * 1000000);
@@ -85,7 +91,6 @@ const AliyunOSSUploader: React.FC<AliyunOSSUploadProps> = ({ value, onChange, bu
             message.error('文件不能超过5M');
             return false;
         }
-
         return file;
     };
 
@@ -99,11 +104,25 @@ const AliyunOSSUploader: React.FC<AliyunOSSUploadProps> = ({ value, onChange, bu
         beforeUpload,
         maxCount: 1,
         accept: '.jpg,.jpeg,.png',
-        listType: 'picture-card',
-        previewFile: (file: any) => {
-            console.log('previewFile', file);
-            return Promise.resolve(`//oss-cdn.superx.chat/${file.url}`);
+        listType,
+        onPreview: async (file: UploadFile) => {
+            let src = file.url as string;
+            if (!src) {
+                src = await new Promise((resolve) => {
+                    const reader = new FileReader();
+                    reader.readAsDataURL(file.originFileObj as RcFile);
+                    reader.onload = () => resolve(reader.result as string);
+                });
+            }
+            const image = new Image();
+            image.src = src;
+            const imgWindow = window.open(src);
+            imgWindow?.document.write(image.outerHTML);
         }
+        // previewFile: (file: any) => {
+        //     console.log('previewFile', file);
+        //     return Promise.resolve(`//oss-cdn.superx.chat/${file.url}`);
+        // }
     };
 
     useEffect(() => {
@@ -112,7 +131,8 @@ const AliyunOSSUploader: React.FC<AliyunOSSUploadProps> = ({ value, onChange, bu
 
     return <>
         <Upload {...uploadParams}>
-            <Button icon={<UploadOutlined />}>{buttonText}</Button>
+            {listType === 'text' ? <Button icon={<UploadOutlined />}>{buttonText}</Button> : buttonText}
+
         </Upload>
     </>
 };

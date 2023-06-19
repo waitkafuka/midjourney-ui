@@ -271,7 +271,7 @@ const Index: React.FC = () => {
         );
       } catch (error) {
         console.log('生成出错了：', error);
-        message.error('出错了:' + error, 30000)
+        message.error('出错了:' + error, 30)
         setInputDisable(false);
       }
       setInputValue("");
@@ -314,7 +314,7 @@ const Index: React.FC = () => {
       );
     } catch (error) {
       console.log('upscale出错了：', error);
-      message.error('出错了:' + error, 30000)
+      message.error('出错了:' + error, 30)
       setInputDisable(false);
     }
 
@@ -360,7 +360,7 @@ const Index: React.FC = () => {
       );
     } catch (error) {
       console.log('variation出错了：', error);
-      message.error('出错了:' + error, 30000)
+      message.error('出错了:' + error, 30)
       setInputDisable(false);
     }
 
@@ -650,7 +650,7 @@ const Index: React.FC = () => {
             if (fileList.length > 0) {
               //只在上传完成后做操作
               if (fileList[0].status === 'done') {
-                const imgUrl = `https:${ossUploadedImgBaseURL}${fileList[0].url}`
+                const imgUrl = `https:${fileList[0].url}`
                 setReferImg(imgUrl);
                 const exp = /<.*?>/;
                 //用正则表达式替换掉输入框中的图片地址，图片地址用<>包裹

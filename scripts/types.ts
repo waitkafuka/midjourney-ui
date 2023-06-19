@@ -7,6 +7,9 @@ export interface ImgCardModel {
     thumb_up_count: number,
     painting_type: PaintingType,
     img_base_path?: string,
+    width?: number,
+    height?: number,
+    paint_params?: string
 }
 
 export enum ImgPageType {

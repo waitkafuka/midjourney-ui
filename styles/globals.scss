@@ -114,18 +114,23 @@ a:hover {
 }
 
 /**
-  * 在移动端
-  */
-@media (max-width: 768px) {
-  .ant-layout-content {
-    padding: 24px 10px !important;
-  }
-
+小于 500px 的屏幕
+*/
+@media (max-width: 500px) {
   .choose-style-line {
     div.choose-style-item {
       width: 25%;
       margin-left: 0;
     }
+  }
+}
+
+/**
+  * 在移动端
+  */
+@media (max-width: 768px) {
+  .ant-layout-content {
+    padding: 24px 10px !important;
   }
 
   .workspace-img-container {
@@ -429,8 +434,15 @@ button.ant-btn-primary:not(:disabled):hover {
 .painting-result-wrap {
   display: flex;
   flex-wrap: wrap;
-  justify-content: center;
+  justify-content: space-evenly;
   margin-top: 15px;
+  align-items: flex-start;
+  &.sd-result {
+    padding-bottom: 300px;
+  }
+  .masonry-item {
+    margin-top: 20px;
+  }
 }
 
 .dalle-input-box {
@@ -447,19 +459,21 @@ button.ant-btn-primary:not(:disabled):hover {
 .sd-params-set {
   display: flex;
   align-items: center;
+  margin-top: 10px;
+  svg {
+    cursor: pointer;
+  }
   .ant-space-compact {
     margin-left: 5px;
     margin-right: 2px;
-    svg{
-      cursor: pointer;
-    }
+
     &:first-child {
       margin-left: 0;
     }
   }
 }
 
-.sd-point-cost{
+.sd-point-cost {
   margin: 5px 0;
 }
 
@@ -484,8 +498,9 @@ button.ant-btn-primary:not(:disabled):hover {
     text-align: center;
     margin-top: 3px;
     margin-bottom: 3px;
-    &:hover,&.checked{
-      outline:1px solid #504f4f;
+    &:hover,
+    &.checked {
+      outline: 1px solid #504f4f;
       border-radius: 5px;
       box-shadow: 1px 2px 5px #504f4f;
     }
@@ -524,4 +539,14 @@ button.ant-btn-primary:not(:disabled):hover {
       margin-bottom: 5px;
     }
   }
+}
+
+.sd-point-cost {
+  position: absolute;
+  right: 0;
+  top: -30px;
+}
+
+.sd-img-params-box {
+  margin-top: 10px;
 }

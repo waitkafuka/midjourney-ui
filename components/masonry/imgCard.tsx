@@ -21,6 +21,7 @@ interface Props {
     // 实例模型
     model: ImgCardModel,
     columnWidth: number,
+    paint_params: any,
     onImgDeleted?: (id: number) => void,
     // 类型，我的页面还是公开页面
     type: ImgPageType,
@@ -37,7 +38,7 @@ const baseWidth = 500;
 //从提示词中提取宽高比例
 
 
-const App = ({ model, columnWidth, onImgDeleted, type, onImgThumbUpActionDone }: Props) => {
+const App = ({ model, columnWidth, onImgDeleted, paint_params, type, onImgThumbUpActionDone }: Props) => {
     const { img_url, prompt, create_time, id, is_public, thumb_up_count, painting_type } = model;
     const userThumbUpList = useSelector((state: any) => state.user.thumbUpList);
     const user = useSelector((state: any) => state.user.info);
@@ -61,7 +62,8 @@ const App = ({ model, columnWidth, onImgDeleted, type, onImgThumbUpActionDone }:
     }
 
     const height = useMemo(() => {
-        const ratio = getRatio(prompt);
+        const { width, height } = paint_params;
+        const ratio = (width && height) ? { width, height } : getRatio(prompt);
         return getHeight(ratio, baseWidth);
     }, [prompt])
 
@@ -87,11 +89,15 @@ const App = ({ model, columnWidth, onImgDeleted, type, onImgThumbUpActionDone }:
         <div className={`${css['masonry-item']} masonry-item`} style={{ width: `${columnWidth}px` }} id={`i${id}`}>
             <div style={{ position: "absolute", left: "0", top: '-1px' }}>
                 {/* data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAABQAAAAEABAMAAAAehcbXAAAAHlBMVEX//2ZC//9R2Uv/bjs7Rv///2ZC//9R2kz/bjw8Rv+T0BPCAAAABXRSTlPf39/f3yHgI24AAAHRSURBVHgBYmQYYCA4ou0ftZ8pdADBKBgFTAOZ+kfBKGAaDQJAu3QsAAAAgADMnyXJCLp7NoYhIAKCgAgIAiIgCIiAICACgoAICAIiIAiIgCAgAoKACAgCIiAIiIAgIAKCgAgIAiIgCIiACAgCIiAIiIAgIAKCgAgIAiIgCIiAICACgoAICAIiIAiIgCAgAoKACAgCIiAIiIAgIAKCgAiIgCAgAoKACAgCIiAIiIAgIAKCgAgIAiIgCIiAICACgoAICAIiIAiIgCAgAoKACAgCIiACgoAICAIiIAiIgCAgAoKACAgCIiAIiIAgIAKCgAgIAiIgCIiAICACgoAICCsgCIiAICACgoAICAIiIAiIgCAgAoKACAgCIiAIiIAgIAKCgAgIAiIgCIiAICACgoAICAIiIAKCgAgIAiIgCIiAICACgoAICAIiIAiIgCAgAoKACAgCIiAIiIAgIAKCgAgIAiIgCIiACAgCIiAIiIAgIAKCgAgIAiIgCIiAICACgoAICAIiIAiIgCAgAoKACAgCIiAIiIAgIAKCgAiIgCAgAoKACAgCIiAIiIAgIAKCgAgIAiIgCIiAICACgoAICAIiIAiIgCAgAoKACAgCIiACBo4KVgKCYkXIHT4AAAAASUVORK5CYII=" */}
-                {/* {model.painting_type === 'dalle' ? <Tag color="rgba(96 108 93/70%)" >
+                {model.painting_type === 'dalle' && <Tag color="rgba(96 108 93/70%)" >
                     DALL·E
-                </Tag> : <Tag color="rgba(76 76 109/70%)">
+                </Tag>}
+                {model.painting_type === 'mj' && <Tag color="rgba(76 76 109/70%)">
                     Midjourney
-                </Tag>} */}
+                </Tag>}
+                {model.painting_type === 'sd' && <Tag color="rgba(76 76 109/70%)">
+                    SD
+                </Tag>}
             </div>
             <div style={{ position: "absolute", right: "-8px", top: "-1px" }}>
                 <Tag color={model.painting_type === 'mj' ? 'rgba(76 76 109/70%)' : 'rgba(96 108 93/70%)'}>

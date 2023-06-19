@@ -121,6 +121,13 @@ a:hover {
     padding: 24px 10px !important;
   }
 
+  .choose-style-line {
+    div.choose-style-item {
+      width: 25%;
+      margin-left: 0;
+    }
+  }
+
   .workspace-img-container {
     width: 100% !important;
     height: auto !important;
@@ -433,9 +440,86 @@ button.ant-btn-primary:not(:disabled):hover {
   right: 20px;
 }
 
+.rect-input input {
+  border-radius: 0;
+}
+
+.sd-params-set {
+  .ant-space-compact {
+    margin-left: 5px;
+    margin-right: 2px;
+    svg{
+      cursor: pointer;
+    }
+    &:first-child {
+      margin-left: 0;
+    }
+  }
+}
+
+.sd-point-cost{
+  margin: 5px 0;
+}
+
 .dalle-point-box {
   position: absolute;
   right: 20px;
   top: 15px;
   z-index: 100;
+}
+
+.choose-style-line {
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+  flex-wrap: wrap;
+  .choose-style-item {
+    font-size: 16px;
+    font-weight: bold;
+    cursor: pointer;
+    // border: 1px solid #e6e6e6;
+    margin-left: 10px;
+    text-align: center;
+    margin-top: 3px;
+    margin-bottom: 3px;
+    &:hover,&.checked{
+      outline:1px solid #504f4f;
+      border-radius: 5px;
+      box-shadow: 1px 2px 5px #504f4f;
+    }
+    // &:hover div img {
+    //   width: 160px;
+    //   max-width: 160px;
+    //   position: absolute;
+    //   bottom: 0;
+    //   z-index: 100;
+    // }
+    .style-img-box {
+      width: 80px;
+      height: 80px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      position: relative;
+      margin: 0 auto;
+
+      svg {
+        font-size: 30px;
+        color: #888;
+      }
+      img {
+        max-width: 80px;
+        width: 100%;
+        border-radius: 5px;
+        transition: all 0.3s ease-in-out;
+      }
+    }
+    .style-name {
+      font-weight: normal;
+      text-align: center;
+      font-size: 13px;
+      margin-top: 5px;
+      margin-bottom: 5px;
+    }
+  }
 }

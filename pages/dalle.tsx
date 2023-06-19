@@ -187,7 +187,7 @@ const Dalle: React.FC = () => {
         setIsGenerating(true);
         //如果长度大于 10，移除开头的 10 个
         console.log(imgList.length);
-        //创建一个图片卡片
+        //创建一个空的图片卡片
         const imgCardPlaceHolder: ImgCardModel = {
             id: Math.random(),
             img_url: null,

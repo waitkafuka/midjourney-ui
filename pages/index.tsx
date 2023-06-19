@@ -552,14 +552,14 @@ const Index: React.FC = () => {
       >
         <div><Spin />正在翻译为英文...</div>
       </Modal>
-      <div className="qr-code-modal" style={{ display: showQrcodeModal ? 'block' : 'none' }}>
+      {/* <div className="qr-code-modal" style={{ display: showQrcodeModal ? 'block' : 'none' }}>
         <CloseCircleOutlined onClick={() => {
           setShowQrcodeModal(false)
           localStorage.setItem('noAllowQrcode', 'true')
         }} />
         <p>加入绘画交流群：</p>
         <img src="//cdn.superx.chat/stuff/1.png" alt="" />
-      </div>
+      </div> */}
       {/* <List
         className="mx-auto justify-start overflow-y-auto img-list-box"
         style={{

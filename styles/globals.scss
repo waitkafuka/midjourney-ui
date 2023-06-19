@@ -445,6 +445,8 @@ button.ant-btn-primary:not(:disabled):hover {
 }
 
 .sd-params-set {
+  display: flex;
+  align-items: center;
   .ant-space-compact {
     margin-left: 5px;
     margin-right: 2px;

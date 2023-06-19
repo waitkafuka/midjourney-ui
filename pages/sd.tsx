@@ -1,4 +1,4 @@
-import { Button, Input, Space, Tooltip, message } from "antd";
+import { Button, Input, Space, Tooltip, message, InputNumber } from "antd";
 import PaintingPoint from "../components/paintingPoint";
 import { SendOutlined, StopOutlined, QuestionCircleOutlined } from '@ant-design/icons';
 import { useEffect, useMemo, useState } from 'react';
@@ -234,18 +234,12 @@ const SD: React.FC = () => {
                 })
                 }
             </div>
-            {/* 工具栏 */}
+            {/* 工具栏1 */}
             <div className="sd-params-set">
-                {/* 上传图片 */}
-                <Space.Compact size="middle">
-                    <AliyunOSSUploader buttonText="添加参考图" onChange={fileList => {
-                        console.log('fileList:', fileList);
-                        setFileList(fileList);
-                    }}></AliyunOSSUploader>
-                </Space.Compact>
+
                 {/* 图片权重 */}
                 {fileList.length > 0 && <> <Space.Compact size="middle">
-                    <Input style={{ width: "150px", borderRadius: 0 }} addonBefore={<>参考图权重：</>} defaultValue={params.image_strength} />
+                    <InputNumber max={1} min={0} step={0.1} style={{ width: "170px", borderRadius: 0 }} addonBefore={<>参考图权重：</>} defaultValue={params.image_strength} />
                 </Space.Compact> <Tooltip title="设置参考图的权重，0-1 之间。数值越大，同原图越相似。">
                         <QuestionCircleOutlined />
                     </Tooltip>
@@ -256,26 +250,36 @@ const SD: React.FC = () => {
                     </Tooltip></>}
                 {/* 选择比例 */}
                 {fileList.length === 0 && <> <Space.Compact size="middle">
-                    <Input style={{ width: "150px", borderRadius: 0 }} className="rect-input" addonBefore={<>图片宽高：</>} defaultValue={params.width} />
-                    <Input defaultValue={params.height} style={{ width: "60px" }} />
+                    <InputNumber max={1024} min={128} readOnly={false} step={64} style={{ width: "160px", borderRadius: 0 }} className="rect-input" addonBefore={<>图片宽高：</>} defaultValue={params.width} />
+                    <InputNumber max={1024} min={128} readOnly={false} step={64} defaultValue={params.height} style={{ width: "70px" }} />
                 </Space.Compact>
                     <Tooltip title="设置生成图片的宽和高，数值是 64 的整数倍">
                         <QuestionCircleOutlined />
                     </Tooltip></>}
                 {/* 图片数量 */}
                 <Space.Compact size="middle">
-                    <Input style={{ width: "120px", borderRadius: 0 }} addonBefore={<>数量：</>} defaultValue={params.samples} />
+                    <InputNumber max={20} min={1} style={{ width: "120px", borderRadius: 0 }} addonBefore={<>数量：</>} defaultValue={params.samples} />
                 </Space.Compact>
                 <Tooltip title="一次生成图片的数量">
                     <QuestionCircleOutlined />
                 </Tooltip>
                 {/* 步数 */}
                 <Space.Compact size="middle">
-                    <Input style={{ width: "120px", borderRadius: 0 }} addonBefore={<>步数：</>} defaultValue={params.steps} />
+                    <InputNumber max={150} min={10} step={10} style={{ width: "130px", borderRadius: 0 }} addonBefore={<>步数：</>} defaultValue={params.steps} />
                 </Space.Compact>
                 <Tooltip title="生成步数，越大图片越清晰。10-150 之间。">
                     <QuestionCircleOutlined />
                 </Tooltip>
+            </div>
+            {/* 工具栏 2 */}
+            <div className="sd-params-set">
+                {/* 上传图片 */}
+                <Space.Compact size="middle">
+                    <AliyunOSSUploader buttonText="添加参考图" onChange={fileList => {
+                        console.log('fileList:', fileList);
+                        setFileList(fileList);
+                    }}></AliyunOSSUploader>
+                </Space.Compact>
             </div>
             {/* 消耗点数 */}
             <div className="sd-point-cost">

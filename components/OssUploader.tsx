@@ -99,6 +99,11 @@ const AliyunOSSUploader: React.FC<AliyunOSSUploadProps> = ({ value, onChange, bu
         beforeUpload,
         maxCount: 1,
         accept: '.jpg,.jpeg,.png',
+        listType: 'picture-card',
+        previewFile: (file: any) => {
+            console.log('previewFile', file);
+            return Promise.resolve(`//oss-cdn.superx.chat/${file.url}`);
+        }
     };
 
     useEffect(() => {

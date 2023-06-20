@@ -236,9 +236,8 @@ const Index: React.FC = () => {
               return;
             }
 
-            //mj 服务崩溃
+            //mj 服务报错
             if (data.code === 40024) {
-              message.error(data.message, 20);
               notification.error({
                 message: '提示',
                 description: data.message,
@@ -299,6 +298,17 @@ const Index: React.FC = () => {
         JSON.stringify({ content: pormpt, index, msgId, msgHash, clientIndex }),
         (data: MJMessage) => {
           console.log('upscale dataing:', data);
+          //mj 服务报错
+          if (data.code === 40024) {
+            notification.error({
+              message: '提示',
+              description: data.message,
+              duration: 0,
+            });
+
+            setInputDisable(false);
+            return;
+          }
           newMessage.img = data.uri.replace(
             "https://cdn.discordapp.com/",
             NEXT_PUBLIC_IMAGE_PREFIX
@@ -339,6 +349,17 @@ const Index: React.FC = () => {
       await Variation(
         JSON.stringify({ content, index, msgId, msgHash, clientIndex }),
         (data: MJMessage) => {
+          //mj 服务报错
+          if (data.code === 40024) {
+            notification.error({
+              message: '提示',
+              description: data.message,
+              duration: 0,
+            });
+
+            setInputDisable(false);
+            return;
+          }
           newMessage.img = data.uri.replace(
             "https://cdn.discordapp.com/",
             NEXT_PUBLIC_IMAGE_PREFIX

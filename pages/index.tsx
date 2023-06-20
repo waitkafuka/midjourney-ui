@@ -671,7 +671,7 @@ const Index: React.FC = () => {
             if (fileList.length > 0) {
               //只在上传完成后做操作
               if (fileList[0].status === 'done') {
-                const imgUrl = `https:${fileList[0].url}`
+                const imgUrl = `${fileList[0].url}`
                 setReferImg(imgUrl);
                 const exp = /<.*?>/;
                 //用正则表达式替换掉输入框中的图片地址，图片地址用<>包裹

@@ -26,7 +26,7 @@ const SD: React.FC = () => {
         maxSize: 1048576,
         minSize: 262144,
     }
-    const imgBasePath = 'https://oss-cdn-h.superx.chat/'
+    const imgBasePath = 'https://oss-cdn-h.youyi.asia/'
     const [isGenerating, setIsGenerating] = useState(false);
     const user = useSelector((state: any) => state.user.info)
     const [isTranslating, setIsTranslating] = useState(false);
@@ -358,7 +358,7 @@ const SD: React.FC = () => {
                         setParams({ ...params, style_preset: item.styleValue })
                     }}>
                         <div className="style-img-box">
-                            {item.styleValue ? <img src={`//cdn.superx.chat/stuff/sd-styles/${item.styleValue}.png`} /> : <StopOutlined />}
+                            {item.styleValue ? <img src={`//cdn.youyi.asia/stuff/sd-styles/${item.styleValue}.png`} /> : <StopOutlined />}
                         </div>
                         <div className="style-name">
                             {item.name} {item.checked}

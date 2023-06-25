@@ -6,14 +6,14 @@ import { Input, Button, List, Image, Typography } from "antd";
 import Link from "next/link";
 const imgList = [{
     prompt: 'A beautiful and serene landscape painting of a traditional Chinese peach forest with Towards dusk, there was a Chinese courtyard in the hill. It was snowing heavily. Several people were baking stoves and drinking in the room. by Caspar David Friedrich and Zhang daqian, --ar 3:4 --v 5.1',
-    image: 'https://oss-cdn-h.superx.chat/attachments/1100632439031877675/1111205415699611768/waitkafuka_A_beautiful_and_serene_landscape_painting_of_a_tradi_defa1111-e9c7-44b0-a08b-1e50e7778025.png?width=1000&height=1332',
+    image: 'https://oss-cdn-h.youyi.asia/attachments/1100632439031877675/1111205415699611768/waitkafuka_A_beautiful_and_serene_landscape_painting_of_a_tradi_defa1111-e9c7-44b0-a08b-1e50e7778025.png?width=1000&height=1332',
 }, {
     prompt: '`<https://s.mj.run/T-TaZHZk-yo>`, full body front photo, figure, one piece,ultra high definiton, 8k , --niji 5 --style expressive --s 400 --ar 3:5',
-    image: 'https://oss-cdn-h.superx.chat/attachments/1100632439031877675/1110928624300871750/waitkafuka_full_body_front_photo_figure_one_pieceultra_high_def_27cb7785-4e27-49a2-8657-18b029b4cafb.png?width=1000&height=1666',
+    image: 'https://oss-cdn-h.youyi.asia/attachments/1100632439031877675/1110928624300871750/waitkafuka_full_body_front_photo_figure_one_pieceultra_high_def_27cb7785-4e27-49a2-8657-18b029b4cafb.png?width=1000&height=1666',
 },
 {
     prompt: 'an asian woman poses for a portrait, in the style of luminous shadows, dark white and beige, onii kei , fluid photography, realistic yet romantic, smooth lines, angura kei',
-    image: 'https://cdn.superx.chat/stuff/human.png',
+    image: 'https://cdn.youyi.asia/stuff/human.png',
 },];
 const text = `
 ## 介绍

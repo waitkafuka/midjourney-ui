@@ -96,7 +96,7 @@ const ROUTES: Route = {
     //   icon: <i className='iconfont icon-canshushezhi'></i>,
     // },
     {
-      path: 'https://superx.chat/',
+      path: 'https://chat.youyi.asia/',
       target: '_blank',
       name: 'ChatGPT',
       key: 'chatgpt',
@@ -278,7 +278,7 @@ export default function Main(children: JSX.Element) {
                 {user && user.email ? <Dropdown menu={{ items }} placement="top" arrow={{ pointAtCenter: true }}>
                   <Button block>{user.email}</Button>
                 </Dropdown> : <Button block onClick={() => {
-                  window.location.href = `https://superx.chat/${process.env.NODE_ENV === 'development' ? 'login' : 'login/'}?redirect=/art`
+                  window.location.href = `/${process.env.NODE_ENV === 'development' ? 'login' : 'login/'}?redirect=/art`
                 }}>
                   登录
                 </Button>}

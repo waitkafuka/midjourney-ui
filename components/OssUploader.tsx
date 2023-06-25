@@ -121,7 +121,7 @@ const AliyunOSSUploader: React.FC<AliyunOSSUploadProps> = ({ value, listType = '
         }
         // previewFile: (file: any) => {
         //     console.log('previewFile', file);
-        //     return Promise.resolve(`//oss-cdn.superx.chat/${file.url}`);
+        //     return Promise.resolve(`//midjour.oss-cn-beijing.aliyuncs.com/${file.url}`);
         // }
     };
 

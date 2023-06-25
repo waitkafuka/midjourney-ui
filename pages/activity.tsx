@@ -12,7 +12,7 @@ const cookbook = () => {
 本次活动的主题为“人工智能绘画”，旨在通过人工智能技术，让计算机自动完成绘画创作，从而探索人工智能技术在艺术创作领域的应用。
 
 ## 二、活动规则
-通过本站绘画生成的作品（不限使用 midjourney 还是 DALLE2），分享到公共区（[https://superx.chat/art/paintings/](../paintings/)），经网友点赞投票，每月选出点赞最多的前 10 名选手。
+通过本站绘画生成的作品（不限使用 midjourney 还是 DALLE2），分享到公共区（[https://chat.youyi.asia/art/paintings/](../paintings/)），经网友点赞投票，每月选出点赞最多的前 10 名选手。
 
 ## 三、活动时间
 每月1日至次月1日，每月1日公布上月活动结果。

@@ -13,7 +13,7 @@ const imgList = [{
 },
 {
     prompt: 'an asian woman poses for a portrait, in the style of luminous shadows, dark white and beige, onii kei , fluid photography, realistic yet romantic, smooth lines, angura kei',
-    image: 'https://cdn.youyi.asia/stuff/human.png',
+    image: 'https://cdn.superx.chat/stuff/human.png',
 },];
 const text = `
 ## 介绍

@@ -96,7 +96,7 @@ const ROUTES: Route = {
     //   icon: <i className='iconfont icon-canshushezhi'></i>,
     // },
     {
-      path: 'https://chat.youyi.asia/',
+      path: '/',
       target: '_blank',
       name: 'ChatGPT',
       key: 'chatgpt',

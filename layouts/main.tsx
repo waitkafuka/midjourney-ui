@@ -151,11 +151,24 @@ const menuItemRender = (options: MenuDataItem, element: React.ReactNode) => (
 export default function Main(children: JSX.Element) {
   const [openKeys, setOpenKeys] = useState<WithFalse<string[]>>(['start']);
   const [dark, setDark] = useState(false);
+  const [logo, setLogo] = useState('/art/logo.png');
   const [user, setUser] = useState({} as any);
   // const user = useSelector((state: any) => state.user.info);
   store.subscribe(() => {
     setUser(store.getState().user.info)
   })
+
+  useEffect(() => {
+    const domain = window.location.host;
+    //如果域名是superx360.com，去掉ROUTES中的chatgpt
+    if (domain.includes('superx360.com') || domain.includes('superx.chat')) {
+      setLogo('//cdn.superx.chat/stuff/superx360-logo1.png');
+      ROUTES.routes = ROUTES.routes.filter((item: any) => {
+        return item.key !== 'chatgpt'
+      })
+    }
+  }, [])
+
 
 
   const items: MenuProps['items'] = [
@@ -241,7 +254,7 @@ export default function Main(children: JSX.Element) {
         icon: <GithubFilled></GithubFilled>, title:"superx.chat", url:'https://'
       }]}></ProLayout> */}
         <ProLayout
-          logo={"/art/logo.png"}
+          logo={logo}
           title="superx.chat"
           style={{ minHeight: '100vh' }}
           route={ROUTES}

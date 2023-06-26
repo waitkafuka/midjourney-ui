@@ -29,7 +29,7 @@ const PaingPoint = ({ }) => {
             return;
             // }, 1000);
         };
-        const base64Url = await QRCode.toDataURL(`https://chat.youyi.asia/pay/?email=${email}&pkgId=10&bd_vid=${sessionStorage.getItem('bd_vid') || ''}`)
+        const base64Url = await QRCode.toDataURL(`https://superx360.com/pay/?channel=${window.location.host}&email=${email}&pkgId=10&bd_vid=${sessionStorage.getItem('bd_vid') || ''}`)
         setQrCodeSrc(base64Url);
     }
 

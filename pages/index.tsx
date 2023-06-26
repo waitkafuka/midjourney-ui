@@ -732,7 +732,7 @@ const Index: React.FC = () => {
             }} />
 
           </div>
-          <Tooltip title={`为保证服务高可用，缩短等待时间，特新增${clientCount}个服务器节点。如果您生成出错或时间过长，可以选择切换节点。一般不需要切换。（生成开始后不可切换）`}>
+          <Tooltip title={`为保证服务高可用，缩短等待时间，特新增${clientCount}个服务器节点。如果您生成出错或时间过长，可以选择切换节点。一般情况下不需要切换。（生成开始后不可切换）`}>
             <QuestionCircleOutlined style={{ cursor: "pointer" }} />
           </Tooltip>
 

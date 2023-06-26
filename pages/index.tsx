@@ -1,11 +1,11 @@
 import React, { use, useEffect, useState, useRef, useMemo } from "react";
-import { Input, Button, Table, Image, Typography, message, Modal, Spin, Upload, Space, Divider, Checkbox, notification, Tag, Switch, } from "antd";
+import { Input, Button, Table, Image, Typography, message, Modal, Spin, Select, Space, Divider, Checkbox, notification, Tag, Switch, Tooltip, } from "antd";
 import { SendOutlined, UploadOutlined, QuestionCircleOutlined, CloseCircleOutlined } from "@ant-design/icons";
 import { Imagine, Upscale, Variation } from "../request";
 import { MJMessage } from "midjourney";
 import { Message } from "../interfaces/message";
 import MyTag from "../components/tag";
-import { requestAliyun } from "../request/http";
+import { requestAliyun, requestAliyunArt } from "../request/http";
 import { useSelector, useDispatch } from 'react-redux';
 import { downloadFile, getQueryString, hasChinese } from '../scripts/utils';
 import { NEXT_PUBLIC_IMAGE_PREFIX, PAINTING_POINTS_ONE_TIME } from '../scripts/config';
@@ -64,6 +64,9 @@ const Index: React.FC = () => {
   const [showOperationtTips, setShowOperationtTips] = useState(false);
   const [isShowParamsTips, setIsShowParamsTips] = useState(false);
   const [showQrcodeModal, setShowQrcodeModal] = useState(true);
+  const [clientCount, setClientCount] = useState(0);
+  const [nodes, setNodes] = useState<any[]>([]);
+  const [hasStartImagin, setHasStartImagin] = useState(false);
 
   //测试
   // const [messages, setMessages] = useState<Message[]>([{
@@ -186,6 +189,7 @@ const Index: React.FC = () => {
     };
     // alert('通过')
     // return;
+    setHasStartImagin(true);
 
     if (newMessage.text) {
       //检测内容是否包含中文
@@ -467,8 +471,21 @@ const Index: React.FC = () => {
   }
 
   //随机一个 0-2 的随机数
-  const setRandomClientIndex = () => {
-    const rand = Math.floor(Math.random() * 3);
+  const setRandomClientIndex = async () => {
+    //首先获取客户端的数量
+    const { length: clientCount } = await requestAliyunArt('/client-length', null, 'GET');
+    setClientCount(clientCount);
+    //设置nodes
+    const nodes = [];
+    for (let i = 0; i < clientCount; i++) {
+      nodes.push({
+        value: i,
+        label: `绘画服务器${i + 1}`,
+      });
+    }
+    setNodes(nodes);
+
+    const rand = Math.floor(Math.random() * clientCount);
     setClientIndex(rand);
   };
 
@@ -708,6 +725,17 @@ const Index: React.FC = () => {
               setIsShowParamsTips(v);
             }} /> </span>
           </div>
+          {/* 线路切换 */}
+          <div style={{ marginLeft: "20px", marginRight: "5px" }}>
+            <Select options={nodes} value={clientIndex} disabled={hasStartImagin} style={{ width: 140 }} onChange={v => {
+              setClientIndex(v);
+            }} />
+
+          </div>
+          <Tooltip title={`为保证服务高可用，缩短等待时间，特新增${clientCount}个服务器节点。如果您生成出错或时间过长，可以选择切换节点。一般不需要切换。（生成开始后不可切换）`}>
+            <QuestionCircleOutlined />
+          </Tooltip>
+
         </div>
 
         {referImg && <div style={{ margin: "10px 0" }} className="refer-img-box">

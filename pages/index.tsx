@@ -189,7 +189,6 @@ const Index: React.FC = () => {
     };
     // alert('通过')
     // return;
-    setHasStartImagin(true);
 
     if (newMessage.text) {
       //检测内容是否包含中文
@@ -261,6 +260,7 @@ const Index: React.FC = () => {
               newMessage.hasTag = true;
               //扣减点数
               store.dispatch({ type: 'user/pointChange', payload: user.point_count - PAINTING_POINTS_ONE_TIME })
+              setHasStartImagin(true);
             }
 
             newMessage.msgHash = data.hash;

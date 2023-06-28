@@ -34,15 +34,15 @@ const ROUTES: Route = {
       key: 'start',
       flatMenu: false,
       children: [{
-        path: '/art/sd',
-        target: "_blank",
-        name: 'Stable Diffusion',
-        key: "stablediffusion",
-      }, {
         path: '/art/',
         target: "_blank",
         name: 'Midjourney',
         key: "midjourney",
+      }, {
+        path: '/art/sd',
+        target: "_blank",
+        name: 'Stable Diffusion',
+        key: "stablediffusion",
       }, {
         path: '/art/dalle/',
         target: "_blank",

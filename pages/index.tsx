@@ -368,7 +368,7 @@ const Index: React.FC = () => {
     //   <div className="no-content-tips">当前使用人数过多，服务器已无法继续提供服务。图片渲染需要耗费大量计算资源，请稍后再试。</div>
     // </div>
     <div className="w-full mx-auto px-4 h-full overflow-y-hidden list-input-container">
-      <div className='dalle-point-box'><PaintingPoint></PaintingPoint></div>
+      {/* <div className='dalle-point-box'><PaintingPoint></PaintingPoint></div> */}
       {contextHolder}
       {/* <Spin>{paintingTip}</Spin> */}
       <Modal

@@ -221,6 +221,7 @@ const Index: React.FC = () => {
       }
       setInputDisable(true);
       setMessages(msgs => [...msgs, newMessage]);
+      setHasStartImagin(true);
       try {
         await Imagine(
           JSON.stringify({ prompt: newMessage.text, clientIndex }),
@@ -260,7 +261,6 @@ const Index: React.FC = () => {
               newMessage.hasTag = true;
               //扣减点数
               store.dispatch({ type: 'user/pointChange', payload: user.point_count - PAINTING_POINTS_ONE_TIME })
-              setHasStartImagin(true);
             }
 
             newMessage.msgHash = data.hash;

@@ -18,6 +18,8 @@ const PaingPoint = ({ }) => {
     const [qrCodeSrc, setQrCodeSrc] = useState<string>('');
     const user = useSelector((state: any) => state.user.info);
     const isShowBuyPointDialog = useSelector((state: any) => state.user.isShowBuyPointDialog);
+    //从链接中取出u 参数
+    const u = sessionStorage.getItem('u');
 
     const setModalQrcode = async () => {
         //获取用户邮箱
@@ -29,7 +31,7 @@ const PaingPoint = ({ }) => {
             return;
             // }, 1000);
         };
-        const base64Url = await QRCode.toDataURL(`https://superx360.com/pay/?channel=${window.location.host}&email=${email}&pkgId=10&bd_vid=${sessionStorage.getItem('bd_vid') || ''}`)
+        const base64Url = await QRCode.toDataURL(`https://superx360.com/pay/?u=${u}&channel=${window.location.host}&email=${email}&pkgId=10&bd_vid=${sessionStorage.getItem('bd_vid') || ''}`)
         setQrCodeSrc(base64Url);
     }
 

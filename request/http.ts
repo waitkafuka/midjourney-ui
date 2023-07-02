@@ -24,11 +24,11 @@ export const request = async function (path: string, data: any, method = "POST",
 
 //请求国内服务器
 export const requestAliyun = async function (path: string, data?: any, method = "POST", headers = {}) {
-    return request(`/api/${path}`, data, method, headers);
+    return request(`/sapi/${path}`, data, method, headers);
 }
 
 //请求国内服务器
 export const requestAliyunArt = async function (path: string, data?: any, method = "POST", headers = {}) {
-    return request(`/art/api/${path}`, data, method, headers);
+    return request(`/art/sapi/${path}`, data, method, headers);
 }
 

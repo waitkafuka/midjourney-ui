@@ -255,6 +255,7 @@ const Index: React.FC = () => {
             );
             if (data.id) {
               newMessage.hasTag = true;
+              newMessage.flags = data.flags;
               //扣减点数
               store.dispatch({ type: 'user/pointChange', payload: user.point_count - PAINTING_POINTS_ONE_TIME })
             }
@@ -282,7 +283,8 @@ const Index: React.FC = () => {
     pormpt: string,
     msgId: string,
     msgHash: string,
-    index: number
+    index: number,
+    flags: number,
   ) => {
     let newMessage: Message = {
       text: `${pormpt} upscale U${index}`,
@@ -295,7 +297,7 @@ const Index: React.FC = () => {
     setMessages(omsg => [...omsg, newMessage]);
     try {
       await Upscale(
-        JSON.stringify({ content: pormpt, index, msgId, msgHash, clientIndex }),
+        JSON.stringify({ content: pormpt, index, msgId, msgHash, clientIndex, flags }),
         (data: MJMessage) => {
           console.log('upscale dataing:', data);
           //mj 服务报错
@@ -334,7 +336,8 @@ const Index: React.FC = () => {
     content: string,
     msgId: string,
     msgHash: string,
-    index: number
+    index: number,
+    flags: number
   ) => {
     let newMessage: Message = {
       text: `${content} variation V${index}`,
@@ -347,7 +350,7 @@ const Index: React.FC = () => {
     setMessages(omsg => [...omsg, newMessage]);
     try {
       await Variation(
-        JSON.stringify({ content, index, msgId, msgHash, clientIndex }),
+        JSON.stringify({ content, index, msgId, msgHash, clientIndex, flags }),
         (data: MJMessage) => {
           //mj 服务报错
           if (data.code === 40024) {
@@ -366,6 +369,8 @@ const Index: React.FC = () => {
           );
           if (data.uri.endsWith(".png")) {
             newMessage.hasTag = true;
+            newMessage.flags = data.flags;
+
             //扣减点数
             store.dispatch({ type: 'user/pointChange', payload: user.point_count - (PAINTING_POINTS_ONE_TIME / 2) })
           }
@@ -391,32 +396,33 @@ const Index: React.FC = () => {
     content: string,
     msgId: string,
     msgHash: string,
-    tag: string
+    tag: string,
+    flags: number
   ) => {
     switch (tag) {
       case "V1":
-        variation(content, msgId, msgHash, 1);
+        variation(content, msgId, msgHash, 1, flags);
         break;
       case "V2":
-        variation(content, msgId, msgHash, 2);
+        variation(content, msgId, msgHash, 2, flags);
         break;
       case "V3":
-        variation(content, msgId, msgHash, 3);
+        variation(content, msgId, msgHash, 3, flags);
         break;
       case "V4":
-        variation(content, msgId, msgHash, 4);
+        variation(content, msgId, msgHash, 4, flags);
         break;
       case "U1":
-        upscale(content, msgId, msgHash, 1);
+        upscale(content, msgId, msgHash, 1, flags);
         break;
       case "U2":
-        upscale(content, msgId, msgHash, 2);
+        upscale(content, msgId, msgHash, 2, flags);
         break;
       case "U3":
-        upscale(content, msgId, msgHash, 3);
+        upscale(content, msgId, msgHash, 3, flags);
         break;
       case "U4":
-        upscale(content, msgId, msgHash, 4);
+        upscale(content, msgId, msgHash, 4, flags);
         break;
       default:
         break;
@@ -596,7 +602,7 @@ const Index: React.FC = () => {
           height: "calc(100vh - 96px)", overflowY: "auto"
         }}>
           {/* 图片结果列表容器 */}
-          {messages.map(({ text, img, progress, hasTag, content, msgID, msgHash }, index) => <div className="img-list-item" key={index}>
+          {messages.map(({ text, img, progress, hasTag, flags, content, msgID, msgHash }, index) => <div className="img-list-item" key={index}>
             <div> {text.replace(/- <@\d+>\s*\([^)]*\)/g, '')} {`(${progress === 'done' ? '完成' : progress})`}</div>
             <div className="workspace-img-container" style={{ width: `${baseWidth}px`, height: getImgCalcHeight(img, text) }}>
 
@@ -636,7 +642,7 @@ const Index: React.FC = () => {
                     type="upscale"
                     onClick={(tag) => {
                       scrollToBottom();
-                      tagClick(String(content), String(msgID), String(msgHash), tag)
+                      tagClick(String(content), String(msgID), String(msgHash), tag, flags || 0)
                     }
                     }
                   />
@@ -646,7 +652,7 @@ const Index: React.FC = () => {
                   type="variation"
                   onClick={(tag) => {
                     scrollToBottom();
-                    tagClick(String(content), String(msgID), String(msgHash), tag)
+                    tagClick(String(content), String(msgID), String(msgHash), tag, flags || 0)
                   }
                   }
                 />

@@ -1,6 +1,8 @@
 import { MJMessage } from "midjourney";
 import { notification } from "antd";
 
+ const decoder = new TextDecoder("utf-8");
+
 const streamFetch = async (
   url: string,
   body: string,
@@ -30,13 +32,14 @@ const streamFetch = async (
         break;
       }
 
-      buffer += new TextDecoder("utf-8").decode(value);
+      buffer += decoder.decode(value);
 
       let startIdx = 0;
-      let endIdx = buffer.indexOf("}");
+      let endIdx = buffer.lastIndexOf("}");
       while (endIdx !== -1) {
         const jsonString = buffer.substring(startIdx, endIdx + 1);
         try {
+          console.log('string', jsonString);
           const parsedMessage = JSON.parse(jsonString);
           loading && loading(parsedMessage);
         } catch (error) {
@@ -53,13 +56,13 @@ const streamFetch = async (
 };
 
 export const Imagine = (body: string, loading?: (uri: MJMessage) => void) => {
-  return streamFetch("/art/api/imagine", body, loading);
+  return streamFetch("/art/sapi/imagine", body, loading);
 };
 
 export const Upscale = (body: string, loading?: (uri: MJMessage) => void) => {
-  return streamFetch("/art/api/upscale", body, loading);
+  return streamFetch("/art/sapi/upscale", body, loading);
 };
 
 export const Variation = (body: string, loading?: (uri: MJMessage) => void) => {
-  return streamFetch("/art/api/variation", body, loading);
+  return streamFetch("/art/sapi/variation", body, loading);
 };

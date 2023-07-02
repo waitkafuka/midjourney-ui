@@ -20,6 +20,8 @@ export interface Message {
    * 是否有标签，只在完成时为true，通过是否有id判断
    */
   hasTag: boolean;
+  flags?: number;
+
   /**
    * 进度百分比，比如：93% 完成
    */

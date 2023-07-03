@@ -7,7 +7,7 @@ import { Message } from "../interfaces/message";
 import MyTag from "../components/tag";
 import { requestAliyun, requestAliyunArt } from "../request/http";
 import { useSelector, useDispatch } from 'react-redux';
-import { downloadFile, getQueryString, hasChinese } from '../scripts/utils';
+import { downloadFile, getQueryString, hasChinese, shuffleArray } from '../scripts/utils';
 import { NEXT_PUBLIC_IMAGE_PREFIX, PAINTING_POINTS_ONE_TIME } from '../scripts/config';
 import { getRatio, getHeight } from "../scripts/utils";
 import PaintingPoint from "../components/paintingPoint";
@@ -60,7 +60,7 @@ const Index: React.FC = () => {
   const [referImg, setReferImg] = useState('');
   const [showTips, setShowTips] = useState(true);
   const [showPublicTips, setShowPublicTips] = useState(true);
-  const [clientIndex, setClientIndex] = useState(0)
+  const [clientId, setClientId] = useState(0)
   const [showOperationtTips, setShowOperationtTips] = useState(false);
   const [isShowParamsTips, setIsShowParamsTips] = useState(false);
   const [showQrcodeModal, setShowQrcodeModal] = useState(true);
@@ -224,7 +224,7 @@ const Index: React.FC = () => {
       setHasStartImagin(true);
       try {
         await Imagine(
-          JSON.stringify({ prompt: newMessage.text, clientIndex }),
+          JSON.stringify({ prompt: newMessage.text, clientId }),
           (data: any) => {
             if (data.code === 40015) {
               //未登录
@@ -301,7 +301,7 @@ const Index: React.FC = () => {
     setMessages(omsg => [...omsg, newMessage]);
     try {
       await Upscale(
-        JSON.stringify({ content: pormpt, index, msgId, msgHash, clientIndex, flags }),
+        JSON.stringify({ content: pormpt, index, msgId, msgHash, clientId, flags }),
         (data: MJMessage) => {
           console.log('upscale dataing:', data);
           //mj 服务报错
@@ -354,7 +354,7 @@ const Index: React.FC = () => {
     setMessages(omsg => [...omsg, newMessage]);
     try {
       await Variation(
-        JSON.stringify({ content, index, msgId, msgHash, clientIndex, flags }),
+        JSON.stringify({ content, index, msgId, msgHash, clientId, flags }),
         (data: MJMessage) => {
           //mj 服务报错
           if (data.code === 40024) {
@@ -475,23 +475,24 @@ const Index: React.FC = () => {
     }
   }
 
-  //随机一个 0-2 的随机数
-  const setRandomClientIndex = async () => {
+  //随机一个客户端
+  const setRandomClientId = async () => {
     //首先获取客户端的数量
-    const { length: clientCount } = await requestAliyunArt('/client-length', null, 'GET');
-    setClientCount(clientCount);
+    let { clientIds } = await requestAliyunArt('clientIds', null, 'GET');
+    clientIds = shuffleArray(clientIds);
+    setClientCount(clientIds.length);
     //设置nodes
     const nodes = [];
-    for (let i = 0; i < clientCount; i++) {
+    for (let i = 0; i < clientIds.length; i++) {
       nodes.push({
-        value: i,
+        value: clientIds[i],
         label: `绘画服务器${i + 1}`,
       });
     }
     setNodes(nodes);
 
-    const rand = Math.floor(Math.random() * clientCount);
-    setClientIndex(rand);
+    const randIndex = Math.floor(Math.random() * clientIds.length);
+    setClientId(clientIds[randIndex]);
   };
 
   const showQRcode = () => {
@@ -506,7 +507,7 @@ const Index: React.FC = () => {
     checkTips();
     setBDVid();
     showQRcode();
-    setRandomClientIndex();
+    setRandomClientId();
   }, []);
 
   return (
@@ -732,8 +733,8 @@ const Index: React.FC = () => {
           </div>
           {/* 线路切换 */}
           <div style={{ marginLeft: "20px", marginRight: "5px" }}>
-            <Select options={nodes} value={clientIndex} disabled={hasStartImagin} style={{ width: 140 }} onChange={v => {
-              setClientIndex(v);
+            <Select options={nodes} value={clientId} disabled={hasStartImagin} style={{ width: 140 }} onChange={v => {
+              setClientId(v);
             }} />
 
           </div>

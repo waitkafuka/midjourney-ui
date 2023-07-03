@@ -35,7 +35,8 @@ const streamFetch = async (
       buffer += decoder.decode(value);
 
       let startIdx = 0;
-      let endIdx = buffer.lastIndexOf("}");
+      // let endIdx = buffer.lastIndexOf("}");
+      let endIdx = buffer.indexOf("}");
       while (endIdx !== -1) {
         const jsonString = buffer.substring(startIdx, endIdx + 1);
         try {

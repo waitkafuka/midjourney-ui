@@ -102,6 +102,20 @@ export const getQueryString = (name: string) => {
 }
 
 /**
+ * 使用洗牌算法打乱数组
+ * @param array 
+ * @returns 
+ */
+export const shuffleArray = (array: any) => {
+    const newArray = [...array]; // 复制原始数组，避免修改原数组
+    for (let i = newArray.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1)); // 生成随机索引
+        [newArray[i], newArray[j]] = [newArray[j], newArray[i]]; // 交换元素
+    }
+    return newArray;
+}
+
+/**
  * 检测字符串是否包含中文
  * @param str 
  * @returns 

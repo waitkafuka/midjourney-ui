@@ -318,6 +318,11 @@
   resolved "https://registry.npmjs.org/@eslint/js/-/js-8.39.0.tgz"
   integrity sha512-kf9RB0Fg7NZfap83B3QOqOGg9QmD9yBudqQXzzOtn3i4y7ZUXe5ONeW34Gwi+TxhH4mvj72R1Zc300KUMa9Bng==
 
+"@huggingface/inference@^2.5.0":
+  version "2.6.1"
+  resolved "https://registry.npmjs.org/@huggingface/inference/-/inference-2.6.1.tgz#d11f4c44d824e92577ec460c6ff60474ef36467d"
+  integrity sha512-qFYchgOCPeEkZJKiSr7Kz62QwukJtgkeQCT7Q0SSKUcvHpTQVNJp6i/JrJMR4dBdzQysJ1SZDC0pLBBnnskTag==
+
 "@humanwhocodes/config-array@^0.11.8":
   version "0.11.8"
   resolved "https://registry.npmjs.org/@humanwhocodes/config-array/-/config-array-0.11.8.tgz"
@@ -2346,6 +2351,11 @@ isexe@^2.0.0:
   resolved "https://registry.npmjs.org/isexe/-/isexe-2.0.0.tgz"
   integrity sha512-RHxMLp9lnKHGHRng9QFhRCMbYAcVpn69smSGcq3f36xjgVVWThj4qqLbTLlq7Ssj8B+fIQ1EuCEGI2lKsyQeIw==
 
+isomorphic-ws@^5.0.0:
+  version "5.0.0"
+  resolved "https://registry.npmjs.org/isomorphic-ws/-/isomorphic-ws-5.0.0.tgz#e5529148912ecb9b451b46ed44d53dae1ce04bbf"
+  integrity sha512-muId7Zzn9ywDsyXgTIafTry2sV3nySZeUDe6YedVd1Hvuuep5AsIlqK+XefWpYTyJG5e503F2xIuT2lcU6rCSw==
+
 jiti@^1.18.2:
   version "1.18.2"
   resolved "https://registry.yarnpkg.com/jiti/-/jiti-1.18.2.tgz#80c3ef3d486ebf2450d9335122b32d121f2a83cd"
@@ -2931,14 +2941,18 @@ micromatch@^4.0.4, micromatch@^4.0.5:
     braces "^3.0.2"
     picomatch "^2.3.1"
 
-midjourney@2.1.30:
-  version "2.1.30"
-  resolved "https://registry.npmmirror.com/midjourney/-/midjourney-2.1.30.tgz#087b8dd6e563ae02d580022297f0f495ca045aeb"
-  integrity sha512-l54MQDH0CjeeRPwbdfRzThgaVX3+G1A2FVJvBkpe18TMkBHW2Pnwx74HO3NnyKnu5nWbvs6oIWI78ptXDT5oGQ==
+midjourney@3.1.93:
+  version "3.1.93"
+  resolved "https://registry.npmjs.org/midjourney/-/midjourney-3.1.93.tgz#dd625658c3d70a60b4b59b737c91a511eafab65c"
+  integrity sha512-tO8D0yt75NFTXZp6fMN2snI5mn0WuRuiJtRbCivy6VfNc2NDAiRHLGpjzjLBikWgJsfpsFMxCrJKmovF5aPPRg==
   dependencies:
+    "@huggingface/inference" "^2.5.0"
+    isomorphic-ws "^5.0.0"
+    mime "^3.0.0"
     p-queue "^6.6.2"
-    throat "^6.0.2"
+    snowyflake "^2.0.0"
     tslib "^2.5.0"
+    ws "^8.13.0"
 
 mime-db@1.52.0:
   version "1.52.0"
@@ -2951,6 +2965,11 @@ mime-types@^2.1.12:
   integrity sha512-ZDY+bPm5zTTF+YpCrAU9nK0UgICYPT0QtT1NZWFv4s++TNkcgVaT0g6+4R2uI4MjQjzysHB1zxuWL50hzaeXiw==
   dependencies:
     mime-db "1.52.0"
+
+mime@^3.0.0:
+  version "3.0.0"
+  resolved "https://registry.npmjs.org/mime/-/mime-3.0.0.tgz#b374550dca3a0c18443b0c950a6a58f1931cf7a7"
+  integrity sha512-jSCU7/VB1loIWBZe14aEYHU/+1UMEHoaO7qxCOVJOw9GgH72VAWppxNcjU+x9a2k3GSIBXNKxXQFqRvvZ7vr3A==
 
 minimatch@^3.0.4, minimatch@^3.0.5, minimatch@^3.1.1, minimatch@^3.1.2:
   version "3.1.2"
@@ -4108,6 +4127,11 @@ slash@^4.0.0:
   resolved "https://registry.npmjs.org/slash/-/slash-4.0.0.tgz"
   integrity sha512-3dOsAHXXUkQTpOYcoAxLIorMTp4gIQr5IW3iVb7A7lFIp0VHhnynm9izx6TssdrIcVIESAlVjtnO2K8bg+Coew==
 
+snowyflake@^2.0.0:
+  version "2.0.0"
+  resolved "https://registry.npmjs.org/snowyflake/-/snowyflake-2.0.0.tgz#9514fb3540b290b71fec8efb6a737d32c4dc8105"
+  integrity sha512-BxeqV0KJxJASu6EBJGUkX194Zhh37AEa0ow/JRK39icWbLTG9Wl/7LAL6a/ZMSjNm4O9pZk6QoLcWP7f/YKmtA==
+
 "source-map-js@>=0.6.2 <2.0.0", source-map-js@^1.0.2:
   version "1.0.2"
   resolved "https://registry.npmjs.org/source-map-js/-/source-map-js-1.0.2.tgz"
@@ -4320,11 +4344,6 @@ thenify-all@^1.0.0:
   integrity sha512-RVZSIV5IG10Hk3enotrhvz0T9em6cyHBLkH/YAZuKqd8hRkKhSfCGIcP2KUY0EPxndzANBmNllzWPwak+bheSw==
   dependencies:
     any-promise "^1.0.0"
-
-throat@^6.0.2:
-  version "6.0.2"
-  resolved "https://registry.npmmirror.com/throat/-/throat-6.0.2.tgz#51a3fbb5e11ae72e2cf74861ed5c8020f89f29fe"
-  integrity sha512-WKexMoJj3vEuK0yFEapj8y64V0A6xcuPuK9Gt1d0R+dzCSJc0lHqQytAbSB4cDAK0dWh4T0E2ETkoLE2WZ41OQ==
 
 throttle-debounce@^5.0.0:
   version "5.0.0"
@@ -4652,6 +4671,11 @@ wrappy@1:
   version "1.0.2"
   resolved "https://registry.npmjs.org/wrappy/-/wrappy-1.0.2.tgz"
   integrity sha512-l4Sp/DRseor9wL6EvV2+TuQn63dMkPjZ/sp9XkghTEbV9KlPS1xUsZ3u7/IQO4wxtcFB4bgpQPRcR3QCvezPcQ==
+
+ws@^8.13.0:
+  version "8.13.0"
+  resolved "https://registry.npmjs.org/ws/-/ws-8.13.0.tgz#9a9fb92f93cf41512a0735c8f4dd09b8a1211cd0"
+  integrity sha512-x9vcZYTrFPC7aSIbj7sRCYo7L/Xb8Iy+pW0ng0wt2vCJv7M9HOMy0UoN3rr+IFC7hb7vXoqS+P9ktyLLLhO+LA==
 
 y18n@^4.0.0:
   version "4.0.3"

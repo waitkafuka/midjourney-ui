@@ -97,13 +97,13 @@ const ROUTES: Route = {
       key: 'chatgpt',
       icon: <WechatOutlined />,
     },
-    {
-      path: '/art/activity',
-      target: "_blank",
-      name: '首届绘画大赛',
-      key: 'activity',
-      icon: <SketchOutlined />,
-    },
+    // {
+    //   path: '/art/activity',
+    //   target: "_blank",
+    //   name: '首届绘画大赛',
+    //   key: 'activity',
+    //   icon: <SketchOutlined />,
+    // },
     // {
     //   path: 'https://arkit.com.cn/pay/',
     //   target: '_blank',

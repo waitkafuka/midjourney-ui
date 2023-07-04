@@ -430,7 +430,9 @@ button.ant-btn-primary:not(:disabled):hover {
   //   margin-top: 20px;
   // }
 }
-
+.ant-pro-layout div.ant-pro-sider-logo >a >img{
+  margin-bottom: -1px;
+}
 .painting-result-wrap {
   display: flex;
   flex-wrap: wrap;

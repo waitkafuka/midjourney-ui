@@ -162,7 +162,7 @@ export default function Main(children: JSX.Element) {
     const domain = window.location.host;
     //如果域名是superx360.com，去掉ROUTES中的chatgpt
     if (domain.includes('superx360.com') || domain.includes('superx.chat')) {
-      setLogo('//cdn.superx.chat/stuff/superx360-logo1.png');
+      setLogo('//cdn.superx.chat/stuff/superx360-logo2.png');
       ROUTES.routes = ROUTES.routes.filter((item: any) => {
         return item.key !== 'chatgpt'
       })

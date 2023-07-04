@@ -358,7 +358,7 @@ const SD: React.FC = () => {
                         setParams({ ...params, style_preset: item.styleValue })
                     }}>
                         <div className="style-img-box">
-                            {item.styleValue ? <img src={`//cdn.superx.chat/stuff/sd-styles/${item.styleValue}.png`} /> : <StopOutlined />}
+                            {item.styleValue ? <img src={`//c.arkit.com.cn/stuff/sd-styles/${item.styleValue}.png`} /> : <StopOutlined />}
                         </div>
                         <div className="style-name">
                             {item.name} {item.checked}

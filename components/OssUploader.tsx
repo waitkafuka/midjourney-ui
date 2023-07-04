@@ -29,7 +29,7 @@ const AliyunOSSUploader: React.FC<AliyunOSSUploadProps> = ({ value, listType = '
     const handleChange: UploadProps['onChange'] = ({ fileList }) => {
         console.log('handle change Aliyun OSS:', fileList);
         fileList = fileList.map((file) => {
-            file.url = `https://oss-cdn.superx.chat/${file.url}`;
+            file.url = `https://o-c.arkit.com.cn/${file.url}`;
             return file;
         });
         onChange?.([...fileList]);

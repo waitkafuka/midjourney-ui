@@ -4,7 +4,7 @@ const nextConfig = {
   basePath: '/art',
   reactStrictMode: true,
   transpilePackages: ['antd'],
-  assetPrefix: isDev ? '' : 'https://cdn.superx.chat/art/',
+  assetPrefix: isDev ? '' : 'https://c.arkit.com.cn/art/',
   trailingSlash: true,
   async rewrites() {
     return [

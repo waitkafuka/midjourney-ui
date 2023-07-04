@@ -110,7 +110,7 @@ const ROUTES: Route = {
       icon: <SketchOutlined />,
     },
     // {
-    //   path: 'https://superx.chat/pay/',
+    //   path: 'https://arkit.com.cn/pay/',
     //   target: '_blank',
     //   name: '开通包月',
     //   icon: <ShoppingCartOutlined />,
@@ -163,7 +163,7 @@ export default function Main(children: JSX.Element) {
     //   key: '2',
     //   label: (
     //     <Button type="text" block onClick={async () => {
-    //       window.location.href = `https://superx.chat/pay/?email=${user.email}`;
+    //       window.location.href = `https://arkit.com.cn/pay/?email=${user.email}`;
     //     }}>
     //       开通包月
     //     </Button>
@@ -237,12 +237,9 @@ export default function Main(children: JSX.Element) {
       <ProConfigProvider
         dark={dark}
         hashed={false}>
-        {/* <ProLayout appList={[{
-        icon: <GithubFilled></GithubFilled>, title:"superx.chat", url:'https://'
-      }]}></ProLayout> */}
         <ProLayout
           logo={"/art/logo.png"}
-          title="superx.chat"
+          title="ARKIT"
           style={{ minHeight: '100vh' }}
           route={ROUTES}
           openKeys={openKeys}
@@ -250,18 +247,13 @@ export default function Main(children: JSX.Element) {
           onOpenChange={(keys) => {
             setOpenKeys(keys);
           }}
-          // defaultOpenKeys={openKeys}
-          // avatarProps={{
-          //   src: 'logo.png',
-          //   title: 'superx.chat',
-          // }}
           onMenuHeaderClick={() => {
             window.location.href = '/';
           }}
           actionsRender={(props) => {
             if (props.isMobile) return [];
             return [
-              // <Link href="https://superx.chat/login" key="about">
+              // <Link href="https://arkit.com.cn/login" key="about">
               //   登录
               //   {/* <GithubFilled  style={{
               //   fontSize: 24,

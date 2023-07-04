@@ -240,7 +240,7 @@ const Dalle: React.FC = () => {
             'An armchair in the shape of an avocado',
             '3D render of a cute tropical fish in an aquarium on a dark blue background, digital art'];
 
-        const imgBasePath = 'https://cdn.superx.chat/stuff/dalle'
+        const imgBasePath = 'https://c.arkit.com.cn/stuff/dalle'
         const imgCards: ImgCardModel[] = imgSrcs.map((src, index) => {
             return {
                 id: index,

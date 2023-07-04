@@ -39,11 +39,6 @@ const ROUTES: Route = {
         name: 'Midjourney',
         key: "midjourney",
       }, {
-        path: '/art/sd',
-        target: "_blank",
-        name: 'Stable Diffusion',
-        key: "stablediffusion",
-      }, {
         path: '/art/dalle/',
         target: "_blank",
         name: 'DALL·E',

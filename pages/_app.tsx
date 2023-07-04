@@ -52,7 +52,7 @@ export default function App({ Component, pageProps }: AppProps) {
       <Head>
         <title>AI绘画, Midjourney绘画, 人工智能绘画</title>
         <meta name="keywords" content="AI绘画, Midjourney绘画, 人工智能绘画, Dalle 绘画, Stable Diffusion" />
-        <meta name="description" content="AI绘画, Midjourney绘画, 人工智能绘画, Stable Diffusion。使用人工智能+描述词画出你想要绘制的图像。" />
+        <meta name="description" content="AI绘画, Midjourney绘画, 人工智能绘画。使用人工智能+描述词画出你想要绘制的图像。" />
         <meta
           name="viewport"
           content="width=device-width,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no"

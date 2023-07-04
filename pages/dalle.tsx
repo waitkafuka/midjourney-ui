@@ -297,14 +297,14 @@ const Dalle: React.FC = () => {
                         <Space.Compact style={{ width: '100%' }}>
                             <Input placeholder="请尽量详细描述你要生成的作品" onKeyDown={(e) => {
                                 if (e.key === "Enter") {
-                                    doGenerationAuzre();
+                                    doGenerationOpenAi();
                                     e.preventDefault();
                                 }
                             }}
                                 value={text} onChange={(e) => {
                                     setText(e.target.value)
                                 }} />
-                            <Button type="primary" loading={isGenerating} onClick={doGenerationAuzre}>开始生成</Button>
+                            <Button type="primary" loading={isGenerating} onClick={doGenerationOpenAi}>开始生成</Button>
                         </Space.Compact>
                     </div>
                 </div>

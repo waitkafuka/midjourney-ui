@@ -26,7 +26,7 @@ const SD: React.FC = () => {
         maxSize: 1048576,
         minSize: 262144,
     }
-    const imgBasePath = 'https://oss-cdn-h.youyi.asia/'
+    const imgBasePath = 'https://o-c-h.arkit.com.cn/'
     const [isGenerating, setIsGenerating] = useState(false);
     const user = useSelector((state: any) => state.user.info)
     const [isTranslating, setIsTranslating] = useState(false);

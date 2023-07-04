@@ -71,7 +71,7 @@ const Index: React.FC = () => {
   //测试
   // const [messages, setMessages] = useState<Message[]>([{
   //   text: '测试',
-  //   img: 'https://oss-cdn-h.youyi.asia/attachments/1100632439031877675/1109823643304853564/waitkafuka_an_asian_woman_poses_for_a_portrait_in_the_style_of__61423d59-7663-42d4-b972-eb4a2cf1e6d6.png?x-oss-process=style/scale_500',
+  //   img: 'https://o-c-h.arkit.com.cn/attachments/1100632439031877675/1109823643304853564/waitkafuka_an_asian_woman_poses_for_a_portrait_in_the_style_of__61423d59-7663-42d4-b972-eb4a2cf1e6d6.png?x-oss-process=style/scale_500',
   //   progress: 'done',
   //   hasTag: true,
   // }]);

@@ -130,4 +130,4 @@ dist
 .pnp.*
 
 # build generated files
-public/antd.min.css
+# public/antd.min.css

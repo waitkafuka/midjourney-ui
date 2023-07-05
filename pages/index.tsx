@@ -302,7 +302,7 @@ const Index: React.FC = () => {
     try {
       await Upscale(
         JSON.stringify({ content: pormpt, index, msgId, msgHash, clientId, flags }),
-        (data: MJMessage) => {
+        (data: any) => {
           console.log('upscale dataing:', data);
           //mj 服务报错
           if (data.code === 40024) {
@@ -355,7 +355,7 @@ const Index: React.FC = () => {
     try {
       await Variation(
         JSON.stringify({ content, index, msgId, msgHash, clientId, flags }),
-        (data: MJMessage) => {
+        (data: any) => {
           //mj 服务报错
           if (data.code === 40024) {
             notification.error({

@@ -696,20 +696,20 @@ const Index: React.FC = () => {
               if (fileList[0].status === 'done') {
                 const imgUrl = `${fileList[0].url}`
                 setReferImg(imgUrl);
-                const exp = /<.*?>/;
+                const exp = /< .*? >/;
                 //用正则表达式替换掉输入框中的图片地址，图片地址用<>包裹
                 //判断inputValue 中是否有图片地址
                 if (exp.test(inputValue)) {
                   //如果有，替换掉
-                  setInputValue(inputValue.replace(exp, `<${imgUrl}>`))
+                  setInputValue(inputValue.replace(exp, `< ${imgUrl} >`))
                 } else {
                   //如果没有，加到开头
-                  setInputValue(`<${imgUrl}> ${inputValue}`);
+                  setInputValue(`< ${imgUrl} > ${inputValue}`);
                 }
               }
             } else {
               setReferImg('')
-              setInputValue(v => v.replace(/<\s*([^<>]+)\s*>/g, ''))
+              setInputValue(v => v.replace(/< \s*([^<>]+)\s* >/g, ''))
               // setInputValue(v => v.replace(`<${referImg}> `, ''))
             }
           }}></AliyunOSSUploader>

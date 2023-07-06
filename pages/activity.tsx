@@ -3,7 +3,7 @@ import ReactMarkdown from 'react-markdown';
 import remarkGfm from 'remark-gfm'
 import 'github-markdown-css';
 
-const cookbook = () => {
+const Cookbook = () => {
 
     const text = `
 # 首届人工智能绘画大赛
@@ -18,15 +18,23 @@ const cookbook = () => {
 每月1日至次月1日，每月1日公布上月活动结果。
 
 ## 四、活动奖励
-每月1日统计上月获奖人员，1 日晚 8 点公布获奖名单。前 1-5 名选手，将获得 200 绘画点数奖励，前 6-10 名选手，将获得 100 绘画点数奖励。
-每月选出冠军一名，额外赠送 ChatGPT 包月会员一份。
+每月1日统计上月获奖人员，1 日晚 8 点公布获奖名单。 公示 3 日后，奖励发放。  
+第一名获得 1000 点绘画点数奖励，ChatGPT 包月会员一个月；  
+第二名获得 1000 点绘画点数奖励；  
+第三名获得 800 点绘画点数奖励；  
+第四名获得 600 点绘画点数奖励；  
+第五~十名获得 500、400、300、200、100、100 点绘画点数奖励。
 
+## 五、其他说明
+1.同一用户不可重复获奖，前十名作品有同一用户，以该用户最高奖项为准
+2.如点赞数相同，以作品先后顺序为准
+3.最终解释权归https://superx.chat所有
 
 `
-// ## 本站公众号
-// [![](https://c.superx.chat/stuff/qrcode.jpg)](https://c.superx.chat/stuff/qrcode.jpg)
-// ## 微信群
-// ![](https://c.superx.chat/stuff/group.png)
+    // ## 本站公众号
+    // [![](https://c.superx.chat/stuff/qrcode.jpg)](https://c.superx.chat/stuff/qrcode.jpg)
+    // ## 微信群
+    // ![](https://c.superx.chat/stuff/group.png)
 
     return (
         <div style={{ paddingLeft: "15px" }} className='markdown-body' >
@@ -40,4 +48,4 @@ const cookbook = () => {
     )
 }
 
-export default cookbook;
+export default Cookbook;

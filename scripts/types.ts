@@ -9,7 +9,8 @@ export interface ImgCardModel {
     img_base_path?: string,
     width?: number,
     height?: number,
-    paint_params?: string
+    paint_params?: string,
+    like_count?: number,
 }
 
 export enum ImgPageType {

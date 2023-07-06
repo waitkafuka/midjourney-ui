@@ -1,18 +1,18 @@
 // pages/post/[id].js
 
-import { useRouter } from 'next/router';
+import { useRouter, withRouter } from 'next/router';
 import { useEffect, useState } from 'react';
 import { requestAliyunArt } from '../../request/http';
 import { ImgCardModel } from '../../scripts/types';
 import PureImgCard from '../../components/masonry/PureImgCard'
+import { getQueryString } from '../../scripts/utils';
 
 export default function ImgDetail() {
     const [imgDetail, setImgDetail] = useState<ImgCardModel>();//图片详情
     const router = useRouter();
-    const { id } = router.query; // 从路由中获取路径参数
 
-    const queryImg = async () => {
-        const { data } = await requestAliyunArt('get-img-detail', { id });
+    const queryImg = async (img_id: string) => {
+        const { data } = await requestAliyunArt('get-img-detail', { img_id });
         console.log(data);
         setImgDetail(data);
     }
@@ -29,8 +29,9 @@ export default function ImgDetail() {
 
     }
     useEffect(() => {
-        queryImg();
-    }, [id]);
+        const img_id = getQueryString('img_id');
+        queryImg(img_id);
+    }, []);
 
 
     return (

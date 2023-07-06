@@ -74,7 +74,8 @@ const ActivityResult = () => {
             title: '图片链接',
             dataIndex: 'img_url',
             key: 'img_url',
-            render: (d, _) => <a href={`/art/img/${_.id}`} target='_blank'>点击查看</a>,
+            render: (d, _) => <a href={`//och.superx.chat${d}`} target='_blank'>点击查看</a>,
+            // render: (d, _) => <a href={`/art/img/detail/?img_id=${_.img_id}`} target='_blank'>点击查看</a>,
             width: 100,
         },
         {

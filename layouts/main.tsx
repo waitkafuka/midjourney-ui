@@ -103,11 +103,21 @@ const ROUTES: Route = {
       icon: <WechatOutlined />,
     },
     {
-      path: '/art/activity',
-      target: "_blank",
+      path: '/',
       name: '首届绘画大赛',
-      key: 'activity',
+      key: 'activityfirst',
       icon: <SketchOutlined />,
+      children: [{
+        path: '/art/activity/',
+        target: "_blank",
+        name: '大赛规则',
+        key: "activity",
+      }, {
+        path: '/art/activity-show',
+        target: "_blank",
+        name: '结果公示',
+        key: "activity-show",
+      }]
     },
     // {
     //   path: 'https://superx.chat/pay/',

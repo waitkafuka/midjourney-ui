@@ -26,7 +26,10 @@ interface Props {
     showThumbImg: boolean,
     isLoading: boolean,
     imgBasePath?: string,
+    hasLikeButton?: boolean,
     ratio?: { width: number, height: number },
+    //点赞完成的回调，需要在父页面更新点赞数量
+    onImgThumbUpActionDone?: (id: number, action: string) => void,
 }
 
 const defaultImg = 'data:image/png;base64,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'
@@ -37,8 +40,8 @@ const { CheckableTag } = Tag;
 const baseWidth = 500;
 //从提示词中提取宽高比例
 
-const App = ({ model, columnWidth = 400, onImgDeleted, ratio, isLoading, hasDelete, showThumbImg, imgBasePath = 'https://och.superx.chat' }: Props) => {
-    const { img_url, prompt, create_time, id, is_public, thumb_up_count, painting_type } = model;
+const App = ({ model, columnWidth = 400, hasLikeButton = false, onImgThumbUpActionDone, onImgDeleted, ratio, isLoading, hasDelete, showThumbImg, imgBasePath = 'https://och.superx.chat' }: Props) => {
+    let { img_url, prompt, create_time, id, is_public, thumb_up_count, painting_type } = model;
     const userThumbUpList = useSelector((state: any) => state.user.thumbUpList);
     const user = useSelector((state: any) => state.user.info);
     const [isShare, setIsShare] = useState(is_public === 0);
@@ -102,6 +105,7 @@ const App = ({ model, columnWidth = 400, onImgDeleted, ratio, isLoading, hasDele
                     }}>
                         <CopyOutlined key="copy" title="复制提示词" />
                     </div>
+                    {/* 下载图片 */}
                     <div className={css["masonry-action-item"]} onClick={() => {
                         if (!img_url) {
                             message.error('图片未生成')
@@ -111,12 +115,43 @@ const App = ({ model, columnWidth = 400, onImgDeleted, ratio, isLoading, hasDele
                     }}>
                         <CloudDownloadOutlined title="下载" />
                     </div>
+                    {/* 删除图片 */}
                     {hasDelete && <div className={css["masonry-action-item"]} onClick={() => {
                         deleteImg(model.id);
                     }}>
                         <DeleteOutlined title="删除" />
                     </div>
                     }
+                    {/* 点赞 */}
+                    {/* 点赞按钮 */}
+                    {hasLikeButton && <div className={css["masonry-action-item"]} onClick={async () => {
+                        console.log('userThumbUpList:', userThumbUpList);
+                        console.log('id:', id);
+                        const hasThumbUp = userThumbUpList.includes(id);
+                        const url = hasThumbUp ? 'cancel-thumb-up' : 'thumb-up';
+                        const result = await requestAliyunArt(url, { id });
+                        console.log('user:', user);
+
+                        if (!user || !user.email) {
+                            message.error('登录之后才能点赞哦');
+                            return;
+                        }
+                        console.log('hasThumbUp:', hasThumbUp);
+                        if (result.code === 0) {
+                            // message.success('点赞成功');
+                            store.dispatch({ type: hasThumbUp ? 'user/cancelThumbUp' : 'user/thumbUp', payload: id });
+                            thumb_up_count = thumb_up_count + (hasThumbUp ? -1 : 1);
+                            //通知给父页面，更新list
+                            onImgThumbUpActionDone && onImgThumbUpActionDone(id, hasThumbUp ? 'cancel' : 'add');
+                        } else {
+                            message.error(result.message);
+                        }
+
+                    }}>
+                        {userThumbUpList.includes(id) ? <LikeFilled title="取消点赞" style={{ color: "#ff5722" }} /> : <LikeOutlined title="点赞" />}
+                        <p style={{ position: "relative", fontSize: "12px", marginLeft: "4px", top: "2px" }}>{thumb_up_count}</p>
+                        {/* <LikeOutlined title="点赞" style={{color:"#ff2626"}} /> */}
+                    </div>}
                     {/* {JSON.stringify(userThumbUpList)} */}
 
 

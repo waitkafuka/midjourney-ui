@@ -71,7 +71,7 @@ const Index: React.FC = () => {
   //测试
   // const [messages, setMessages] = useState<Message[]>([{
   //   text: '测试',
-  //   img: 'https://oss-cdn-h.youyi.asia/attachments/1100632439031877675/1109823643304853564/waitkafuka_an_asian_woman_poses_for_a_portrait_in_the_style_of__61423d59-7663-42d4-b972-eb4a2cf1e6d6.png?x-oss-process=style/scale_500',
+  //   img: 'https://och.superx.chat/attachments/1100632439031877675/1109823643304853564/waitkafuka_an_asian_woman_poses_for_a_portrait_in_the_style_of__61423d59-7663-42d4-b972-eb4a2cf1e6d6.png?x-oss-process=style/scale_500',
   //   progress: 'done',
   //   hasTag: true,
   // }]);
@@ -602,7 +602,7 @@ const Index: React.FC = () => {
           localStorage.setItem('noAllowQrcode', 'true')
         }} />
         <p>加入绘画交流群：</p>
-        <img src="//cdn.superx.chat/stuff/1.png" alt="" />
+        <img src="//c.superx.chat/stuff/1.png" alt="" />
       </div> */}
       {/* <List
         className="mx-auto justify-start overflow-y-auto img-list-box"
@@ -633,7 +633,7 @@ const Index: React.FC = () => {
 
               {/* {!img && <Spin tip="绘画中，正常 1 分钟内可完成，如遇排队，可能需要 1-2 分钟。"></Spin>} */}
               {!img && <div style={{ textAlign: "center" }}>
-                <img style={{ width: "130px" }} src="https://cdn.superx.chat/stuff/default.svg" alt="" /> <br />
+                <img style={{ width: "130px" }} src="https://c.superx.chat/stuff/default.svg" alt="" /> <br />
                 <div style={{ marginTop: "10px", display: "flex", textAlign: "center", justifyContent: "center" }}><Spin tip=""></Spin>  <span style={{ color: "#888", fontSize: "13px" }}>正在努力绘画...</span></div>
               </div>}
               {/* 隐藏一个原图，这是为了提前缓存，以便在后面点击查看大图的时候能够更快加载 */}

@@ -24,9 +24,9 @@ const cookbook = () => {
 
 `
 // ## 本站公众号
-// [![](https://cdn.superx.chat/stuff/qrcode.jpg)](https://cdn.superx.chat/stuff/qrcode.jpg)
+// [![](https://c.superx.chat/stuff/qrcode.jpg)](https://c.superx.chat/stuff/qrcode.jpg)
 // ## 微信群
-// ![](https://cdn.superx.chat/stuff/group.png)
+// ![](https://c.superx.chat/stuff/group.png)
 
     return (
         <div style={{ paddingLeft: "15px" }} className='markdown-body' >

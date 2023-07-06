@@ -90,7 +90,7 @@ const PaingPoint = ({ }) => {
                 <div style={{ display: "flex" }}>
                     <div>
                         <img src={qrCodeSrc} />
-                        <div style={{ display: "flex", alignItems: "center", justifyContent: "center" }}><img style={{ marginRight: "5px", width: "20px" }} src="https://cdn.superx.chat/wechatlogo.png" />请使用微信扫码支付</div>
+                        <div style={{ display: "flex", alignItems: "center", justifyContent: "center" }}><img style={{ marginRight: "5px", width: "20px" }} src="https://c.superx.chat/wechatlogo.png" />请使用微信扫码支付</div>
                     </div>
                     <div style={{ display: "flex", flexGrow: 1, lineHeight: 1.6, textAlign: "center", alignItems: "center", justifyContent: "center", flexDirection: "column" }}>
                         <div>1000 个点数 / 68 元</div>

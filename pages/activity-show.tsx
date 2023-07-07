@@ -120,7 +120,7 @@ const ActivityResult = () => {
     return (
         <div style={{ padding: "20px" }}>
             <h2>{lastMonth}月份大赛结果公示</h2>
-            <p style={{ margin: "10px 0" }}>备注：以下点赞数量为{lastMonth}月份时间范围内的点赞数量，因此在点击进入图片详情页的时候，点赞数量也许会变多，是在其他时间的点赞数据，并非数据错误。点赞数量相同的按时间先后顺序排列。</p>
+            <p style={{ margin: "10px 0" }}>备注：以下点赞数量为{lastMonth}月份时间范围内的点赞数量，因此在点击进入图片详情页的时候，点赞数量也许会变多，是在其他时间的点赞数据，非数据错误。点赞数量相同的按时间先后顺序排列。</p>
             <div style={{ marginTop: "20px" }}>
                 <Table columns={columns} pagination={false} dataSource={lastMonthArray} />
             </div>

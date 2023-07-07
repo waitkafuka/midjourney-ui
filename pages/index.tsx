@@ -215,6 +215,13 @@ const Index: React.FC = () => {
         result = result.data;
         setIsTranslating(false);
         console.log('翻译结果', result);
+        //长度限制 500 个字符
+        // if (result.length > 500) {
+        //   messageApi.error('提示词过长，不能超过 500 个字符，请重新输入', 10);
+        //   return;
+        // }
+        //去掉文字中的换行和回车
+        
         newMessage.text = `${imgStrArray.join(' ')} ${result}`;
         setInputValue(result);
         // }
@@ -223,6 +230,9 @@ const Index: React.FC = () => {
       setMessages(msgs => [...msgs, newMessage]);
       setHasStartImagin(true);
       try {
+        newMessage.text = newMessage.text.replace(/[\r\n]/g, '');
+        // alert('翻译结果' + newMessage.text)
+        // return;
         await Imagine(
           JSON.stringify({ prompt: newMessage.text, clientId }),
           (data: any) => {

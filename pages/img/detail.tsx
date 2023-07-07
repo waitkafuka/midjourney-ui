@@ -6,15 +6,19 @@ import { requestAliyunArt } from '../../request/http';
 import { ImgCardModel } from '../../scripts/types';
 import PureImgCard from '../../components/masonry/PureImgCard'
 import { getQueryString } from '../../scripts/utils';
+import { message } from 'antd';
 
 export default function ImgDetail() {
     const [imgDetail, setImgDetail] = useState<ImgCardModel>();//图片详情
     const router = useRouter();
 
-    const queryImg = async (img_id: string) => {
-        const { data } = await requestAliyunArt('get-img-detail', { img_id });
-        console.log(data);
-        setImgDetail(data);
+    const queryImg = async (id: string) => {
+        const result = await requestAliyunArt('get-img-detail', { id });
+        console.log(result);
+        if (result.code !== 0) {
+            message.error(result.message, 5);
+        }
+        setImgDetail(result.data);
     }
 
     const onImgThumbUpActionDone = (imgId: number, action: string) => {
@@ -29,8 +33,8 @@ export default function ImgDetail() {
 
     }
     useEffect(() => {
-        const img_id = getQueryString('img_id');
-        queryImg(img_id);
+        const id = getQueryString('id');
+        queryImg(id);
     }, []);
 
 

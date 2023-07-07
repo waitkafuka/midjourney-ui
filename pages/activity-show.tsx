@@ -34,6 +34,14 @@ function convertToUpperCaseNumber(number: number) {
     return result;
 }
 
+function hideEmail(email: string) {
+    if (email.length >= 2) {
+        return "**" + email.substring(3);
+    } else {
+        return email;
+    }
+}
+
 const ActivityResult = () => {
     const [lastMonthArray, setLastMonthArray] = useState<[]>([]);
     const [thisMonthArray, setThisMonthArray] = useState<[]>([]);
@@ -53,6 +61,7 @@ const ActivityResult = () => {
             dataIndex: 'email',
             key: 'email',
             width: 150,
+            render: (d) => <span>{hideEmail(d)}</span>,
         },
         {
             title: '日期',

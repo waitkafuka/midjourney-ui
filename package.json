@@ -40,6 +40,7 @@
     "@types/qrcode": "1.5.0",
     "axios": "^1.3.6",
     "clipboard": "2.0.11",
+    "echarts": "5.4.2",
     "eventsource-parser": "^1.0.0",
     "github-markdown-css": "5.2.0",
     "midjourney": "2.1.30",

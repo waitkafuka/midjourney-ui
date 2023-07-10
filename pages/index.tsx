@@ -199,9 +199,7 @@ const Index: React.FC = () => {
         let result = {} as any;
         let imgStrArray = newMessage.text.match(imgExp) || [];
         try {
-
           result = await requestAliyun('translate', { content: newMessage.text.replace(imgExp, '') });
-
         } catch (error) {
           messageApi.error('翻译出错，请稍后重试，请确保您的输入词中不包含政治、色情、暴力等词汇', 10);
           setIsTranslating(false);

@@ -48,8 +48,21 @@ export default function OrderCount() {
     const [dateArray, setDateArray] = useState<string[]>(getDateArray(dayjs().subtract(defaultDays, 'day').format(format), dayjs().format(format)));
     const [dayCountSeries, setDayCountSeries] = useState<any[]>([]);
     const [hourCountSeries, setHourCountSeries] = useState<any[]>([]);
+    const [hourCountSumSeries, setHourCountSumSeries] = useState<any[]>([]);
     const [hourArray, setHourArray] = useState<string[]>(timeArray);
     const [onlybaidu, setOnlybaidu] = useState<boolean>(false);
+
+    function calculateSumArray(arr: any) {
+        let sumArr = [];
+        let sum = 0;
+
+        for (let i = 0; i < arr.length; i++) {
+            sum += arr[i];
+            sumArr.push(sum);
+        }
+
+        return sumArr;
+    }
 
     const queryOrder = async () => {
         const result = await requestAliyun('order-count', { startDate, endDate, onlybaidu });
@@ -70,6 +83,15 @@ export default function OrderCount() {
                 name: dateArray[index],
                 type: 'line',
                 data: item.map((hourItem: any) => hourItem.total_orders)
+            }
+        }))
+
+        //设置小时汇总数据
+        setHourCountSumSeries(result.hourCount.map((item: any, index: number) => {
+            return {
+                name: dateArray[index],
+                type: 'line',
+                data: calculateSumArray(item.map((hourItem: any) => hourItem.total_orders))
             }
         }))
     }
@@ -101,6 +123,8 @@ export default function OrderCount() {
             <LineChart title={'每日订单统计'} legendData={['数量']} yMax={200} xAxisData={dateArray} series={dayCountSeries} />
             <div style={{ height: "30px" }}></div>
             <LineChart title={'每日小时明细'} legendData={dateArray} yMax={30} xAxisData={hourArray} series={hourCountSeries} />
+            <div style={{ height: "30px" }}></div>
+            <LineChart title={'每日小时汇总明细'} legendData={dateArray} yMax={200} xAxisData={hourArray} series={hourCountSumSeries} />
         </div>
     );
 }

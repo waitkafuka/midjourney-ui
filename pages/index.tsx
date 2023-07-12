@@ -237,7 +237,7 @@ const Index: React.FC = () => {
             if (data.code === 40015) {
               //未登录
               setTimeout(() => {
-                window.location.href = process.env.NODE_ENV === 'development' ? '/login' : '/login.html';
+                window.location.href = process.env.NODE_ENV === 'development' ? '/login' : '/login/';
               }, 1000)
               return;
             }

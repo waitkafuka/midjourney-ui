@@ -22,6 +22,11 @@ const PaingPoint = ({ }) => {
     const u = sessionStorage.getItem('u');
 
     const setModalQrcode = async () => {
+        let pkgId = 10;
+        //如果是测试链接，ID 改为 13
+        if (window.location.href.indexOf('art.yczktek.com') > -1) {
+            pkgId = 13;
+        }
         //获取用户邮箱
         const email = user.email;
         if (!email) {
@@ -31,7 +36,7 @@ const PaingPoint = ({ }) => {
             return;
             // }, 1000);
         };
-        const base64Url = await QRCode.toDataURL(`https://chat.youyi.asia/pay/?u=${u}&email=${email}&pkgId=10&bd_vid=${sessionStorage.getItem('bd_vid') || ''}`)
+        const base64Url = await QRCode.toDataURL(`https://chat.youyi.asia/pay/?u=${u}&email=${email}&pkgId=${pkgId}&bd_vid=${sessionStorage.getItem('bd_vid') || ''}`)
         setQrCodeSrc(base64Url);
     }
 

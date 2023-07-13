@@ -17,6 +17,7 @@ interface ImgListPageProps {
 const PaingPoint = ({ }) => {
     const [qrCodeSrc, setQrCodeSrc] = useState<string>('');
     const user = useSelector((state: any) => state.user.info);
+    const [price, setPrice] = useState<string>('68');
     const isShowBuyPointDialog = useSelector((state: any) => state.user.isShowBuyPointDialog);
     //从链接中取出u 参数
     const u = sessionStorage.getItem('u');
@@ -25,6 +26,7 @@ const PaingPoint = ({ }) => {
         let pkgId = 10;
         //如果是测试链接，ID 改为 13
         if (window.location.href.indexOf('art.yczktek.com') > -1) {
+            setPrice('98')
             pkgId = 13;
         }
         //获取用户邮箱
@@ -98,7 +100,7 @@ const PaingPoint = ({ }) => {
                         <div style={{ display: "flex", alignItems: "center", justifyContent: "center" }}><img style={{ marginRight: "5px", width: "20px" }} src="https://c.superx.chat/wechatlogo.png" />请使用微信扫码支付</div>
                     </div>
                     <div style={{ display: "flex", flexGrow: 1, lineHeight: 1.6, textAlign: "center", alignItems: "center", justifyContent: "center", flexDirection: "column" }}>
-                        <div>1000 个点数 / 68 元</div>
+                        <div>1000 个点数 / {price} 元</div>
                         <div>可应用于 Stable Diffusion、Midjourney、DALLE，点数永久有效。</div>
                         <div>每张图消耗 8 个点数（SD 根据参数消耗不同点数）</div>
                         <div>（ midjourney四宫格算一张图）</div>

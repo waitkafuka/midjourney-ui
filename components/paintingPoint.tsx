@@ -38,7 +38,7 @@ const PaingPoint = ({ }) => {
             return;
             // }, 1000);
         };
-        const base64Url = await QRCode.toDataURL(`https://chat.youyi.asia/pay/?u=${u}&email=${email}&pkgId=${pkgId}&bd_vid=${sessionStorage.getItem('bd_vid') || ''}`)
+        const base64Url = await QRCode.toDataURL(`https://chat.youyi.asia/pay/?channel=${window.location.host}&u=${u}&email=${email}&pkgId=${pkgId}&bd_vid=${sessionStorage.getItem('bd_vid') || ''}`)
         setQrCodeSrc(base64Url);
     }
 

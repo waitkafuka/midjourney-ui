@@ -134,7 +134,9 @@ a:hover {
 .param-wrap {
   background-color: #000;
 }
-
+.line-change-box{
+  display: flex;
+}
 /**
   * 在移动端
   */
@@ -143,8 +145,12 @@ a:hover {
     padding: 24px 10px !important;
   }
 
+  .line-change-box{
+    display: none;
+  }
+
   .param-table-box {
-    height: 65vh;
+    height: 62vh;
     overflow: auto;
   }
   .workspace-img-container {

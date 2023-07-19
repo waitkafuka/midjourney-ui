@@ -134,7 +134,10 @@ a:hover {
 .param-wrap {
   background-color: #000;
 }
-.line-change-box{
+.line-change-box1{
+  display: none;
+}
+.line-change-box2{
   display: flex;
 }
 /**
@@ -144,8 +147,10 @@ a:hover {
   .ant-layout-content {
     padding: 24px 10px !important;
   }
-
-  .line-change-box{
+  .line-change-box1{
+    display: none;
+  }
+  .line-change-box2{
     display: none;
   }
 

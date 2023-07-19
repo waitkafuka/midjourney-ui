@@ -697,6 +697,19 @@ const Index: React.FC = () => {
         </>
       }
       <div className="prompt-input-wrap">
+        {/* 线路切换1 */}
+        <div className="line-change-box1">
+          <div style={{ marginRight: "5px" }}>
+            <Select options={nodes} value={clientId} disabled={hasStartImagin} style={{ width: 140 }} onChange={v => {
+              setClientId(v);
+            }} />
+
+          </div>
+          <Tooltip title={`为保证服务高可用，缩短等待时间，特新增${clientCount}个服务器节点。如果您生成出错或时间过长，可以选择切换节点。一般情况下不需要切换。（生成开始后不可切换，如需切换请刷新页面。）`}>
+            <QuestionCircleOutlined style={{ cursor: "pointer" }} />
+          </Tooltip>
+        </div>
+        {/* 参考图上传 */}
         <div style={{ display: "flex", alignItems: "center", flexWrap: "wrap" }}>
           <AliyunOSSUploader buttonText="添加参考图" onChange={fileList => {
             if (fileList.length > 0) {
@@ -738,8 +751,8 @@ const Index: React.FC = () => {
               setIsShowParamsTips(v);
             }} /> </span>
           </div>
-          {/* 线路切换 */}
-          <div className="line-change-box">
+          {/* 线路切换1 */}
+          <div className="line-change-box2">
             <div style={{ marginRight: "5px" }}>
               <Select options={nodes} value={clientId} disabled={hasStartImagin} style={{ width: 140 }} onChange={v => {
                 setClientId(v);

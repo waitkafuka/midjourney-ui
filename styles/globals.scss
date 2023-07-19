@@ -125,6 +125,16 @@ a:hover {
   }
 }
 
+.param-table-box {
+  height: 70vh;
+  overflow: auto;
+  box-shadow: 0px 3px 6px 0px #dcdcdc;
+}
+
+.param-wrap {
+  background-color: #000;
+}
+
 /**
   * 在移动端
   */
@@ -133,6 +143,10 @@ a:hover {
     padding: 24px 10px !important;
   }
 
+  .param-table-box {
+    height: 65vh;
+    overflow: auto;
+  }
   .workspace-img-container {
     width: 100% !important;
     height: auto !important;
@@ -342,6 +356,9 @@ button.ant-btn-primary:not(:disabled):hover {
 
 //在日间模式下
 @media (prefers-color-scheme: light) {
+  .param-wrap {
+    background-color: #fff;
+  }
   button.ant-btn-default:not(:disabled):hover {
     color: #333 !important;
     border-color: #999 !important;

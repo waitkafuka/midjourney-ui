@@ -116,11 +116,11 @@ const Index: React.FC = () => {
   const data: DataType[] = [
     {
       name: '--ar n:m',
-      describe: "图片尺寸宽:高（Aspect Ratios），例如：--ar 16:9"
+      describe: "图片尺寸宽:高（Aspect Ratios），例如：a cat --ar 16:9"
     },
     {
       name: '--chaos 0-100',
-      describe: "变异程度，默认 0。数字越大，图片想象力越发散，例如：--chaos 50"
+      describe: "变异程度，默认 0。数字越大，图片想象力越发散，例如：a cat --chaos 50"
     },
     {
       name: '--iw 0-2',
@@ -136,11 +136,11 @@ const Index: React.FC = () => {
     },
     {
       name: '--style raw ',
-      describe: "减少 midjourney 的艺术加工，生成更摄影化的图片。例如：--style raw（只在v5.1下有效）"
+      describe: "减少 midjourney 的艺术加工，生成更摄影化的图片。例如：--style raw"
     },
     {
       name: '--style <cute, expressive, original, or scenic>',
-      describe: "设置动漫风格：可爱、表现力、原始、或者风景。例如：--style cute（只在--niji 5下有效）"
+      describe: "设置动漫风格：可爱、表现力、原始、或者风景。例如：--style cute（必须搭配--niji使用，如：a cat --style cute --niji）"
     },
     {
       name: '--s（或--stylize） 数字',
@@ -148,7 +148,7 @@ const Index: React.FC = () => {
     },
     {
       name: '--niji',
-      describe: "模型设置。设置为日本动漫风格模型，例如：--niji，也可以写成：--niji 5（目前 5 可以省略）"
+      describe: "设置为日本动漫风格模型，例如：--niji，也可以写成：--niji 5（目前 5 可以省略）"
     },
     {
       name: '--v <1-5> ',
@@ -219,7 +219,7 @@ const Index: React.FC = () => {
         //   return;
         // }
         //去掉文字中的换行和回车
-        
+
         newMessage.text = `${imgStrArray.join(' ')} ${result}`;
         setInputValue(result);
         // }
@@ -697,7 +697,7 @@ const Index: React.FC = () => {
         </>
       }
       <div className="prompt-input-wrap">
-        <div style={{ display: "flex", alignItems: "center" }}>
+        <div style={{ display: "flex", alignItems: "center", flexWrap: "wrap" }}>
           <AliyunOSSUploader buttonText="添加参考图" onChange={fileList => {
             if (fileList.length > 0) {
               //只在上传完成后做操作
@@ -722,11 +722,16 @@ const Index: React.FC = () => {
             }
           }}></AliyunOSSUploader>
           {/* 参数手册 */}
-          <div style={{ position: "relative" }}>
-            <div style={{ width: "100%", maxWidth: "800px", position: "fixed", left: "50%", transform: "translateX(-50%)", top: "0", display: `${isShowParamsTips ? 'block' : 'none'}` }}>
-              <Table columns={columns} dataSource={data} pagination={false} />
-              <div style={{ marginTop: "10px" }}>
-                示例：a white cat --niji --ar 4:3 --style cute（参数放在最后，空格分隔，不要加任何多余符号，如句号、小数点等。）
+          <div style={{ position: "relative", marginRight: "20px" }}>
+            <div className="param-wrap" style={{ width: "100%", maxWidth: "800px", position: "fixed", left: "50%", transform: "translateX(-50%)", top: "0", display: `${isShowParamsTips ? 'block' : 'none'}` }}>
+              <div className="param-table-box">
+                <Table columns={columns} dataSource={data} pagination={false} />
+              </div>
+              <div style={{ marginTop: "10px", padding: "10px" }}>
+                示例：a cat --ar 4:3 --style cute --niji（1.参数放在提示词之后 2.参数和值之间用空格分隔 3.参数与参数之间也需要用空格分隔 4.参数之后不要加任何多余符号，如句号、小数点、其他字符等。）
+              </div>
+              <div style={{ marginTop: "5px", padding: "10px" }}>
+                常见错误：1. a cat--niji(--前缺少空格) 2.a cat --niji.（最后多一个小数点） 3.--ar 16:9 a cat（参数应该在提示词之后）4.a cat -- ar 16:9（--和ar之间不能有空格）
               </div>
             </div>
             <span style={{ marginLeft: "20px", cursor: "pointer", fontSize: "13px" }}>参数手册 <Switch size="small" onChange={v => {
@@ -734,7 +739,7 @@ const Index: React.FC = () => {
             }} /> </span>
           </div>
           {/* 线路切换 */}
-          <div style={{ marginLeft: "20px", marginRight: "5px" }}>
+          <div style={{ marginRight: "5px" }}>
             <Select options={nodes} value={clientId} disabled={hasStartImagin} style={{ width: 140 }} onChange={v => {
               setClientId(v);
             }} />

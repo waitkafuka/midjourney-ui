@@ -20,7 +20,7 @@ const PaingPoint = ({ }) => {
     const [price, setPrice] = useState<string>('68');
     const isShowBuyPointDialog = useSelector((state: any) => state.user.isShowBuyPointDialog);
     //从链接中取出u 参数
-    const u = sessionStorage.getItem('u');
+    const u = localStorage.getItem('u');
 
     const setModalQrcode = async () => {
         let pkgId = 10;
@@ -38,7 +38,7 @@ const PaingPoint = ({ }) => {
             return;
             // }, 1000);
         };
-        const base64Url = await QRCode.toDataURL(`https://chat.youyi.asia/pay/?channel=${window.location.host}&u=${u}&email=${email}&pkgId=${pkgId}&bd_vid=${sessionStorage.getItem('bd_vid') || ''}`)
+        const base64Url = await QRCode.toDataURL(`https://chat.youyi.asia/pay/?channel=${window.location.host}&u=${u}&email=${email}&pkgId=${pkgId}&bd_vid=${localStorage.getItem('bd_vid') || ''}`)
         setQrCodeSrc(base64Url);
     }
 
@@ -66,6 +66,13 @@ const PaingPoint = ({ }) => {
             type: 'user/setIsShowBuyPointDialog',
             payload: false
         })
+        //支付完成后，清除bd_vid和u 
+        if (data.user.point_count >= 1000) {
+            console.log('支付成功');
+            localStorage.removeItem('bd_vid');
+            localStorage.removeItem('u');
+        }
+
         // dispatch(setUserInfo(data.user || {}))
     };
 

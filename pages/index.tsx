@@ -468,12 +468,12 @@ const Index: React.FC = () => {
     //从链接中获取bd_vid参数
     const bd_vid = getQueryString('bd_vid');
     if (bd_vid) {
-      sessionStorage.setItem('bd_vid', bd_vid)
+      localStorage.setItem('bd_vid', bd_vid)
     }
 
     const u = getQueryString('u');
     if (u) {
-      sessionStorage.setItem('u', u)
+      localStorage.setItem('u', u)
     }
   }
 

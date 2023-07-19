@@ -98,7 +98,7 @@ const ROUTES: Route = {
     {
       path: '/',
       target: '_blank',
-      name: 'ChatGPT',
+      name: 'AI 聊天',
       key: 'chatgpt',
       icon: <WechatOutlined />,
     },

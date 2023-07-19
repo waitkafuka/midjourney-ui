@@ -167,7 +167,21 @@ export default function Main(children: JSX.Element) {
     setUser(store.getState().user.info)
   })
 
+  const noLoginItems: MenuProps['items'] = [
+    {
+      key: '2',
+      label: (
+        <Button type="text" block onClick={async () => {
+          Router.push('/contact');
+        }}>
+          关于我们
+        </Button>
+      ),
+    },
 
+
+
+  ];
   const items: MenuProps['items'] = [
     // {
     //   key: '2',
@@ -287,11 +301,13 @@ export default function Main(children: JSX.Element) {
               <>
                 {user && user.email ? <Dropdown menu={{ items }} placement="top" arrow={{ pointAtCenter: true }}>
                   <Button block>{user.email}</Button>
-                </Dropdown> : <Button block onClick={() => {
-                  window.location.href = `/${process.env.NODE_ENV === 'development' ? 'login' : 'login/'}?redirect=/art`
-                }}>
-                  登录
-                </Button>}
+                </Dropdown> : <Dropdown menu={{ items: noLoginItems }} placement="top" arrow={{ pointAtCenter: true }}>
+                  <Button block onClick={() => {
+                    window.location.href = `/${process.env.NODE_ENV === 'development' ? 'login' : 'login/'}?redirect=/art`
+                  }}>
+                    登录
+                  </Button>
+                </Dropdown>}
 
                 <p
                   style={{

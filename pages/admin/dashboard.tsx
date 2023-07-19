@@ -6,7 +6,7 @@ import { requestAliyun } from '../../request/http';
 import { ImgCardModel } from '../../scripts/types';
 import PureImgCard from '../../components/masonry/PureImgCard'
 import { getQueryString } from '../../scripts/utils';
-import { message } from 'antd';
+import { Select, message } from 'antd';
 import LineChart from '../../components/charts/LineChart'
 import { DatePicker, Checkbox, Switch } from 'antd';
 import type { CheckboxChangeEvent } from 'antd/es/checkbox';
@@ -51,6 +51,16 @@ export default function OrderCount() {
     const [hourCountSumSeries, setHourCountSumSeries] = useState<any[]>([]);
     const [hourArray, setHourArray] = useState<string[]>(timeArray);
     const [onlybaidu, setOnlybaidu] = useState<boolean>(false);
+    const [domain, setDomain] = useState<string>('');
+    const domains = [
+        { label: '全部', value: '' },
+        { label: 'chat.yczktek.com(主账号)', value: 'chat.yczktek.com' },
+        { label: 'design.yczktek.com(子账号01)', value: 'design.yczktek.com' },
+        { label: 'ai.yczktek.com(子账号02)', value: 'ai.yczktek.com' },
+        { label: 'art.yczktek.com(子账号03)', value: 'art.yczktek.com' },
+        // { label: 'superx.chat（03）', value: 'superx.chat' },
+        // { label: 'vision.yczktek.com', value: 'vision.yczktek.com' },
+    ]
 
     function calculateSumArray(arr: any) {
         let sumArr = [];
@@ -65,7 +75,11 @@ export default function OrderCount() {
     }
 
     const queryOrder = async () => {
-        const result = await requestAliyun('order-count', { startDate, endDate, onlybaidu });
+        let pkgId = 10;
+        if(domain === 'art.yczktek.com') {
+            pkgId = 13;
+        }
+        const result = await requestAliyun('order-count', { startDate, endDate, onlybaidu, domain, pkgId });
         console.log(result);
         if (result.code !== 0) {
             message.error(result.message, 5);
@@ -106,7 +120,7 @@ export default function OrderCount() {
 
     useEffect(() => {
         queryOrder();
-    }, [startDate, endDate, onlybaidu]);
+    }, [startDate, endDate, onlybaidu, domain]);
 
 
     return (
@@ -117,6 +131,10 @@ export default function OrderCount() {
                     console.log(checked);
                     setOnlybaidu(checked);
                 })} />
+                &nbsp;&nbsp;&nbsp;&nbsp;
+                选择应用：<Select options={domains} value={domain} style={{ width: 260 }} onChange={v => {
+                    setDomain(v);
+                }} />
             </div>
             {/* 每日订单 */}
             {/* <h2>日订单统计</h2> */}

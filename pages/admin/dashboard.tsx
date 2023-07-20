@@ -58,6 +58,8 @@ export default function OrderCount() {
         { label: 'design.yczktek.com(子账号01)', value: 'design.yczktek.com' },
         { label: 'ai.yczktek.com(子账号02)', value: 'ai.yczktek.com' },
         { label: 'art.yczktek.com(子账号03)', value: 'art.yczktek.com' },
+        { label: 'superx360.com', value: 'superx360.com' },
+        { label: 'superx.chat', value: 'superx.chat' },
         // { label: 'superx.chat（03）', value: 'superx.chat' },
         // { label: 'vision.yczktek.com', value: 'vision.yczktek.com' },
     ]

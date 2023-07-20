@@ -172,9 +172,19 @@ export default function Main(children: JSX.Element) {
       key: '2',
       label: (
         <Button type="text" block onClick={async () => {
-          Router.push('/contact');
+          Router.push('/about');
         }}>
           关于我们
+        </Button>
+      ),
+    },
+    {
+      key: '3',
+      label: (
+        <Button type="text" block onClick={async () => {
+          Router.push('/contact');
+        }}>
+          联系我们
         </Button>
       ),
     },
@@ -207,6 +217,16 @@ export default function Main(children: JSX.Element) {
       ),
     },
     {
+      key: '4',
+      label: (
+        <Button type="text" block onClick={async () => {
+          Router.push('/about');
+        }}>
+          关于我们
+        </Button>
+      ),
+    },
+    {
       key: '2',
       label: (
         <Button type="text" block onClick={async () => {
@@ -216,6 +236,7 @@ export default function Main(children: JSX.Element) {
         </Button>
       ),
     },
+
 
     {
       key: '1',

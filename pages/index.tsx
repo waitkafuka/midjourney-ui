@@ -691,7 +691,7 @@ const Index: React.FC = () => {
             <Divider></Divider>
           </div>)}
         </div> : <>
-          <p className="no-content-tips">使用 midjourney 生成你的第一幅人工智能绘画作品。</p>
+          <p className="no-content-tips">使用 midjourney 生成你的专属人工智能绘画作品。</p>
           {/* <p className="no-content-tips">请勿使用违禁词汇，违者将被封号。</p> */}
           {!user.email && <p className="no-content-tips">您尚未登录，请先<a href="/login/?redirect=/art" style={{ fontSize: "14px", textDecoration: "underline" }}> 登录</a></p>}
         </>

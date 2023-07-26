@@ -170,6 +170,7 @@ export default function Main(children: JSX.Element) {
   const [dark, setDark] = useState(false);
   const [user, setUser] = useState({} as any);
   const [title, setTitle] = useState('superx.chat');
+  const [logoSrc, setLogoSrc] = useState('/art/logo.png');
   // const user = useSelector((state: any) => state.user.info);
   store.subscribe(() => {
     setUser(store.getState().user.info)
@@ -271,6 +272,7 @@ export default function Main(children: JSX.Element) {
     //如果链接中包含ued，就隐藏购买弹窗
     if (window.location.href.indexOf('ued') > -1) {
       setTitle('学科网UED');
+      setLogoSrc('/art/logo-xkw.png');
       //隐藏左侧大赛入口、艺术公园等
       ROUTES.routes = ROUTES.routes.filter((item: any) => {
         const unshows = ['activityfirst', 'paintings', 'chatgpt', 'stablediffusion', 'dalle']
@@ -315,7 +317,7 @@ export default function Main(children: JSX.Element) {
         icon: <GithubFilled></GithubFilled>, title:"superx.chat", url:'https://'
       }]}></ProLayout> */}
         <ProLayout
-          logo={"/art/logo.png"}
+          logo={logoSrc}
           title={title}
           style={{ minHeight: '100vh' }}
           route={ROUTES}

@@ -50,6 +50,13 @@ const ROUTES: Route = {
         key: "dalle",
       },]
     },
+    // {
+    //   name: '艺术二维码',
+    //   key: 'artqrcode',
+    //   icon: <i className='iconfont icon-erweima'></i>,
+    //   path: '/art/qrcode/',
+    //   target: "_blank",
+    // },
     {
       name: '教程',
       key: "guideParent",
@@ -57,13 +64,13 @@ const ROUTES: Route = {
       children: [
         {
           key: 'guide',
-          path: '/art/guide',
+          path: '/art/guide/',
           target: "_blank",
           name: '入门指引',
           icon: <BulbOutlined />,
         },
         {
-          path: '/art/cookbook',
+          path: '/art/cookbook/',
           target: "_blank",
           name: '参数大全',
           key: 'cookbook',
@@ -71,14 +78,14 @@ const ROUTES: Route = {
         }]
     },
     {
-      path: '/art/mypaintings',
+      path: '/art/mypaintings/',
       target: '_blank',
       name: '我的作品',
       key: 'mypaintings',
       icon: <i className='iconfont icon-huihua'></i>,
     },
     {
-      path: '/art/paintings',
+      path: '/art/paintings/',
       target: '_blank',
       name: '艺术公园',
       key: 'paintings',
@@ -113,7 +120,7 @@ const ROUTES: Route = {
         name: '大赛规则',
         key: "activity",
       }, {
-        path: '/art/activity-show',
+        path: '/art/activity-show/',
         target: "_blank",
         name: '结果公示',
         key: "activity-show",
@@ -162,6 +169,7 @@ export default function Main(children: JSX.Element) {
   const [openKeys, setOpenKeys] = useState<WithFalse<string[]>>(['start']);
   const [dark, setDark] = useState(false);
   const [user, setUser] = useState({} as any);
+  const [title, setTitle] = useState('superx.chat');
   // const user = useSelector((state: any) => state.user.info);
   store.subscribe(() => {
     setUser(store.getState().user.info)
@@ -260,6 +268,27 @@ export default function Main(children: JSX.Element) {
 
   //页面初始化
   useEffect(() => {
+    //如果链接中包含ued，就隐藏购买弹窗
+    if (window.location.href.indexOf('ued') > -1) {
+      setTitle('学科网UED');
+      //隐藏左侧大赛入口、艺术公园等
+      ROUTES.routes = ROUTES.routes.filter((item: any) => {
+        const unshows = ['activityfirst', 'paintings', 'chatgpt', 'stablediffusion', 'dalle']
+        item.children && (item.children = item.children.filter((child: any) => {
+          if (unshows.indexOf(child.key) > -1) {
+            return false;
+          }
+          return true;
+        }))
+
+        if (unshows.indexOf(item.key) > -1) {
+          return false;
+        }
+        return true;
+      }
+      )
+
+    }
     setOpenKeys(['start']);
     // Check the theme when the user first visits the page
     if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
@@ -287,7 +316,7 @@ export default function Main(children: JSX.Element) {
       }]}></ProLayout> */}
         <ProLayout
           logo={"/art/logo.png"}
-          title="superx.chat"
+          title={title}
           style={{ minHeight: '100vh' }}
           route={ROUTES}
           openKeys={openKeys}

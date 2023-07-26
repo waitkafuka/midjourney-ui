@@ -1,10 +1,9 @@
-import { useEffect } from "react";
 import ImgListPage from "../components/ImgListPage";
 import { ImgCardModel, ImgPageType } from '../scripts/types'
 import { getQueryString } from "../scripts/utils";
 
-const Paintings: React.FC = () => {
-    const setBDVid = () => {
+const QrCode: React.FC = () => {
+    const setBDVid = (vid: string) => {
         //从链接中取出bd_vid参数
         // const url = new URL(window.location.href);
         const bd_vid = getQueryString('bd_vid');
@@ -13,11 +12,7 @@ const Paintings: React.FC = () => {
         }
     }
 
-    useEffect(() => {
-        setBDVid();
-    }, [])
-
-    return <ImgListPage type={ImgPageType.PUBLIC} />;
+    return <div>dw</div>
 }
 
-export default Paintings;
+export default QrCode;

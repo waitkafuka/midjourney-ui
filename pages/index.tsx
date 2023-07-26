@@ -58,6 +58,7 @@ const Index: React.FC = () => {
   const [inputDisable, setInputDisable] = useState(false);
   const [isTranslating, setIsTranslating] = useState(false);
   const [referImg, setReferImg] = useState('');
+  const [isShowBuyPointEntry, setIsShowBuyPointEntry] = useState<boolean>(true);
   const [showTips, setShowTips] = useState(true);
   const [showPublicTips, setShowPublicTips] = useState(true);
   const [clientId, setClientId] = useState(0)
@@ -510,6 +511,11 @@ const Index: React.FC = () => {
     setBDVid();
     showQRcode();
     setRandomClientId();
+    //页面初始化
+    //如果链接中包含ued参数，隐藏购买入口
+    if (window.location.href.indexOf('ued') > -1) {
+      setIsShowBuyPointEntry(false);
+    }
   }, []);
 
   return (
@@ -556,8 +562,9 @@ const Index: React.FC = () => {
     // </div>
     <div className="w-full mx-auto px-4 h-full overflow-y-hidden list-input-container">
 
+      {/* 购买点数 */}
+      {isShowBuyPointEntry && <div className='dalle-point-box'><PaintingPoint></PaintingPoint></div>}
 
-      <div className='dalle-point-box'><PaintingPoint></PaintingPoint></div>
       {contextHolder}
       {/* <Spin>{paintingTip}</Spin> */}
       {/* 操作提示弹窗 */}

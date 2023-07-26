@@ -76,7 +76,6 @@ const PaingPoint = ({ }) => {
         // dispatch(setUserInfo(data.user || {}))
     };
 
-    //初始化
     useEffect(() => {
         setModalQrcode();
     }, [user]);

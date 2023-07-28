@@ -310,10 +310,10 @@ const SD: React.FC = () => {
                     </Tooltip></>}
                 {/* 选择比例 */}
                 {fileList.length === 0 && <> <Space.Compact size="middle">
-                    <InputNumber max={1024} min={128} readOnly={false} step={64} style={{ width: "160px", borderRadius: 0 }} className="rect-input" addonBefore={<>图片宽高：</>} value={params.width} onChange={v => {
+                    <InputNumber max={1536} min={128} readOnly={false} step={64} style={{ width: "160px", borderRadius: 0 }} className="rect-input" addonBefore={<>图片宽高：</>} value={params.width} onChange={v => {
                         setParams({ ...params, width: v })
                     }} />
-                    <InputNumber max={1024} min={128} readOnly={false} step={64} value={params.height} onChange={v => {
+                    <InputNumber max={1536} min={128} readOnly={false} step={64} value={params.height} onChange={v => {
                         setParams({ ...params, height: v })
                     }} style={{ width: "70px" }} />
                 </Space.Compact>

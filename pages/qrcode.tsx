@@ -23,7 +23,7 @@ const QrCode: React.FC = () => {
         seed: '',
         prompt: '',
         negative_prompt: '',
-        qr_content: 'https://superx.chat/art/',
+        qr_content: process.env.NODE_ENV === 'development' ? 'https://superx.chat/art/' : '',
         model: '67',
         template_id: 0,
     }); //表单参数

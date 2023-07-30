@@ -18,12 +18,13 @@ interface OSSDataType {
 interface AliyunOSSUploadProps {
     value?: UploadFile[];
     onChange?: (fileList: UploadFile[]) => void;
-    buttonText: string;
-    listType?: 'text' | 'picture' | 'picture-card' | 'picture-circle'
+    buttonText?: string;
+    listType?: 'text' | 'picture' | 'picture-card' | 'picture-circle',
+    slot?: React.ReactNode;
 }
 
 
-const AliyunOSSUploader: React.FC<AliyunOSSUploadProps> = ({ value, listType = 'text', onChange, buttonText }) => {
+const AliyunOSSUploader: React.FC<AliyunOSSUploadProps> = ({ value, listType = 'text', onChange, buttonText, slot }) => {
     const [OSSData, setOSSData] = useState<OSSDataType>();
 
     const handleChange: UploadProps['onChange'] = ({ fileList }) => {
@@ -132,6 +133,7 @@ const AliyunOSSUploader: React.FC<AliyunOSSUploadProps> = ({ value, listType = '
     return <>
         <Upload {...uploadParams}>
             {listType === 'text' ? <Button icon={<UploadOutlined />}>{buttonText}</Button> : buttonText}
+            {slot}
 
         </Upload>
     </>

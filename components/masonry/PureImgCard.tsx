@@ -24,6 +24,7 @@ interface Props {
     // 类型，我的页面还是公开页面
     hasDelete: boolean,
     showThumbImg: boolean,
+    copylink?: boolean,
     isLoading: boolean,
     imgBasePath?: string,
     hasLikeButton?: boolean,
@@ -40,7 +41,7 @@ const { CheckableTag } = Tag;
 const baseWidth = 500;
 //从提示词中提取宽高比例
 
-const App = ({ model, columnWidth = 400, hasLikeButton = false, onImgThumbUpActionDone, onImgDeleted, ratio, isLoading, hasDelete, showThumbImg, imgBasePath = 'https://och.superx.chat' }: Props) => {
+const App = ({ model, columnWidth = 400, hasLikeButton = false, onImgThumbUpActionDone, onImgDeleted, copylink = false, ratio, isLoading, hasDelete, showThumbImg, imgBasePath = 'https://och.superx.chat' }: Props) => {
     let { img_url, prompt, create_time, id, is_public, thumb_up_count, painting_type } = model;
     const userThumbUpList = useSelector((state: any) => state.user.thumbUpList);
     const user = useSelector((state: any) => state.user.info);
@@ -52,10 +53,14 @@ const App = ({ model, columnWidth = 400, hasLikeButton = false, onImgThumbUpActi
             okText: '确定',
             cancelText: '取消',
             async onOk() {
-                await requestAliyunArt('delete-painting', { id });
-                message.success('删除成功');
-                //从列表中移除
-                onImgDeleted && onImgDeleted(id);
+                const data = await requestAliyunArt('delete-painting', { id });
+                if (data.code === 0) {
+                    message.success('删除成功');
+                    //从列表中移除
+                    onImgDeleted && onImgDeleted(id);
+                } else {
+                    message.error(data.message);
+                }
             },
             onCancel() {
                 console.log('Cancel');
@@ -66,7 +71,7 @@ const App = ({ model, columnWidth = 400, hasLikeButton = false, onImgThumbUpActi
     const height = useMemo(() => {
         const rt = ratio || getRatio(prompt);
         return getHeight(rt, baseWidth);
-    }, [prompt])
+    }, [prompt, ratio])
 
     const onImgClick = () => {
         // window.open(src, '_blank')
@@ -100,10 +105,10 @@ const App = ({ model, columnWidth = 400, hasLikeButton = false, onImgThumbUpActi
             <div className={css["masonry-action-wrap"]}>
                 <div className={css["masonry-action-box"]}>
                     {/* 复制提示词 */}
-                    <div className={`${css["masonry-action-item"]} copy-action`} data-clipboard-text={prompt} onClick={() => {
-                        message.success('prompt已复制')
+                    <div className={`${css["masonry-action-item"]} copy-action`} data-clipboard-text={copylink ? HDsrc : prompt} onClick={() => {
+                        message.success(`${copylink ? '图片链接' : 'prompt'}已复制`)
                     }}>
-                        <CopyOutlined key="copy" title="复制提示词" />
+                        <CopyOutlined key="copy" title={copylink ? '复制图片链接' : '复制提示词'} />
                     </div>
                     {/* 下载图片 */}
                     <div className={css["masonry-action-item"]} onClick={() => {

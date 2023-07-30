@@ -98,6 +98,9 @@ const App = ({ model, columnWidth, onImgDeleted, paint_params, type, onImgThumbU
                 {model.painting_type === 'sd' && <Tag color="rgba(76 76 109/70%)">
                     SD
                 </Tag>}
+                {model.painting_type === 'qrcode' && <Tag color="rgba(118 110 110/70%)">
+                    QrCode
+                </Tag>}
             </div>
             <div style={{ position: "absolute", right: "-8px", top: "-1px" }}>
                 <Tag color={model.painting_type === 'mj' ? 'rgba(76 76 109/70%)' : 'rgba(96 108 93/70%)'}>

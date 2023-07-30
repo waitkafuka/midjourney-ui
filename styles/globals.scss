@@ -104,12 +104,23 @@ a:hover {
 }
 
 /**
-  * 小于 1000 像素时
+  * 小于 1000 像素时 移动端 手机端
   */
 
 @media (max-width: 1000px) {
   .qr-code-modal {
     display: none !important;
+  }
+  div.ai-qrcode-wrapper{
+    width: 100%;
+    flex-wrap: wrap;
+    padding: 50px 20px;
+    .code-options-box,.code-result{
+      width: 100%;
+    }
+    .code-result{
+      margin-top: 50px;
+    }
   }
 }
 
@@ -134,10 +145,10 @@ a:hover {
 .param-wrap {
   background-color: #000;
 }
-.line-change-box1{
+.line-change-box1 {
   display: none;
 }
-.line-change-box2{
+.line-change-box2 {
   display: flex;
 }
 /**
@@ -147,10 +158,10 @@ a:hover {
   .ant-layout-content {
     padding: 24px 10px !important;
   }
-  .line-change-box1{
+  .line-change-box1 {
     display: none;
   }
-  .line-change-box2{
+  .line-change-box2 {
     display: none;
   }
 
@@ -367,6 +378,9 @@ button.ant-btn-primary:not(:disabled):hover {
 
 //在日间模式下
 @media (prefers-color-scheme: light) {
+  span.more-options-icon {
+    color: #333;
+  }
   .param-wrap {
     background-color: #fff;
   }
@@ -575,6 +589,98 @@ button.ant-btn-primary:not(:disabled):hover {
   top: -30px;
 }
 
+.cp {
+  cursor: pointer;
+}
+
+.inline-block {
+  display: inline-block;
+}
+
 .sd-img-params-box {
   margin-top: 10px;
+}
+.ai-qrcode-wrapper {
+  display: flex;
+  justify-content: center;
+  padding: 50px;
+  width: 1000px;
+  margin: 0 auto;
+  .form-item-label {
+    margin-bottom: 10px;
+    .label-right {
+      float: right;
+      cursor: pointer;
+      .iconfont {
+        margin-right: 5px;
+      }
+    }
+  }
+  .input-label {
+    margin-right: 5px;
+  }
+  .code-options-box,
+  .code-result {
+    width: 50%;
+  }
+}
+
+.more-options-icon {
+  color: #fff;
+}
+
+.art-form-item {
+  margin-bottom: 20px;
+  .form-item-value-row {
+    width: 200px;
+    flex-grow: 0.5;
+  }
+  &.horizontal {
+    display: flex;
+    justify-content: space-between;
+    .form-item-label {
+      margin-bottom: 0;
+      display: flex;
+      align-items: center;
+      svg {
+        margin-top: 1px;
+      }
+    }
+  }
+}
+
+.anticon.anticon-question-circle {
+  cursor: pointer;
+}
+.select-hover-options {
+  position: relative;
+  .select-hover-img {
+    display: none;
+  }
+  &:hover .select-hover-img {
+    display: block;
+    position: absolute;
+    top: 0;
+    right: 0;
+    z-index: 100;
+  }
+}
+.code-result {
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+}
+.art-desc {
+  margin: 0 auto;
+  width: 100%;
+  margin-top: 50px;
+  h2 {
+    text-align: center;
+  }
+}
+.qrcode-demo-tips {
+  margin-top: 10px;
+  text-align: center;
+  color: #999;
+  font-size: 12px;
 }

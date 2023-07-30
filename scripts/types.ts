@@ -22,5 +22,6 @@ export enum ImgPageType {
 export enum PaintingType {
     MJ = 'mj',
     SD = 'sd',
-    DALLE = 'dalle'
+    DALLE = 'dalle',
+    QRCODE = 'qrcode',
 }

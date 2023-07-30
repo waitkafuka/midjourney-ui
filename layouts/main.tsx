@@ -50,13 +50,13 @@ const ROUTES: Route = {
         key: "dalle",
       },]
     },
-    // {
-    //   name: '艺术二维码',
-    //   key: 'artqrcode',
-    //   icon: <i className='iconfont icon-erweima'></i>,
-    //   path: '/art/qrcode/',
-    //   target: "_blank",
-    // },
+    {
+      name: 'AI 艺术二维码',
+      key: 'artqrcode',
+      icon: <i className='iconfont icon-erweima'></i>,
+      path: '/art/qrcode/',
+      target: "_blank",
+    },
     {
       name: '教程',
       key: "guideParent",

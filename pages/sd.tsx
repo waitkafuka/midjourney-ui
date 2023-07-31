@@ -108,15 +108,15 @@ const SD: React.FC = () => {
         //生成图片的数量
         samples: 1,
         //步数
-        steps: 50,
+        steps: 35,
         //图片宽度
-        width: 512,
+        width: 1024,
         //图片高度
-        height: 512,
+        height: 1024,
         //参考图链接
         image_url: '',
         //引擎 id
-        engineId: 'stable-diffusion-512-v2-1'
+        engineId: 'stable-diffusion-xl-1024-v1-0'
     })
 
     const getImgSize = async (file: File) => {
@@ -331,23 +331,28 @@ const SD: React.FC = () => {
                 </Tooltip>
                 {/* 步数 */}
                 <Space.Compact size="middle">
-                    <InputNumber max={150} min={10} step={10} style={{ width: "130px", borderRadius: 0 }} addonBefore={<>步数：</>} value={params.steps} onChange={v => {
+                    <InputNumber max={150} min={10} step={5} style={{ width: "130px", borderRadius: 0 }} addonBefore={<>步数：</>} value={params.steps} onChange={v => {
                         setParams({ ...params, steps: v })
                     }} />
                 </Space.Compact>
                 <Tooltip title="生成步数，越大图片越清晰。10-150 之间。">
                     <QuestionCircleOutlined />
                 </Tooltip>
-                <div style={{ marginLeft: "10px" }}>
+                <div style={{ marginLeft: "8px" }}>
                     选择模型：
-                    <Select
-                        value={params.engineId}
-                        style={{ width: 260, marginLeft: "10px" }}
-                        onChange={v => {
-                            setParams({ ...params, engineId: v })
-                        }}
-                        options={sdModels.map(item => ({ value: item.id, label: item.name }))}
-                    />
+                    <Space.Compact size="middle">
+                        <Select
+                            value={params.engineId}
+                            style={{ width: 260, marginLeft: "10px" }}
+                            onChange={v => {
+                                setParams({ ...params, engineId: v })
+                            }}
+                            options={sdModels.map(item => ({ value: item.id, label: item.name }))}
+                        />
+                    </Space.Compact>
+                    <Tooltip title="不同的模型将决定生成图片的风格和特点。最新的模型是SDXL1.0，于 2023 年 7 月 27 日最新发布，是目前最先进的开源图片模型。">
+                        <QuestionCircleOutlined />
+                    </Tooltip>
                 </div>
 
             </div>

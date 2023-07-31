@@ -63,7 +63,13 @@ const App = ({ model, columnWidth, onImgDeleted, paint_params, type, onImgThumbU
 
     const height = useMemo(() => {
         const { width, height } = paint_params;
-        const ratio = (width && height) ? { width, height } : getRatio(prompt);
+        let ratio = (width && height) ? { width, height } : getRatio(prompt);
+        //如果参数中有宽高，则使用参数中的宽高
+        //业务hack:在qrcode中，11 12 13 14 这四个id的图片为宽度740，高度 1280
+        const ids = [11, 12, 13, 14];
+        if (paint_params.template_id && ids.includes(paint_params.template_id)) {
+            ratio = { width: 740, height: 1280 }
+        }
         return getHeight(ratio, baseWidth);
     }, [prompt])
 

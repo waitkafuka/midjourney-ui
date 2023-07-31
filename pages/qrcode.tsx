@@ -23,7 +23,7 @@ const QrCode: React.FC = () => {
         seed: '',
         prompt: '',
         negative_prompt: '',
-        qr_content: process.env.NODE_ENV === 'development' ? 'https://superx.chat/art/' : '',
+        qr_content: process.env.NODE_ENV === 'development' ? 'http://weixin.qq.com/r/OBxdRS3EnXDirWkm90kq' : '',
         model: '67',
         template_id: 0,
     }); //表单参数
@@ -74,7 +74,7 @@ const QrCode: React.FC = () => {
         const initQrcodeImage: ImgCardModel = {
             id: 0,
             img_url: '/mx-qrcode/lanselifu.png',
-            prompt: params.prompt,
+            prompt: 'blue dress',
             create_time: new Date(),
             is_public: 0,
             thumb_up_count: 0,
@@ -85,9 +85,9 @@ const QrCode: React.FC = () => {
         setQrCodeImage(initQrcodeImage);
     }
 
-    useEffect(() => {
-        initQrDemo();
-    }, [params.prompt]);
+    // useEffect(() => {
+    //     initQrDemo();
+    // }, [params.prompt]);
 
     const doSubmit = async () => {
         if (!params.qr_content) {
@@ -96,24 +96,6 @@ const QrCode: React.FC = () => {
         }
         setIsGenerating(true);
         setShowDemo(false);
-
-        const newQrcodeImage: ImgCardModel = {
-            id: 0,
-            img_url: '',
-            prompt: params.prompt,
-            create_time: new Date(),
-            is_public: 0,
-            thumb_up_count: 0,
-            painting_type: PaintingType.QRCODE,
-            width: currentTemplate ? currentTemplate.width : 500,
-            height: currentTemplate ? currentTemplate.height : 500
-        };
-        // if (currentTemplate) {
-        //     setRatio({ width: currentTemplate?.width || 1, height: currentTemplate?.height || 1 });
-        // } else {
-        //     setRatio({ width: 1, height: 1 });
-        // }
-        setQrCodeImage(img => newQrcodeImage);
         if (hasChinese(params.prompt)) {
             // 调用api翻译为英文
             // message.info('midjourney无法支持中文提示词，正在为您翻译为英文...');
@@ -159,6 +141,25 @@ const QrCode: React.FC = () => {
             setIsTranslating(false);
             console.log('翻译结果', result);
         }
+
+        const newQrcodeImage: ImgCardModel = {
+            id: 0,
+            img_url: '',
+            prompt: params.prompt,
+            create_time: new Date(),
+            is_public: 0,
+            thumb_up_count: 0,
+            painting_type: PaintingType.QRCODE,
+            width: currentTemplate ? currentTemplate.width : 500,
+            height: currentTemplate ? currentTemplate.height : 500
+        };
+        // if (currentTemplate) {
+        //     setRatio({ width: currentTemplate?.width || 1, height: currentTemplate?.height || 1 });
+        // } else {
+        //     setRatio({ width: 1, height: 1 });
+        // }
+        setQrCodeImage(img => newQrcodeImage);
+        
         console.log('提交参数：', params);
 
         const result = await requestAliyunArtStream({

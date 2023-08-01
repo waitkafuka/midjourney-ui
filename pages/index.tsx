@@ -17,6 +17,7 @@ import { ossUploadedImgBaseURL } from '../scripts/config'
 import { isPromptValid } from "../scripts/utils";
 import type { ColumnsType } from "antd/es/table";
 const imgExp = /<([^<>]+)>/g;
+import ClipboardJS from 'clipboard';
 
 const baseWidth = 500;
 const { TextArea } = Input;
@@ -84,6 +85,7 @@ const Index: React.FC = () => {
   const defaultImg = ''
   const [paintingTip, setPaintingTip] = useState<string>('');
   const [api, contextHolder2] = notification.useNotification();
+  const [currentIndex, setCurrentIndex] = useState<number>(0);
 
   const scrollToBottom = () => {
     setTimeout(() => {
@@ -443,6 +445,20 @@ const Index: React.FC = () => {
     }
   };
 
+  const handleArray = (direction: string) => {
+    if(messages.length === 0) return;
+    if (direction === 'down') {
+      setCurrentIndex(prevIndex => (prevIndex === messages.length - 1 ? 0 : prevIndex + 1));
+      
+    } else {
+      setCurrentIndex(prevIndex => (prevIndex === 0 ? messages.length - 1 : prevIndex - 1));
+    }
+      console.log('currentIndex:', currentIndex);
+      console.log('message:', messages[currentIndex].text);
+      const t = messages[currentIndex].text;
+      setInputValue(t.replace(/(variation|upscale) (V|U)\d/g, ''))
+  }
+
   //定义一个方法，取出链接参数中的prompt，放在 Input 中
   const getPrompt = () => {
     //从链接中取出prompt参数
@@ -513,6 +529,7 @@ const Index: React.FC = () => {
 
   //页面初始化
   useEffect(() => {
+    new ClipboardJS('.copy-prompt-btn');
     getPrompt();
     checkTips();
     setBDVid();
@@ -642,7 +659,9 @@ const Index: React.FC = () => {
         }}>
           {/* 图片结果列表容器 */}
           {messages.map(({ text, img, progress, hasTag, content, msgID, msgHash }, index) => <div className="img-list-item" key={index}>
-            <div> {text.replace(/- <@\d+>\s*\([^)]*\)/g, '')} {`(${progress === 'done' ? '完成' : progress})`}</div>
+            <div className="mj-prompt-box"> {text.replace(/- <@\d+>\s*\([^)]*\)/g, '')} {`(${progress === 'done' ? '完成' : progress})`} <Button size="small" onClick={() => {
+              setInputValue(text.replace(/- <@\d+>\s*\([^)]*\)/g, '').replace(/(variation V\d+|upscale\d+)/g, ''))
+            }} data-clipboard-text={text.replace(/- <@\d+>\s*\([^)]*\)/g, '').replace(/(variation|upscale) (V|U)\d/g, '')} className="copy-prompt-btn">复制提示词</Button></div>
             <div className="workspace-img-container" style={{ width: `${baseWidth}px`, height: getImgCalcHeight(img, text) }}>
 
               {img && !progress?.includes('error') && <img src={img} style={{ cursor: isDone(progress) ? 'zoom-in' : 'auto' }} onClick={() => {
@@ -799,6 +818,12 @@ const Index: React.FC = () => {
                 e.preventDefault();
               } else if (e.key === "Enter") {
                 handleMessageSend();
+                e.preventDefault();
+              } else if (e.key === 'ArrowUp' || e.keyCode === 38) {
+                handleArray('up');
+                e.preventDefault();
+              } else if (e.key === 'ArrowDown' || e.keyCode === 40) {
+                handleArray('down');
                 e.preventDefault();
               }
             }}

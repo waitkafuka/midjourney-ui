@@ -22,6 +22,16 @@
   --card-border-rgb: 131, 134, 135;
 }
 
+.mj-prompt-box {
+  line-height: 1.7;
+  button {
+    display: none;
+  }
+  &:hover button {
+    display: inline-block;
+  }
+}
+
 a:hover {
   color: #cfd0d0;
 }
@@ -111,14 +121,15 @@ a:hover {
   .qr-code-modal {
     display: none !important;
   }
-  div.ai-qrcode-wrapper{
+  div.ai-qrcode-wrapper {
     width: 100%;
     flex-wrap: wrap;
     padding: 50px 20px;
-    .code-options-box,.code-result{
+    .code-options-box,
+    .code-result {
       width: 100%;
     }
-    .code-result{
+    .code-result {
       margin-top: 50px;
     }
   }
@@ -150,6 +161,10 @@ a:hover {
 }
 .line-change-box2 {
   display: flex;
+}
+.prompt-input-wrap {
+  padding-top: 20px;
+  background: #000;
 }
 /**
   * 在移动端
@@ -381,6 +396,9 @@ button.ant-btn-primary:not(:disabled):hover {
   span.more-options-icon {
     color: #333;
   }
+  .prompt-input-wrap{
+    background-color: #f5f5f5;
+  }
   .param-wrap {
     background-color: #fff;
   }
@@ -460,9 +478,14 @@ button.ant-btn-primary:not(:disabled):hover {
 .workspace-img-wrap {
   line-height: 1.6;
   padding: 20px;
-  padding-bottom: 110px;
+  padding-bottom: 200px;
   position: relative;
   z-index: 10;
+  .img-list-item:last-child{
+    .ant-divider,.ant-divider-horizontal{
+      display: none;
+    }
+  }
   .prompt-text {
   }
 }
@@ -684,6 +707,6 @@ button.ant-btn-primary:not(:disabled):hover {
   color: #999;
   font-size: 12px;
 }
-.sd-params-set .anticon-question-circle{
+.sd-params-set .anticon-question-circle {
   margin-left: 2px;
 }

@@ -41,11 +41,26 @@ function hideEmail(email: string) {
         return email;
     }
 }
+function isBeforeThirdDayOfMonth(date: Date) {
+    // 获取给定日期的月份和日期
+    const month = date.getMonth();
+    const day = date.getDate();
 
+    if (day <= 3) {
+        return true;
+    }
+
+    // 其他情况返回 false
+    return false
+}
 const ActivityResult = () => {
     const [lastMonthArray, setLastMonthArray] = useState<[]>([]);
     const [thisMonthArray, setThisMonthArray] = useState<[]>([]);
     const [lastMonth, setLastMonth] = useState<string>('');
+    //是否是每个月的前三天
+    const [isBeforeThirdDay, setisBeforeThirdDay] = useState<boolean>(isBeforeThirdDayOfMonth(new Date()));
+
+
 
     const columns: ColumnsType<any> = [
         {
@@ -94,7 +109,7 @@ const ActivityResult = () => {
             width: 100,
         },
         {
-            title: '奖励（均已发放到位，如无收到请联系客服邮箱service@superx.chat）',
+            title: `奖励${isBeforeThirdDay ? '(公示中，公示期结束将发放奖励)' : '（均已发放到位，如无收到请联系客服邮箱service@superx.chat）'}`,
             dataIndex: 'award',
             key: 'award',
             render: (d, _, index) => <div>

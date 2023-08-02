@@ -18,7 +18,7 @@ interface ImgListPageProps {
 const PaingPoint = ({ }) => {
     const [qrCodeSrc, setQrCodeSrc] = useState<string>('');
     const user = useSelector((state: any) => state.user.info);
-    const [price, setPrice] = useState<string>('68');
+    const [price, setPrice] = useState<string>('58');
     const [qrcodeCost, setQrcodeCost] = useState<number>(QRCODE_COST);
     const isShowBuyPointDialog = useSelector((state: any) => state.user.isShowBuyPointDialog);
     //从链接中取出u 参数
@@ -110,7 +110,7 @@ const PaingPoint = ({ }) => {
                     <div style={{ display: "flex", flexGrow: 1, lineHeight: 1.6, textAlign: "center", alignItems: "center", justifyContent: "center", flexDirection: "column" }}>
                         <div>1000 个点数 / {price} 元</div>
                         <div>可应用于 Stable Diffusion、Midjourney、DALLE、AI 艺术二维码，点数永久有效。</div>
-                        <div>每张图消耗 8 个点数（SD 根据参数消耗不同点数，AI 艺术二维码 {qrcodeCost} 点数/每张）</div>
+                        <div>每张图消耗 8 个点数，变体 4 个点数，高清放大 2 个点数。（SD 根据参数消耗不同点数，AI 艺术二维码 {qrcodeCost} 点数/每张）</div>
                         <div>（ midjourney四宫格算一张图）</div>
                     </div>
                 </div>

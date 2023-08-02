@@ -25,7 +25,7 @@ const Contact: React.FC = () => {
                 <div style={{ lineHeight: "1.8" }}>
                     <p>{companyInfo.name}是一家专注于人工智能软件开发和企业级智能知识库应用的创新型科技公司。我们致力于为客户提供先进的人工智能解决方案，帮助他们实现业务的数字化转型和智能化升级。</p>
                     <p>地址：{companyInfo.address}</p>
-                    <p>联系电话：18037226583</p>
+                    <p>联系电话：18310949357</p>
                     <p>联系邮箱： <a href="mailto:service@superx.chat" style={{ textDecoration: "underline" }}>service@superx.chat</a></p>
 
                 </div>

@@ -18,7 +18,7 @@ interface ImgListPageProps {
 const PaingPoint = ({ }) => {
     const [qrCodeSrc, setQrCodeSrc] = useState<string>('');
     const user = useSelector((state: any) => state.user.info);
-    const [price, setPrice] = useState<string>('58');
+    const [price, setPrice] = useState<string>('68');
     const [qrcodeCost, setQrcodeCost] = useState<number>(QRCODE_COST);
     const isShowBuyPointDialog = useSelector((state: any) => state.user.isShowBuyPointDialog);
     //从链接中取出u 参数
@@ -30,7 +30,15 @@ const PaingPoint = ({ }) => {
         if (window.location.href.indexOf('art.yczktek.com') > -1) {
             setPrice('98')
             pkgId = 13;
+        } else if (window.location.href.indexOf('superx360.com') > -1) {
+            setPrice('58')
+            pkgId = 15;
         }
+        else if (window.location.href.indexOf('chat.yczktek.com') > -1) {
+            setPrice('68')
+            pkgId = 10;
+        }
+
         //获取用户邮箱
         const email = user.email;
         if (!email) {

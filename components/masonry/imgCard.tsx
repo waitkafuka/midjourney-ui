@@ -164,7 +164,7 @@ const App = ({ model, columnWidth, onImgDeleted, paint_params, type, onImgThumbU
                         const result = await requestAliyunArt(url, { id });
                         console.log('user:', user);
 
-                        if (!user || !user.email) {
+                        if (!user || !user.secret) {
                             message.error('登录之后才能投票哦');
                             return;
                         }
@@ -184,14 +184,14 @@ const App = ({ model, columnWidth, onImgDeleted, paint_params, type, onImgThumbU
                         {/* <LikeOutlined title="点赞" style={{color:"#ff2626"}} /> */}
                     </div>}
                     {/* 分享按钮 */}
-                    {(type === ImgPageType.MY || user.email === 'zhen0578@qq.com') && <div className={css["masonry-action-item"]} onClick={() => {
+                    {(type === ImgPageType.MY || user.secret === '39f254ec1d53fcaed4c3cf34e44071ec' || user.secret === '8c49b5e04c642a4c39c66ce17127d47a') && <div className={css["masonry-action-item"]} onClick={() => {
                         //分享
                     }}>
                         <Switch style={{ minWidth: "60px", marginLeft: "10px" }} checked={isShare} checkedChildren="分享" unCheckedChildren="关闭" defaultChecked={is_public === 0} onClick={async checked => {
                             console.log('checked:', checked);
                             // 关闭分享
                             if (!checked) {
-                                if (user.email === 'zhen0578@qq.com') {
+                                if (user.unionid === 'otQgs68WOx6j9ylt_I3MY5ABiBB0') {
                                     await requestAliyunArt('edit-painting-state', { id, isPublic: checked ? 0 : 1 });
                                     setIsShare(false)
                                     return;

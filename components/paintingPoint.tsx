@@ -40,15 +40,15 @@ const PaingPoint = ({ }) => {
         }
 
         //获取用户邮箱
-        const email = user.email;
-        if (!email) {
+        const secret = user.secret;
+        if (!secret) {
             // message.error('请先登录');
             // setTimeout(() => {
             // window.location.href = '/login';
             return;
             // }, 1000);
         };
-        const base64Url = await QRCode.toDataURL(`https://chat.youyi.asia/pay/?channel=${window.location.host}${window.location.pathname}&u=${u}&email=${email}&pkgId=${pkgId}&bd_vid=${localStorage.getItem('bd_vid') || ''}`)
+        const base64Url = await QRCode.toDataURL(`https://${process.env.NODE_ENV === 'development' ? 'nat' : 'chat'}.youyi.asia/pay/?channel=${window.location.host}${window.location.pathname}&u=${u}&secret=${secret}&pkgId=${pkgId}&bd_vid=${localStorage.getItem('bd_vid') || ''}`)
         setQrCodeSrc(base64Url);
     }
 
@@ -62,7 +62,7 @@ const PaingPoint = ({ }) => {
 
     useEffect(() => {
         if (isShowBuyPointDialog) {
-            if (!user.email) {
+            if (!user.secret) {
                 window.location.href = `/login?redirect=${encodeURIComponent(`/art?bd_vid=${getQueryString('bd_vid')}`)}`;
             }
         }

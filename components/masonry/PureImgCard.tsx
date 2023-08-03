@@ -137,7 +137,7 @@ const App = ({ model, columnWidth = 400, hasLikeButton = false, onImgThumbUpActi
                         const result = await requestAliyunArt(url, { id });
                         console.log('user:', user);
 
-                        if (!user || !user.email) {
+                        if (!user || !user.secret) {
                             message.error('登录之后才能点赞哦');
                             return;
                         }

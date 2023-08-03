@@ -35,7 +35,7 @@ function convertToUpperCaseNumber(number: number) {
 }
 
 function hideEmail(email: string) {
-    if (email.length >= 2) {
+    if (email && email.length >= 2) {
         return "**" + email.substring(3);
     } else {
         return email;

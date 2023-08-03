@@ -161,7 +161,7 @@ const Index: React.FC = () => {
   ];
 
   const checkUserAuth = () => {
-    if (!user || !user.email) {
+    if (!user || !user.secret) {
       message.error('用户尚未登录', 5);
       return false;
     }
@@ -728,7 +728,7 @@ const Index: React.FC = () => {
         </div> : <>
           <p className="no-content-tips">使用 midjourney 生成你的专属人工智能绘画作品。</p>
           {/* <p className="no-content-tips">请勿使用违禁词汇，违者将被封号。</p> */}
-          {!user.email && <p className="no-content-tips">您尚未登录，请先<a href="/login/?redirect=/art" style={{ fontSize: "14px", textDecoration: "underline" }}> 登录</a></p>}
+          {!user.secret && <p className="no-content-tips">您尚未登录，请先<a href="/login/?redirect=/art" style={{ fontSize: "14px", textDecoration: "underline" }}> 登录</a></p>}
         </>
       }
       <div className="prompt-input-wrap">

@@ -1,10 +1,11 @@
 import dynamic from 'next/dynamic'
 import Link from 'next/link'
 import React, { useEffect, useState } from 'react';
-import { Button, Dropdown } from 'antd';
+import { Button, Dropdown, Form, Modal, Input, message } from 'antd';
 import Head from 'next/head';
 import store from '../store'
 import type { MenuProps } from 'antd';
+import { setUserInfo } from "../store/userInfo";
 
 import {
   SmileOutlined,
@@ -171,9 +172,16 @@ export default function Main(children: JSX.Element) {
   const [user, setUser] = useState({} as any);
   const [title, setTitle] = useState('superx.chat');
   const [logoSrc, setLogoSrc] = useState('/art/logo.png');
+  const [isShowEditFormModal, setIsShowEditFormModal] = useState(false)
+  const [nickname, setNickname] = useState('');
+
   // const user = useSelector((state: any) => state.user.info);
   store.subscribe(() => {
-    setUser(store.getState().user.info)
+    let info = store.getState().user.info;
+    setUser(info)
+    if (info) {
+      setNickname(info.nickname)
+    }
   })
 
   const noLoginItems: MenuProps['items'] = [
@@ -202,16 +210,6 @@ export default function Main(children: JSX.Element) {
 
   ];
   const items: MenuProps['items'] = [
-    // {
-    //   key: '2',
-    //   label: (
-    //     <Button type="text" block onClick={async () => {
-    //       window.location.href = `https://superx.chat/pay/?email=${user.email}`;
-    //     }}>
-    //       开通包月
-    //     </Button>
-    //   ),
-    // },
     {
       key: '3',
       label: (
@@ -245,13 +243,42 @@ export default function Main(children: JSX.Element) {
         </Button>
       ),
     },
-
+    {
+      key: '30',
+      label: (
+        <Button type="text" block onClick={() => {
+          setIsShowEditFormModal(true)
+        }}>
+          修改昵称
+        </Button>
+      ),
+    },
+    {
+      key: '40',
+      label: (
+        <Button type="text" block onClick={() => {
+          Router.push('/wx-bind');
+        }}>
+           绑定微信
+        </Button>
+      ),
+    },
+    {
+      key: '50',
+      label: (
+        <Button type="text" block onClick={() => {
+          Router.push('/email-bind');
+        }}>
+           绑定邮箱
+        </Button>
+      ),
+    },
 
     {
       key: '1',
       label: (
         <Button type="text" block onClick={async () => {
-          if (user.email) {
+          if (user.secret) {
             // 退出登录
             await requestAliyun(`logout`, null, 'GET');
             store.dispatch({
@@ -310,6 +337,41 @@ export default function Main(children: JSX.Element) {
 
   return (
     <>
+      <Modal
+        title="修改昵称"
+        style={{ top: 20, width: "500px" }}
+        open={isShowEditFormModal}
+        destroyOnClose={true}
+        closable={true}
+        maskClosable={true}
+        okText="确定"
+        onCancel={() => { setIsShowEditFormModal(false) }}
+        footer={[
+          <Button key="ok" onClick={() => { setIsShowEditFormModal(false) }}>
+            取消
+          </Button>,
+          <Button key="ok" type="primary" onClick={async () => {
+            const result = await requestAliyun(`edit-user`, { nickname });
+            if (result.code === 0) {
+              const u = result.user;
+              store.dispatch(setUserInfo(u || {}))
+              setIsShowEditFormModal(false)
+            } else {
+              message.warning(result.message);
+            }
+          }}>
+            确定
+          </Button>,
+        ]}
+      // footer={null}
+      >
+
+        <div style={{ marginTop: "20px", textAlign: "right" }}>
+          <Input placeholder="输入一个你喜欢的昵称吧" value={nickname} onChange={v => {
+            setNickname(v.target.value)
+          }} />
+        </div>
+      </Modal>
       <ProConfigProvider
         dark={dark}
         hashed={false}>
@@ -351,8 +413,8 @@ export default function Main(children: JSX.Element) {
             if (props?.collapsed) return undefined;
             return (
               <>
-                {user && user.email ? <Dropdown menu={{ items }} placement="top" arrow={{ pointAtCenter: true }}>
-                  <Button block>{user.email}</Button>
+                {user && user.secret ? <Dropdown menu={{ items }} placement="top" arrow={{ pointAtCenter: true }}>
+                  <Button block>{user.nickname || user.email || '匿名用户'}</Button>
                 </Dropdown> : <Dropdown menu={{ items: noLoginItems }} placement="top" arrow={{ pointAtCenter: true }}>
                   <Button block onClick={() => {
                     window.location.href = `/${process.env.NODE_ENV === 'development' ? 'login' : 'login/'}?redirect=/art`

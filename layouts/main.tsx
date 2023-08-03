@@ -174,15 +174,10 @@ export default function Main(children: JSX.Element) {
   const [logoSrc, setLogoSrc] = useState('/art/logo.png');
   const [isShowEditFormModal, setIsShowEditFormModal] = useState(false)
   const [nickname, setNickname] = useState('');
+  const [items, setItems] = useState<MenuProps['items']>();
 
   // const user = useSelector((state: any) => state.user.info);
-  store.subscribe(() => {
-    let info = store.getState().user.info;
-    setUser(info)
-    if (info) {
-      setNickname(info.nickname)
-    }
-  })
+
 
   const noLoginItems: MenuProps['items'] = [
     {
@@ -209,7 +204,7 @@ export default function Main(children: JSX.Element) {
 
 
   ];
-  const items: MenuProps['items'] = [
+  let itemsOrigin: MenuProps['items'] = [
     {
       key: '3',
       label: (
@@ -259,7 +254,7 @@ export default function Main(children: JSX.Element) {
         <Button type="text" block onClick={() => {
           Router.push('/wx-bind');
         }}>
-           绑定微信
+          绑定微信
         </Button>
       ),
     },
@@ -269,7 +264,7 @@ export default function Main(children: JSX.Element) {
         <Button type="text" block onClick={() => {
           Router.push('/email-bind');
         }}>
-           绑定邮箱
+          绑定邮箱
         </Button>
       ),
     },
@@ -293,6 +288,28 @@ export default function Main(children: JSX.Element) {
     },
 
   ];
+
+
+  store.subscribe(() => {
+    let info = store.getState().user.info;
+    setUser(info)
+    if (info) {
+      setNickname(info.nickname)
+    }
+    if (info && info.secret) {
+      //如果有邮箱，去掉绑定邮箱功能
+      if (info.email) {
+        itemsOrigin = itemsOrigin?.filter(i => i?.key !== '50')
+      }
+      //如果有unionid，去掉绑定微信功能
+      if (info.unionid) {
+        itemsOrigin = itemsOrigin?.filter(i => i?.key !== '40')
+      }
+      setItems(itemsOrigin);
+    } else {
+      setItems(itemsOrigin);
+    }
+  })
 
   //页面初始化
   useEffect(() => {

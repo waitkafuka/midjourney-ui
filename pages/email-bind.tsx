@@ -49,6 +49,7 @@ const EmailBind = function () {
         console.log('result', result);
         if (result.code === 0) {
             store.dispatch(setUserInfo(result.user || {}))
+            message.success('绑定成功')
             // localStorage.setItem('email', result.email);
         } else {
             message.warning(result.message)
@@ -91,7 +92,7 @@ const EmailBind = function () {
             <Form.Item
                 name="email"
                 label="邮箱："
-                initialValue={'zhen0578@qq.com'}
+                initialValue={''}
                 rules={[
                     {
                         type: 'email',
@@ -103,7 +104,7 @@ const EmailBind = function () {
                     },
                 ]}
             >
-                <Input />
+                <Input placeholder="请输入邮箱账号"/>
             </Form.Item>
 
 
@@ -114,7 +115,7 @@ const EmailBind = function () {
                         label="验证码："
                         rules={[{ required: true, message: '请输入邮箱验证码' }]}
                     >
-                        <Input maxLength={6} />
+                        <Input maxLength={6} placeholder="请输入验证码"/>
                     </Form.Item>
                 </Col>
                 <Col span={8}>
@@ -127,6 +128,7 @@ const EmailBind = function () {
                     确定
                 </Button>
                 <p className="qrcode-demo-tips">如果您之前购买过，可通过邮箱绑定同步权益。</p>
+                <p className="qrcode-demo-tips">注意：如果所绑定邮箱之前有相关权益，将使用之前邮箱覆盖当前账号权益。请谨慎操作。</p>
             </Form.Item>
 
         </Form>

@@ -5,7 +5,10 @@ const userSlice = createSlice({
   initialState: {
     info: {
       point_count: 0,
-      nickname: ''
+      nickname: '',
+      secret: '',
+      email: '',
+      unionid: ''
     },
     //显示购买弹窗
     isShowBuyPointDialog: false,

@@ -384,7 +384,7 @@ export default function Main(children: JSX.Element) {
       >
 
         <div style={{ marginTop: "20px", textAlign: "right" }}>
-          <Input placeholder="输入一个你喜欢的昵称吧" value={nickname} onChange={v => {
+          <Input placeholder="输入一个你喜欢的昵称吧" showCount={true} maxLength={20} value={nickname} onChange={v => {
             setNickname(v.target.value)
           }} />
         </div>

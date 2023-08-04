@@ -110,7 +110,7 @@ LDIuMzYsMi4zNiIgdHJhbnNmb3JtPSJ0cmFuc2xhdGUoLTEgLTMpIi8+PHBhdGggY2xhc3M9ImNs
 cy00IiBkPSJNMzkuNSwyNS44YTIuMDYsMi4wNiwwLDEsMCwyLjA2LTIuMDdBMi4wNywyLjA3LDAs
 MCwwLDM5LjUsMjUuOG0tMTAuMTQsMGEyLjA2LDIuMDYsMCwxLDAsMi4wNi0yLjA3LDIuMDcsMi4w
 NywwLDAsMC0yLjA2LDIuMDciIHRyYW5zZm9ybT0idHJhbnNsYXRlKC0xIC0zKSIvPjwvc3ZnPg==" />
-            扫码绑定，之后可以直接使用微信扫码登录
+            绑定之后，可以使用微信扫码登录
         </div>
 
     </div>

@@ -127,7 +127,7 @@ const EmailBind = function () {
                 <Button type="primary" htmlType="submit" style={{ width: "100%" }} loading={apiRequesting}>
                     确定
                 </Button>
-                <p className="qrcode-demo-tips">如果您之前购买过，可通过邮箱绑定同步权益。</p>
+                <p className="qrcode-demo-tips">如果您之前用邮箱购买过，可通过邮箱绑定同步权益。</p>
                 <p className="qrcode-demo-tips">注意：如果所绑定邮箱之前有相关权益，将使用之前邮箱覆盖当前账号权益。请谨慎操作。</p>
             </Form.Item>
 

@@ -48,7 +48,7 @@ const PaingPoint = ({ }) => {
             return;
             // }, 1000);
         };
-        const base64Url = await QRCode.toDataURL(`https://${process.env.NODE_ENV === 'development' ? 'nat' : 'chat'}.youyi.asia/pay/?channel=${window.location.host}${window.location.pathname}&u=${u}&secret=${secret}&pkgId=${pkgId}&bd_vid=${localStorage.getItem('bd_vid') || ''}`)
+        const base64Url = await QRCode.toDataURL(`https://${process.env.NODE_ENV === 'development' ? 'nat.youyi.asia' : 'superx.chat'}/pay/?channel=${window.location.host}${window.location.pathname}&u=${u}&secret=${secret}&pkgId=${pkgId}&bd_vid=${localStorage.getItem('bd_vid') || ''}`)
         setQrCodeSrc(base64Url);
     }
 

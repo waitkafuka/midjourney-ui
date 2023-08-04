@@ -42,6 +42,7 @@ const Guide: React.FC = () => {
             <style>
                 {`.markdown-body img{
                     max-width: 600px;
+                    width: 100%;
                 }`}
             </style>
             <h1>midjourney入门指引</h1>

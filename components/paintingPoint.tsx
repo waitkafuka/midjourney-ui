@@ -31,8 +31,8 @@ const PaingPoint = ({ }) => {
             setPrice('98')
             pkgId = 13;
         } else if (window.location.href.indexOf('superx360.com') > -1) {
-            setPrice('58')
-            pkgId = 15;
+            setPrice('68')
+            pkgId = 10;
         }
         else if (window.location.href.indexOf('chat.yczktek.com') > -1) {
             setPrice('68')

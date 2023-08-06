@@ -118,6 +118,16 @@ a:hover {
   */
 
 @media (max-width: 1000px) {
+  .buy-code-box,.buy-code-desc{
+    width: 100%;
+    text-align: center;
+  }
+  .buy-code-desc{
+    margin-top: 10px;
+  }
+  .buy-code-wrap{
+    flex-wrap: wrap;
+  }
   .qr-code-modal {
     display: none !important;
   }
@@ -714,4 +724,11 @@ button.ant-btn-primary:not(:disabled):hover {
   width: 90%;
   max-width: 400px;
   margin: 30px auto;
+}
+
+.buy-code-box{
+
+}
+.buy-code-desc{
+  margin-left: 5px;
 }

@@ -47,7 +47,7 @@ const Guide: React.FC = () => {
             </style>
             <h1>midjourney入门指引</h1>
 
-            <h3>强烈建议你在开始之前，先看一下这篇教程：<a href="https://learningprompt.wiki/docs/midjourney-learning-path" target="_blank">https://learningprompt.wiki/docs/midjourney-learning-path</a></h3>
+            <h3>强烈建议你在开始之前，先看一下这篇教程：<a href="https://mp.weixin.qq.com/s/I0342FeExlgyCBWWfckpBw" target="_blank">Midjourney简要使用指南</a></h3>
 
             <ReactMarkdown children={text} remarkPlugins={[remarkGfm]} />
             其他更多参数请参考：<Link href="/cookbook/">风格大全</Link> <br />

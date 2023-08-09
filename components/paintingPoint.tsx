@@ -14,6 +14,17 @@ interface ImgListPageProps {
     type: ImgPageType
 }
 
+interface OrderParams {
+    pkgId: number;
+    secret: string;
+    buyCount: number;
+    inviter?: string;
+    channel?: string;
+    openid?: string;
+    orderType: string;
+    deviceType?: 'android' | 'ios' | 'pc';
+}
+
 //由于setstate是异步的，所以需要一个变量来判断是否正在请求数据
 const PaingPoint = ({ }) => {
     const [qrCodeSrc, setQrCodeSrc] = useState<string>('');
@@ -63,6 +74,7 @@ const PaingPoint = ({ }) => {
     useEffect(() => {
         if (isShowBuyPointDialog) {
             if (!user.secret) {
+                //没有登录的时候跳转到登录页面
                 window.location.href = `/login?redirect=${encodeURIComponent(`/art?bd_vid=${getQueryString('bd_vid')}`)}`;
             }
         }

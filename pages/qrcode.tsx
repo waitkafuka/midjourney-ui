@@ -13,6 +13,8 @@ import store from '../store';
 import { useSelector } from 'react-redux';
 import Head from 'next/head';
 import { QRCODE_COST } from '../scripts/config'
+import { Html5Qrcode } from "html5-qrcode";
+
 const TextArea = Input.TextArea;
 
 const QrCode: React.FC = () => {
@@ -234,15 +236,22 @@ const QrCode: React.FC = () => {
                 const { imgData, img, canvas } = await getImageData(base64String) as any;
                 console.log(imgData);
                 const code = jsQR(imgData.data, canvas.width, canvas.height) as any;
+                let text = null;
                 if (code) {
-                    console.log(code.data);
+                    text = code.data;
+                } else {
+                    const html5QrCode = new Html5Qrcode(/* element id */ "qr-input-file");
+                    text = await html5QrCode.scanFile(file, true)
+                }
+                if (text) {
                     setParams({
                         ...params,
-                        qr_content: code.data
+                        qr_content: text
                     });
                 } else {
                     message.error('二维码解析失败，请确保您的图片中包含二维码，或联系微信客服。');
                 }
+
                 // 销毁动态创建的input标签
                 fileInput.remove();
             };
@@ -278,6 +287,7 @@ const QrCode: React.FC = () => {
                             <QuestionCircleOutlined />
                         </Tooltip>
                         <div className="label-right" onClick={chooseImage}>
+                            <input type="file" id="qr-input-file" accept="image/*" style={{ display: "none" }} />
                             <i className="iconfont icon-xiangji"></i>
                             识别
                             <input type="file" id="fileInput" accept="image/*" style={{ display: "none" }} />
@@ -449,7 +459,7 @@ const QrCode: React.FC = () => {
                 </Button>
             </div>
             {/* 二维码结果区域 */}
-            <div className="code-result">
+            <div className="code-result" style={{ display: "none" }}>
                 <div style={{ display: "flex", justifyContent: "center", flexDirection: 'column', alignItems: 'center' }}>
                     {qrCodeImage && <PureImgCard
                         imgBasePath="https://och.superx.chat"

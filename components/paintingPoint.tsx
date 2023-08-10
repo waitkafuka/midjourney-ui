@@ -9,6 +9,7 @@ import store from "../store";
 import { setUserInfo } from "../store/userInfo";
 import { getQueryString } from "../scripts/utils";
 import { QRCODE_COST } from '../scripts/config'
+import AuthPage from "./Auth";
 
 interface ImgListPageProps {
     type: ImgPageType
@@ -104,6 +105,7 @@ const PaingPoint = ({ }) => {
 
     return (
         <div className="">
+            <AuthPage hidePage={true}></AuthPage>
             <Modal
                 title="购买点数"
                 style={{ top: 20 }}
@@ -135,7 +137,7 @@ const PaingPoint = ({ }) => {
                     </div>
                 </div>
             </Modal>
-            <div style={{ color: "rgb(119, 119, 119)", fontSize: "13px" }}> 剩余点数：{user.point_count} <Button onClick={showBuyModal}>购买点数</Button></div>
+            <div style={{ color: "rgb(119, 119, 119)", fontSize: "13px" }}> 剩余点数：{user.point_count || 0} <Button onClick={showBuyModal}>购买点数</Button></div>
         </div>
     );
 };

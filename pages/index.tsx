@@ -446,17 +446,17 @@ const Index: React.FC = () => {
   };
 
   const handleArray = (direction: string) => {
-    if(messages.length === 0) return;
+    if (messages.length === 0) return;
     if (direction === 'down') {
       setCurrentIndex(prevIndex => (prevIndex === messages.length - 1 ? 0 : prevIndex + 1));
-      
+
     } else {
       setCurrentIndex(prevIndex => (prevIndex === 0 ? messages.length - 1 : prevIndex - 1));
     }
-      console.log('currentIndex:', currentIndex);
-      console.log('message:', messages[currentIndex].text);
-      const t = messages[currentIndex].text;
-      setInputValue(t.replace(/(variation|upscale) (V|U)\d/g, ''))
+    console.log('currentIndex:', currentIndex);
+    console.log('message:', messages[currentIndex].text);
+    const t = messages[currentIndex].text;
+    setInputValue(t.replace(/(variation|upscale) (V|U)\d/g, ''))
   }
 
   //定义一个方法，取出链接参数中的prompt，放在 Input 中
@@ -585,7 +585,6 @@ const Index: React.FC = () => {
     //   <div className="no-content-tips">当前使用人数过多，服务器已无法继续提供服务。图片渲染需要耗费大量计算资源，请稍后再试。</div>
     // </div>
     <div className="w-full mx-auto px-4 h-full overflow-y-hidden list-input-container">
-
       {/* 购买点数 */}
       {isShowBuyPointEntry && <div className='dalle-point-box'><PaintingPoint></PaintingPoint></div>}
 

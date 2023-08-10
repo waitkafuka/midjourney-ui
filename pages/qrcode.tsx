@@ -241,7 +241,7 @@ const QrCode: React.FC = () => {
                         qr_content: code.data
                     });
                 } else {
-                    message.error('二维码解析失败，请确保您的图片中包含二维码，或联系微信客服解决。');
+                    message.error('二维码解析失败，请确保您的图片中包含二维码，或联系微信客服。');
                 }
                 // 销毁动态创建的input标签
                 fileInput.remove();

@@ -459,7 +459,7 @@ const QrCode: React.FC = () => {
                 </Button>
             </div>
             {/* 二维码结果区域 */}
-            <div className="code-result" style={{ display: "none" }}>
+            <div className="code-result">
                 <div style={{ display: "flex", justifyContent: "center", flexDirection: 'column', alignItems: 'center' }}>
                     {qrCodeImage && <PureImgCard
                         imgBasePath="https://och.superx.chat"

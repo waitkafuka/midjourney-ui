@@ -159,7 +159,7 @@ const QrCode: React.FC = () => {
         //     setRatio({ width: 1, height: 1 });
         // }
         setQrCodeImage(img => newQrcodeImage);
-        
+
         console.log('提交参数：', params);
 
         const result = await requestAliyunArtStream({
@@ -177,20 +177,28 @@ const QrCode: React.FC = () => {
 
     //获取图片imageData
     function getImageData(dataURI: string) {
+        const maxSize = 400;
+
         return new Promise((resolve, reject) => {
             const img = new Image();
 
             img.onload = function () {
+                let rate = Math.min(img.width, img.height) / maxSize;
                 const canvas = document.createElement('canvas');
-                canvas.width = img.width;
-                canvas.height = img.height;
-
                 const ctx = canvas.getContext('2d');
-                if (!ctx) return reject(new Error('无法加载图像'));
-                ctx.drawImage(img, 0, 0);
 
-                const imageData = ctx.getImageData(0, 0, img.width, img.height);
-                resolve(imageData);
+                canvas.width = img.width / rate;
+                canvas.height = img.height / rate;
+
+                if (!ctx) return reject(new Error('无法加载图像'));
+                ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
+
+                const imgData = ctx.getImageData(0, 0, canvas.width, canvas.height);
+                resolve({
+                    imgData,
+                    img,
+                    canvas
+                });
             };
 
             img.onerror = function () {
@@ -223,17 +231,18 @@ const QrCode: React.FC = () => {
                 // base64String = base64String.replace(/^data:image\/\w+;base64,/, "");
                 // base64String = 'data:image/png;base64,' + base64String
                 //获取图片宽高
-                const imgData = await getImageData(base64String) as any;
+                const { imgData, img, canvas } = await getImageData(base64String) as any;
                 console.log(imgData);
-                const code = jsQR(imgData.data, imgData.width, imgData.height) as any;
+                const code = jsQR(imgData.data, canvas.width, canvas.height) as any;
                 if (code) {
                     console.log(code.data);
                     setParams({
                         ...params,
                         qr_content: code.data
                     });
+                } else {
+                    message.error('二维码解析失败，请确保您的图片中包含二维码，或联系微信客服解决。');
                 }
-
                 // 销毁动态创建的input标签
                 fileInput.remove();
             };

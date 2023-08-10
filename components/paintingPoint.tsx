@@ -66,6 +66,11 @@ const PaingPoint = ({ }) => {
 
 
     const showBuyModal = async () => {
+        if (!user.secret) {
+            //没有登录的时候跳转到登录页面
+            window.location.href = `/login?redirect=${encodeURIComponent(`/art?bd_vid=${getQueryString('bd_vid')}`)}`;
+            return;
+        }
         store.dispatch({
             type: 'user/setIsShowBuyPointDialog',
             payload: true

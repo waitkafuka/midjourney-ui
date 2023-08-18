@@ -474,7 +474,7 @@ const QrCode: React.FC = () => {
                     {/* {JSON.stringify(ratio)} */}
                     {/* {JSON.stringify(qrCodeImage)} */}
                     {showDemo && <>
-                        <div className="qrcode-demo-tips">示例二维码由高级选项中的模板：“蓝色礼服”生成</div>
+                        <div className="qrcode-demo-tips">示例二维码由：高级选项-{'>'}选择模板-{'>'}“蓝色礼服”生成</div>
                         <div className="qrcode-demo-tips">玫瑰礼服、蓝色礼服、公主裙、清新古风四个模板为比例9:16，其他模板为 1:1</div>
                         <div className="qrcode-demo-tips">二维码创作30点数/张</div>
                         {/* <div className="qrcode-demo-tips">每张点数 30 点</div> */}

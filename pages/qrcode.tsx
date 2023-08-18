@@ -96,6 +96,11 @@ const QrCode: React.FC = () => {
             message.error('请输入URL链接');
             return;
         }
+        //校验点数
+        if (user.point_count < QRCODE_COST) {
+            message.error('点数不足，请先购买点数。');
+            return;
+        }
         setIsGenerating(true);
         setShowDemo(false);
         if (hasChinese(params.prompt)) {
@@ -167,6 +172,12 @@ const QrCode: React.FC = () => {
         const result = await requestAliyunArtStream({
             path: 'qrcode-generate', data: { params }, onDataChange: (data: any) => {
                 console.log('onDataChange', data);
+                if (data.code === 40022) {
+                    message.error('点数不足，请先购买点数。');
+                    setIsGenerating(false);
+                    initQrDemo();
+                    return;
+                }
                 if (data.progress === 100) {
                     setIsGenerating(false);
                     setQrCodeImage({ ...newQrcodeImage, img_url: data.img_url, id: data.id });

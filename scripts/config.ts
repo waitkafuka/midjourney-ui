@@ -151,7 +151,57 @@ export const qrTemplates = [
         width: 920,
         height: 920,
         "points": 2
-    }
+    },
+    {
+        "id": 53,
+        "name": "怦然心动（七夕限定）",
+        "preview_img": "https://cdn.mewx.art/images/static/qr-template-preview/flowers-pink.jpeg",
+        "is_vip": 0,
+        width: 920,
+        height: 920,
+        "points": 10,
+        type: 'sevenseven'
+    },
+    {
+        "id": 54,
+        "name": "星河与你（七夕限定）",
+        "preview_img": "https://cdn.mewx.art/images/static/qr-template-preview/flowers-blue.jpeg",
+        "is_vip": 0,
+        width: 920,
+        height: 920,
+        "points": 10,
+        type: 'sevenseven'
+    },
+    {
+        "id": 55,
+        "name": "月落星沉（七夕限定）",
+        "preview_img": "https://cdn.mewx.art/images/static/qr-template-preview/flowers-purple.jpeg",
+        "is_vip": 0,
+        width: 920,
+        height: 920,
+        "points": 10,
+        type: 'sevenseven'
+    },
+    {
+        "id": 57,
+        "name": "金色暖阳（七夕限定）",
+        "preview_img": "https://cdn.mewx.art/images/static/qr-template-preview/flowers-yellow.jpeg",
+        "is_vip": 0,
+        width: 920,
+        height: 920,
+        "points": 10,
+        type: 'sevenseven'
+    },
+    {
+        "id": 58,
+        "name": "落日晚风（七夕限定）",
+        "preview_img": "https://cdn.mewx.art/images/static/qr-template-preview/flowers-d61db12b-8f2b-4ee5-94ed.jpeg",
+        "is_vip": 0,
+        width: 920,
+        height: 920,
+        "points": 10,
+        type: 'sevenseven'
+    },
 ]
 
 export const qrVersions = [{

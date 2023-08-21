@@ -62,7 +62,7 @@ const ROUTES: Route = {
       name: '七夕玫瑰二维码（限定）',
       key: 'artqrcode77',
       icon: <i className='iconfont icon-meiguihua'></i>,
-      path: '/art/qrcode/',
+      path: '/art/77/',
       target: "_blank",
     },
     {

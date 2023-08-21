@@ -21,14 +21,14 @@ const QrCode: React.FC = () => {
     const qrTemplates77 = qrTemplates.filter(item => item.type === 'sevenseven')
     //初始化参数
     const [params, setParams] = useState<any>({
-        iw: 0.35,
+        iw: 0.45,
         v: process.env.NODE_ENV === 'development' ? '1' : '2',
         seed: '',
         prompt: '',
         negative_prompt: '',
         qr_content: process.env.NODE_ENV === 'development' ? 'http://weixin.qq.com/r/OBxdRS3EnXDirWkm90kq' : '',
         model: '67',
-        template_id: 53,
+        template_id: 54,
     }); //表单参数
     const [showOptions, setShowOptions] = useState<boolean>(true); //是否显示更多选项
     const [qrCodeImage, setQrCodeImage] = useState<ImgCardModel>(); //模板
@@ -76,14 +76,14 @@ const QrCode: React.FC = () => {
     const initQrDemo = () => {
         const initQrcodeImage: ImgCardModel = {
             id: 0,
-            img_url: '/mx-qrcode/lanselifu.png',
-            prompt: 'blue dress',
+            img_url: '/mx-qrcode/20230821234355646757.png',
+            prompt: '怦然心动',
             create_time: new Date(),
             is_public: 0,
             thumb_up_count: 0,
             painting_type: PaintingType.QRCODE,
-            width: 740,
-            height: 1280
+            width: 920,
+            height: 920
         };
         setQrCodeImage(initQrcodeImage);
     }
@@ -311,7 +311,7 @@ const QrCode: React.FC = () => {
                             ...params,
                             qr_content: v.target.value
                         });
-                    }} placeholder="如：https://superx.chat/art/" value={params.qr_content} />
+                    }} placeholder="输入链接、文字、号码，或点击右侧“识别”上传二维码进行解析" value={params.qr_content} />
                 </div>
                 {/* 提示词 */}
                 {/* <div className="art-form-item">
@@ -467,7 +467,7 @@ const QrCode: React.FC = () => {
                 </div>
 
                 <Button type="primary" loading={isGenerating} onClick={doSubmit} style={{ width: "100%", marginTop: "10px" }}>
-                    生成
+                    确定
                 </Button>
             </div>
             {/* 二维码结果区域 */}
@@ -487,8 +487,7 @@ const QrCode: React.FC = () => {
                     {/* {JSON.stringify(qrCodeImage)} */}
                     {showDemo && <>
                         <div className="qrcode-demo-tips">示例二维码由：选择模板-{'>'}“怦然心动”生成</div>
-                        <div className="qrcode-demo-tips">玫瑰礼服、蓝色礼服、公主裙、清新古风四个模板为比例9:16，其他模板为 1:1</div>
-                        <div className="qrcode-demo-tips">二维码创作30点数/张</div>
+                        <div className="qrcode-demo-tips">AI 二维码创作30点数/张</div>
                         {/* <div className="qrcode-demo-tips">每张点数 30 点</div> */}
                     </>}
 

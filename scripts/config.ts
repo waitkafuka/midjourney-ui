@@ -153,16 +153,6 @@ export const qrTemplates = [
         "points": 2
     },
     {
-        "id": 53,
-        "name": "怦然心动（七夕限定）",
-        "preview_img": "https://cdn.mewx.art/images/static/qr-template-preview/flowers-pink.jpeg",
-        "is_vip": 0,
-        width: 920,
-        height: 920,
-        "points": 10,
-        type: 'sevenseven'
-    },
-    {
         "id": 54,
         "name": "星河与你（七夕限定）",
         "preview_img": "https://cdn.mewx.art/images/static/qr-template-preview/flowers-blue.jpeg",
@@ -172,6 +162,17 @@ export const qrTemplates = [
         "points": 10,
         type: 'sevenseven'
     },
+    {
+        "id": 53,
+        "name": "怦然心动（七夕限定）",
+        "preview_img": "https://cdn.mewx.art/images/static/qr-template-preview/flowers-pink.jpeg",
+        "is_vip": 0,
+        width: 920,
+        height: 920,
+        "points": 10,
+        type: 'sevenseven'
+    },
+
     {
         "id": 55,
         "name": "月落星沉（七夕限定）",

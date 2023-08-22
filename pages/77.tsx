@@ -311,7 +311,7 @@ const QrCode: React.FC = () => {
                             ...params,
                             qr_content: v.target.value
                         });
-                    }} placeholder="输入链接、文字、号码，或点击右侧“识别”上传二维码进行解析" value={params.qr_content} />
+                    }} placeholder="春风十里，不如你" value={params.qr_content} />
                 </div>
                 {/* 提示词 */}
                 {/* <div className="art-form-item">

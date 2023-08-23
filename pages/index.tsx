@@ -208,6 +208,7 @@ const Index: React.FC = () => {
           setIsTranslating(false);
           return;
         }
+        // return;
         if (result.code !== 0) {
           messageApi.error(result.message, 10);
           setIsTranslating(false);
@@ -801,7 +802,7 @@ const Index: React.FC = () => {
         </div>
 
         {referImg && <div style={{ margin: "10px 0" }} className="refer-img-box">
-          参考图已添加：<a href={referImg} target="_blank">{referImg}</a>，将在此图基础上，结合您的提示词生成新的作品。
+          参考图已添加：<a href={referImg} target="_blank">{referImg}</a>（下方提示词中的链接请勿删除）。将在此图基础上，结合您的提示词生成新的作品。
         </div>}
 
 

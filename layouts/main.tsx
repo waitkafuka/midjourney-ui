@@ -326,7 +326,7 @@ export default function Main(children: JSX.Element) {
       setLogoSrc('/art/logo-xkw.png');
       //隐藏左侧大赛入口、艺术公园等
       ROUTES.routes = ROUTES.routes.filter((item: any) => {
-        const unshows = ['activityfirst', 'artqrcode', 'paintings', 'chatgpt', 'stablediffusion', 'dalle']
+        const unshows = ['activityfirst', 'artqrcode', 'paintings', 'chatgpt', 'stablediffusion', 'dalle','artqrcode77']
         item.children && (item.children = item.children.filter((child: any) => {
           if (unshows.indexOf(child.key) > -1) {
             return false;

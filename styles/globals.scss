@@ -118,6 +118,20 @@ a:hover {
   */
 
 @media (max-width: 1000px) {
+  .param-book{
+    .param-book-label{
+      margin-left: 10px !important;
+    }
+  }
+  .correct-prompt-box{
+    float: left;
+    .correct-prompt-label{
+      margin-left: 10px !important;
+    }
+    .anticon{
+      display: none;
+    }
+  }
   .buy-code-box,.buy-code-desc{
     width: 100%;
     text-align: center;
@@ -399,6 +413,10 @@ button.ant-btn-primary:not(:disabled):hover {
   img {
     width: 100%;
   }
+}
+
+.copy-prompt-btn{
+  cursor: pointer;
 }
 
 //在日间模式下

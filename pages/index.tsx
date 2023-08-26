@@ -142,7 +142,7 @@ const Index: React.FC = () => {
     },
     {
       name: '--style <cute, expressive, original, or scenic>',
-      describe: '设置动漫风格：可爱、表现力、原始、或者风景。例如：--style cute（必须搭配--niji使用，如：a cat --style cute --niji）',
+      describe: '设置动漫风格：可爱、表现力、原始、或者风景。例如：--style cute（cute, expressive, original 和 scenic 必须搭配--niji 一起使用，如：a cat --style expressive --niji）',
     },
     {
       name: '--s（或--stylize） 数字',

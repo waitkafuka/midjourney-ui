@@ -58,13 +58,13 @@ const ROUTES: Route = {
       path: '/art/qrcode/',
       target: "_blank",
     },
-    {
-      name: '七夕玫瑰二维码（限定）',
-      key: 'artqrcode77',
-      icon: <i className='iconfont icon-meiguihua'></i>,
-      path: '/art/77/',
-      target: "_blank",
-    },
+    // {
+    //   name: '七夕玫瑰二维码（限定）',
+    //   key: 'artqrcode77',
+    //   icon: <i className='iconfont icon-meiguihua'></i>,
+    //   path: '/art/77/',
+    //   target: "_blank",
+    // },
     {
       name: '教程',
       key: "guideParent",

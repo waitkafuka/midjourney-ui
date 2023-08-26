@@ -660,7 +660,7 @@ const Index: React.FC = () => {
           {/* 图片结果列表容器 */}
           {messages.map(({ text, img, progress, hasTag, content, msgID, msgHash }, index) => <div className="img-list-item" key={index}>
             <div className="mj-prompt-box"> {text.replace(/- <@\d+>\s*\([^)]*\)/g, '')} {`(${progress === 'done' ? '完成' : progress})`} <Button size="small" onClick={() => {
-              setInputValue(text.replace(/- <@\d+>\s*\([^)]*\)/g, '').replace(/(variation V\d+|upscale\d+)/g, ''))
+              setInputValue(text.replace(/- <@\d+>\s*\([^)]*\)/g, '').replace(/(variation V\d+|upscale U\d+)/g, ''))
             }} data-clipboard-text={text.replace(/- <@\d+>\s*\([^)]*\)/g, '').replace(/(variation|upscale) (V|U)\d/g, '')} className="copy-prompt-btn">复制提示词</Button></div>
             <div className="workspace-img-container" style={{ width: `${baseWidth}px`, height: getImgCalcHeight(img, text) }}>
 

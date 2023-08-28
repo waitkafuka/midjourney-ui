@@ -841,7 +841,7 @@ const Index: React.FC = () => {
             </span>
           </div>
           {/* 提示词优化 */}
-          <div style={{ position: 'relative' }} className='correct-prompt-box'>
+          {/* <div style={{ position: 'relative' }} className='correct-prompt-box'>
             <span style={{ marginLeft: '20px', cursor: 'pointer', fontSize: '13px' }} className='correct-prompt-label'>
               优化提示词
               <Switch
@@ -856,7 +856,7 @@ const Index: React.FC = () => {
             <Tooltip title={`开启后，将自动优化提示词。可能会改变原有提示词，如果不想改变原有提示词，可关闭此功能。`}>
               <QuestionCircleOutlined style={{ cursor: 'pointer', verticalAlign: '-3px', marginLeft: '3px' }} />
             </Tooltip>
-          </div>
+          </div> */}
           {/* 线路切换1,pc端显示 */}
           <div className='line-change-box2'>
             <div style={{ marginRight: '5px', marginLeft: '20px' }}>

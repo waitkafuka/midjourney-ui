@@ -325,23 +325,122 @@ export default function Main(children: JSX.Element) {
       setTitle('学科网UED');
       setLogoSrc('/art/logo-xkw.png');
       //隐藏左侧大赛入口、艺术公园等
-      ROUTES.routes = ROUTES.routes.filter((item: any) => {
-        const unshows = ['activityfirst', 'artqrcode', 'paintings', 'chatgpt', 'stablediffusion', 'dalle','artqrcode77']
-        item.children && (item.children = item.children.filter((child: any) => {
-          if (unshows.indexOf(child.key) > -1) {
-            return false;
-          }
-          return true;
-        }))
-
-        if (unshows.indexOf(item.key) > -1) {
-          return false;
-        }
-        return true;
-      }
-      )
+      ROUTES.routes = [
+        {
+          path: '/art/',
+          name: '开始绘画',
+          icon: <SendOutlined />,
+          key: 'start',
+          flatMenu: false,
+          children: [{
+            path: '/art/',
+            target: "_blank",
+            name: 'Midjourney',
+            key: "midjourney",
+          }]
+        },
+        {
+          name: '教程',
+          key: "guideParent",
+          icon: <BulbOutlined />,
+          children: [
+            {
+              key: 'guide',
+              path: '/art/guide/',
+              target: "_blank",
+              name: '入门指引',
+              icon: <BulbOutlined />,
+            },
+            {
+              path: '/art/cookbook/',
+              target: "_blank",
+              name: '参数大全',
+              key: 'cookbook',
+              icon: <i className='iconfont icon-canshushezhi'></i>,
+            }]
+        },
+        {
+          path: '/art/mypaintings/',
+          target: '_blank',
+          name: '我的作品',
+          key: 'mypaintings',
+          icon: <i className='iconfont icon-huihua'></i>,
+        },
+      ]
 
     }
+
+    //如果是ciae，单独制定路由
+    if(window.location.href.includes('ciae.superx.chat')){
+      setTitle('人工智能创意设计');
+      setLogoSrc('/art/logo-ciae.png');
+      ROUTES.routes = [
+        {
+          path: '/art/',
+          name: '开始绘画',
+          icon: <SendOutlined />,
+          key: 'start',
+          flatMenu: false,
+          children: [{
+            path: '/art/',
+            target: "_blank",
+            name: 'Midjourney',
+            key: "midjourney",
+          }]
+        },
+        {
+          name: '教程',
+          key: "guideParent",
+          icon: <BulbOutlined />,
+          children: [
+            {
+              key: 'guide',
+              path: '/art/guide/',
+              target: "_blank",
+              name: '入门指引',
+              icon: <BulbOutlined />,
+            },
+            {
+              path: '/art/cookbook/',
+              target: "_blank",
+              name: '参数大全',
+              key: 'cookbook',
+              icon: <i className='iconfont icon-canshushezhi'></i>,
+            }]
+        },
+        {
+          path: '/art/mypaintings/',
+          target: '_blank',
+          name: '我的作品',
+          key: 'mypaintings',
+          icon: <i className='iconfont icon-huihua'></i>,
+        },
+        {
+          path: '/art/paintings/',
+          target: '_blank',
+          name: '艺术公园',
+          key: 'paintings',
+          icon: <i className='iconfont icon-fengjing-01'></i>,
+        },
+    
+       
+        {
+          path: 'https://ciae.net/',
+          name: 'CIAE 绘画大赛',
+          key: 'activityfirst',
+          icon: <SketchOutlined />,
+          target: '_blank',
+          
+        },
+        // {
+        //   path: 'https://superx.chat/pay/',
+        //   target: '_blank',
+        //   name: '开通包月',
+        //   icon: <ShoppingCartOutlined />,
+        // },
+      ]
+    }
+
     setOpenKeys(['start']);
     // Check the theme when the user first visits the page
     if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {

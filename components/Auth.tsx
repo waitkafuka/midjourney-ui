@@ -60,7 +60,7 @@ const AuthPage = ({ hidePage }: { hidePage: boolean }) => {
 
     useEffect(() => {
         // 在组件加载后执行代码
-        if (typeof window !== 'undefined' && isPCOrWeChat()) {
+        if (typeof window !== 'undefined' && isPCOrWeChat() && (window.location.host === 'superx.chat' || window.location.host === 'nat.youyi.asia')) {
             redirectUri.current = encodeURIComponent(window.location.href);
             init();
         }

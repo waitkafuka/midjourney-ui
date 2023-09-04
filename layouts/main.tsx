@@ -113,7 +113,7 @@ const ROUTES: Route = {
     {
       path: '/',
       target: '_blank',
-      name: 'AI 聊天',
+      name: 'ChatAI',
       key: 'chatgpt',
       icon: <i className='iconfont icon-chat'></i>,
     },

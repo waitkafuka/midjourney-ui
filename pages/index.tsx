@@ -456,8 +456,12 @@ const Index: React.FC = () => {
   const setBDVid = () => {
     //从链接中获取bd_vid参数
     const bd_vid = getQueryString('bd_vid');
+    const qhclickid = getQueryString('qhclickid');
     if (bd_vid) {
       localStorage.setItem('bd_vid', bd_vid);
+    }
+    if (qhclickid) {
+      localStorage.setItem('qhclickid', qhclickid);
     }
 
     const u = getQueryString('u');

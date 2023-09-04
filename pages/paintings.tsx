@@ -11,6 +11,11 @@ const Paintings: React.FC = () => {
         if (bd_vid) {
             localStorage.setItem('bd_vid', bd_vid);
         }
+
+        const qhclickid = getQueryString('qhclickid');
+        if (qhclickid) {
+            localStorage.setItem('qhclickid', qhclickid);
+        }
     }
 
     useEffect(() => {

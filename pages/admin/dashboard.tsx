@@ -67,7 +67,6 @@ export default function OrderCount() {
   async function queryUserApps() {
     const { data } = await requestAliyun('user-auths', null, 'GET');
     console.log('result:', data);
-    data.unshift({ app_name: '全部', query: '' });
     setDomains(
       data.map((item: any) => {
         return {

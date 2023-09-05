@@ -96,6 +96,7 @@ const PaingPoint = ({}) => {
     if (data.user.point_count >= 1000) {
       console.log('支付成功');
       localStorage.removeItem('bd_vid');
+      localStorage.removeItem('qhclickid');
       localStorage.removeItem('u');
     }
 

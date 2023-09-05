@@ -147,7 +147,7 @@ const PaingPoint = ({}) => {
       </Modal>
       <div style={{ color: 'rgb(119, 119, 119)', fontSize: '13px' }}>
         {' '}
-        剩余点数：{user.point_count || 0} <Button onClick={showBuyModal}>购买点数</Button>
+        我的点数：{user.point_count || 0} <Button onClick={showBuyModal}>购买点数</Button>
       </div>
     </div>
   );

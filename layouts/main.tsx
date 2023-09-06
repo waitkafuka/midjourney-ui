@@ -280,14 +280,15 @@ export default function Main(children: JSX.Element) {
       key: '1',
       label: (
         <Button type="text" block onClick={async () => {
-          if (user.secret) {
+          // debugger;
+          // if (user.secret) {
             // 退出登录
             await requestAliyun(`logout`, null, 'GET');
             store.dispatch({
               type: 'user/setUserInfo',
               payload: {}
             })
-          }
+          // }
         }}>
           退出
         </Button>
@@ -299,6 +300,8 @@ export default function Main(children: JSX.Element) {
 
   store.subscribe(() => {
     let info = store.getState().user.info;
+    console.log('info:',info);
+    
     setUser(info)
     if (info) {
       setNickname(info.nickname)
@@ -438,6 +441,61 @@ export default function Main(children: JSX.Element) {
         //   name: '开通包月',
         //   icon: <ShoppingCartOutlined />,
         // },
+      ]
+    }
+
+    //如果是sunmen.ai，单独定制路由 design.sunmen.cn
+    if(window.location.href.includes('design.sunmen.cn')){
+      setTitle('sunmen.ai');
+      setLogoSrc('/art/logo-jf.png');
+      ROUTES.routes = [
+        {
+          path: '/art/',
+          name: '开始绘画',
+          icon: <SendOutlined />,
+          key: 'start',
+          flatMenu: false,
+          children: [{
+            path: '/art/',
+            target: "_blank",
+            name: 'Midjourney',
+            key: "midjourney",
+          }]
+        },
+        {
+          name: '教程',
+          key: "guideParent",
+          icon: <BulbOutlined />,
+          children: [
+            {
+              key: 'guide',
+              path: '/art/guide/',
+              target: "_blank",
+              name: '入门指引',
+              icon: <BulbOutlined />,
+            },
+            {
+              path: '/art/cookbook/',
+              target: "_blank",
+              name: '参数大全',
+              key: 'cookbook',
+              icon: <i className='iconfont icon-canshushezhi'></i>,
+            }]
+        },
+        {
+          path: '/art/mypaintings/',
+          target: '_blank',
+          name: '我的作品',
+          key: 'mypaintings',
+          icon: <i className='iconfont icon-huihua'></i>,
+        },
+        {
+          path: '/art/paintings/',
+          target: '_blank',
+          name: '艺术公园',
+          key: 'paintings',
+          icon: <i className='iconfont icon-fengjing-01'></i>,
+        },
       ]
     }
 

@@ -48,7 +48,7 @@ export default function OrderCount() {
   const [hourCountSumSeries, setHourCountSumSeries] = useState<any[]>([]);
   const [hourArray, setHourArray] = useState<string[]>(timeArray);
   const [onlybaidu, setOnlybaidu] = useState<boolean>(false);
-  const [query, setQuery] = useState<string>('');
+  const [appId, setAppId] = useState<number>(-1);
   // const domains = [
   //     { label: '全部', value: '' },
   //     { label: 'chat.yczktek.com(主账号)', value: 'chat.yczktek.com' },
@@ -71,10 +71,16 @@ export default function OrderCount() {
       data.map((item: any) => {
         return {
           label: item.app_name,
-          value: item.query,
+          value: item.app_id,
         };
       })
     );
+    //默认选中第一个 app
+    if(!data || data.length === 0){
+      message.error('没有权限');
+      return;
+    }
+    setAppId(data[0].app_id);
   }
 
   function calculateSumArray(arr: any) {
@@ -90,11 +96,17 @@ export default function OrderCount() {
   }
 
   const queryOrder = async () => {
+    if (appId === -1) {
+      return;
+    }
     let pkgId = 10;
-    if (query === 'channel=art.yczktek.com') {
+    if (appId === 40) {
       pkgId = 13;
     }
-    const result = await requestAliyun('order-count', { startDate, endDate, onlybaidu, query, pkgId });
+    if (appId === 101) {
+      pkgId = 21;
+    }
+    const result = await requestAliyun('order-count', { startDate, endDate, onlybaidu, appId, pkgId });
     console.log(result);
     if (result.code !== 0) {
       message.error(result.message, 5);
@@ -141,7 +153,7 @@ export default function OrderCount() {
 
   useEffect(() => {
     queryOrder();
-  }, [startDate, endDate, onlybaidu, query]);
+  }, [startDate, endDate, onlybaidu, appId]);
 
   useEffect(() => {
     queryUserApps();
@@ -162,10 +174,10 @@ export default function OrderCount() {
         &nbsp;&nbsp;&nbsp;&nbsp; 选择应用：
         <Select
           options={domains}
-          value={query}
+          value={appId}
           style={{ width: 260 }}
           onChange={(v) => {
-            setQuery(v);
+            setAppId(v);
           }}
         />
       </div>

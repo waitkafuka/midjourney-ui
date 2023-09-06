@@ -48,6 +48,9 @@ const PaingPoint = ({}) => {
     } else if (window.location.href.indexOf('chat.yczktek.com') > -1) {
       setPrice('68');
       pkgId = 10;
+    } else if (window.location.href.indexOf('design.sunmen.cn') > -1) {
+      setPrice('340');
+      pkgId = 21;
     }
 
     //获取用户邮箱

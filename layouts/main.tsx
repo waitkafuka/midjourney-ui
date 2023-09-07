@@ -445,7 +445,7 @@ export default function Main(children: JSX.Element) {
     }
 
     //如果是sunmen.ai，单独定制路由 design.sunmen.cn
-    if(window.location.href.includes('design.sunmen.cn')){
+    if(window.location.href.includes('ai.sunmen.cn')){
       setTitle('sunmen.ai');
       setLogoSrc('/art/logo-jf.png');
       ROUTES.routes = [
@@ -460,6 +460,16 @@ export default function Main(children: JSX.Element) {
             target: "_blank",
             name: 'Midjourney',
             key: "midjourney",
+          },{
+            path: '/art/sd',
+            target: "_blank",
+            name: 'Stable Diffusion',
+            key: "stablediffusion",
+          }, {
+            path: '/art/dalle/',
+            target: "_blank",
+            name: 'DALL·E',
+            key: "dalle",
           }]
         },
         {
@@ -467,13 +477,13 @@ export default function Main(children: JSX.Element) {
           key: "guideParent",
           icon: <BulbOutlined />,
           children: [
-            {
-              key: 'guide',
-              path: '/art/guide/',
-              target: "_blank",
-              name: '入门指引',
-              icon: <BulbOutlined />,
-            },
+            // {
+            //   key: 'guide',
+            //   path: '/art/guide/',
+            //   target: "_blank",
+            //   name: '入门指引',
+            //   icon: <BulbOutlined />,
+            // },
             {
               path: '/art/cookbook/',
               target: "_blank",
@@ -489,12 +499,19 @@ export default function Main(children: JSX.Element) {
           key: 'mypaintings',
           icon: <i className='iconfont icon-huihua'></i>,
         },
+        // {
+        //   path: '/art/paintings/',
+        //   target: '_blank',
+        //   name: '艺术公园',
+        //   key: 'paintings',
+        //   icon: <i className='iconfont icon-fengjing-01'></i>,
+        // },
         {
-          path: '/art/paintings/',
+          path: '/',
           target: '_blank',
-          name: '艺术公园',
-          key: 'paintings',
-          icon: <i className='iconfont icon-fengjing-01'></i>,
+          name: 'ChatAI',
+          key: 'chatgpt',
+          icon: <i className='iconfont icon-chat'></i>,
         },
       ]
     }
@@ -610,7 +627,7 @@ export default function Main(children: JSX.Element) {
                     paddingBlockStart: 12,
                   }}
                 >
-                  Power by Midjourney + DALLE2
+                  Power by ai.sunmen.cn
                 </p>
               </>
             );

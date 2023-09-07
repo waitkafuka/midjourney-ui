@@ -181,6 +181,7 @@ export default function Main(children: JSX.Element) {
   const [logoSrc, setLogoSrc] = useState('/art/logo.png');
   const [isShowEditFormModal, setIsShowEditFormModal] = useState(false)
   const [nickname, setNickname] = useState('');
+  const [powerBy, setPowerBy] = useState('Powered by Midjourney + DALLE2');
   const [items, setItems] = useState<MenuProps['items']>();
 
   // const user = useSelector((state: any) => state.user.info);
@@ -448,6 +449,7 @@ export default function Main(children: JSX.Element) {
     if(window.location.href.includes('ai.sunmen.cn')){
       setTitle('sunmen.ai');
       setLogoSrc('/art/logo-jf.png');
+      setPowerBy('Powered by ai.sunmen.cn')
       ROUTES.routes = [
         {
           path: '/art/',
@@ -627,7 +629,7 @@ export default function Main(children: JSX.Element) {
                     paddingBlockStart: 12,
                   }}
                 >
-                  Power by ai.sunmen.cn
+                  {powerBy}
                 </p>
               </>
             );

@@ -33,6 +33,7 @@ const PaingPoint = ({}) => {
   const [price, setPrice] = useState<string>('68');
   const [qrcodeCost, setQrcodeCost] = useState<number>(QRCODE_COST);
   const isShowBuyPointDialog = useSelector((state: any) => state.user.isShowBuyPointDialog);
+  const [pricePoint,setPricePoint] = useState('1000');
   //从链接中取出u 参数
   const u = localStorage.getItem('u');
 
@@ -48,8 +49,9 @@ const PaingPoint = ({}) => {
     } else if (window.location.href.indexOf('chat.yczktek.com') > -1) {
       setPrice('68');
       pkgId = 10;
-    } else if (window.location.href.indexOf('design.sunmen.cn') > -1) {
-      setPrice('340');
+    } else if (window.location.href.indexOf('ai.sunmen.cn') > -1) {
+      setPrice('799');
+      setPricePoint('3000')
       pkgId = 21;
     }
 
@@ -141,7 +143,7 @@ const PaingPoint = ({}) => {
             </div>
           </div>
           <div className='buy-code-desc' style={{ flexGrow: 1, lineHeight: 1.6, textAlign: 'center', alignItems: 'center', justifyContent: 'center', flexDirection: 'column' }}>
-            <div>1000 个点数 / {price} 元</div>
+            <div>{pricePoint} 个点数 / {price} 元</div>
             <div>可应用于 Stable Diffusion、Midjourney、DALLE、AI 艺术二维码，点数永久有效。</div>
             <div>每张图消耗 8 个点数，变体 4 个点数，获取单张高清图 2 个点数。（SD 根据参数消耗不同点数，AI 艺术二维码 {qrcodeCost} 点数/每张）</div>
             <div>（ midjourney四宫格算一张图）</div>

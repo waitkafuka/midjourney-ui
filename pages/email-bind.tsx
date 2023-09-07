@@ -4,7 +4,7 @@ import {
     UserOutlined,
     LockOutlined
 } from '@ant-design/icons'
-import { useMemo, useState } from "react"
+import { useEffect, useMemo, useState } from "react"
 import { requestAliyun } from "../request/http"
 declare const window: Window & { countdownInterval: any, poolScanTimer: any, refreshQrcodeTimer: any }
 import { setUserInfo } from "../store/userInfo";
@@ -18,6 +18,7 @@ const EmailBind = function () {
     const [codeRequesting, setCodeRequesting] = useState<boolean>(false);
     const [getCodeBtnText, setGetCodeBtnText] = useState<string>(getCodeText);
     const [apiRequesting, setApiRequesting] = useState<boolean>(false);
+    const [appHost,setAppHost] = useState<string>('superx.chat');
 
     // 获取验证码按钮置灰
     const getEmailCodeBtnDisabled = useMemo(() => {
@@ -28,6 +29,7 @@ const EmailBind = function () {
         await form.validateFields(['email']);
 
         const params = form.getFieldsValue(['email']);
+        params.appHost = appHost;
         setCodeRequesting(true)
         const result = await requestAliyun(`get-email-code`, params);
         setCodeRequesting(false)
@@ -81,6 +83,10 @@ const EmailBind = function () {
         }, 1000);
         window.countdownInterval = countdownInterval;
     }
+
+    useEffect(()=>{
+        setAppHost(window.location.host);
+    },[])
 
     return <div className="email-bind-form">
         <Form

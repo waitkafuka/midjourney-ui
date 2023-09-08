@@ -43,6 +43,7 @@ const App = ({ model, columnWidth, onImgDeleted, paint_params, type, onImgThumbU
     const userThumbUpList = useSelector((state: any) => state.user.thumbUpList);
     const user = useSelector((state: any) => state.user.info);
     const [isShare, setIsShare] = useState(is_public === 0);
+    const [hideShareButton, setHideShareButton] = useState(false);
 
     const deleteImg = (id: number) => {
         confirm({
@@ -89,7 +90,11 @@ const App = ({ model, columnWidth, onImgDeleted, paint_params, type, onImgThumbU
     //初始化
     useEffect(() => {
         new ClipboardJS('.copy-action');
-    })
+        //如果链接中包含ai.sunmen.cn，则隐藏分享按钮
+        if (window.location.href.includes('ai.sunmen.cn')) {
+            setHideShareButton(true);
+        }
+    },[])
 
     return <>
         <div className={`${css['masonry-item']} masonry-item`} style={{ width: `${columnWidth}px` }} id={`i${id}`}>
@@ -184,7 +189,7 @@ const App = ({ model, columnWidth, onImgDeleted, paint_params, type, onImgThumbU
                         {/* <LikeOutlined title="点赞" style={{color:"#ff2626"}} /> */}
                     </div>}
                     {/* 分享按钮 */}
-                    {(type === ImgPageType.MY || user.secret === '39f254ec1d53fcaed4c3cf34e44071ec' || user.secret === '8c49b5e04c642a4c39c66ce17127d47a') && <div className={css["masonry-action-item"]} onClick={() => {
+                    {((type === ImgPageType.MY || user.secret === '39f254ec1d53fcaed4c3cf34e44071ec' || user.secret === '8c49b5e04c642a4c39c66ce17127d47a') && !hideShareButton) && <div className={css["masonry-action-item"]} onClick={() => {
                         //分享
                     }}>
                         <Switch style={{ minWidth: "60px", marginLeft: "10px" }} checked={isShare} checkedChildren="分享" unCheckedChildren="关闭" defaultChecked={is_public === 0} onClick={async checked => {

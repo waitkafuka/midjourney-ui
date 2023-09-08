@@ -37,7 +37,7 @@ const ROUTES: Route = {
       children: [{
         path: '/art/',
         target: "_blank",
-        name: 'Midjourney',
+        name: 'AI绘画·MJ（推荐）',
         key: "midjourney",
       }, {
         path: '/art/sd',

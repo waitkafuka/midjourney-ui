@@ -189,7 +189,7 @@ const App = ({ model, columnWidth, onImgDeleted, paint_params, type, onImgThumbU
                         {/* <LikeOutlined title="点赞" style={{color:"#ff2626"}} /> */}
                     </div>}
                     {/* 分享按钮 */}
-                    {((type === ImgPageType.MY || user.secret === '39f254ec1d53fcaed4c3cf34e44071ec' || user.secret === '8c49b5e04c642a4c39c66ce17127d47a') && !hideShareButton) && <div className={css["masonry-action-item"]} onClick={() => {
+                    {((type === ImgPageType.MY || user.secret === '39f254ec1d53fcaed4c3cf34e44071ec' || user.secret === '8c49b5e04c642a4c39c66ce17127d47a')) && <div className={css["masonry-action-item"]} onClick={() => {
                         //分享
                     }}>
                         <Switch style={{ minWidth: "60px", marginLeft: "10px" }} checked={isShare} checkedChildren="分享" unCheckedChildren="关闭" defaultChecked={is_public === 0} onClick={async checked => {
@@ -203,11 +203,11 @@ const App = ({ model, columnWidth, onImgDeleted, paint_params, type, onImgThumbU
                                 }
                                 confirm({
                                     title: '确定关闭分享吗？',
-                                    content: <>关闭分享后，将无法参与点赞送包月会员的活动哦~ <br />
-                                        每月点赞最多的前 5 名作品的作者将获得<b> 200 个绘画点数</b> <br />
-                                        5-10 名将获得 <b> 100 个绘画点数</b><br />
-                                        按月统计，每月 1 日公布上月获胜者。<br />
-                                        详情请参考：<Link href="/activity" style={{ color: "#333333", textDecoration: "underline" }}>首届 midjourney 人工智能绘画大赛</Link></>,
+                                    content: <>{hideShareButton?'关闭分享后，其他人无法在“艺术公园”中看到该作品。':<>关闭分享后，将无法参与点赞送包月会员的活动哦~ <br />
+                                    每月点赞最多的前 5 名作品的作者将获得<b> 200 个绘画点数</b> <br />
+                                    5-10 名将获得 <b> 100 个绘画点数</b><br />
+                                    按月统计，每月 1 日公布上月获胜者。<br />
+                                    详情请参考：<Link href="/activity" style={{ color: "#333333", textDecoration: "underline" }}>首届 midjourney 人工智能绘画大赛</Link></>}</>,
                                     okText: '确定',
                                     cancelText: '取消',
                                     async onOk() {

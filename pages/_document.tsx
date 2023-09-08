@@ -19,12 +19,14 @@ export default class MyDocument extends Document {
   }
 
   render() {
+    let logoPath = '/art/logo.png';
+    //如果链接中包含ai.sunmen.cn，使用ai.sunmen.cn的logo
     return (
       <Html lang='en'>
         <Head >
           <link
             rel="icon"
-            href="/art/logo.png"
+            href={logoPath}
           />
           <link rel="stylesheet" href="//at.alicdn.com/t/c/font_4080772_id19l3mxufs.css" />
         </Head>

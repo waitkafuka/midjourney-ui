@@ -501,13 +501,13 @@ export default function Main(children: JSX.Element) {
           key: 'mypaintings',
           icon: <i className='iconfont icon-huihua'></i>,
         },
-        // {
-        //   path: '/art/paintings/',
-        //   target: '_blank',
-        //   name: '艺术公园',
-        //   key: 'paintings',
-        //   icon: <i className='iconfont icon-fengjing-01'></i>,
-        // },
+        {
+          path: '/art/paintings/',
+          target: '_blank',
+          name: '艺术公园',
+          key: 'paintings',
+          icon: <i className='iconfont icon-fengjing-01'></i>,
+        },
         {
           path: '/',
           target: '_blank',

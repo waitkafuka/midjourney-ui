@@ -58,6 +58,13 @@ const ROUTES: Route = {
       path: '/art/qrcode/',
       target: "_blank",
     },
+    {
+      name: '图片无损放大',
+      key: 'imgupscale',
+      icon: <i className='iconfont icon-fangda'></i>,
+      path: '/art/upscale',
+      target: "_blank",
+    },
     // {
     //   name: '七夕玫瑰二维码（限定）',
     //   key: 'artqrcode77',
@@ -208,9 +215,6 @@ export default function Main(children: JSX.Element) {
         </Button>
       ),
     },
-
-
-
   ];
   let itemsOrigin: MenuProps['items'] = [
     {

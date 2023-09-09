@@ -29,6 +29,7 @@ interface Props {
     imgBasePath?: string,
     hasLikeButton?: boolean,
     ratio?: { width: number, height: number },
+    hasPrompt?: boolean,
     //点赞完成的回调，需要在父页面更新点赞数量
     onImgThumbUpActionDone?: (id: number, action: string) => void,
 }
@@ -41,7 +42,7 @@ const { CheckableTag } = Tag;
 const baseWidth = 500;
 //从提示词中提取宽高比例
 
-const App = ({ model, columnWidth = 400, hasLikeButton = false, onImgThumbUpActionDone, onImgDeleted, copylink = false, ratio, isLoading, hasDelete, showThumbImg, imgBasePath = 'https://och.superx.chat' }: Props) => {
+const App = ({ model, columnWidth = 400, hasLikeButton = false, onImgThumbUpActionDone, onImgDeleted, copylink = false, ratio, isLoading, hasDelete, showThumbImg, hasPrompt = true, imgBasePath = 'https://och.superx.chat' }: Props) => {
     let { img_url, prompt, create_time, id, is_public, thumb_up_count, painting_type } = model;
     const userThumbUpList = useSelector((state: any) => state.user.thumbUpList);
     const user = useSelector((state: any) => state.user.info);
@@ -97,11 +98,11 @@ const App = ({ model, columnWidth = 400, hasLikeButton = false, onImgThumbUpActi
             </a> : <div style={{ height: `${columnWidth * height / baseWidth}px`, display: "flex", justifyContent: "center", alignItems: "center" }} >
                 <Spin />
             </div>}
-            <div className={css["masonry-meta"]}>
+            {hasPrompt && <div className={css["masonry-meta"]}>
                 <Tooltip title={prompt}>
                     <p className={css["prompt"]} >{prompt}</p>
                 </Tooltip>
-            </div>
+            </div>}
             <div className={css["masonry-action-wrap"]}>
                 <div className={css["masonry-action-box"]}>
                     {/* 复制提示词 */}

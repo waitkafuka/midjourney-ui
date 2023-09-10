@@ -4,6 +4,19 @@ export const paintingTips = [
     '通过添加--ar可以设置图片宽高比例哦，例如：--ar 16:9',
     '即使因为网络问题生成失败了，您也可以在左侧“我的作品”中看到生成的图片呢',
 ]
+
+//创建a标签，模拟window.open
+export const openWindow = (url: string) => {
+    const a = document.createElement('a');
+    a.setAttribute('href', url);
+    a.setAttribute('target', '_blank');
+    //随机一个 5 位的英文字母
+    const id = Math.random().toString(36).slice(-5);
+    a.setAttribute('id', id);
+    a.click();
+}
+
+
 export const downloadFile = (url: string, filename: string = 'midjourney.png') => {
     message.info('正在下载图片...', 200);
     const regex = /\/([\w-]+\.(png|jpg|jpeg|gif|webp))/;
@@ -32,6 +45,19 @@ export const downloadFile = (url: string, filename: string = 'midjourney.png') =
     };
     img.src = url;
 }
+
+//封装一个方法，自动跳转到放大页面，并携带图片链接参数
+export const redirectToZoomPage = (url: string, openType = 'new_window') => {
+    //新标签打开
+    const href = `/art/upscale?url=${encodeURIComponent(url)}`;
+    if (openType === 'new_window') {
+        openWindow(href);
+    } else {
+        window.location.href = href;
+    }
+
+}
+
 
 /**
  * 判断mj prompt参数是否合法

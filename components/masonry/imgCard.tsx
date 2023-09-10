@@ -12,7 +12,7 @@ import Router from "next/router";
 import { requestAliyunArt } from "../../request/http";
 const { confirm } = Modal;
 import { ImgPageType } from "../../scripts/types";
-import { getRatio, getHeight } from "../../scripts/utils";
+import { getRatio, getHeight, redirectToZoomPage } from "../../scripts/utils";
 import { useSelector } from "react-redux";
 import store from "../../store";
 import Link from "next/link";
@@ -94,7 +94,7 @@ const App = ({ model, columnWidth, onImgDeleted, paint_params, type, onImgThumbU
         if (window.location.href.includes('ai.sunmen.cn')) {
             setHideShareButton(true);
         }
-    },[])
+    }, [])
 
     return <>
         <div className={`${css['masonry-item']} masonry-item`} style={{ width: `${columnWidth}px` }} id={`i${id}`}>
@@ -136,12 +136,12 @@ const App = ({ model, columnWidth, onImgDeleted, paint_params, type, onImgThumbU
                         <CopyOutlined key="copy" title="复制提示词" />
                     </div>
                     {/* 编辑按钮 */}
-                    {type === ImgPageType.MY && <div className={css["masonry-action-item"]} onClick={() => {
+                    <div className={css["masonry-action-item"]} onClick={() => {
                         //路由到编辑页面
                         Router.push(`/?prompt=${encodeURIComponent(prompt)}`);
                     }}>
                         <EditOutlined key="edit" title="重新生成" />
-                    </div>}
+                    </div>
                     {/* 下载按钮 */}
                     <div className={css["masonry-action-item"]} onClick={() => {
                         if (!img_url) {
@@ -158,6 +158,12 @@ const App = ({ model, columnWidth, onImgDeleted, paint_params, type, onImgThumbU
                     }}>
                         <DeleteOutlined title="删除" />
                     </div>}
+                    {/* 一键放大按钮 */}
+                    <div className={css["masonry-action-item"]} onClick={() => {
+                        redirectToZoomPage(src, 'current_window');
+                    }}>
+                        <i className='iconfont icon-fangda' title="一键放大"></i>
+                    </div>
                     {/* {JSON.stringify(userThumbUpList)} */}
 
                     {/* 点赞按钮 */}
@@ -203,11 +209,11 @@ const App = ({ model, columnWidth, onImgDeleted, paint_params, type, onImgThumbU
                                 }
                                 confirm({
                                     title: '确定关闭分享吗？',
-                                    content: <>{hideShareButton?'关闭分享后，其他人无法在“艺术公园”中看到该作品。':<>关闭分享后，将无法参与点赞送包月会员的活动哦~ <br />
-                                    每月点赞最多的前 5 名作品的作者将获得<b> 200 个绘画点数</b> <br />
-                                    5-10 名将获得 <b> 100 个绘画点数</b><br />
-                                    按月统计，每月 1 日公布上月获胜者。<br />
-                                    详情请参考：<Link href="/activity" style={{ color: "#333333", textDecoration: "underline" }}>首届 midjourney 人工智能绘画大赛</Link></>}</>,
+                                    content: <>{hideShareButton ? '关闭分享后，其他人无法在“艺术公园”中看到该作品。' : <>关闭分享后，将无法参与点赞送包月会员的活动哦~ <br />
+                                        每月点赞最多的前 5 名作品的作者将获得<b> 200 个绘画点数</b> <br />
+                                        5-10 名将获得 <b> 100 个绘画点数</b><br />
+                                        按月统计，每月 1 日公布上月获胜者。<br />
+                                        详情请参考：<Link href="/activity" style={{ color: "#333333", textDecoration: "underline" }}>首届 midjourney 人工智能绘画大赛</Link></>}</>,
                                     okText: '确定',
                                     cancelText: '取消',
                                     async onOk() {

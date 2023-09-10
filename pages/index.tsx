@@ -7,7 +7,7 @@ import { Message } from '../interfaces/message';
 import MyTag from '../components/tag';
 import { requestAliyun, requestAliyunArt } from '../request/http';
 import { useSelector, useDispatch } from 'react-redux';
-import { downloadFile, getQueryString, hasChinese, shuffleArray } from '../scripts/utils';
+import { downloadFile, getQueryString, hasChinese, shuffleArray, redirectToZoomPage } from '../scripts/utils';
 import { NEXT_PUBLIC_IMAGE_PREFIX, PAINTING_POINTS_ONE_TIME } from '../scripts/config';
 import { getRatio, getHeight } from '../scripts/utils';
 import PaintingPoint from '../components/paintingPoint';
@@ -705,7 +705,7 @@ const Index: React.FC = () => {
               )}
 
               {/* ，如果您不希望展示，可进入“<Link href="/mypaintings">我的作品</Link>”进行关闭。 */}
-              {img && !progress?.includes('error') && img !== defaultImg && (
+              {img && !progress?.includes('error') && (progress?.includes('完成')||progress?.includes('done')) && img !== defaultImg && (
                 <Space.Compact style={{ width: '100%', marginTop: '0px' }}>
                   <Button
                     onClick={() => {
@@ -720,6 +720,13 @@ const Index: React.FC = () => {
                     }}
                   >
                     下载原图
+                  </Button>
+                  <Button
+                    onClick={() => {
+                      redirectToZoomPage(img);
+                    }}
+                  >
+                    一键放大
                   </Button>
                 </Space.Compact>
               )}

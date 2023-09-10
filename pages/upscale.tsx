@@ -31,7 +31,7 @@ const Upscale: React.FC = () => {
         label: '在线图片',
         value: 'online',
     }, {
-        label: "本地图片",
+        label: "本地上传",
         value: "local"
     }]
 
@@ -135,10 +135,13 @@ const Upscale: React.FC = () => {
             height: imgData.height,
         };
         setQrCodeImage({ ...newQrcodeImage, img_base_path: 'https://oc.superx.chat/' });
-        const { data } = await requestAliyunArt('image-upscale', params);
-        if (data.code === 40022) {
-            message.error('点数不足，请先购买点数。');
+        const res = await requestAliyunArt('image-upscale', params);
+        const data = res.data;
+        if (res.code !== 0) {
+            //这里取的是sd返回的message
+            message.error(res.data.message);
             setIsGenerating(false);
+            setQrCodeImage(undefined);
             return;
         }
         setIsGenerating(false);
@@ -147,9 +150,22 @@ const Upscale: React.FC = () => {
         store.dispatch({ type: 'user/pointChange', payload: user.point_count - data.cost })
     }
 
+    //定义一个方法，从链接中获取url参数，并set到params中
+    const setParamsFromUrl = () => {
+        let imgUrl = getQueryString('url');
+        if (!imgUrl) return;
+        //decode一下
+        imgUrl = decodeURIComponent(imgUrl);
+        setParams({
+            ...params,
+            onlineImgUrl: imgUrl
+        })
+    }
+
 
     //页面初始化
     useEffect(() => {
+        setParamsFromUrl();
     }, [])
 
     return <><Head>
@@ -413,12 +429,14 @@ const Upscale: React.FC = () => {
                 <Button type="primary" loading={isGenerating} onClick={doSubmit} style={{ width: "100%", marginTop: "10px" }}>
                     确定
                 </Button>
-                <div style={{ marginTop: "20px", color: "#666", fontSize: "13px", lineHeight: "1.6" }}>
+                <div style={{ marginTop: "20px", color: "#666", fontSize: "13px", lineHeight: "1.6", width: "100%" }}>
                     提示：
                     <ul>
                         <ol>1. 2 倍图大约需要 10-20 秒，体积4M 左右</ol>
                         <ol>2. 4 倍图大约需要 20-30 秒，体积15M 左右</ol>
                         <ol>3. 8 倍图大约需要 1-3 分钟，体积50M 左右</ol>
+                        {/* <ol>4. 以上数据以 1024x 1024为基准</ol> */}
+                        <ol>4. 出于隐私考虑，服务器不对生成的图片进行保存，请在生成之后及时下载，或从邮箱下载</ol>
                     </ul>
                 </div>
             </div>
@@ -441,6 +459,7 @@ const Upscale: React.FC = () => {
                         hasDelete={true} />}
                 </div>
             </div>}
+
         </div>
         {/* 说明区域 */}
         {/* <div className="art-desc">

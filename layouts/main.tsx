@@ -59,7 +59,7 @@ const ROUTES: Route = {
       target: "_blank",
     },
     {
-      name: '图片无损放大',
+      name: '图片高清放大',
       key: 'imgupscale',
       icon: <i className='iconfont icon-fangda'></i>,
       path: '/art/upscale',

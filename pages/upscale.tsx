@@ -100,6 +100,8 @@ const Upscale: React.FC = () => {
             };
 
             img.onerror = function () {
+                message.error('无法加载图像');
+                setIsGenerating(false);
                 reject(new Error('无法加载图像'));
             };
             img.setAttribute("crossOrigin", 'anonymous')
@@ -135,7 +137,19 @@ const Upscale: React.FC = () => {
             height: imgData.height,
         };
         setQrCodeImage({ ...newQrcodeImage, img_base_path: 'https://oc.superx.chat/' });
-        const res = await requestAliyunArt('image-upscale', params);
+        let res = null;
+        try {
+            res = await requestAliyunArt('image-upscale', params);
+        } catch (error: any) {
+            if (error.includes('timeout')) {
+                message.error('由于图片较大，接口响应超时，后台任务仍在运算中，稍后将发送至邮箱，最长不会超过 10 分钟。若生成失败不扣点数。');
+            } else {
+                message.error(error + '');
+            }
+            setIsGenerating(false);
+            setQrCodeImage(undefined);
+            return;
+        }
         const data = res.data;
         if (res.code !== 0) {
             //这里取的是sd返回的message
@@ -433,9 +447,9 @@ const Upscale: React.FC = () => {
                     提示：
                     <ul>
                         <ol>1. 以 1024 x 1024图片为例：</ol>
-                        <ol style={{paddingLeft:"10px"}}> 1.1 2 倍图大约需要 10-20 秒，体积4M 左右</ol>
-                        <ol style={{paddingLeft:"10px"}}> 1.2 4 倍图大约需要 20-30 秒，体积15M 左右</ol>
-                        <ol style={{paddingLeft:"10px"}}> 1.3 8 倍图大约需要 1-3 分钟，体积50M 左右</ol>
+                        <ol style={{ paddingLeft: "10px" }}> 1.1 2 倍图大约需要 10-20 秒，体积4M 左右</ol>
+                        <ol style={{ paddingLeft: "10px" }}> 1.2 4 倍图大约需要 20-30 秒，体积15M 左右</ol>
+                        <ol style={{ paddingLeft: "10px" }}> 1.3 8 倍图大约需要 1-3 分钟，体积50M 左右</ol>
                         {/* <ol>4. 以上数据以 1024x 1024为基准</ol> */}
                         <ol>2. 可用于老照片修复等场景</ol>
                         <ol>3. 出于隐私考虑，服务器不对生成的图片进行保存，请在生成之后及时下载，或从邮箱下载</ol>

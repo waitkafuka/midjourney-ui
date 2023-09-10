@@ -21,7 +21,7 @@ const Upscale: React.FC = () => {
     //初始化参数
     const user = useSelector((state: any) => state.user.info)
     const [params, setParams] = useState<any>({
-        upscaling_resize: 2,
+        scale_num: 2,
         onlineImgUrl: '',
         localImgUrl: '',
         email: ''
@@ -57,10 +57,10 @@ const Upscale: React.FC = () => {
         value: 8,
     }]
 
-    //点数消耗算法：params.upscaling_resize * 10 + 10
+    //点数消耗算法：params.scale_num * 10 + 10
     const pointCost = useMemo(() => {
-        return params.upscaling_resize * params.upscaling_resize * 5 + 10;
-    }, [params.upscaling_resize]);
+        return params.scale_num * params.scale_num * 5 + 10;
+    }, [params.scale_num]);
 
     const [showOptions, setShowOptions] = useState<boolean>(false); //是否显示更多选项
     const [qrCodeImage, setQrCodeImage] = useState<ImgCardModel>(); //模板
@@ -226,10 +226,10 @@ const Upscale: React.FC = () => {
                                 onChange={v => {
                                     setParams({
                                         ...params,
-                                        upscaling_resize: v
+                                        scale_num: v
                                     })
                                 }}
-                                value={typeof params.upscaling_resize === 'number' ? params.upscaling_resize : 0}
+                                value={typeof params.scale_num === 'number' ? params.scale_num : 0}
                                 step={2}
                             />
                         </Col>
@@ -241,11 +241,11 @@ const Upscale: React.FC = () => {
                                 max={8}
                                 style={{ width: "100%" }}
                                 step={2}
-                                value={params.upscaling_resize}
+                                value={params.scale_num}
                                 onChange={v => {
                                     setParams({
                                         ...params,
-                                        upscaling_resize: v
+                                        scale_num: v
                                     })
                                 }}
                             />
@@ -266,10 +266,10 @@ const Upscale: React.FC = () => {
                             onChange={v => {
                                 setParams({
                                     ...params,
-                                    upscaling_resize: v.target.value
+                                    scale_num: v.target.value
                                 })
                             }}
-                            value={params.upscaling_resize}
+                            value={params.scale_num}
                             optionType="button"
                             buttonStyle="solid"
                         />
@@ -432,11 +432,13 @@ const Upscale: React.FC = () => {
                 <div style={{ marginTop: "20px", color: "#666", fontSize: "13px", lineHeight: "1.6", width: "100%" }}>
                     提示：
                     <ul>
-                        <ol>1. 2 倍图大约需要 10-20 秒，体积4M 左右</ol>
-                        <ol>2. 4 倍图大约需要 20-30 秒，体积15M 左右</ol>
-                        <ol>3. 8 倍图大约需要 1-3 分钟，体积50M 左右</ol>
+                        <ol>1. 以 1024 x 1024图片为例：</ol>
+                        <ol style={{paddingLeft:"10px"}}> 1.1 2 倍图大约需要 10-20 秒，体积4M 左右</ol>
+                        <ol style={{paddingLeft:"10px"}}> 1.2 4 倍图大约需要 20-30 秒，体积15M 左右</ol>
+                        <ol style={{paddingLeft:"10px"}}> 1.3 8 倍图大约需要 1-3 分钟，体积50M 左右</ol>
                         {/* <ol>4. 以上数据以 1024x 1024为基准</ol> */}
-                        <ol>4. 出于隐私考虑，服务器不对生成的图片进行保存，请在生成之后及时下载，或从邮箱下载</ol>
+                        <ol>2. 可用于老照片修复等场景</ol>
+                        <ol>3. 出于隐私考虑，服务器不对生成的图片进行保存，请在生成之后及时下载，或从邮箱下载</ol>
                     </ul>
                 </div>
             </div>

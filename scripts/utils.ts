@@ -49,6 +49,9 @@ export const downloadFile = (url: string, filename: string = 'midjourney.png') =
 //封装一个方法，自动跳转到放大页面，并携带图片链接参数
 export const redirectToZoomPage = (url: string, openType = 'new_window') => {
     //新标签打开
+    if(!url) return;
+    //替换掉url中的?x-oss-process=style/scale_500
+    url = url.replace(/\?x-oss-process=style\/scale_500/, '');
     const href = `/art/upscale?url=${encodeURIComponent(url)}`;
     if (openType === 'new_window') {
         openWindow(href);

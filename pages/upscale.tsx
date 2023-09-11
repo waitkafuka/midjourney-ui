@@ -2,7 +2,7 @@ import { useEffect, useMemo, useState } from "react";
 import { ImgCardModel, ImgPageType, PaintingType } from '../scripts/types'
 import { getQueryString, hasChinese } from "../scripts/utils";
 import { SendOutlined, StopOutlined, QuestionCircleOutlined } from '@ant-design/icons';
-import { Button, Col, Form, Input, InputNumber, Radio, Row, Select, Slider, Tooltip, message } from "antd";
+import { Button, Col, Form, Input, InputNumber, Radio, Row, Select, Slider, Tooltip, message, notification } from "antd";
 import jsQR from "jsqr";
 import { qrTemplates, qrModels, qrVersions } from "../scripts/config";
 import PaintingPoint from "../components/paintingPoint";
@@ -124,8 +124,14 @@ const Upscale: React.FC = () => {
         //当图片宽度乘以高度，再乘以（放大倍数的平方），大于 8096*8096 的时候，提示图片过大
         let pixieAfter = imgData.width * imgData.height * params.scale_num * params.scale_num;
 
+        const errorMsg = `图片过大，放大后的像素数（计算公式：宽度x高度x放大倍数²）：${pixieAfter.toLocaleString()}，超过最大像素数：${(8096 * 8096).toLocaleString()}！请缩小图片尺寸，或减小放大倍数。`;
         if (pixieAfter > (8096 * 8096)) {
-            message.error(`图片过大，放大后的像素数：${pixieAfter.toLocaleString()}，超过最大像素数：${(8096 * 8096).toLocaleString()}！请缩小图片尺寸，或减小放大倍数。`,15);
+            // notification.error({
+            //     message: '提示',
+            //     description: errorMsg,
+            //     duration: 0,
+            //   });
+            message.error(errorMsg, 15);
             setIsGenerating(false);
             return;
         }

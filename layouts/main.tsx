@@ -287,12 +287,12 @@ export default function Main(children: JSX.Element) {
         <Button type="text" block onClick={async () => {
           // debugger;
           // if (user.secret) {
-            // 退出登录
-            await requestAliyun(`logout`, null, 'GET');
-            store.dispatch({
-              type: 'user/setUserInfo',
-              payload: {}
-            })
+          // 退出登录
+          await requestAliyun(`logout`, null, 'GET');
+          store.dispatch({
+            type: 'user/setUserInfo',
+            payload: {}
+          })
           // }
         }}>
           退出
@@ -305,8 +305,8 @@ export default function Main(children: JSX.Element) {
 
   store.subscribe(() => {
     let info = store.getState().user.info;
-    console.log('info:',info);
-    
+    console.log('info:', info);
+
     setUser(info)
     if (info) {
       setNickname(info.nickname)
@@ -379,7 +379,7 @@ export default function Main(children: JSX.Element) {
     }
 
     //如果是ciae，单独制定路由
-    if(window.location.href.includes('ciae.superx.chat')){
+    if (window.location.href.includes('ciae.superx.chat')) {
       setTitle('人工智能创意设计');
       setLogoSrc('/art/logo-ciae.png');
       ROUTES.routes = [
@@ -430,15 +430,15 @@ export default function Main(children: JSX.Element) {
           key: 'paintings',
           icon: <i className='iconfont icon-fengjing-01'></i>,
         },
-    
-       
+
+
         {
           path: 'https://ciae.net/',
           name: 'CIAE 绘画大赛',
           key: 'activityfirst',
           icon: <SketchOutlined />,
           target: '_blank',
-          
+
         },
         // {
         //   path: 'https://superx.chat/pay/',
@@ -450,7 +450,7 @@ export default function Main(children: JSX.Element) {
     }
 
     //如果是sunmen.ai，单独定制路由 design.sunmen.cn
-    if(window.location.href.includes('ai.sunmen.cn')){
+    if (window.location.href.includes('ai.sunmen.cn')) {
       setTitle('sunmen.ai');
       setLogoSrc('/art/logo-jf.png');
       setPowerBy('Powered by ai.sunmen.cn')
@@ -466,7 +466,7 @@ export default function Main(children: JSX.Element) {
             target: "_blank",
             name: 'Midjourney',
             key: "midjourney",
-          },{
+          }, {
             path: '/art/sd',
             target: "_blank",
             name: 'Stable Diffusion',
@@ -477,6 +477,13 @@ export default function Main(children: JSX.Element) {
             name: 'DALL·E',
             key: "dalle",
           }]
+        },
+        {
+          name: '图片高清放大',
+          key: 'imgupscale',
+          icon: <i className='iconfont icon-fangda'></i>,
+          path: '/art/upscale',
+          target: "_blank",
         },
         {
           name: '教程',

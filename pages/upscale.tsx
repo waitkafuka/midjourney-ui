@@ -75,18 +75,15 @@ const Upscale: React.FC = () => {
 
     //获取图片imageData
     function getImageData(imgUrl: string): any {
-        const maxSize = 400;
-
         return new Promise((resolve, reject) => {
             const img = new Image();
 
             img.onload = function () {
-                let rate = Math.min(img.width, img.height) / maxSize;
                 const canvas = document.createElement('canvas');
                 const ctx = canvas.getContext('2d');
 
-                canvas.width = img.width / rate;
-                canvas.height = img.height / rate;
+                canvas.width = img.width;
+                canvas.height = img.height;
 
                 if (!ctx) return reject(new Error('无法加载图像'));
                 ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
@@ -122,9 +119,16 @@ const Upscale: React.FC = () => {
         }
         setIsGenerating(true);
 
-        console.log('提交参数：', params);
         //获取图片宽高
         const { imgData } = await getImageData(params.img_url);
+        //当图片宽度乘以高度，再乘以（放大倍数的平方），大于 8096*8096 的时候，提示图片过大
+        let pixieAfter = imgData.width * imgData.height * params.scale_num * params.scale_num;
+
+        if (pixieAfter > (8096 * 8096)) {
+            message.error(`图片过大，放大后的像素数：${pixieAfter.toLocaleString()}，超过最大像素数：${(8096 * 8096).toLocaleString()}！请缩小图片尺寸，或减小放大倍数。`,15000);
+            setIsGenerating(false);
+            return;
+        }
         const newQrcodeImage: ImgCardModel = {
             id: 0,
             img_url: '',
@@ -136,9 +140,11 @@ const Upscale: React.FC = () => {
             width: imgData.width,
             height: imgData.height,
         };
+
         setQrCodeImage({ ...newQrcodeImage, img_base_path: 'https://oc.superx.chat/' });
         let res = null;
         try {
+            console.log('提交参数：', params);
             res = await requestAliyunArt('image-upscale', params);
         } catch (error: any) {
             if (error.includes('timeout')) {

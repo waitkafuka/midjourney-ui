@@ -125,7 +125,7 @@ const Upscale: React.FC = () => {
         let pixieAfter = imgData.width * imgData.height * params.scale_num * params.scale_num;
 
         if (pixieAfter > (8096 * 8096)) {
-            message.error(`图片过大，放大后的像素数：${pixieAfter.toLocaleString()}，超过最大像素数：${(8096 * 8096).toLocaleString()}！请缩小图片尺寸，或减小放大倍数。`,15000);
+            message.error(`图片过大，放大后的像素数：${pixieAfter.toLocaleString()}，超过最大像素数：${(8096 * 8096).toLocaleString()}！请缩小图片尺寸，或减小放大倍数。`,15);
             setIsGenerating(false);
             return;
         }

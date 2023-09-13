@@ -27,7 +27,7 @@ export const isMobileWeChat = function () {
 }
 
 //判断是否是 PC 或者手机微信环境
-export const isPCOrWeChat = function () {
+export const isPCWeChatOrMobileWeChat = function () {
     var ua = navigator.userAgent.toLowerCase();
     // ua中包含micromessenger字符串，且包含iphone或者android字符串
     if (/micromessenger/i.test(ua)) {

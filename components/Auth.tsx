@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from "react";
-import { getDeviceType, isPCOrWeChat } from '../utils/app/env'
+import { getDeviceType, isPCWeChatOrMobileWeChat } from '../utils/app/env'
 import { requestAliyun } from "../request/http";
 
 //入口链接：https://superx.chat/auth/?distPage=/art/sd/
@@ -44,7 +44,7 @@ const AuthPage = ({ hidePage }: { hidePage: boolean }) => {
             const data = await requestAliyun(`wx/loginByCode`, { code });
             if (data.code === 0) {
                 //将openid存入localStorage
-                localStorage.setItem('openid', data.user.openid);   
+                localStorage.setItem('openid', data.user.openid);
                 // 从 url 链接中获取distPage 参数
                 if (distPage) {
                     window.location.href = `https://${window.location.host}${decodeURIComponent(distPage)}`
@@ -61,8 +61,15 @@ const AuthPage = ({ hidePage }: { hidePage: boolean }) => {
     }
 
     useEffect(() => {
-        // 在组件加载后执行代码
-        if (typeof window !== 'undefined' && isPCOrWeChat() && (window.location.host === 'superx.chat' || window.location.host === 'nat.youyi.asia')) {
+        //页面初始化
+        const hosts = ['superx.chat', 'nat.youyi.asia'];
+        if (isPCWeChatOrMobileWeChat() && !hosts.includes(window.location.host)) {
+            //将host替换为superx.chat，拼接新的url，然后跳转
+            const url = window.location.href.replace(`//${window.location.host}`, '//superx.chat');
+            window.location.href = url;
+            return;
+        }
+        if (isPCWeChatOrMobileWeChat() && (window.location.host === 'superx.chat' || window.location.host === 'nat.youyi.asia')) {
             redirectUri.current = encodeURIComponent(window.location.href);
             init();
         }

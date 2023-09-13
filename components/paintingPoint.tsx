@@ -149,6 +149,13 @@ const PaingPoint = ({ }) => {
     pullTimer = setInterval(async () => {
       let result = await queryOrderStatus(orderNo);
       if (result && result.trade_state === 'SUCCESS') {
+        //关闭弹窗
+        store.dispatch({
+          type: 'user/setIsShowBuyPointDialog',
+          payload: false,
+        });
+        //重新获取用户信息
+        getUserInfo();
         stopPullOrderState();
       }
     }, 1000)
@@ -263,6 +270,14 @@ const PaingPoint = ({ }) => {
         closable={true}
         // cancelText='取消'
         maskClosable={false}
+        onCancel={() => {
+          store.dispatch({
+            type: 'user/setIsShowBuyPointDialog',
+            payload: false,
+          });
+          stopPullOrderState();
+        }}
+
         // okText='支付完成'
         // onOk={getUserInfo}
         footer={isMobile ? null : <div className='pay-dialog-footer-wrap'>
@@ -271,6 +286,7 @@ const PaingPoint = ({ }) => {
               type: 'user/setIsShowBuyPointDialog',
               payload: false,
             });
+            getUserInfo();
             stopPullOrderState();
           }}>取消</Button>
           <Button type="primary" onClick={getUserInfo}>支付完成</Button>
@@ -331,8 +347,8 @@ const PaingPoint = ({ }) => {
           {/* 楼层 3 */}
           <div className='price-desc'>
             <div className='price-title'>点数使用说明：</div>
-            <div className='price-item'>1. 可用于 Midjourney、Stable Diffusion、DALLE、AI 艺术二维码等以及其他 AI 绘画功能，点数永久有效</div>
-            <div className='price-item'>2. Midjourney 绘图价格为每张 8 个点数/张，变体 4 个点数/张，获取单张高清图 2 个点数/张（Midjourney 四宫格算一张图。SD 根据参数不同消耗不同点数，AI 艺术二维码 {qrcodeCost} 点数/张）</div>
+            <div className='price-item'>1. 可用于 Midjourney、Stable Diffusion、DALLE、AI 艺术二维码等功能，点数永久有效</div>
+            <div className='price-item'>2. Midjourney 绘图价格为每张 8 个点数，变体 4 个点数，获取单张高清图 2 个点数（Midjourney 四宫格算一张图。SD 根据参数不同消耗不同点数，AI 艺术二维码 {qrcodeCost} 点数/张）</div>
             {/* <div className='price-item'>3. 点数永久有效</div> */}
             {/* <div>4. 由于绘画成本高昂，暂无包月会员</div> */}
           </div>

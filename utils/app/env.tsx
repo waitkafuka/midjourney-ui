@@ -16,7 +16,7 @@ export const getDeviceType = function (): 'android' | 'ios' | 'pc' {
 }
 
 //判断是否是手机微信环境
-export const isWeChat = function () {
+export const isMobileWeChat = function () {
     var ua = navigator.userAgent.toLowerCase();
     // ua中包含micromessenger字符串，且包含iphone或者android字符串
     if (/micromessenger/i.test(ua) && (/iphone/i.test(ua) || /android/i.test(ua))) {

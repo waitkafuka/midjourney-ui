@@ -488,6 +488,11 @@ const Index: React.FC = () => {
 
     const randIndex = Math.floor(Math.random() * clientIds.length);
     setClientId(clientIds[randIndex]);
+
+    //如果是 UED，使用固定的client Id
+    if(window.location.href.includes('ued.superx.chat')){
+      // setClientId();
+    }
   };
 
   const showQRcode = () => {

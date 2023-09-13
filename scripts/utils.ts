@@ -49,7 +49,7 @@ export const downloadFile = (url: string, filename: string = 'midjourney.png') =
 //封装一个方法，自动跳转到放大页面，并携带图片链接参数
 export const redirectToZoomPage = (url: string, openType = 'new_window') => {
     //新标签打开
-    if(!url) return;
+    if (!url) return;
     //替换掉url中的?x-oss-process=style/scale_500
     url = url.replace(/\?x-oss-process=style\/scale_500/, '');
     const href = `/art/upscale?url=${encodeURIComponent(url)}`;
@@ -127,6 +127,16 @@ export const isPromptValid = (prompt: string): { isValid: boolean, message?: str
 export const getQueryString = (name: string) => {
     const regex = new RegExp(`${name}=([^&]*)`);
     const match = regex.exec(window.location.search);
+    return match ? match[1] : '';
+}
+
+/**
+ * 从字符串中获取指定参数
+ * @param name
+ */
+export const getQueryFromString = (string: string, name: string,) => {
+    const regex = new RegExp(`${name}=([^&]*)`);
+    const match = regex.exec(string);
     return match ? match[1] : '';
 }
 

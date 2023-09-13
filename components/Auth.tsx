@@ -44,7 +44,6 @@ const AuthPage = ({ hidePage }: { hidePage: boolean }) => {
             const data = await requestAliyun(`wx/loginByCode`, { code });
             if (data.code === 0) {
                 //将openid存入localStorage
-                debugger
                 localStorage.setItem('openid', data.user.openid);   
                 // 从 url 链接中获取distPage 参数
                 if (distPage) {

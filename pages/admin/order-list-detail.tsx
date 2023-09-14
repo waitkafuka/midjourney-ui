@@ -24,19 +24,44 @@ for (let i = 0; i <= 23; i++) {
   timeArray.push(timeString);
 }
 
+const pkgIdTypes: any = {
+  '10': '1000点数/68元',
+  '26': '1000点数/68元',
+  '27': '3000点数/188元',
+  '28': '5000点数/298元',
+  '29': '3000点数/799元',
+  '30': '5000点数/999元',
+  '31': '10000点数/1299元',
+}
+
+const pkgIdOptions = Object.keys(pkgIdTypes).map(key => ({
+  label: key,
+  value: key
+}));
+let timerId: NodeJS.Timer;
+
 export default function OrderList() {
   const router = useRouter();
   //默认最近几天的数据
-  const defaultDays = 6;
+  // const defaultDays = 6;
+  const defaultDays = 0;
   const [defaultPickerValue, setDefaultPickerValue] = useState<any>([dayjs().subtract(defaultDays, 'day'), dayjs()]);
   const [startDate, setStartDate] = useState<string>(dayjs().subtract(defaultDays, 'day').format(format));
   const [endDate, setEndDate] = useState<string>(dayjs().format(format));
   const [onlybaidu, setOnlybaidu] = useState<boolean>(false);
   const [onlySuccess, setOnlySuccess] = useState<boolean>(true);
+  const [autoRefresh, setAutoRefresh] = useState<boolean>(true);
   const [appId, setAppId] = useState<number>(-1);
   const [list, setList] = useState<any[]>([]);
+  const [total, setTotal] = useState<number>(0);
+  const [pkgIds, setPkgIds] = useState<string[]>(['10', '26', '27', '28']);
+  const [page, setPage] = useState<number>(1);
+  const [pageSize, setPageSize] = useState<number>(10);
+  //最后刷新时间
+  const [lastRefreshTime, setLastRefreshTime] = useState<Date>(new Date());
 
   const [domains, setDomains] = useState([]);
+
 
   const columns: any = [
     {
@@ -44,9 +69,35 @@ export default function OrderList() {
       dataIndex: 'id',
     },
     {
+      title: '套餐类型',
+      dataIndex: 'source',
+      render: (text: string) => {
+        const pkgId = getQueryFromString(text, 'pkgId');
+        return <span>{`${pkgId} - ${pkgIdTypes[pkgId] || pkgId}`}</span>
+      },
+    },
+
+    {
+      title: '总金额',
+      dataIndex: 'total_amount',
+      render: (text: number) => <span>{text / 100}</span>,
+    },
+    {
       title: '创建时间',
       dataIndex: 'create_time',
-      render: (text: string) => <a>{text}</a>,
+      render: (time: Date) => <span>{dayjs(time).format('YYYY-MM-DD HH:mm:ss')}</span>
+    },
+    {
+      title: '支付时间',
+      dataIndex: 'success_time',
+      //使用dayjs,把时间格式化为 2021-01-01 12:00:00
+      render: (time: Date) => <span>{dayjs(time).format('YYYY-MM-DD HH:mm:ss')}</span>
+    },
+    {
+      title: '渠道',
+      dataIndex: 'source',
+      with: 500,
+      render: (text: string) => <span>{getQueryFromString(text, 'channel')}</span>,
     },
     {
       title: '商户订单号',
@@ -68,29 +119,15 @@ export default function OrderList() {
       dataIndex: 'description',
     },
     {
-      title: '总金额',
+      title: '总支付金额',
       dataIndex: 'payer_total_amount',
       render: (text: number) => <span>{text / 100}</span>,
     },
-    {
-      title: '支付成功时间',
-      dataIndex: 'success_time',
-    },
+
     {
       title: 'source',
       dataIndex: 'source',
       ellipsis: true,
-    },
-    {
-      title: '渠道',
-      dataIndex: 'source',
-      render: (text: string) => <span>{getQueryFromString(text, 'channel')}</span>,
-    },
-
-    {
-      title: '套餐 ID',
-      dataIndex: 'source',
-      render: (text: string) => <span>{getQueryFromString(text, 'pkgId')}</span>,
     },
 
     {
@@ -116,11 +153,7 @@ export default function OrderList() {
       dataIndex: 'secret',
     },
 
-    {
-      title: 'total_amount',
-      dataIndex: 'total_amount',
-      render: (text: number) => <span>{text / 100}</span>,
-    },
+
     {
       title: 'trade_state',
       dataIndex: 'trade_state',
@@ -162,20 +195,16 @@ export default function OrderList() {
     if (appId === -1) {
       return;
     }
-    let pkgId = 10;
-    if (appId === 40) {
-      pkgId = 13;
-    }
-    if (appId === 101) {
-      pkgId = 21;
-    }
-    const { data } = await requestAliyun('order-list', { startDate, endDate, onlybaidu, appId, pkgId, limit: 10, offset: 0, onlySuccess });
+
+    const { data } = await requestAliyun('order-list', { startDate, endDate, onlybaidu, appId, pkgIds, limit: pageSize, offset: (pageSize * (page - 1)), onlySuccess });
     //添加一个属性key，取值为 ID
     data.list.forEach((item: any) => {
       item.key = item.id;
     });
     setList(data.list);
     console.log('总数量:', data.count);
+    setTotal(data.count)
+    setLastRefreshTime(new Date());
   };
 
   const dateOnChange = (dates: DatePickerProps['value'] | RangePickerProps['value'], dateStrings: [string, string]) => {
@@ -183,12 +212,37 @@ export default function OrderList() {
     setEndDate(dateStrings[1]);
   };
 
+  const startTimer = () => {
+    timerId = setInterval(() => {
+      queryOrder();
+    }, 5000)
+  }
+
+  const stopTimer = () => {
+    console.log('stopTimer', timerId);
+
+    clearInterval(timerId);
+  }
+
   useEffect(() => {
+    if (autoRefresh) {
+      startTimer();
+    } else {
+      stopTimer();
+    }
+  }, [autoRefresh])
+
+  useEffect(() => {
+    stopTimer();
+    startTimer();
     queryOrder();
-  }, [startDate, endDate, onlybaidu, appId, onlySuccess]);
+  }, [startDate, endDate, onlybaidu, appId, onlySuccess, pkgIds, page, pageSize]);
 
   useEffect(() => {
     queryUserApps();
+    return () => {
+      stopTimer();
+    }
   }, []);
 
   return (
@@ -220,14 +274,44 @@ export default function OrderList() {
             setAppId(v);
           }}
         />
+        &nbsp;&nbsp;&nbsp;&nbsp; 选择套餐 ID：
+        <Select
+          mode="multiple"
+          style={{ width: 260 }}
+          placeholder="选择套餐"
+          defaultValue={['10', '26', '27', '28']}
+          onChange={v => {
+            setPkgIds(v);
+          }}
+          options={pkgIdOptions}
+          optionLabelProp="label"
+        >
+        </Select>
+        &nbsp;&nbsp;&nbsp;&nbsp; 每 5 秒自动刷新
+        <Switch
+          defaultChecked={autoRefresh}
+          onChange={(checked) => {
+            setAutoRefresh(checked);
+          }}
+        />
       </div>
       {/* 每日订单 */}
       {/* <h2>日订单统计</h2> */}
+      <div style={{ padding: "10px 0" }}>总数量：{total} 数据最后刷新时间：{dayjs(lastRefreshTime).format('YYYY-MM-DD HH:mm:ss')}</div>
       <Table
         tableLayout="fixed"
-
         columns={columns}
         dataSource={list}
+        pagination={{
+          total,
+          pageSize: 10,
+          showTotal: (total, range) => ` 共 ${total} 条数据 当前：${range[0]}-${range[1]}`,
+          onChange: (page, pageSize) => {
+            console.log(page, pageSize);
+            setPage(page);
+            setPageSize(pageSize);
+          }
+        }}
       />
     </div>
   );

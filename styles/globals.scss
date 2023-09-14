@@ -180,6 +180,9 @@ a:hover {
   }
 }
 
+.check-png.white {
+  display: none;
+}
 .buy-code-wrap-multiple {
   display: flex;
   flex-direction: column;
@@ -588,6 +591,21 @@ button.ant-btn-primary:not(:disabled):hover {
 
 //在日间模式下
 @media (prefers-color-scheme: light) {
+  .buy-code-wrap-multiple .qrcode-select-wrap .pkg-select-button {
+    border-color: rgba(142, 142, 142, 1);
+  }
+  .buy-code-wrap-multiple .qrcode-select-wrap .pkg-select-button {
+    &:hover,
+    &.active {
+      border-color: rgba(52, 53, 65, 1);
+    }
+  }
+  .check-png.white {
+    display: block;
+  }
+  .check-png.bg-black {
+    display: none;
+  }
   span.more-options-icon {
     color: #333;
   }

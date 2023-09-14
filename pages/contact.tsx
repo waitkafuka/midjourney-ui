@@ -14,6 +14,12 @@ const Contact: React.FC = () => {
                 phone:'13819987688'
             })
         }
+        if(window.location.href.includes('ciae.superx.chat')){
+            setContactInfo({
+                mail:'yule@ciae.net',
+                phone:'18410913984'
+            })
+        }
     })
     return <>
         <Space direction="vertical" size={16} align='center'>

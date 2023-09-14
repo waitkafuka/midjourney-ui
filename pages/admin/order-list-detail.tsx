@@ -56,7 +56,7 @@ export default function OrderList() {
   const [total, setTotal] = useState<number>(0);
   const [pkgIds, setPkgIds] = useState<string[]>(['10', '26', '27', '28']);
   const [page, setPage] = useState<number>(1);
-  const [pageSize, setPageSize] = useState<number>(10);
+  const [pageSize, setPageSize] = useState<number>(20);
   //最后刷新时间
   const [lastRefreshTime, setLastRefreshTime] = useState<Date>(new Date());
 
@@ -67,10 +67,14 @@ export default function OrderList() {
     {
       title: 'ID',
       dataIndex: 'id',
+      width: 100,
+      fixed: true,
     },
     {
       title: '套餐类型',
       dataIndex: 'source',
+      width: 200,
+      fixed: true,
       render: (text: string) => {
         const pkgId = getQueryFromString(text, 'pkgId');
         return <span>{`${pkgId} - ${pkgIdTypes[pkgId] || pkgId}`}</span>
@@ -80,25 +84,47 @@ export default function OrderList() {
     {
       title: '总金额',
       dataIndex: 'total_amount',
+      width: 80,
+      fixed: true,
       render: (text: number) => <span>{text / 100}</span>,
+    },
+    {
+      title: '渠道',
+      dataIndex: 'source',
+      width: 200,
+      render: (text: string) => <span>{getQueryFromString(text, 'channel')}</span>,
+    },
+    {
+      title: 'bd_vid',
+      dataIndex: 'source',
+      width: 50,
+      render: (text: string) => <span>{getQueryFromString(text, 'bd_vid')}</span>,
+    },
+    {
+      title: 'qhclickid',
+      dataIndex: 'source',
+      width: 50,
+      render: (text: string) => <span>{getQueryFromString(text, 'qhclickid')}</span>,
+    },
+    {
+      title: 'source',
+      dataIndex: 'source',
+      ellipsis: true,
     },
     {
       title: '创建时间',
       dataIndex: 'create_time',
+      width: 180,
       render: (time: Date) => <span>{dayjs(time).format('YYYY-MM-DD HH:mm:ss')}</span>
     },
     {
       title: '支付时间',
       dataIndex: 'success_time',
+      width: 180,
       //使用dayjs,把时间格式化为 2021-01-01 12:00:00
       render: (time: Date) => <span>{dayjs(time).format('YYYY-MM-DD HH:mm:ss')}</span>
     },
-    {
-      title: '渠道',
-      dataIndex: 'source',
-      with: 500,
-      render: (text: string) => <span>{getQueryFromString(text, 'channel')}</span>,
-    },
+
     {
       title: '商户订单号',
       dataIndex: 'out_trade_no',
@@ -124,11 +150,7 @@ export default function OrderList() {
       render: (text: number) => <span>{text / 100}</span>,
     },
 
-    {
-      title: 'source',
-      dataIndex: 'source',
-      ellipsis: true,
-    },
+
 
     {
       title: 'inviter',
@@ -297,14 +319,16 @@ export default function OrderList() {
       </div>
       {/* 每日订单 */}
       {/* <h2>日订单统计</h2> */}
-      <div style={{ padding: "10px 0" }}>总数量：{total} 数据最后刷新时间：{dayjs(lastRefreshTime).format('YYYY-MM-DD HH:mm:ss')}</div>
+      <div style={{ padding: "10px 0" }}>总数量：{total} <span style={{ marginLeft: "20px" }}>数据更新时间</span>：{dayjs(lastRefreshTime).format('YYYY-MM-DD HH:mm:ss')}</div>
       <Table
-        tableLayout="fixed"
+        // tableLayout="fixed"
         columns={columns}
+        bordered
         dataSource={list}
+        scroll={{ x: 'max-content' }}
         pagination={{
           total,
-          pageSize: 10,
+          pageSize,
           showTotal: (total, range) => ` 共 ${total} 条数据 当前：${range[0]}-${range[1]}`,
           onChange: (page, pageSize) => {
             console.log(page, pageSize);

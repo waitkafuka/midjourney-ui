@@ -60,7 +60,7 @@ const PaingPoint = ({ }) => {
         host = item;
       }
     });
-    const result = await requestAliyun(`get-pkg-list?host=${host}`, null, 'GET');
+    const result = await requestAliyun(`get-pkg-list?host=${host}&pkg_type=1`, null, 'GET');
     setPkgs(result);
     setModalQrcode(result[0].id);
   }

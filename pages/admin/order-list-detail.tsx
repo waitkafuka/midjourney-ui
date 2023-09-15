@@ -89,9 +89,18 @@ export default function OrderList() {
       render: (text: number) => <span>{text / 100}</span>,
     },
     {
+      title: '支付时间',
+      dataIndex: 'success_time',
+      width: 180,
+      fixed: true,
+      //使用dayjs,把时间格式化为 2021-01-01 12:00:00
+      render: (time: Date) => <span>{dayjs(time).format('YYYY-MM-DD HH:mm:ss')}</span>
+    },
+    {
       title: '渠道',
       dataIndex: 'source',
       width: 200,
+      fixed: true,
       render: (text: string) => <span>{getQueryFromString(text, 'channel')}</span>,
     },
     {
@@ -117,13 +126,7 @@ export default function OrderList() {
       width: 180,
       render: (time: Date) => <span>{dayjs(time).format('YYYY-MM-DD HH:mm:ss')}</span>
     },
-    {
-      title: '支付时间',
-      dataIndex: 'success_time',
-      width: 180,
-      //使用dayjs,把时间格式化为 2021-01-01 12:00:00
-      render: (time: Date) => <span>{dayjs(time).format('YYYY-MM-DD HH:mm:ss')}</span>
-    },
+    
 
     {
       title: '商户订单号',
@@ -149,9 +152,6 @@ export default function OrderList() {
       dataIndex: 'payer_total_amount',
       render: (text: number) => <span>{text / 100}</span>,
     },
-
-
-
     {
       title: 'inviter',
       dataIndex: 'inviter',
@@ -294,6 +294,7 @@ export default function OrderList() {
           style={{ width: 260 }}
           onChange={(v) => {
             setAppId(v);
+            setPage(1);
           }}
         />
         &nbsp;&nbsp;&nbsp;&nbsp; 选择套餐 ID：

@@ -1,4 +1,4 @@
-import { Button, Input, Space, Tooltip, message, InputNumber, Select } from "antd";
+import { Button, Input, Space, Tooltip, message, InputNumber, Select, notification } from "antd";
 import PaintingPoint from "../components/paintingPoint";
 import { SendOutlined, StopOutlined, QuestionCircleOutlined } from '@ant-design/icons';
 import { useEffect, useMemo, useState } from 'react';
@@ -213,11 +213,18 @@ const SD: React.FC = () => {
                 result = await requestAliyun('translate', { content: params.text });
             } catch (error) {
                 message.error('翻译出错，请稍后重试，请确保您的输入词中不包含政治、色情、暴力等词汇', 10);
+                setIsGenerating(false);
                 setIsTranslating(false);
                 return;
             }
             if (result.code !== 0) {
-                message.error(result.message, 10);
+                notification.error({
+                    message: '提示',
+                    description: result.message,
+                    duration: 0
+                });
+                // message.error(result.message, 10);
+                setIsGenerating(false);
                 setIsTranslating(false);
                 return;
             }

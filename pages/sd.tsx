@@ -236,11 +236,26 @@ const SD: React.FC = () => {
         // 调用api生成图片
         setIsGenerating(true);
 
-        const data = await requestAliyunArt('sd-painting', params)
+        let data: any = {};
+        try {
+            data = await requestAliyunArt('sd-painting', params)
+        } catch (error: any) {
+            notification.error({
+                message: '提示',
+                description: error.message as string,
+                duration: 0,
+            });
+            setIsGenerating(false);
+            return;
+        }
         console.log('生成结果', data);
         if (data.code !== 0) {
-            message.error(data.message, 30);
             setIsGenerating(false);
+            notification.error({
+                message: '提示',
+                description: data.message as string,
+                duration: 0,
+            });
             return;
         }
 

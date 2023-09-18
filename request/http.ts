@@ -51,7 +51,8 @@ export const request = async function ({ path, data, method = "POST", headers = 
             return await response.json();
         } else {
             //如果接口返回状态码不正常，则抛出异常，把错误信息返回
-            throw new Error(response.statusText);
+            const j = await response.json();
+            throw new Error(j ? JSON.stringify(j) : response.statusText);
         }
     }
 }

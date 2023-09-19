@@ -117,6 +117,12 @@ const Upscale: React.FC = () => {
             message.error('点数不足，请先购买点数。');
             return;
         }
+        //放大倍数是 4 倍以上的时候，必须输入邮箱
+        if(params.scale_num >=4 && !params.email){
+            message.error('请输入邮箱，以便接收放大后的图片。');
+            return;
+        }
+        
         setIsGenerating(true);
 
         //获取图片宽高
@@ -314,7 +320,7 @@ const Upscale: React.FC = () => {
                             ...params,
                             email: v.target.value
                         });
-                    }} placeholder="生成之后的通知，可不填" value={params.email} />
+                    }} placeholder="用来接收放大后的图片" value={params.email} />
                 </div>
                 {/* 更多选项 */}
                 <div className="art-form-item" style={{ display: "none" }}>

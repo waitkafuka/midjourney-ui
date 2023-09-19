@@ -231,6 +231,15 @@ const Index: React.FC = () => {
       setHasStartImagin(true);
       try {
         newMessage.text = newMessage.text.replace(/[\r\n]/g, '');
+        if (!localStorage.getItem('beta-tips')) {
+          notification.success({
+            message: '提示',
+            description: '💐恭喜您已获得超极速出图的内测体验资格，作为一项黑科技，出图速度将在之前相当快的基础上，再次提升数倍，达到秒级出图。已自动开启，如需关闭，可微信联系客服进行关闭。',
+            duration: 0,
+          })
+          localStorage.setItem('beta-tips', '1')
+        }
+        // return;
         // alert('翻译结果' + newMessage.text)
         // return;
         await Imagine(JSON.stringify({ prompt: newMessage.text, clientId, isCorrectPrompt }), (data: any) => {
@@ -490,7 +499,7 @@ const Index: React.FC = () => {
     setClientId(clientIds[randIndex]);
 
     //如果是 UED，使用固定的client Id
-    if(window.location.href.includes('ued.superx.chat')){
+    if (window.location.href.includes('ued.superx.chat')) {
       // setClientId();
     }
   };
@@ -593,7 +602,7 @@ const Index: React.FC = () => {
             确定
           </Button>,
         ]}
-        // footer={null}
+      // footer={null}
       >
         <div style={{ lineHeight: '1.6' }}>
           <p>1. 每次绘图消耗 8 个点数；点一次 V（变体），消耗 4 个点数；点 U（放大单图）消耗 2 个点数。</p>
@@ -710,7 +719,7 @@ const Index: React.FC = () => {
               )}
 
               {/* ，如果您不希望展示，可进入“<Link href="/mypaintings">我的作品</Link>”进行关闭。 */}
-              {img && !progress?.includes('error') && (progress?.includes('完成')||progress?.includes('done')) && img !== defaultImg && (
+              {img && !progress?.includes('error') && (progress?.includes('完成') || progress?.includes('done')) && img !== defaultImg && (
                 <Space.Compact style={{ width: '100%', marginTop: '0px' }}>
                   <Button
                     onClick={() => {
@@ -890,7 +899,7 @@ const Index: React.FC = () => {
               <QuestionCircleOutlined style={{ cursor: 'pointer' }} />
             </Tooltip>
           </div>
-          
+
         </div>
 
         {referImg && (

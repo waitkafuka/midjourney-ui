@@ -234,7 +234,7 @@ const Index: React.FC = () => {
         if (!localStorage.getItem('beta-tips')) {
           notification.success({
             message: '提示',
-            description: '💐恭喜您已获得超极速出图的内测体验资格，作为一项黑科技，出图速度将在之前相当快的基础上，再次提升数倍，达到秒级出图。功能已自动开启，如需关闭，可微信联系客服进行关闭。',
+            description: '💐恭喜您已获得超极速出图的内测体验资格，作为一项黑科技，出图速度将在之前相当快的基础上，再次提升数倍。功能已自动开启，如需关闭，可微信联系客服进行关闭。',
             duration: 0,
           })
           localStorage.setItem('beta-tips', '1')

@@ -430,15 +430,12 @@ export default function Main(children: JSX.Element) {
           key: 'paintings',
           icon: <i className='iconfont icon-fengjing-01'></i>,
         },
-
-
         {
           path: 'https://ciae.net/',
           name: 'CIAE 绘画大赛',
           key: 'activityfirst',
           icon: <SketchOutlined />,
           target: '_blank',
-
         },
         // {
         //   path: 'https://superx.chat/pay/',
@@ -521,6 +518,83 @@ export default function Main(children: JSX.Element) {
         },
         {
           path: '/',
+          target: '_blank',
+          name: 'ChatAI',
+          key: 'chatgpt',
+          icon: <i className='iconfont icon-chat'></i>,
+        },
+      ]
+    }
+
+    //如果是chat.yczktek.com或者superx360.com，单独定制路由
+    if (window.location.host === 'chat.yczktek.com' || window.location.host === 'superx360.com') {
+      ROUTES.routes = [
+        {
+          path: '/art/',
+          name: '开始绘画',
+          icon: <SendOutlined />,
+          key: 'start',
+          flatMenu: false,
+          children: [{
+            path: '/art/',
+            target: "_blank",
+            name: 'AI绘画·四宫格',
+            key: "aihuihua",
+          }, {
+            path: '/art/sd',
+            target: "_blank",
+            name: 'sd',
+            key: "Stable Diffusion",
+          }, {
+            path: '/art/dalle/',
+            target: "_blank",
+            name: 'DALL·E2',
+            key: "dalle",
+          }]
+        },
+        {
+          name: '图片高清放大',
+          key: 'imgupscale',
+          icon: <i className='iconfont icon-fangda'></i>,
+          path: '/art/upscale',
+          target: "_blank",
+        },
+        {
+          name: '教程',
+          key: "guideParent",
+          icon: <BulbOutlined />,
+          children: [
+            {
+              key: 'guide',
+              path: '/art/guide/',
+              target: "_blank",
+              name: '入门指引',
+              icon: <BulbOutlined />,
+            },
+            {
+              path: '/art/cookbook/',
+              target: "_blank",
+              name: '参数大全',
+              key: 'cookbook',
+              icon: <i className='iconfont icon-canshushezhi'></i>,
+            }]
+        },
+        {
+          path: '/art/mypaintings/',
+          target: '_blank',
+          name: '我的作品',
+          key: 'mypaintings',
+          icon: <i className='iconfont icon-huihua'></i>,
+        },
+        {
+          path: '/art/paintings/',
+          target: '_blank',
+          name: '艺术公园',
+          key: 'paintings',
+          icon: <i className='iconfont icon-fengjing-01'></i>,
+        },
+        {
+          path: 'https://aihuihua.ai/',
           target: '_blank',
           name: 'ChatAI',
           key: 'chatgpt',

@@ -245,6 +245,8 @@ const SD: React.FC = () => {
                 description: error.message as string,
                 duration: 0,
             });
+            //从imgList中删除最后 4 个
+            setImgList(list => list.slice(0, list.length - holder.length));
             setIsGenerating(false);
             return;
         }

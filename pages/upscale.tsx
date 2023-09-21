@@ -118,11 +118,11 @@ const Upscale: React.FC = () => {
             return;
         }
         //放大倍数是 4 倍以上的时候，必须输入邮箱
-        if(params.scale_num >=4 && !params.email){
+        if (params.scale_num >= 4 && !params.email) {
             message.error('请输入邮箱，以便接收放大后的图片。');
             return;
         }
-        
+
         setIsGenerating(true);
 
         //获取图片宽高
@@ -159,11 +159,18 @@ const Upscale: React.FC = () => {
             console.log('提交参数：', params);
             res = await requestAliyunArt('image-upscale', params);
         } catch (error: any) {
-            if (error.includes('timeout')) {
-                message.error('由于图片较大，接口响应超时，后台任务仍在运算中，稍后将发送至邮箱，最长不会超过 10 分钟。若生成失败不扣点数。');
+            //error.message转为小写
+            if (error.message.toLowerCase().includes('time')) {
+                const tips = '由于图片较大，接口响应超时，后台任务仍在运算中，可直接关闭页面。稍后结果将发送至邮箱，预计 10 分钟左右。若生成失败不会扣减点数。';
+                notification.error({
+                    message: '提示',
+                    description: tips,
+                    duration: 0,
+                });
             } else {
                 message.error(error + '');
             }
+
             setIsGenerating(false);
             setQrCodeImage(undefined);
             return;

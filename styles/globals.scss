@@ -716,6 +716,8 @@ button.ant-btn-primary:not(:disabled):hover {
   justify-content: space-evenly;
   margin-top: 15px;
   align-items: flex-start;
+  position: relative;
+  z-index: 1000;
   &.sd-result {
     padding-bottom: 300px;
   }

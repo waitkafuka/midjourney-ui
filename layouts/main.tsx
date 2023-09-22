@@ -527,7 +527,8 @@ export default function Main(children: JSX.Element) {
     }
 
     //如果是chat.yczktek.com或者superx360.com，单独定制路由
-    if (window.location.host === 'chat.yczktek.com' || window.location.host === 'superx360.com') {
+    const forbiddenHosts = ['chat.yczktek.com', 'superx360.com', 'ai.superx360.com'];
+    if(forbiddenHosts.includes(window.location.host)) {
       ROUTES.routes = [
         {
           path: '/art/',

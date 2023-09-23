@@ -1,5 +1,7 @@
 import { useEffect, useState } from "react";
 import { qrTemplates, qrModels, qrVersions } from "../scripts/config";
+import { Button } from "antd";
+import  Router from "next/router";
 
 const QrcodeTemplates: React.FC = () => {
 
@@ -15,6 +17,10 @@ const QrcodeTemplates: React.FC = () => {
                     <div className="qrcode-template-title">{template.name}</div>
                     <div className="qrcode-template-img-box">
                         <img src={template.preview_img} alt="" />
+                        <Button onClick={() => {
+                            //使用next-router跳转到/art/qrcode路由，并且携带template_id参数
+                            Router.push(`/qrcode/?template_id=${template.id}`);
+                        }}>使用</Button>
                     </div>
                 </div>
             })}

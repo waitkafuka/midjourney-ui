@@ -76,7 +76,7 @@ const QrCode: React.FC = () => {
         const initQrcodeImage: ImgCardModel = {
             id: 0,
             img_url: '/mx-qrcode/lanselifu.png',
-            prompt: 'blue dress',
+            prompt: '由 高级选项 -> 选择模板 -> 蓝色礼服生成',
             create_time: new Date(),
             is_public: 0,
             thumb_up_count: 0,
@@ -275,11 +275,39 @@ const QrCode: React.FC = () => {
         fileInput.click();
     }
 
+    //解析链接参数，取出是否有高级选项，和模板 ID
+    const parseUrlParams = () => {
+        const url = new URL(window.location.href);
+        const template_id = url.searchParams.get('template_id');
+        if (template_id) {
+            const template_id_int = parseInt(template_id);
+            setShowOptions(true);
+            const tpl = qrTemplates.find(item => item.id === template_id_int);
+            const newQrcodeImage: ImgCardModel = {
+                id: 0,
+                img_url: tpl?.preview_img?.replace('https://och.superx.chat', '') || '',
+                prompt: params.prompt,
+                create_time: new Date(),
+                is_public: 0,
+                thumb_up_count: 0,
+                painting_type: PaintingType.QRCODE,
+                width: tpl?.width,
+                height: tpl?.height
+            };
+            setQrCodeImage(img => newQrcodeImage);
+            setParams({
+                ...params,
+                template_id: template_id_int
+            });
+        }
+    }
+
     //页面初始化
     useEffect(() => {
         randomPrompt();
         setBDVid();
         initQrDemo();
+        parseUrlParams();
     }, [])
 
     return <><Head>
@@ -293,7 +321,7 @@ const QrCode: React.FC = () => {
             <div className="code-options-box">
                 <div className="art-form-item">
                     <div className="form-item-label">
-                        <span className="input-label">URL 链接</span>
+                        <span className="input-label">扫码链接（微信名片等图片请点右侧识别）</span>
                         <Tooltip title="二维码扫码之后识别到的链接。链接越短越容易扫描（也可以是文字，但二维码容量有限，文字不宜过长）。如果是微信二维码，请点击右侧“识别”，上传二维码图片。">
                             <QuestionCircleOutlined />
                         </Tooltip>
@@ -313,7 +341,7 @@ const QrCode: React.FC = () => {
                     }} placeholder="如：https://superx.chat/art/" value={params.qr_content} />
                 </div>
                 {/* 提示词 */}
-                <div className="art-form-item">
+                {!params.template_id && <div className="art-form-item">
                     <div className="form-item-label">
                         <span className="input-label">图片提示词</span>
                         <Tooltip title="要生成图片的描述词，和 midjourney 一样，支持中文，会自动进行翻译。不支持参数。">
@@ -330,7 +358,7 @@ const QrCode: React.FC = () => {
                             prompt: v.target.value
                         });
                     }} value={params.prompt} autoSize={{ minRows: 3, maxRows: 5 }} />
-                </div>
+                </div>}
                 {/* 更多选项 */}
                 <div className="art-form-item">
                     <div className="form-item-label cp inline-block" onClick={() => {
@@ -386,7 +414,7 @@ const QrCode: React.FC = () => {
                         </Row>
                     </div>
                     {/* 模型选择 */}
-                    <div className="art-form-item horizontal">
+                    {!params.template_id && <div className="art-form-item horizontal">
                         <div className="form-item-label">
                             <span className="input-label">选择风格</span>
                             <Tooltip title="选择不同的模型，生成的艺术图片会有所不同。">
@@ -410,7 +438,7 @@ const QrCode: React.FC = () => {
                                 </div>
                             }))}
                         />
-                    </div>
+                    </div>}
                     {/* 模板选择 */}
                     <div className="art-form-item horizontal">
                         <div className="form-item-label">
@@ -418,13 +446,30 @@ const QrCode: React.FC = () => {
                             <Tooltip title="选择模板的情况下，将直接使用系统图片模板进行二维码融合，而不会使用提示词、负面提示词和风格选择。">
                                 <QuestionCircleOutlined />
                             </Tooltip>
-                            <a href="/art/qrcode-templates" target="_blank" style={{ marginLeft: '20px', fontSize: '12px', textDecoration: "underline" }}>查看模板效果</a>
+                            <a href="/art/qrcode-templates" target="_blank" style={{ marginLeft: '20px', fontSize: '12px', textDecoration: "underline" }}>查看全部模板</a>
                         </div>
                         <Select
                             value={params.template_id}
                             style={{ width: 180, marginLeft: "10px" }}
                             onChange={v => {
                                 setParams({ ...params, template_id: v })
+                                if (v !== 0) {
+                                    const tpl = qrTemplates.find(item => item.id === v);
+                                    const newQrcodeImage: ImgCardModel = {
+                                        id: 0,
+                                        img_url: tpl?.preview_img?.replace('https://och.superx.chat', '') || '',
+                                        prompt: '生成效果示例',
+                                        create_time: new Date(),
+                                        is_public: 0,
+                                        thumb_up_count: 0,
+                                        painting_type: PaintingType.QRCODE,
+                                        width: tpl?.width,
+                                        height: tpl?.height
+                                    };
+                                    setQrCodeImage(img => newQrcodeImage);
+                                } else {
+                                    initQrDemo();
+                                }
                             }}
                             options={qrTemplates.map(item => ({ value: item.id, label: item.name }))}
                         />
@@ -481,13 +526,12 @@ const QrCode: React.FC = () => {
                         copylink={true}
                         key={qrCodeImage.id}
                         model={qrCodeImage}
+                        hasPrompt={!!qrCodeImage.prompt}
                         hasDelete={true} />}
                     {/* {JSON.stringify(ratio)} */}
                     {/* {JSON.stringify(qrCodeImage)} */}
                     {showDemo && <>
-                        <div className="qrcode-demo-tips">示例二维码由：高级选项-{'>'}选择模板-{'>'}“蓝色礼服”生成</div>
-                        <div className="qrcode-demo-tips">玫瑰礼服、蓝色礼服、公主裙、清新古风四个模板为比例9:16，其他模板为 1:1</div>
-                        <div className="qrcode-demo-tips">二维码创作30点数/张</div>
+                        {/* <div className="qrcode-demo-tips">二维码创作30点数/张</div> */}
                         {/* <div className="qrcode-demo-tips">每张点数 30 点</div> */}
                     </>}
 

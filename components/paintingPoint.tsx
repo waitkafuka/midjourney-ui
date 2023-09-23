@@ -104,6 +104,12 @@ const PaingPoint = ({ }) => {
       return;
     }
     setModalQrcode(pkgs[0].id);
+    //如果剩余点数大于 100，删除bd_vid
+    if (user.point_count >= 100) {
+      localStorage.removeItem('bd_vid');
+      localStorage.removeItem('qhclickid');
+      localStorage.removeItem('u');
+    }
     store.dispatch({
       type: 'user/setIsShowBuyPointDialog',
       payload: true,

@@ -418,7 +418,7 @@ const QrCode: React.FC = () => {
                             <Tooltip title="选择模板的情况下，将直接使用系统图片模板进行二维码融合，而不会使用提示词、负面提示词和风格选择。">
                                 <QuestionCircleOutlined />
                             </Tooltip>
-
+                            <a href="/art/qrcode-templates" target="_blank" style={{ marginLeft: '20px', fontSize: '12px', textDecoration: "underline" }}>查看模板效果</a>
                         </div>
                         <Select
                             value={params.template_id}

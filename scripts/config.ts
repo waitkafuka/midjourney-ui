@@ -47,7 +47,7 @@ export const qrTemplates = [
     {
         "id": 10,
         "name": "蛋糕",
-        "preview_img": "https://cdn.mewx.art/images/static/qr-template-preview/dangao.jpeg",
+        "preview_img": "https://och.superx.chat/mx-qrcode/20230923180954276737.png",
         "is_vip": 2,
         width: 920,
         height: 920,
@@ -56,7 +56,7 @@ export const qrTemplates = [
     {
         "id": 12,
         "name": "玫瑰礼服",
-        "preview_img": "https://cdn.mewx.art/images/static/qr-template-preview/meiguilifu.jpeg",
+        "preview_img": "https://och.superx.chat/mx-qrcode/20230923181526303896.png",
         "is_vip": 1,
         width: 740,
         height: 1280,
@@ -65,7 +65,7 @@ export const qrTemplates = [
     {
         "id": 13,
         "name": "公主裙",
-        "preview_img": "https://cdn.mewx.art/images/static/qr-template-preview/13.jpeg",
+        "preview_img": "https://och.superx.chat/mx-qrcode/20230923181050674046.png",
         "is_vip": 1,
         width: 740,
         height: 1280,
@@ -74,7 +74,7 @@ export const qrTemplates = [
     {
         "id": 11,
         "name": "蓝色礼服",
-        "preview_img": "https://cdn.mewx.art/images/static/qr-template-preview/11.jpeg",
+        "preview_img": "https://och.superx.chat/mx-qrcode/lanselifu.png",
         "is_vip": 1,
         width: 740,
         height: 1280,
@@ -83,7 +83,7 @@ export const qrTemplates = [
     {
         "id": 14,
         "name": "清新古风",
-        "preview_img": "https://cdn.mewx.art/images/static/qr-template-preview/14.jpeg",
+        "preview_img": "https://och.superx.chat/mx-qrcode/20230923181124659318.png",
         "is_vip": 1,
         width: 740,
         height: 1280,
@@ -92,7 +92,7 @@ export const qrTemplates = [
     {
         "id": 4,
         "name": "蝴蝶仙子",
-        "preview_img": "https://cdn.mewx.art/images/static/qr-template-preview/4.jpeg",
+        "preview_img": "https://och.superx.chat/mx-qrcode/20230923181144279994.png",
         "is_vip": 1,
         width: 920,
         height: 920,
@@ -101,7 +101,7 @@ export const qrTemplates = [
     {
         "id": 6,
         "name": "花嫁",
-        "preview_img": "https://cdn.mewx.art/images/static/qr-template-preview/6.jpeg",
+        "preview_img": "https://och.superx.chat/mx-qrcode/20230923181219303263.png",
         "is_vip": 1,
         width: 920,
         height: 920,
@@ -110,7 +110,7 @@ export const qrTemplates = [
     {
         "id": 5,
         "name": "国风写实",
-        "preview_img": "https://cdn.mewx.art/images/static/qr-template-preview/5.jpeg",
+        "preview_img": "https://och.superx.chat/mx-qrcode/20230923181314645073.png",
         "is_vip": 1,
         width: 920,
         height: 920,
@@ -119,7 +119,7 @@ export const qrTemplates = [
     {
         "id": 2,
         "name": "墨莲",
-        "preview_img": "https://cdn.mewx.art/images/static/qr-template-preview/2.jpeg",
+        "preview_img": "https://och.superx.chat/mx-qrcode/2023092318173947705.png",
         "is_vip": 1,
         width: 920,
         height: 920,
@@ -128,7 +128,7 @@ export const qrTemplates = [
     {
         "id": 3,
         "name": "钢铁侠",
-        "preview_img": "https://cdn.mewx.art/images/static/qr-template-preview/3.jpeg",
+        "preview_img": "https://och.superx.chat/mx-qrcode/20230923181348781008.png",
         "is_vip": 0,
         width: 920,
         height: 920,
@@ -137,7 +137,7 @@ export const qrTemplates = [
     {
         "id": 7,
         "name": "雪景",
-        "preview_img": "https://cdn.mewx.art/images/static/qr-template-preview/7.jpeg",
+        "preview_img": "https://och.superx.chat/mx-qrcode/20230923181412919341.png",
         "is_vip": 1,
         width: 920,
         height: 920,
@@ -146,7 +146,7 @@ export const qrTemplates = [
     {
         "id": 9,
         "name": "城堡",
-        "preview_img": "https://cdn.mewx.art/images/static/qr-template-preview/9.jpeg",
+        "preview_img": "https://och.superx.chat/mx-qrcode/20230923181446603244.png",
         "is_vip": 0,
         width: 920,
         height: 920,
@@ -155,7 +155,7 @@ export const qrTemplates = [
     {
         "id": 54,
         "name": "星河与你（七夕限定）",
-        "preview_img": "https://cdn.mewx.art/images/static/qr-template-preview/flowers-blue.jpeg",
+        "preview_img": "https://och.superx.chat/mx-qrcode/20230822101701873316.png",
         "is_vip": 0,
         width: 920,
         height: 920,
@@ -165,7 +165,7 @@ export const qrTemplates = [
     {
         "id": 53,
         "name": "怦然心动（七夕限定）",
-        "preview_img": "https://cdn.mewx.art/images/static/qr-template-preview/flowers-pink.jpeg",
+        "preview_img": "https://och.superx.chat/mx-qrcode/20230821234355646757.png",
         "is_vip": 0,
         width: 920,
         height: 920,
@@ -176,7 +176,7 @@ export const qrTemplates = [
     {
         "id": 55,
         "name": "月落星沉（七夕限定）",
-        "preview_img": "https://cdn.mewx.art/images/static/qr-template-preview/flowers-purple.jpeg",
+        "preview_img": "https://och.superx.chat/mx-qrcode/20230822092027334024.png",
         "is_vip": 0,
         width: 920,
         height: 920,
@@ -186,7 +186,7 @@ export const qrTemplates = [
     {
         "id": 57,
         "name": "金色暖阳（七夕限定）",
-        "preview_img": "https://cdn.mewx.art/images/static/qr-template-preview/flowers-yellow.jpeg",
+        "preview_img": "https://och.superx.chat/mx-qrcode/20230822092033510417.png",
         "is_vip": 0,
         width: 920,
         height: 920,
@@ -196,7 +196,7 @@ export const qrTemplates = [
     {
         "id": 58,
         "name": "落日晚风（七夕限定）",
-        "preview_img": "https://cdn.mewx.art/images/static/qr-template-preview/flowers-d61db12b-8f2b-4ee5-94ed.jpeg",
+        "preview_img": "https://och.superx.chat/mx-qrcode/20230822092031517270.png",
         "is_vip": 0,
         width: 920,
         height: 920,

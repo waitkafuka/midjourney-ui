@@ -305,7 +305,6 @@ export default function Main(children: JSX.Element) {
 
   store.subscribe(() => {
     let info = store.getState().user.info;
-    console.log('info:', info);
 
     setUser(info)
     if (info) {

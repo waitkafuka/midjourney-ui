@@ -64,25 +64,24 @@ a:hover {
   text-decoration: underline;
 }
 
-.qrcode-templates-wrap{
+.qrcode-templates-wrap {
   display: flex;
   justify-content: space-around;
   align-items: center;
   flex-wrap: wrap;
   padding-bottom: 100px;
-  .qrcode-template-item{
+  .qrcode-template-item {
     text-align: center;
     margin-top: 30px;
     width: 320px;
   }
-  .qrcode-template-title{
-
+  .qrcode-template-title {
   }
-  .qrcode-template-img-box{
+  .qrcode-template-img-box {
     margin-top: 20px;
     width: 320px;
     padding: 0 10px;
-    img{
+    img {
       width: 100%;
     }
   }
@@ -710,6 +709,16 @@ button.ant-btn-primary:not(:disabled):hover {
   color: #999;
   font-size: 14px;
   margin-top: 30px;
+}
+
+.userinfo-wrap {
+  .userinfo-wrap-item {
+    display: flex;
+    margin-top: 10px;
+    .userinfo-wrap-item-key {
+      width: 80px;
+    }
+  }
 }
 
 .workspace-img-wrap {

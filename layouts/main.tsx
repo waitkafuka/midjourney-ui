@@ -187,6 +187,7 @@ export default function Main(children: JSX.Element) {
   const [title, setTitle] = useState('superx.chat');
   const [logoSrc, setLogoSrc] = useState('/art/logo.png');
   const [isShowEditFormModal, setIsShowEditFormModal] = useState(false)
+  const [isShowMyInfo, setIsShowMyInfo] = useState(false)
   const [nickname, setNickname] = useState('');
   const [powerBy, setPowerBy] = useState('Powered by Midjourney + DALLE2');
   const [items, setItems] = useState<MenuProps['items']>();
@@ -257,6 +258,16 @@ export default function Main(children: JSX.Element) {
           setIsShowEditFormModal(true)
         }}>
           修改昵称
+        </Button>
+      ),
+    },
+    {
+      key: '301',
+      label: (
+        <Button type="text" block onClick={() => {
+          setIsShowMyInfo(true)
+        }}>
+          我的信息
         </Button>
       ),
     },
@@ -527,7 +538,7 @@ export default function Main(children: JSX.Element) {
 
     //如果是chat.yczktek.com或者superx360.com，单独定制路由
     const forbiddenHosts = ['chat.yczktek.com', 'superx360.com', 'ai.superx360.com'];
-    if(forbiddenHosts.includes(window.location.host)) {
+    if (forbiddenHosts.includes(window.location.host)) {
       ROUTES.routes = [
         {
           path: '/art/',
@@ -655,6 +666,50 @@ export default function Main(children: JSX.Element) {
           <Input placeholder="输入一个你喜欢的昵称吧" showCount={true} maxLength={20} value={nickname} onChange={v => {
             setNickname(v.target.value)
           }} />
+        </div>
+      </Modal>
+      <Modal
+        title="我的信息"
+        style={{ top: 20, width: "500px" }}
+        open={isShowMyInfo}
+        destroyOnClose={true}
+        closable={true}
+        maskClosable={true}
+        okText="确定"
+        onCancel={() => { setIsShowMyInfo(false) }}
+        footer={[
+          // <Button key="ok" onClick={() => { setIsShowMyInfo(false) }}>
+          //   取消
+          // </Button>,
+          <Button key="ok" type="primary" onClick={async () => {
+            const result = await requestAliyun(`edit-user`, { nickname });
+            if (result.code === 0) {
+              const u = result.user;
+              store.dispatch(setUserInfo(u || {}))
+              setIsShowMyInfo(false)
+            } else {
+              message.warning(result.message);
+            }
+          }}>
+            确定
+          </Button>,
+        ]}
+      // footer={null}
+      >
+
+        <div className='userinfo-wrap'>
+          <div className='userinfo-wrap-item'>
+            <div className='userinfo-wrap-item-key'>用户ID：</div>
+            <div>{user.secret}</div>
+          </div>
+          <div className='userinfo-wrap-item'>
+            <div className='userinfo-wrap-item-key'>用户名：</div>
+            <div>{user.nickname}</div>
+          </div>
+          <div className='userinfo-wrap-item'>
+            <div className='userinfo-wrap-item-key'>邮箱：</div>
+            <div>{user.email}</div>
+          </div>
         </div>
       </Modal>
       <ProConfigProvider

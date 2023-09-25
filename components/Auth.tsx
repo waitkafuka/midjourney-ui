@@ -62,7 +62,7 @@ const AuthPage = ({ hidePage }: { hidePage: boolean }) => {
 
     useEffect(() => {
         //页面初始化
-        const hosts = ['superx.chat', 'nat.youyi.asia', 'ai.sunmen.cn'];
+        const hosts = ['superx.chat', 'nat.youyi.asia', 'ai.sunmen.cn','ciae.superx.chat','ai.superx.chat'];
         if (isPCWeChatOrMobileWeChat() && !hosts.includes(window.location.host)) {
             //将host替换为superx.chat，拼接新的url，然后跳转
             const url = window.location.href.replace(`//${window.location.host}`, '//superx.chat');

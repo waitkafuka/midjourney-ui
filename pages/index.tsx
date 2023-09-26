@@ -353,7 +353,7 @@ const Index: React.FC = () => {
 
     setInputDisable(true);
     setMessages((omsg) => [...omsg, newMessage]);
-    try {
+    try { 
       await Variation(JSON.stringify({ content, index, msgId, msgHash, clientId }), (data: any) => {
         //mj 服务报错
         if (data.code === 40024) {
@@ -367,7 +367,7 @@ const Index: React.FC = () => {
           return;
         }
         newMessage.img = data.uri.replace('https://cdn.discordapp.com/', NEXT_PUBLIC_IMAGE_PREFIX);
-        if (data.uri.endsWith('.png')) {
+        if (data.id) {
           newMessage.hasTag = true;
           //扣减点数
           store.dispatch({ type: 'user/pointChange', payload: user.point_count - PAINTING_POINTS_ONE_TIME / 2 });

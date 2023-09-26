@@ -624,7 +624,7 @@ const Index: React.FC = () => {
       <Modal
         title='使用指南'
         style={{ top: 20, width: '500px' }}
-        open={showOperationtTips}
+        open={showOperationtTips && false}
         destroyOnClose={true}
         closable={true}
         maskClosable={false}

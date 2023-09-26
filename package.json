@@ -6,6 +6,7 @@
   "scripts": {
     "dev": "next dev",
     "static": "next build && next export",
+    "just-static": "next export",
     "build": "next build",
     "start": "next start",
     "lint": "next lint",

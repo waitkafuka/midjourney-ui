@@ -69,6 +69,7 @@ const Index: React.FC = () => {
   const [clientCount, setClientCount] = useState(0);
   const [nodes, setNodes] = useState<any[]>([]);
   const [hasStartImagin, setHasStartImagin] = useState(false);
+  const [showStartTips, setShowStartTips] = useState(false);
 
   //测试
   // const [messages, setMessages] = useState<Message[]>([{
@@ -231,14 +232,21 @@ const Index: React.FC = () => {
       setHasStartImagin(true);
       try {
         newMessage.text = newMessage.text.replace(/[\r\n]/g, '');
-        // if (!localStorage.getItem('beta-tips')) {
-        //   notification.success({
-        //     message: '提示',
-        //     description: '💐恭喜您已获得超极速出图的内测体验资格，作为一项黑科技，出图速度将在之前相当快的基础上，再次提升数倍。功能已自动开启，如需关闭，可微信联系客服进行关闭。',
-        //     duration: 0,
-        //   })
-        //   localStorage.setItem('beta-tips', '1')
-        // }
+        if (!localStorage.getItem('beta-tips1')) {
+          setShowStartTips(true);
+          // notification.success({
+          //   message: 'MJ绘画提示',
+          //   // description: '💐恭喜您已获得超极速出图的内测体验资格，作为一项黑科技，出图速度将在之前相当快的基础上，再次提升数倍。功能已自动开启，如需关闭，可微信联系客服进行关闭。',
+          //   description: <div>
+          //     <div>💐 MJ 绘画 8 个点数/张</div>
+          //     <div>💐 点 V（变体）8 点数/张</div>
+          //     <div>💐 点 U（高清某一张）2 点数/张</div>
+          //     <div>💐 出图失败不扣费</div>
+          //   </div>,
+          //   duration: 0,
+          // })
+          localStorage.setItem('beta-tips1', '1')
+        }
         // return;
         // alert('翻译结果' + newMessage.text)
         // return;
@@ -353,7 +361,7 @@ const Index: React.FC = () => {
 
     setInputDisable(true);
     setMessages((omsg) => [...omsg, newMessage]);
-    try { 
+    try {
       await Variation(JSON.stringify({ content, index, msgId, msgHash, clientId }), (data: any) => {
         //mj 服务报错
         if (data.code === 40024) {
@@ -582,6 +590,36 @@ const Index: React.FC = () => {
 
       {contextHolder}
       {/* <Spin>{paintingTip}</Spin> */}
+      {/* 价格提示弹窗 */}
+      <Modal
+        title='MJ 使用提示'
+        style={{ top: 20, width: '500px' }}
+        open={showStartTips}
+        destroyOnClose={true}
+        closable={true}
+        maskClosable={false}
+        okText='确定'
+        footer={[
+          <Button
+            key='ok'
+            type='primary'
+            onClick={() => {
+              setShowStartTips(false);
+            }}
+          >
+            确定
+          </Button>,
+        ]}
+      // footer={null}
+      >
+        <div>
+          <div>💐 MJ 绘画 8 点数/张</div>
+          <div>💐 点 V（变体）8 点数/张</div>
+          <div>💐 点 U（高清某一张）2 点数/张</div>
+          <div>💐 可在左侧“我的作品”中查看全部已生成作品</div>
+          <div>💐 如有任何问题和反馈建议，均可联系公众号客服</div>
+        </div>
+      </Modal>
       {/* 操作提示弹窗 */}
       <Modal
         title='使用指南'

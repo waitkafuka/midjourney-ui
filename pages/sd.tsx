@@ -175,9 +175,30 @@ const SD: React.FC = () => {
             message.error('请输入提示词');
             return;
         }
+        //在 SDXL0.9和 1.0 模型下，参考图尺寸必须是指定的尺寸
+        if ((params.engineId === 'stable-diffusion-xl-1024-v0-9' || params.engineId === 'stable-diffusion-xl-1024-v1-0') && fileList.length > 0) {
+            //判断参考图的尺寸
+            let imgSize: any = await getImgSize(fileList[0].originFileObj);
+            imgSize = `${imgSize.width}x${imgSize.height}`;
+            const rightSizes = ['1024x1024', '1152x896', '1216x832', '1344x768', '1536x640', '640x1536', '768x1344', '832x1216', '896x1152'];
+            if (!rightSizes.includes(imgSize)) {
+                notification.error({
+                    message: '提示',
+                    description: <div style={{lineHeight:"1.7"}}>
+                        <div>参考图尺寸有误。</div>
+                        <div>针对 SDXL1.0 和 SDXL0.9 模型，请确保参考图的尺寸符合以下要求之一：{rightSizes.join(', ')}。</div>
+                        <div>您当前的参考图尺寸为：<b>{imgSize}</b>。</div>
+                        <div>请按照以上提示修改参考图尺寸，并重新上传。</div>
+                        <div>本次生成不扣费。</div>
+                    </div>,
+                    duration: 0,
+                })
+                return;
+            }
+        }
         //如果是768模型，图片最小尺寸相乘不能小于589824
         if (params.engineId.indexOf('768') > -1 && params.width * params.height < 589824) {
-            message.error('768模型，图片宽高相乘不能小于589824，请增大图片尺寸');
+            message.error('768模型，图片宽高相乘不能小于589824，请增大图片尺寸', 10);
             return;
         }
         const imgSize: any = fileList.length > 0 ? await getImgSize(fileList[0].originFileObj) : { width: params.width, height: params.height };

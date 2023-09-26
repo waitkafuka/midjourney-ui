@@ -18,6 +18,8 @@ import { isPromptValid } from '../scripts/utils';
 import type { ColumnsType } from 'antd/es/table';
 const imgExp = /<([^<>]+)>/g;
 import ClipboardJS from 'clipboard';
+import LottieAnimation from '../components/LottieAnimation';
+import dkJson from '../components/dk.json'
 
 const baseWidth = 500;
 const { TextArea } = Input;
@@ -687,6 +689,7 @@ const Index: React.FC = () => {
         renderItem={renderMessage}
         locale={{ emptyText: '使用 midjourney 来生成你的第一幅人工智能绘画作品。' }}
       /> */}
+
       {messages.length > 0 ? (
         <div
           className='workspace-img-wrap img-list-box'
@@ -731,9 +734,12 @@ const Index: React.FC = () => {
                 {/* {!img && <Spin tip="绘画中，正常 1 分钟内可完成，如遇排队，可能需要 1-2 分钟。"></Spin>} */}
                 {!img && (
                   <div style={{ textAlign: 'center' }}>
-                    <img style={{ width: '130px' }} src='https://c.superx.chat/stuff/default.svg' alt='' /> <br />
+                    {/* <img style={{ width: '130px' }} src='https://c.superx.chat/stuff/default.svg' alt='' /> <br /> */}
+                    <div style={{ width: "130px" }}>
+                      <LottieAnimation animationData={dkJson}></LottieAnimation>
+                    </div>
                     <div style={{ marginTop: '10px', display: 'flex', textAlign: 'center', justifyContent: 'center' }}>
-                      <Spin tip=''></Spin> <span style={{ color: '#888', fontSize: '13px' }}>正在努力绘画...</span>
+                      <Spin tip=''></Spin> <span style={{ color: '#888', fontSize: '13px' }}> 正在努力绘画...</span>
                     </div>
                   </div>
                 )}

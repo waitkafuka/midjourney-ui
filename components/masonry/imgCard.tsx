@@ -138,7 +138,12 @@ const App = ({ model, columnWidth, onImgDeleted, paint_params, type, onImgThumbU
                     {/* 编辑按钮 */}
                     <div className={css["masonry-action-item"]} onClick={() => {
                         //路由到编辑页面
-                        Router.push(`/?prompt=${encodeURIComponent(prompt)}`);
+                        // Router.push(`/?id=${id}`);
+                        if (type === ImgPageType.MY) {
+                            Router.push(`/?id=${id}`);
+                        } else {
+                            Router.push(`/?prompt=${encodeURIComponent(prompt)}`);
+                        }
                     }}>
                         <EditOutlined key="edit" title="重新生成" />
                     </div>

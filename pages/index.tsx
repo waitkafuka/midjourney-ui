@@ -7,19 +7,20 @@ import { Message } from '../interfaces/message';
 import MyTag from '../components/tag';
 import { requestAliyun, requestAliyunArt } from '../request/http';
 import { useSelector, useDispatch } from 'react-redux';
-import { downloadFile, getQueryString, hasChinese, shuffleArray, redirectToZoomPage } from '../scripts/utils';
+import { downloadFile, getQueryString, hasChinese, shuffleArray, redirectToZoomPage, extractIdFromString } from '../scripts/utils';
 import { NEXT_PUBLIC_IMAGE_PREFIX, PAINTING_POINTS_ONE_TIME } from '../scripts/config';
 import { getRatio, getHeight } from '../scripts/utils';
 import PaintingPoint from '../components/paintingPoint';
 import store from '../store';
 import AliyunOSSUploader from '../components/OssUploader';
-import { ossUploadedImgBaseURL } from '../scripts/config';
 import { isPromptValid } from '../scripts/utils';
 import type { ColumnsType } from 'antd/es/table';
 const imgExp = /<([^<>]+)>/g;
 import ClipboardJS from 'clipboard';
 import LottieAnimation from '../components/LottieAnimation';
 import dkJson from '../components/dk.json'
+import { number } from 'echarts';
+const imgBasePath = '//och.superx.chat'
 
 const baseWidth = 500;
 const { TextArea } = Input;
@@ -311,48 +312,6 @@ const Index: React.FC = () => {
       setInputDisable(false);
     }
   };
-
-  const upscale = async (pormpt: string, msgId: string, msgHash: string, index: number) => {
-    let newMessage: Message = {
-      text: `${pormpt} upscale U${index}`,
-      hasTag: false,
-      progress: defaultTips,
-      img: defaultImg,
-    };
-
-    setInputDisable(true);
-    setMessages((omsg) => [...omsg, newMessage]);
-    try {
-      await Upscale(JSON.stringify({ content: pormpt, index, msgId, msgHash, clientId }), (data: any) => {
-        console.log('upscale dataing:', data);
-        //mj 服务报错
-        if (data.code === 40024) {
-          notification.error({
-            message: '提示',
-            description: data.message,
-            duration: 0,
-          });
-
-          setInputDisable(false);
-          return;
-        }
-        newMessage.img = data.uri.replace('https://cdn.discordapp.com/', NEXT_PUBLIC_IMAGE_PREFIX);
-        newMessage.msgHash = data.hash;
-        newMessage.msgID = data.id;
-        newMessage.content = data.content;
-        newMessage.progress = data.progress;
-        const oldMessages = messages;
-        // setMessages(omsg => replaceLastElement(omsg, newMessage));
-        setMessages([...oldMessages, newMessage]);
-      });
-    } catch (error) {
-      console.log('upscale出错了：', error);
-      message.error('出错了:' + error, 30);
-      setInputDisable(false);
-    }
-
-    setInputDisable(false);
-  };
   const variation = async (content: string, msgId: string, msgHash: string, index: number) => {
     let newMessage: Message = {
       text: `${content} variation V${index}`,
@@ -399,6 +358,49 @@ const Index: React.FC = () => {
 
     setInputDisable(false);
   };
+  const upscale = async (pormpt: string, msgId: string, msgHash: string, index: number) => {
+    let newMessage: Message = {
+      text: `${pormpt} upscale U${index}`,
+      hasTag: false,
+      progress: defaultTips,
+      img: defaultImg,
+    };
+
+    setInputDisable(true);
+    setMessages((omsg) => [...omsg, newMessage]);
+    try {
+      await Upscale(JSON.stringify({ content: pormpt, index, msgId, msgHash, clientId }), (data: any) => {
+        console.log('upscale dataing:', data);
+        //mj 服务报错
+        if (data.code === 40024) {
+          notification.error({
+            message: '提示',
+            description: data.message,
+            duration: 0,
+          });
+          //删除最后一个messages
+          setMessages((msgs) => [...msgs.slice(0, -1)]);
+          setInputDisable(false);
+          return;
+        }
+        newMessage.img = data.uri.replace('https://cdn.discordapp.com/', NEXT_PUBLIC_IMAGE_PREFIX);
+        newMessage.msgHash = data.hash;
+        newMessage.msgID = data.id;
+        newMessage.content = data.content;
+        newMessage.progress = data.progress;
+        const oldMessages = messages;
+        // setMessages(omsg => replaceLastElement(omsg, newMessage));
+        setMessages([...oldMessages, newMessage]);
+      });
+    } catch (error) {
+      console.log('upscale出错了：', error);
+      message.error('出错了:' + error, 30);
+      setInputDisable(false);
+    }
+
+    setInputDisable(false);
+  };
+
   const tagClick = (content: string, msgId: string, msgHash: string, tag: string) => {
     switch (tag) {
       case 'V1':
@@ -513,6 +515,60 @@ const Index: React.FC = () => {
       // setClientId();
     }
   };
+
+  const setServerId = () => {
+
+  }
+
+  //从链接中取出img_id参数，并查询图片信息
+  const getImgInfo = async () => {
+    const id = getQueryString('id');
+    if (id) {
+      const result = await requestAliyunArt('get-img-detail', { id });
+      console.log(result);
+      const data = result.data;
+      //检查是否是自己的图片
+      if (result.code !== 0) {
+        message.error(result.message, 8);
+        return;
+      }
+      setInputValue(data.prompt);
+      //检查服务器是否还在线
+      //获取服务器 ID
+      const clientId = extractIdFromString(data.api_channel) || -1;
+      //检查服务器 ID 是否还存在，有效
+      const serverValid = nodes.findIndex((node) => node.value) > -1;
+      if (!serverValid) {
+        message.error('抱歉，由于时间过长，无法重新生成该图片。您仍可使用下方提示词进行生成。错误码：40012。', 5);
+        return;
+      }
+      if (!data.img_id) {
+        message.error('抱歉，由于时间过长，无法重新生成该图片。您仍可使用下方提示词进行生成。错误码：40013。', 5);
+        return;
+      }
+      //如果动作是imagine或者variation，才有hasTag
+      const hasTag = (data.action === 'imagine' || data.action === 'variation') && data.img_id;
+      let newMessage: Message = {
+        progress: "完成",
+        text: data.prompt,
+        hasTag,
+        img: `${imgBasePath}${data.img_url}`,
+      };
+      newMessage.msgHash = '';
+      newMessage.msgID = data.img_id;
+      newMessage.content = data.prompt;
+      setMessages((msgs) => [newMessage]);
+
+      setClientId(Number(clientId));
+    }
+  };
+
+  useEffect(() => {
+    if (nodes.length > 0) {
+      getImgInfo();
+    }
+  }, [nodes])
+
 
   const showQRcode = () => {
     if (localStorage.getItem('noAllowQrcode') === 'true') {

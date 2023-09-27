@@ -46,6 +46,26 @@ export const downloadFile = (url: string, filename: string = 'midjourney.png') =
     img.src = url;
 }
 
+/**
+ * 从字符串中提取出clientId
+ * @param str 
+ * @returns 
+ */
+export const extractIdFromString = function (str: string) {
+    const regex = /id-(\d+)/;  // 正则表达式匹配 id- 后面的数字
+    const match = str.match(regex);  // 使用 match 方法匹配字符串
+
+    if (match && match[1]) {
+        return match[1];  // 返回匹配到的数字
+    } else {
+        return null;  // 如果没有找到匹配的数字，返回 null
+    }
+}
+
+const inputString = 'lingyun5100@126.com,lingyun5100, id-17, http://8.218.209.122:8004';
+const extractedId = extractIdFromString(inputString);
+console.log(extractedId);  // 输出：17
+
 //封装一个方法，自动跳转到放大页面，并携带图片链接参数
 export const redirectToZoomPage = (url: string, openType = 'new_window') => {
     //新标签打开

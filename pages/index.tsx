@@ -524,7 +524,7 @@ const Index: React.FC = () => {
   const getImgInfo = async () => {
     const id = getQueryString('id');
     if (id) {
-      const result = await requestAliyunArt('get-img-detail', { id });
+      const result = await requestAliyunArt('get-my-img-detail', { id });
       console.log(result);
       const data = result.data;
       //检查是否是自己的图片

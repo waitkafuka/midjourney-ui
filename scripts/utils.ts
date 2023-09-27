@@ -56,7 +56,7 @@ export const extractIdFromString = function (str: string) {
     const match = str.match(regex);  // 使用 match 方法匹配字符串
 
     if (match && match[1]) {
-        return match[1];  // 返回匹配到的数字
+        return Number(match[1]);  // 返回匹配到的数字
     } else {
         return null;  // 如果没有找到匹配的数字，返回 null
     }

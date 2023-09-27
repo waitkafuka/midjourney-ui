@@ -537,7 +537,7 @@ const Index: React.FC = () => {
       //获取服务器 ID
       const clientId = extractIdFromString(data.api_channel) || -1;
       //检查服务器 ID 是否还存在，有效
-      const serverValid = nodes.findIndex((node) => node.value) > -1;
+      const serverValid = nodes.findIndex((node) => node.value === clientId) > -1;
       if (!serverValid) {
         message.error('抱歉，由于时间过长，无法重新生成该图片。您仍可使用下方提示词进行生成。错误码：40012。', 5);
         return;

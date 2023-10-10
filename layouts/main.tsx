@@ -59,6 +59,13 @@ const ROUTES: Route = {
       target: "_blank",
     },
     {
+      name: '换脸',
+      key: 'faceswap',
+      icon: <i className='iconfont icon-abgangzhuanban'></i>,
+      path: '/art/faceswap',
+      target: "_blank",
+    },
+    {
       name: '图片高清放大',
       key: 'imgupscale',
       icon: <i className='iconfont icon-fangda'></i>,
@@ -486,6 +493,13 @@ export default function Main(children: JSX.Element) {
           }]
         },
         {
+          name: '换脸',
+          key: 'faceswap',
+          icon: <i className='iconfont icon-abgangzhuanban'></i>,
+          path: '/art/faceswap',
+          target: "_blank",
+        },
+        {
           name: '图片高清放大',
           key: 'imgupscale',
           icon: <i className='iconfont icon-fangda'></i>,
@@ -562,6 +576,13 @@ export default function Main(children: JSX.Element) {
             name: 'DALL·E2',
             key: "dalle",
           }]
+        },
+        {
+          name: '换脸',
+          key: 'faceswap',
+          icon: <i className='iconfont icon-abgangzhuanban'></i>,
+          path: '/art/faceswap',
+          target: "_blank",
         },
         {
           name: '图片高清放大',

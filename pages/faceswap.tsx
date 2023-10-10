@@ -20,6 +20,14 @@ const TextArea = Input.TextArea;
 const SwapFace: React.FC = () => {
     //初始化参数
     const user = useSelector((state: any) => state.user.info)
+    const [showOptions, setShowOptions] = useState<boolean>(false); //是否显示更多选项
+    const [qrCodeImage, setQrCodeImage] = useState<ImgCardModel>(); //模板
+    const [useTemplate, setUseTemplate] = useState<boolean>(false); //是否使用模板
+    const [isTranslating, setIsTranslating] = useState(false);
+    const [isGenerating, setIsGenerating] = useState(false);
+    const [ratio, setRatio] = useState<{ width: number, height: number }>({ width: 1, height: 1 }); //画布缩放比例
+    const [qrImg, setQrImg] = useState<string>(''); //二维码图片
+    const [showDemo, setShowDemo] = useState<boolean>(true); //是否显示示例
     const [params, setParams] = useState<any>({
         source: {
             onlineImgUrl: process.env.NODE_ENV === 'development' ? 'https://oc.superx.chat/img/1696924547155.png' : '',
@@ -48,15 +56,6 @@ const SwapFace: React.FC = () => {
             email: user.email
         })
     }, [user.email])
-
-    const [showOptions, setShowOptions] = useState<boolean>(false); //是否显示更多选项
-    const [qrCodeImage, setQrCodeImage] = useState<ImgCardModel>(); //模板
-    const [useTemplate, setUseTemplate] = useState<boolean>(false); //是否使用模板
-    const [isTranslating, setIsTranslating] = useState(false);
-    const [isGenerating, setIsGenerating] = useState(false);
-    const [ratio, setRatio] = useState<{ width: number, height: number }>({ width: 1, height: 1 }); //画布缩放比例
-    const [qrImg, setQrImg] = useState<string>(''); //二维码图片
-    const [showDemo, setShowDemo] = useState<boolean>(true); //是否显示示例
 
 
 
@@ -171,15 +170,24 @@ const SwapFace: React.FC = () => {
         setParams({
             ...params,
             source: {
-                onlineImgUrl: imgUrl
+                onlineImgUrl: imgUrl,
+                imgType: imgType.online
             }
         })
+    }
+
+    const showFaceDemo = ()=>{
+        const isHidden = localStorage.getItem('hideFaceDemo');
+        if(isHidden){
+            setShowDemo(false);
+        }
     }
 
 
     //页面初始化
     useEffect(() => {
         setParamsFromUrl();
+        showFaceDemo();
     }, [])
 
     return <><Head>
@@ -187,13 +195,15 @@ const SwapFace: React.FC = () => {
         <meta name="referrer" content="no-referrer" />
     </Head >
         <div className='dalle-point-box'><PaintingPoint></PaintingPoint></div>
-        <div className="ai-qrcode-wrapper" style={{ marginTop: '50px' }}>
+        <div className="ai-qrcode-wrapper" style={{ marginTop: '50px', paddingTop: "0" }}>
 
             {/* 左侧区域 */}
             <div className="code-options-box">
                 {/* 底图 */}
                 <div className="face-box-wrap">
-                    <div className="face-box-title">添加底图</div>
+                    <div className="face-box-title">添加底图 {!showDemo && <a style={{ fontSize: "14px", fontWeight: "100" }} href="javascript:void(0)" onClick={() => {
+                        setShowDemo(true);
+                    }}>显示示例</a>}</div>
                     <div className="face-box">
                         {/* 是否在线图片 */}
                         <div style={{ display: "flex", justifyContent: "center", marginBottom: "20px" }}>
@@ -309,10 +319,34 @@ const SwapFace: React.FC = () => {
                         <ol>1. 底图可使用 midjourney 或者其他 AI 绘画生成的图片</ol>
                         <ol>2. 人脸照尽量选择清晰正脸照片，效果更佳</ol>
                         <ol>3. 出于隐私考虑，合成的照片不会在“艺术公园”展示，只可在“我的作品”中查看</ol>
+                        <ol>4. 换脸时间约 1-3 分钟左右，如显示超时，可关闭页面，在服务端生成之后可在左侧“我的作品”中查看</ol>
                     </ul>
                 </div>
             </div>
             {/* 放大结果区域 */}
+            {!qrCodeImage && showDemo && <div className="code-result">
+
+                <div className="face-swap-demo-wrap">
+                    <div className="face-swap-demo-title">
+                        效果示例 <a style={{ fontWeight: '100', fontSize: "14px" }} href="javascript:void(0)" onClick={() => {
+                            localStorage.setItem('hideFaceDemo', 'true');
+                            setShowDemo(false);
+                        }}>隐藏示例</a>
+                    </div>
+                    <div className="img-title">底图：</div>
+                    <div className="img-box">
+                        <img src="//oc.superx.chat/img/1696936198952.png" alt="" />
+                    </div>
+                    <div className="img-title">人物照片：</div>
+                    <div className="img-box">
+                        <img src="//oc.superx.chat/img/1696939444411.png" alt="" />
+                    </div>
+                    <div className="img-title">换脸结果：</div>
+                    <div className="img-box">
+                        <a target="_blank" href="//oc.superx.chat/fimg/20231010191101162739.png"><img src="//oc.superx.chat/fimg/20231010191101162739.png" alt="" /></a>
+                    </div>
+                </div>
+            </div>}
             {qrCodeImage && <div className="code-result">
                 <div style={{ display: "flex", justifyContent: "center", flexDirection: 'column', alignItems: 'center' }}>
                     {qrCodeImage && <PureImgCard

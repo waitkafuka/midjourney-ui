@@ -78,7 +78,20 @@ export const redirectToZoomPage = (url: string, openType = 'new_window') => {
     } else {
         window.location.href = href;
     }
+}
 
+//自动跳转到换脸页面
+export const redirectToFaceswapPage = (url: string, openType = 'new_window') => {
+    //新标签打开
+    if (!url) return;
+    //替换掉url中的?x-oss-process=style/scale_500
+    url = url.replace(/\?x-oss-process=style\/scale_500/, '');
+    const href = `/art/faceswap?url=${encodeURIComponent(url)}`;
+    if (openType === 'new_window') {
+        openWindow(href);
+    } else {
+        window.location.href = href;
+    }
 }
 
 

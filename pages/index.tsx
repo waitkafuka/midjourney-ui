@@ -7,7 +7,7 @@ import { Message } from '../interfaces/message';
 import MyTag from '../components/tag';
 import { requestAliyun, requestAliyunArt } from '../request/http';
 import { useSelector, useDispatch } from 'react-redux';
-import { downloadFile, getQueryString, hasChinese, shuffleArray, redirectToZoomPage, extractIdFromString } from '../scripts/utils';
+import { downloadFile, getQueryString, hasChinese, shuffleArray, redirectToZoomPage, extractIdFromString, redirectToFaceswapPage } from '../scripts/utils';
 import { NEXT_PUBLIC_IMAGE_PREFIX, PAINTING_POINTS_ONE_TIME } from '../scripts/config';
 import { getRatio, getHeight } from '../scripts/utils';
 import PaintingPoint from '../components/paintingPoint';
@@ -841,6 +841,13 @@ const Index: React.FC = () => {
                     }}
                   >
                     一键放大
+                  </Button>
+                  <Button
+                    onClick={() => {
+                      redirectToFaceswapPage(img);
+                    }}
+                  >
+                    换脸
                   </Button>
                 </Space.Compact>
               )}

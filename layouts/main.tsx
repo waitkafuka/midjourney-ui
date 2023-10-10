@@ -59,7 +59,7 @@ const ROUTES: Route = {
       target: "_blank",
     },
     {
-      name: '换脸',
+      name: 'AI 一键换脸',
       key: 'faceswap',
       icon: <i className='iconfont icon-abgangzhuanban'></i>,
       path: '/art/faceswap',
@@ -493,7 +493,7 @@ export default function Main(children: JSX.Element) {
           }]
         },
         {
-          name: '换脸',
+          name: 'AI 一键换脸',
           key: 'faceswap',
           icon: <i className='iconfont icon-abgangzhuanban'></i>,
           path: '/art/faceswap',
@@ -578,7 +578,7 @@ export default function Main(children: JSX.Element) {
           }]
         },
         {
-          name: '换脸',
+          name: 'AI 一键换脸',
           key: 'faceswap',
           icon: <i className='iconfont icon-abgangzhuanban'></i>,
           path: '/art/faceswap',

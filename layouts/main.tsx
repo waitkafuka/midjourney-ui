@@ -554,7 +554,7 @@ export default function Main(children: JSX.Element) {
           }, {
             path: '/art/sd',
             target: "_blank",
-            name: 'sd',
+            name: 'Stable Diffusion',
             key: "Stable Diffusion",
           }, {
             path: '/art/dalle/',

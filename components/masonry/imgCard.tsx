@@ -33,6 +33,7 @@ const defaultImg = 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAMIAAADDCAYAAA
 const { CheckableTag } = Tag;
 
 const basePath = 'https://och.superx.chat'
+const basePathOc = 'https://oc.superx.chat'
 // 以此宽度进行图片按比例裁剪。mj的图片地址可以支持width和height参数
 const baseWidth = 500;
 //从提示词中提取宽高比例
@@ -71,6 +72,10 @@ const App = ({ model, columnWidth, onImgDeleted, paint_params, type, onImgThumbU
         if (paint_params.template_id && ids.includes(paint_params.template_id)) {
             ratio = { width: 740, height: 1280 }
         }
+        //继续hack，在换脸图片中，图片宽度高度分别通过sourceImgWidth 和 sourceImgHeight返回
+        if (model.painting_type === PaintingType.FACESWAP) {
+            ratio = { width: paint_params.sourceImgWidth, height: paint_params.sourceImgHeight }
+        }
         return getHeight(ratio, baseWidth);
     }, [prompt])
 
@@ -80,11 +85,21 @@ const App = ({ model, columnWidth, onImgDeleted, paint_params, type, onImgThumbU
 
     const src = useMemo(() => {
         //如果已经有?，则使用&，否则使用?
-        return img_url ? `${basePath}${img_url}${img_url.includes('?') ? '&' : '?'}x-oss-process=style/scale_500` : defaultImg
+        let igUrl = img_url ? `${basePath}${img_url}${img_url.includes('?') ? '&' : '?'}x-oss-process=style/scale_500` : defaultImg
+        //如果是换脸照片，则使用oc域名
+        if (painting_type === PaintingType.FACESWAP) {
+            igUrl = img_url ? `${basePathOc}${img_url}${img_url.includes('?') ? '&' : '?'}x-oss-process=style/scale_500` : defaultImg
+        }
+        return igUrl;
     }, [img_url, height])
 
     const HDsrc = useMemo(() => {
-        return `${basePath}${img_url}`
+        let hdsrc =  `${basePath}${img_url}`
+        //如果是换脸图片
+        if(painting_type === PaintingType.FACESWAP){
+            hdsrc =  `${basePathOc}${img_url}`
+        }
+        return hdsrc;
     }, [img_url])
 
     //初始化
@@ -112,6 +127,9 @@ const App = ({ model, columnWidth, onImgDeleted, paint_params, type, onImgThumbU
                 {model.painting_type === 'qrcode' && <Tag color="rgba(118 110 110/70%)">
                     QrCode
                 </Tag>}
+                {model.painting_type === 'faceswap' && <Tag color="rgba(118 110 118/70%)">
+                    FACE
+                </Tag>}
             </div>
             <div style={{ position: "absolute", right: "-8px", top: "-1px" }}>
                 <Tag color={model.painting_type === 'mj' ? 'rgba(76 76 109/70%)' : 'rgba(96 108 93/70%)'}>
@@ -123,20 +141,27 @@ const App = ({ model, columnWidth, onImgDeleted, paint_params, type, onImgThumbU
             </a> : <img style={{ height: `${columnWidth * 360 / 358}px` }} src={defaultImg} />}
 
             <div className={css["masonry-meta"]}>
-                <Tooltip title={prompt}>
+                {painting_type !== 'faceswap' && <Tooltip title={prompt}>
                     <p className={css["prompt"]} >{prompt}</p>
-                </Tooltip>
+                </Tooltip>}
+                {painting_type === 'faceswap' && <Tooltip title={prompt}>
+                    <p className={css["prompt"]} >face magic</p>
+                </Tooltip>}
             </div>
             <div className={css["masonry-action-wrap"]}>
                 <div className={css["masonry-action-box"]}>
                     {/* 复制提示词 */}
-                    <div className={`${css["masonry-action-item"]} copy-action`} data-clipboard-text={prompt} onClick={() => {
-                        message.success('prompt已复制')
+                    <div className={`${css["masonry-action-item"]} copy-action`} data-clipboard-text={painting_type !== 'faceswap' ? prompt:`${basePathOc}${img_url}`} onClick={() => {
+                        if(painting_type !== 'faceswap'){
+                            message.success('prompt已复制')
+                        }else{
+                            message.success('图片地址已复制')
+                        }
                     }}>
                         <CopyOutlined key="copy" title="复制提示词" />
                     </div>
                     {/* 编辑按钮 */}
-                    <div className={css["masonry-action-item"]} onClick={() => {
+                    {painting_type === PaintingType.MJ && <div className={css["masonry-action-item"]} onClick={() => {
                         //路由到编辑页面
                         // Router.push(`/?id=${id}`);
                         if (type === ImgPageType.MY) {
@@ -146,7 +171,7 @@ const App = ({ model, columnWidth, onImgDeleted, paint_params, type, onImgThumbU
                         }
                     }}>
                         <EditOutlined key="edit" title="重新生成" />
-                    </div>
+                    </div>}
                     {/* 下载按钮 */}
                     <div className={css["masonry-action-item"]} onClick={() => {
                         if (!img_url) {
@@ -157,18 +182,19 @@ const App = ({ model, columnWidth, onImgDeleted, paint_params, type, onImgThumbU
                     }}>
                         <CloudDownloadOutlined title="下载原图" />
                     </div>
-                    {/* 删除按钮 */}
-                    {type === ImgPageType.MY && <div className={css["masonry-action-item"]} onClick={() => {
-                        deleteImg(model.id);
-                    }}>
-                        <DeleteOutlined title="删除" />
-                    </div>}
+
                     {/* 一键放大按钮 */}
                     <div className={css["masonry-action-item"]} onClick={() => {
                         redirectToZoomPage(src, 'current_window');
                     }}>
                         <i className='iconfont icon-fangda' title="一键放大"></i>
                     </div>
+                    {/* 删除按钮 */}
+                    {type === ImgPageType.MY && <div className={css["masonry-action-item"]} onClick={() => {
+                        deleteImg(model.id);
+                    }}>
+                        <DeleteOutlined title="删除" />
+                    </div>}
                     {/* {JSON.stringify(userThumbUpList)} */}
 
                     {/* 点赞按钮 */}
@@ -205,6 +231,11 @@ const App = ({ model, columnWidth, onImgDeleted, paint_params, type, onImgThumbU
                     }}>
                         <Switch style={{ minWidth: "60px", marginLeft: "10px" }} checked={isShare} checkedChildren="分享" unCheckedChildren="关闭" defaultChecked={is_public === 0} onClick={async checked => {
                             console.log('checked:', checked);
+                            //如果是换脸照片，不允许开启分享
+                            if (painting_type === PaintingType.FACESWAP) {
+                                message.warning('换脸图片无法分享');
+                                return;
+                            }
                             // 关闭分享
                             if (!checked) {
                                 if (user.unionid === 'otQgs68WOx6j9ylt_I3MY5ABiBB0') {

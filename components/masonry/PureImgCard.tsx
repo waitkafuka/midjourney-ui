@@ -6,7 +6,7 @@ import moment from 'moment';
 import { ImgCardModel, PaintingType } from "../../scripts/types";
 import ClipboardJS from 'clipboard';
 import css from './masonry.module.scss'
-import { downloadFile } from '../../scripts/utils';
+import { downloadFile, redirectToZoomPage } from '../../scripts/utils';
 import Router from "next/router";
 import { requestAliyunArt } from "../../request/http";
 const { confirm } = Modal;
@@ -120,6 +120,12 @@ const App = ({ model, columnWidth = 400, hasLikeButton = false, onImgThumbUpActi
                         downloadFile(HDsrc)
                     }}>
                         <CloudDownloadOutlined title="下载" />
+                    </div>
+                    {/* 一键放大按钮 */}
+                    <div className={css["masonry-action-item"]} onClick={() => {
+                        redirectToZoomPage(src, 'current_window');
+                    }}>
+                        <i className='iconfont icon-fangda' title="一键放大"></i>
                     </div>
                     {/* 删除图片 */}
                     {hasDelete && <div className={css["masonry-action-item"]} onClick={() => {

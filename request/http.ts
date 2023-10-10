@@ -49,6 +49,8 @@ export const request = async function ({ path, data, method = "POST", headers = 
         //如果接口返回状态码正常，则直接返回数据,否则抛出异常
         if (response.status === 200) {
             return await response.json();
+        } else if (response.status === 504) {
+            throw new Error('Request Timeout, 接口请求超时，请稍后再试')
         } else {
             //如果接口返回状态码不正常，则抛出异常，把错误信息返回
             let j = null;

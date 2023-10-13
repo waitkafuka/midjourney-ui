@@ -578,6 +578,13 @@ export default function Main(children: JSX.Element) {
           }]
         },
         {
+          name: 'AI 艺术二维码',
+          key: 'artqrcode',
+          icon: <i className='iconfont icon-erweima'></i>,
+          path: '/art/qrcode/',
+          target: "_blank",
+        },
+        {
           name: 'AI 一键换脸',
           key: 'faceswap',
           icon: <i className='iconfont icon-abgangzhuanban'></i>,

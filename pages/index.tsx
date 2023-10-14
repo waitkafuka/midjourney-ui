@@ -847,7 +847,7 @@ const Index: React.FC = () => {
                       redirectToFaceswapPage(img);
                     }}
                   >
-                    换脸
+                    一键换脸
                   </Button>
                 </Space.Compact>
               )}

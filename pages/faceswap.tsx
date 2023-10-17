@@ -1,6 +1,6 @@
 import { useEffect, useMemo, useState } from "react";
 import { ImgCardModel, ImgPageType, PaintingType } from '../scripts/types'
-import { getQueryString, hasChinese } from "../scripts/utils";
+import { getQueryString, hasChinese, downloadFile } from "../scripts/utils";
 import { Button, Col, Form, Input, InputNumber, Radio, Row, Select, Slider, Tooltip, message, notification } from "antd";
 import { FACESWAP_COST } from "../scripts/config";
 import PaintingPoint from "../components/paintingPoint";
@@ -156,7 +156,11 @@ const SwapFace: React.FC = () => {
             return;
         }
         setIsGenerating(false);
-        setQrCodeImage({ ...newQrcodeImage, img_base_path: 'https://oc.superx.chat/', img_url: data.ossPath, id: data.id, width: imgData.width, height: imgData.height });
+        setQrCodeImage({ ...newQrcodeImage, img_base_path: 'https://oc.superx.chat', img_url: data.ossPath, id: data.id, width: imgData.width, height: imgData.height });
+        const distImgUrl = `https://oc.superx.chat${data.ossPath}`;
+        //自动下载图片
+        downloadFile(distImgUrl);
+       
         //点数减少
         store.dispatch({ type: 'user/pointChange', payload: user.point_count - data.cost })
     }
@@ -176,9 +180,9 @@ const SwapFace: React.FC = () => {
         })
     }
 
-    const showFaceDemo = ()=>{
+    const showFaceDemo = () => {
         const isHidden = localStorage.getItem('hideFaceDemo');
-        if(isHidden){
+        if (isHidden) {
             setShowDemo(false);
         }
     }
@@ -318,8 +322,7 @@ const SwapFace: React.FC = () => {
                     <ul>
                         <ol>1. 底图可使用 midjourney 或者其他 AI 绘画生成的图片</ol>
                         <ol>2. 人脸照尽量选择清晰正脸照片，效果更佳</ol>
-                        <ol>3. 出于隐私考虑，合成的照片不会在“艺术公园”展示，只可在“我的作品”中查看</ol>
-                        <ol>4. 换脸时间约 1-3 分钟左右，如显示超时，可关闭页面，在服务端生成之后可在左侧“我的作品”中查看</ol>
+                        <ol>3. 为保护用户隐私，服务器不对合成的图片进行保存，请生成后及时下载</ol>
                     </ul>
                 </div>
             </div>

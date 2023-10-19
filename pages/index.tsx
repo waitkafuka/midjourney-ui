@@ -909,7 +909,7 @@ const Index: React.FC = () => {
       )}
       <div className='prompt-input-wrap'>
         {/* 线路切换1 */}
-        <div className='line-change-box1'>
+        <div className='line-change-box1' style={{ display: "none" }}>
           <div style={{ marginRight: '5px', marginLeft: '20px' }}>
             <Select
               options={nodes}
@@ -990,7 +990,7 @@ const Index: React.FC = () => {
             </Tooltip>
           </div> */}
           {/* 线路切换1,pc端显示 */}
-          <div className='line-change-box2'>
+          <div className='line-change-box2' style={{display: 'none'}}>
             <div style={{ marginRight: '5px', marginLeft: '20px' }}>
               <Select
                 options={nodes}

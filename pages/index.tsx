@@ -339,7 +339,7 @@ const Index: React.FC = () => {
         if (data.id) {
           newMessage.hasTag = true;
           //扣减点数
-          store.dispatch({ type: 'user/pointChange', payload: user.point_count - PAINTING_POINTS_ONE_TIME / 2 });
+          store.dispatch({ type: 'user/pointChange', payload: user.point_count - PAINTING_POINTS_ONE_TIME });
         }
         console.log('variation dataing:', data);
         newMessage.msgHash = data.hash;
@@ -378,6 +378,7 @@ const Index: React.FC = () => {
             description: data.message,
             duration: 0,
           });
+
           //删除最后一个messages
           setMessages((msgs) => [...msgs.slice(0, -1)]);
           setInputDisable(false);
@@ -389,6 +390,11 @@ const Index: React.FC = () => {
         newMessage.content = data.content;
         newMessage.progress = data.progress;
         const oldMessages = messages;
+        if (data.id) {
+          // newMessage.hasTag = true;
+          //扣减点数
+          store.dispatch({ type: 'user/pointChange', payload: user.point_count - 2 });
+        }
         // setMessages(omsg => replaceLastElement(omsg, newMessage));
         setMessages([...oldMessages, newMessage]);
       });

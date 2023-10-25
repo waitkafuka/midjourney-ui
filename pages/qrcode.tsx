@@ -178,6 +178,22 @@ const QrCode: React.FC = () => {
                     initQrDemo();
                     return;
                 }
+                //未登录
+                if (data.code === 40015) {
+                    message.error('请登录后开始使用');
+                    setIsGenerating(false);
+                    initQrDemo();
+                    setTimeout(() => {
+                        window.location.href = `/login?redirect=${encodeURIComponent('/art/qrcode/')}`
+                    }, 2000);
+                    return;
+                }
+                if (data.code && data.code !== 0) {
+                    message.error(data.message || '生成失败，请稍后重试。');
+                    setIsGenerating(false);
+                    initQrDemo();
+                    return;
+                }
                 if (data.progress === 100) {
                     setIsGenerating(false);
                     setQrCodeImage({ ...newQrcodeImage, img_url: data.img_url, id: data.id });

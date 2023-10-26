@@ -72,6 +72,13 @@ const ROUTES: Route = {
       path: '/art/upscale',
       target: "_blank",
     },
+    {
+      name: '数字人制作',
+      key: 'humanrobot',
+      icon: <i className='iconfont icon-kefu'></i>,
+      path: 'https://human.iiii.com/operate/index',
+      target: "_blank",
+    },
     // {
     //   name: '七夕玫瑰二维码（限定）',
     //   key: 'artqrcode77',
@@ -507,6 +514,13 @@ export default function Main(children: JSX.Element) {
           target: "_blank",
         },
         {
+          name: '数字人制作',
+          key: 'humanrobot',
+          icon: <i className='iconfont icon-kefu'></i>,
+          path: 'https://human.iiii.com/operate/index',
+          target: "_blank",
+        },
+        {
           name: '教程',
           key: "guideParent",
           icon: <BulbOutlined />,
@@ -596,6 +610,13 @@ export default function Main(children: JSX.Element) {
           key: 'imgupscale',
           icon: <i className='iconfont icon-fangda'></i>,
           path: '/art/upscale',
+          target: "_blank",
+        },
+        {
+          name: '数字人制作',
+          key: 'humanrobot',
+          icon: <i className='iconfont icon-kefu'></i>,
+          path: 'https://human.iiii.com/operate/index',
           target: "_blank",
         },
         {

@@ -67,13 +67,17 @@ const Index: React.FC = () => {
   const [clientId, setClientId] = useState(0);
   const [showOperationtTips, setShowOperationtTips] = useState(false);
   const [isShowParamsTips, setIsShowParamsTips] = useState(false);
+  const [showSeed, setShowSeed] = useState(false);
+  const [seed, setSeed] = useState('');
   //自动纠错提示词
   const [isCorrectPrompt, setIsCorrectPrompt] = useState(false);
   const [showQrcodeModal, setShowQrcodeModal] = useState(true);
   const [clientCount, setClientCount] = useState(0);
   const [nodes, setNodes] = useState<any[]>([]);
   const [hasStartImagin, setHasStartImagin] = useState(false);
+  const [seedCopyText, setSeedCopyText] = useState('复制');
   const [showStartTips, setShowStartTips] = useState(false);
+  const [requestingSeed, setRequestingSeed] = useState('');
 
   //测试
   // const [messages, setMessages] = useState<Message[]>([{
@@ -523,6 +527,16 @@ const Index: React.FC = () => {
     }
   };
 
+  const getSeed = async (taskId: string | undefined) => {
+    setRequestingSeed(taskId || '');
+    const result = await requestAliyunArt(`get-seed?taskId=${taskId}`, null, 'GET');
+    setRequestingSeed('');
+    if (result.code === 0) {
+      setSeed(result.data.seed);
+      setShowSeed(true);
+    }
+  }
+
   const setServerId = () => {
 
   }
@@ -685,6 +699,43 @@ const Index: React.FC = () => {
           <div>💐 如有任何问题和反馈建议，均可联系公众号客服</div>
         </div>
       </Modal>
+      {/* 种子结果提示 */}
+      <Modal
+        title='提示'
+        style={{ top: 20, width: '500px' }}
+        open={showSeed}
+        destroyOnClose={true}
+        closable={true}
+        maskClosable={false}
+        okText='确定'
+        footer={[
+          <Button
+            key='ok'
+            type='primary'
+            onClick={() => {
+              setSeedCopyText('复制')
+              setShowSeed(false);
+              setSeed('')
+            }}
+          >
+            确定
+          </Button>,
+        ]}
+      // footer={null}
+      >
+        <div>
+          <div>seed值：{seed}  <Button
+            size='small'
+            onClick={() => {
+              setSeedCopyText('已复制')
+            }}
+            data-clipboard-text={seed}
+            className='copy-prompt-btn'
+          >
+            {seedCopyText}
+          </Button></div>
+        </div>
+      </Modal>
       {/* 操作提示弹窗 */}
       <Modal
         title='使用指南'
@@ -841,6 +892,14 @@ const Index: React.FC = () => {
                     }}
                   >
                     下载原图
+                  </Button>
+                  <Button
+                    loading={!!requestingSeed && (msgID === requestingSeed)}
+                    onClick={() => {
+                      getSeed(msgID)
+                    }}
+                  >
+                    获取seed（种子）
                   </Button>
                   <Button
                     onClick={() => {

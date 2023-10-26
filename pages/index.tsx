@@ -901,11 +901,11 @@ const Index: React.FC = () => {
         </div>
       ) : (
         <>
-          <Alert
+          {/* <Alert
             message="midjourney 接口参数更改，正在修复中，预计半小时修复。其他服务不受影响。"
             banner
             closable
-          />
+          /> */}
           <p className='no-content-tips'>使用 midjourney 生成你的专属人工智能绘画作品。</p>
           {/* <p className="no-content-tips">请勿使用违禁词汇，违者将被封号。</p> */}
           {!user.secret && (

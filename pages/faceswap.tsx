@@ -1,6 +1,6 @@
 import { useEffect, useMemo, useState } from "react";
 import { ImgCardModel, ImgPageType, PaintingType } from '../scripts/types'
-import { getQueryString, hasChinese, downloadFile } from "../scripts/utils";
+import { getQueryString, hasChinese, downloadFile, redirectToZoomPage } from "../scripts/utils";
 import { Button, Col, Form, Input, InputNumber, Radio, Row, Select, Slider, Tooltip, message, notification } from "antd";
 import { FACESWAP_COST } from "../scripts/config";
 import PaintingPoint from "../components/paintingPoint";
@@ -160,7 +160,7 @@ const SwapFace: React.FC = () => {
         const distImgUrl = `https://oc.superx.chat${data.ossPath}`;
         //自动下载图片
         downloadFile(distImgUrl);
-       
+
         //点数减少
         store.dispatch({ type: 'user/pointChange', payload: user.point_count - data.cost })
     }
@@ -353,7 +353,7 @@ const SwapFace: React.FC = () => {
             </div>}
             {qrCodeImage && <div className="code-result">
                 <div style={{ display: "flex", justifyContent: "center", flexDirection: 'column', alignItems: 'center' }}>
-                    {qrCodeImage && <PureImgCard
+                    {qrCodeImage && <><PureImgCard
                         imgBasePath="https://oc.superx.chat"
                         ratio={{ width: qrCodeImage.width || 1, height: qrCodeImage.height || 1 }}
                         isLoading={true}
@@ -363,11 +363,19 @@ const SwapFace: React.FC = () => {
                         key={qrCodeImage.id}
                         model={qrCodeImage}
                         hasPrompt={false}
-
                         onImgDeleted={() => {
                             setQrCodeImage(undefined);
                         }}
-                        hasDelete={true} />}
+                        hasDelete={true} />
+                        {qrCodeImage.img_url && <Button
+                            style={{ marginTop: "20px" }}
+                            onClick={() => {
+                                redirectToZoomPage(`https://oc.superx.chat${qrCodeImage.img_url}`);
+                            }}
+                        >
+                            一键放大
+                        </Button>}
+                    </>}
                 </div>
             </div>}
 

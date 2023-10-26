@@ -899,14 +899,16 @@ const Index: React.FC = () => {
                   >
                     下载原图
                   </Button>
-                  {debug && <Button
+                  <Button
                     loading={!!requestingSeed && (msgID === requestingSeed)}
                     onClick={() => {
                       getSeed(msgID)
                     }}
                   >
-                    获取seed（种子）
-                  </Button>}
+                    获取seed <Tooltip title={`seed值作为图片的“种子”和唯一标识，可在下次生成时，以： --seed xxx(替换成获取到的数字) 参数追加在提示词最后。然后略微修改描述词，以达到在该图片的基础上，进行微调的效果。`}>
+                      <QuestionCircleOutlined style={{ cursor: 'pointer' }} />
+                    </Tooltip>
+                  </Button>
                   <Button
                     onClick={() => {
                       redirectToZoomPage(img);

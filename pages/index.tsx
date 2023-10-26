@@ -78,6 +78,7 @@ const Index: React.FC = () => {
   const [seedCopyText, setSeedCopyText] = useState('复制');
   const [showStartTips, setShowStartTips] = useState(false);
   const [requestingSeed, setRequestingSeed] = useState('');
+  const [debug, setDebug] = useState(false);
 
   //测试
   // const [messages, setMessages] = useState<Message[]>([{
@@ -600,6 +601,11 @@ const Index: React.FC = () => {
   //页面初始化
   useEffect(() => {
     new ClipboardJS('.copy-prompt-btn');
+    //从页面链接中获取ddd参数
+    const ddd = getQueryString('ddd');
+    if (ddd) {
+      setDebug(true);
+    }
     getPrompt();
     checkTips();
     setBDVid();
@@ -893,14 +899,14 @@ const Index: React.FC = () => {
                   >
                     下载原图
                   </Button>
-                  <Button
+                  {debug && <Button
                     loading={!!requestingSeed && (msgID === requestingSeed)}
                     onClick={() => {
                       getSeed(msgID)
                     }}
                   >
                     获取seed（种子）
-                  </Button>
+                  </Button>}
                   <Button
                     onClick={() => {
                       redirectToZoomPage(img);

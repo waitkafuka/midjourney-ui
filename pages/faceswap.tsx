@@ -367,14 +367,14 @@ const SwapFace: React.FC = () => {
                             setQrCodeImage(undefined);
                         }}
                         hasDelete={true} />
-                        {qrCodeImage.img_url && <Button
+                        <Button
                             style={{ marginTop: "20px" }}
                             onClick={() => {
                                 redirectToZoomPage(`https://oc.superx.chat${qrCodeImage.img_url}`);
                             }}
                         >
                             一键放大
-                        </Button>}
+                        </Button>
                     </>}
                 </div>
             </div>}

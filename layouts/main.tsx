@@ -49,14 +49,13 @@ const ROUTES: Route = {
         target: "_blank",
         name: 'DALL·E',
         key: "dalle",
+      }, {
+        name: 'AI 艺术二维码',
+        key: 'artqrcode',
+        icon: <i className='iconfont icon-erweima'></i>,
+        path: '/art/qrcode/',
+        target: "_blank",
       },]
-    },
-    {
-      name: 'AI 艺术二维码',
-      key: 'artqrcode',
-      icon: <i className='iconfont icon-erweima'></i>,
-      path: '/art/qrcode/',
-      target: "_blank",
     },
     {
       name: 'AI 一键换脸',
@@ -230,6 +229,16 @@ export default function Main(children: JSX.Element) {
         </Button>
       ),
     },
+    {
+      key: '45',
+      label: (
+        <Button type="text" block onClick={async () => {
+          Router.push('/openapi');
+        }}>
+          开放 API
+        </Button>
+      ),
+    },
   ];
   let itemsOrigin: MenuProps['items'] = [
     {
@@ -262,6 +271,16 @@ export default function Main(children: JSX.Element) {
           Router.push('/contact');
         }}>
           联系我们
+        </Button>
+      ),
+    },
+    {
+      key: '45',
+      label: (
+        <Button type="text" block onClick={async () => {
+          Router.push('/openapi');
+        }}>
+          开放 API
         </Button>
       ),
     },
@@ -497,8 +516,15 @@ export default function Main(children: JSX.Element) {
             target: "_blank",
             name: 'DALL·E',
             key: "dalle",
-          }]
+          }, {
+            name: 'AI 艺术二维码',
+            key: 'artqrcode',
+            icon: <i className='iconfont icon-erweima'></i>,
+            path: '/art/qrcode/',
+            target: "_blank",
+          },]
         },
+
         {
           name: 'AI 一键换脸',
           key: 'faceswap',
@@ -589,14 +615,13 @@ export default function Main(children: JSX.Element) {
             target: "_blank",
             name: 'DALL·E2',
             key: "dalle",
-          }]
-        },
-        {
-          name: 'AI 艺术二维码',
-          key: 'artqrcode',
-          icon: <i className='iconfont icon-erweima'></i>,
-          path: '/art/qrcode/',
-          target: "_blank",
+          }, {
+            name: 'AI 艺术二维码',
+            key: 'artqrcode',
+            icon: <i className='iconfont icon-erweima'></i>,
+            path: '/art/qrcode/',
+            target: "_blank",
+          },]
         },
         {
           name: 'AI 一键换脸',
@@ -613,7 +638,7 @@ export default function Main(children: JSX.Element) {
           target: "_blank",
         },
         {
-          name: '数字人制作',
+          name: '数字人制作🔥',
           key: 'humanrobot',
           icon: <i className='iconfont icon-kefu'></i>,
           path: 'https://human.iiii.com/operate/index',

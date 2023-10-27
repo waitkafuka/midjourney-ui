@@ -162,7 +162,7 @@ const Upscale: React.FC = () => {
             //error.message转为小写
             if (error.message.toLowerCase().includes('time')) {
                 const tips = '由于图片较大，接口响应超时，后台任务仍在运算中，可直接关闭页面。稍后结果将发送至邮箱，预计 10 分钟左右。若生成失败不会扣减点数。';
-                notification.error({
+                notification.success({
                     message: '提示',
                     description: tips,
                     duration: 0,

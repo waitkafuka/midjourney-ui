@@ -1,9 +1,10 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { Input, Button, List, Image, Typography } from "antd";
-import { requestAliyunArt } from "../request/http";
+import { requestAliyun, requestAliyunArt } from "../request/http";
 import Masonry from "../components/masonry/masonry";
 import { ImgCardModel, ImgPageType } from '../scripts/types'
 
+const { Search } = Input;
 interface ImgListPageProps {
     type: ImgPageType
 }
@@ -11,7 +12,10 @@ interface ImgListPageProps {
 //由于setstate是异步的，所以需要一个变量来判断是否正在请求数据
 const ImgListPage = ({ type }: ImgListPageProps) => {
     let isLockRequest = false;
-    let pageIndex = 0;
+    let pageIndex = useRef(0);
+
+    const keywordsRef = useRef('');
+    const [keywords, setKeywords] = useState<string>('');
     const [imgList, setImgList] = useState<ImgCardModel[]>([])
     const [count, setCount] = useState(0)
     const [isDataLoading, setIsDataLoading] = useState(false);
@@ -30,14 +34,18 @@ const ImgListPage = ({ type }: ImgListPageProps) => {
         if (isLockRequest) return
         isLockRequest = true
         setIsDataLoading(true)
-        pageIndex++;
-        const result = await requestAliyunArt(type === ImgPageType.MY ? 'my-paintings' : 'public-paintings', { pageIndex })
+        pageIndex.current = pageIndex.current + 1;
+        const result = await requestAliyunArt(type === ImgPageType.MY ? 'my-paintings' : 'public-paintings', { pageIndex: pageIndex.current, keywords: keywordsRef.current })
         //追加之前去除重复数据
         let newImgList: any = [];
         if (result.rows) {
             newImgList = result.rows.filter((item: any) => {
                 return imgList.findIndex((img: any) => img.id === item.id) === -1
             })
+        }
+        if (result.keywords !== keywordsRef.current) {
+            setKeywords(result.keywords);
+            keywordsRef.current = result.keywords;
         }
 
         // setImgList([...clist, ...newImgList])
@@ -61,6 +69,13 @@ const ImgListPage = ({ type }: ImgListPageProps) => {
         setImgList([...imgList]);
     }
 
+    const onSearch: any = async (value: string) => {
+        pageIndex.current = 0;
+        keywordsRef.current = value;
+        setKeywords(value);
+        setImgList([]);
+        queryImgList()
+    };
 
     // 页面初始化
     useEffect(() => {
@@ -70,6 +85,11 @@ const ImgListPage = ({ type }: ImgListPageProps) => {
     }, [])
     return (
         <div className="">
+            <div style={{ padding: "10px 20px" }}>
+                <Search placeholder="风景、人物、插画、动漫..." value={keywords} onChange={(v) => {
+                    setKeywords(v.target.value)
+                }} maxLength={50} allowClear onSearch={onSearch} style={{}} />
+            </div>
             <Masonry onImgThumbUpActionDone={onImgThumbUpActionDone} type={type} onImgDeleted={onImgDeleted} style={{ paddingTop: "20px" }} list={imgList} onPageRequest={queryImgList} isDataLoading={isDataLoading} totalCount={count} />
         </div>
     );

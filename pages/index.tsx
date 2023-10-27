@@ -684,6 +684,9 @@ const Index: React.FC = () => {
         closable={true}
         maskClosable={false}
         okText='确定'
+        onCancel={() => {
+          setShowStartTips(false);
+        }}
         footer={[
           <Button
             key='ok'
@@ -714,6 +717,9 @@ const Index: React.FC = () => {
         closable={true}
         maskClosable={false}
         okText='确定'
+        onCancel={() => {
+          setShowSeed(false);
+        }}
         footer={[
           <Button
             key='ok'

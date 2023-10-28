@@ -85,11 +85,11 @@ const ImgListPage = ({ type }: ImgListPageProps) => {
     }, [])
     return (
         <div className="">
-            <div style={{ padding: "10px 20px" }}>
+            {/* <div style={{ padding: "10px 20px" }}>
                 <Search placeholder="风景、人物、插画、动漫..." value={keywords} onChange={(v) => {
                     setKeywords(v.target.value)
                 }} maxLength={50} allowClear onSearch={onSearch} style={{}} />
-            </div>
+            </div> */}
             <Masonry onImgThumbUpActionDone={onImgThumbUpActionDone} type={type} onImgDeleted={onImgDeleted} style={{ paddingTop: "20px" }} list={imgList} onPageRequest={queryImgList} isDataLoading={isDataLoading} totalCount={count} />
         </div>
     );

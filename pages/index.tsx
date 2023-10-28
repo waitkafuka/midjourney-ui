@@ -56,6 +56,7 @@ const isDone = (progress: string | undefined) => {
 
 const Index: React.FC = () => {
   const [inputValue, setInputValue] = useState('');
+  const [seedPrompt, setSeedPrompt] = useState('');
   const inputValueRef = useRef(inputValue);
   const [inputDisable, setInputDisable] = useState(false);
   const [showAlert, setShowAlert] = useState(true);
@@ -736,16 +737,25 @@ const Index: React.FC = () => {
       // footer={null}
       >
         <div>
-          <div>seed值：{seed}  <Button
+          <div>seed（种子）值：{seed}</div>
+          <div style={{ marginTop: "15px" }}>带种子提示词：{seedPrompt} --seed {seed}  <Button
             size='small'
             onClick={() => {
               setSeedCopyText('已复制')
+              setInputValue(`${seedPrompt} --seed ${seed}`)
             }}
-            data-clipboard-text={seed}
+            data-clipboard-text={`${seedPrompt} --seed ${seed}`}
             className='copy-prompt-btn'
           >
             {seedCopyText}
           </Button></div>
+          <div style={{ marginTop: "15px", fontSize: "13px" }}>
+            <p>种子使用说明：</p>
+            <p>种子决定了一次生成的初始图像。相同的种子+相同的提示词将得到100%完全相同的两张图片（如果不固定种子，即使提示词相同，两次生成的图片也会不一样）。因此，通过固定种子数，然后略微修改提示词，可达到“在一张底图上进行微调”的效果。</p>
+            <p style={{ marginTop: "15px" }}>举例：第一次生成：通过 a girl 得到一张女孩的照片，然后获取种子，假设种子数是：123</p>
+            <p>此时修改提示词（按个人意图进行修改）为：a girl, Wear glasses --seed 123（通过固定种子复用第一张图片） ，然后再次生成，将在第一张图的基础上为人物戴上眼镜。</p>
+            {/* <p>点击上方复制按钮将复制完整参数，然后略微修改提示词再次生成，以生成你想要的图片。</p> */}
+          </div>
         </div>
       </Modal>
       {/* 操作提示弹窗 */}
@@ -908,6 +918,7 @@ const Index: React.FC = () => {
                   <Button
                     loading={!!requestingSeed && (msgID === requestingSeed)}
                     onClick={() => {
+                      setSeedPrompt(text.replace(/- <@\d+>\s*\([^)]*\)/g, '').replace(/(variation|upscale) (V|U)\d/g, ''))
                       getSeed(msgID)
                     }}
                   >

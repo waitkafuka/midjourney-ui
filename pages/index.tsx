@@ -606,6 +606,7 @@ const Index: React.FC = () => {
     const ddd = getQueryString('ddd');
     if (ddd) {
       setDebug(true);
+      setInputDisable(false);
     }
     getPrompt();
     checkTips();
@@ -987,7 +988,7 @@ const Index: React.FC = () => {
         <>
         {/* 故障提示 */}
           <Alert
-            message="抱歉，midjourney 接口参数更改，正在修复中，服务暂不可用，预计半小时左右。其他服务不受影响。"
+            message="midjourney 接口参数更改，正在修复中，服务暂不可用，预计半小时左右。其他服务不受影响。给您带来不便深表歉意。"
             banner
             closable
           />

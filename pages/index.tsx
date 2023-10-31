@@ -58,7 +58,7 @@ const Index: React.FC = () => {
   const [inputValue, setInputValue] = useState('');
   const [seedPrompt, setSeedPrompt] = useState('');
   const inputValueRef = useRef(inputValue);
-  const [inputDisable, setInputDisable] = useState(false);
+  const [inputDisable, setInputDisable] = useState(true);
   const [showAlert, setShowAlert] = useState(true);
   const [isTranslating, setIsTranslating] = useState(false);
   const [referImg, setReferImg] = useState('');
@@ -985,11 +985,12 @@ const Index: React.FC = () => {
         </div>
       ) : (
         <>
-          {/* <Alert
-            message="midjourney 接口参数更改，正在修复中，预计半小时修复。其他服务不受影响。"
+        {/* 故障提示 */}
+          <Alert
+            message="抱歉，midjourney 接口参数更改，正在修复中，服务暂不可用，预计半小时左右。其他服务不受影响。"
             banner
             closable
-          /> */}
+          />
           <p className='no-content-tips'>使用 midjourney 生成你的专属人工智能绘画作品。</p>
           {/* <p className="no-content-tips">请勿使用违禁词汇，违者将被封号。</p> */}
           {!user.secret && (

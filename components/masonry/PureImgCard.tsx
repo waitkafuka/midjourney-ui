@@ -123,7 +123,7 @@ const App = ({ model, columnWidth = 400, hasLikeButton = false, onImgThumbUpActi
                     </div>
                     {/* 一键放大按钮 */}
                     <div className={css["masonry-action-item"]} onClick={() => {
-                        redirectToZoomPage(src, 'current_window');
+                        redirectToZoomPage(HDsrc, 'current_window');
                     }}>
                         <i className='iconfont icon-fangda' title="一键放大"></i>
                     </div>

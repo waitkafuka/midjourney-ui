@@ -183,6 +183,9 @@ a:hover {
   */
 
 @media (max-width: 1000px) {
+  .faceswap-alert{
+    display: none;
+  }
   .param-book {
     .param-book-label {
       margin-left: 10px !important;

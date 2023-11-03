@@ -1,7 +1,7 @@
 import { useEffect, useMemo, useState } from "react";
 import { ImgCardModel, ImgPageType, PaintingType } from '../scripts/types'
 import { getQueryString, hasChinese, downloadFile, redirectToZoomPage } from "../scripts/utils";
-import { Button, Col, Form, Input, InputNumber, Radio, Row, Select, Slider, Tooltip, message, notification } from "antd";
+import { Alert, Button, Col, Form, Input, InputNumber, Radio, Row, Select, Slider, Tooltip, message, notification } from "antd";
 import { FACESWAP_COST } from "../scripts/config";
 import PaintingPoint from "../components/paintingPoint";
 import { requestAliyunArt } from "../request/http";
@@ -198,6 +198,14 @@ const SwapFace: React.FC = () => {
         <meta name="description" content="这是我的页面描述" />
         <meta name="referrer" content="no-referrer" />
     </Head >
+        <Alert
+            className="faceswap-alert"
+            message="换脸限时优惠中，原价：60点数/张，现价：30点数/张。"
+            banner
+            style={{ width: 'calc(100% - 230px)' }}
+            type="success"
+            closable
+        />
         <div className='dalle-point-box'><PaintingPoint></PaintingPoint></div>
         <div className="ai-qrcode-wrapper" style={{ marginTop: '50px', paddingTop: "0" }}>
 

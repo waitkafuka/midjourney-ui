@@ -52,10 +52,12 @@ const SwapFace: React.FC = () => {
 
     //当user.email更新的时候，重新设置params.email
     useEffect(() => {
-        setParams({
-            ...params,
-            email: user.email
-        })
+        if (user.email) {
+            setParams({
+                ...params,
+                email: user.email
+            })
+        }
     }, [user.email])
 
 
@@ -184,13 +186,13 @@ const SwapFace: React.FC = () => {
                 imgType: imgType.online
             }
         })
-        // const notifyEmail = localStorage.getItem('notifyEmail');
-        // if (notifyEmail) {
-        //     setParams({
-        //         ...params,
-        //         email: notifyEmail
-        //     })
-        // }
+        const notifyEmail = localStorage.getItem('notifyEmail');
+        if (notifyEmail) {
+            setParams({
+                ...params,
+                email: notifyEmail
+            })
+        }
     }
 
     const showFaceDemo = () => {
@@ -337,7 +339,7 @@ const SwapFace: React.FC = () => {
                 <div className="art-form-item" style={{ display: "block" }}>
                     <div className="form-item-label">
                         <span className="input-label">通知邮箱</span>
-                        <Tooltip title="如果图片较大，生成时间过长，可添加邮箱，待换脸完成后会将结果图片发送至邮箱。">
+                        <Tooltip title="如果图片较大，生成时间过长，可添加邮箱，待换脸完成后会将结果图片发送至邮箱。如已绑定邮箱，此处会自动显示。">
                             <QuestionCircleOutlined />
                         </Tooltip>
                     </div>

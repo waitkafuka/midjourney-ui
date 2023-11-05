@@ -37,10 +37,12 @@ const Upscale: React.FC = () => {
 
     //当user.email更新的时候，重新设置params.email
     useEffect(() => {
-        setParams({
-            ...params,
-            email: user.email
-        })
+        if (user.email) {
+            setParams({
+                ...params,
+                email: user.email
+            })
+        }
     }, [user.email])
     //放大倍数有 2 倍 4 倍 8 倍
     const resizeOptions = [{
@@ -121,6 +123,12 @@ const Upscale: React.FC = () => {
         if (params.scale_num >= 4 && !params.email) {
             message.error('请输入邮箱，以便接收放大后的图片。');
             return;
+        }
+
+        //记录邮箱
+        if (params.email) {
+            //存入localsotrage , notifyEmail 为key
+            localStorage.setItem('notifyEmail', params.email)
         }
 
         setIsGenerating(true);
@@ -204,6 +212,13 @@ const Upscale: React.FC = () => {
 
     //页面初始化
     useEffect(() => {
+        const notifyEmail = localStorage.getItem('notifyEmail');
+        if (notifyEmail) {
+            setParams({
+                ...params,
+                email: notifyEmail
+            })
+        }
         setParamsFromUrl();
     }, [])
 

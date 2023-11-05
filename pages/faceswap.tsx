@@ -1,6 +1,7 @@
 import { useEffect, useMemo, useState } from "react";
 import { ImgCardModel, ImgPageType, PaintingType } from '../scripts/types'
 import { getQueryString, hasChinese, downloadFile, redirectToZoomPage } from "../scripts/utils";
+import { SendOutlined, StopOutlined, QuestionCircleOutlined } from '@ant-design/icons';
 import { Alert, Button, Col, Form, Input, InputNumber, Radio, Row, Select, Slider, Tooltip, message, notification } from "antd";
 import { FACESWAP_COST } from "../scripts/config";
 import PaintingPoint from "../components/paintingPoint";
@@ -105,6 +106,11 @@ const SwapFace: React.FC = () => {
             message.error('点数不足，请先购买点数。');
             return;
         }
+        //记录邮箱
+        if (params.email) {
+            //存入localsotrage , notifyEmail 为key
+            localStorage.setItem('notifyEmail', params.email)
+        }
 
         setIsGenerating(true);
 
@@ -133,7 +139,7 @@ const SwapFace: React.FC = () => {
         } catch (error: any) {
             //error.message转为小写
             if (error.message.toLowerCase().includes('time')) {
-                const tips = '由于图片较大，接口响应超时，后台任务仍在运算中，可直接关闭页面。稍后可在“我的作品”中查看结果，预计 5 分钟左右。若生成失败不会扣减点数。';
+                const tips = '由于图片较大，接口响应超时，后台任务仍在运算中，可直接关闭页面。稍后换脸结果将发送至预留邮箱。';
                 notification.error({
                     message: '提示',
                     description: tips,
@@ -178,6 +184,13 @@ const SwapFace: React.FC = () => {
                 imgType: imgType.online
             }
         })
+        // const notifyEmail = localStorage.getItem('notifyEmail');
+        // if (notifyEmail) {
+        //     setParams({
+        //         ...params,
+        //         email: notifyEmail
+        //     })
+        // }
     }
 
     const showFaceDemo = () => {
@@ -317,7 +330,23 @@ const SwapFace: React.FC = () => {
                                 });
                             }} listType="picture-card" slot={<div>+ 上传图片</div>} />
                         </div>}
+
                     </div>
+                </div>
+                {/* 通知邮箱 */}
+                <div className="art-form-item" style={{ display: "block" }}>
+                    <div className="form-item-label">
+                        <span className="input-label">通知邮箱</span>
+                        <Tooltip title="如果图片较大，生成时间过长，可添加邮箱，待换脸完成后会将结果图片发送至邮箱。">
+                            <QuestionCircleOutlined />
+                        </Tooltip>
+                    </div>
+                    <Input showCount maxLength={20} onChange={v => {
+                        setParams({
+                            ...params,
+                            email: v.target.value
+                        });
+                    }} placeholder="用来接收放大后的图片" value={params.email} />
                 </div>
                 <div style={{ marginTop: "20px" }}>
                     消耗点数：{FACESWAP_COST}

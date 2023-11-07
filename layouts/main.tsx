@@ -45,10 +45,15 @@ const ROUTES: Route = {
         name: 'Stable Diffusion',
         key: "stablediffusion",
       }, {
-        path: '/art/dalle/',
+        path: '/art/dalle2/',
         target: "_blank",
-        name: 'DALL·E',
-        key: "dalle",
+        name: 'DALL·E 2',
+        key: "dalle2",
+      }, {
+        path: '/art/dalle3/',
+        target: "_blank",
+        name: 'DALL·E 3（最新发布）',
+        key: "dalle3",
       }, {
         name: 'AI 艺术二维码',
         key: 'artqrcode',
@@ -202,7 +207,7 @@ export default function Main(children: JSX.Element) {
   const [isShowEditFormModal, setIsShowEditFormModal] = useState(false)
   const [isShowMyInfo, setIsShowMyInfo] = useState(false)
   const [nickname, setNickname] = useState('');
-  const [powerBy, setPowerBy] = useState('Powered by Midjourney + DALLE2');
+  const [powerBy, setPowerBy] = useState('Powered by Midjourney + DALLE3');
   const [items, setItems] = useState<MenuProps['items']>();
 
   // const user = useSelector((state: any) => state.user.info);
@@ -512,11 +517,17 @@ export default function Main(children: JSX.Element) {
             name: 'Stable Diffusion',
             key: "stablediffusion",
           }, {
-            path: '/art/dalle/',
+            path: '/art/dalle2/',
             target: "_blank",
-            name: 'DALL·E',
-            key: "dalle",
+            name: 'DALL·E 2',
+            key: "dalle2",
           }, {
+            path: '/art/dalle3/',
+            target: "_blank",
+            name: 'DALL·E 3（最新发布）',
+            key: "dalle3",
+          },
+          {
             name: 'AI 艺术二维码',
             key: 'artqrcode',
             icon: <i className='iconfont icon-erweima'></i>,
@@ -611,10 +622,15 @@ export default function Main(children: JSX.Element) {
             name: 'Stable Diffusion',
             key: "Stable Diffusion",
           }, {
-            path: '/art/dalle/',
+            path: '/art/dalle2/',
             target: "_blank",
-            name: 'DALL·E2',
-            key: "dalle",
+            name: 'DALL·E 2',
+            key: "dalle2",
+          }, {
+            path: '/art/dalle3/',
+            target: "_blank",
+            name: 'DALL·E 3（最新发布）',
+            key: "dalle3",
           }, {
             name: 'AI 艺术二维码',
             key: 'artqrcode',

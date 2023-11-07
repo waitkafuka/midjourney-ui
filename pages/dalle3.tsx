@@ -1,6 +1,6 @@
-import { Button, Input, Modal, Select, Space, Spin, message } from 'antd';
+import { Button, Input, Modal, Select, Space, Spin, Tooltip, message } from 'antd';
 import { useEffect, useState } from 'react';
-import { SendOutlined } from '@ant-design/icons';
+import { QuestionCircleOutlined } from '@ant-design/icons';
 import { hasChinese } from '../scripts/utils';
 import { requestAliyun, requestAliyunArt } from '../request/http';
 const prompts = ['a bowl of soup that is also a portal to another dimension, digital art',
@@ -14,18 +14,58 @@ const prompts = ['a bowl of soup that is also a portal to another dimension, dig
 import PureImgCard from '../components/masonry/PureImgCard'
 import { ImgCardModel, PaintingType, ImgPageType } from '../scripts/types';
 import PaintingPoint from '../components/paintingPoint';
-import { PAINTING_POINTS_ONE_TIME, defaultImg } from '../scripts/config';
 import { useSelector } from 'react-redux';
 import store from '../store';
 
+//'1024x1024', '1792x1024', '1024x1792'
+const sizes = [{
+    label: '1024x1024',
+    value: '1024x1024'
+}, {
+    label: '1792x1024',
+    value: '1792x1024'
+}, {
+    label: '1024x1792',
+    value: '1024x1792'
+}];
+const styles = [{
+    label: '自然',
+    value: 'natural'
+}, {
+    label: '强烈',
+    value: 'vivid'
+},];
+//'hd', 'standard'
+const qualitys = [{
+    label: '普通',
+    value: 'standard'
+}, {
+    label: '高清',
+    value: 'hd'
+},];
+
+//'dall-e-2', 'dall-e-3'
+const models = [{
+    label: 'DALL·E 2',
+    value: 'dall-e-2'
+}, {
+    label: 'DALL·E 3',
+    value: 'dall-e-3'
+}];
 
 const Dalle: React.FC = () => {
     const [text, setText] = useState<string>('')
+    const [size, setSize] = useState<string>(sizes[0].value)
+    const [style, setStyle] = useState<string>(styles[0].value)
+    const [quality, setQuality] = useState<string>(qualitys[0].value)
+    const [price, setPrice] = useState<number>(0)
+    const [model, setModel] = useState<string>(models[0].value)
     const [isTranslating, setIsTranslating] = useState(false);
     const [isGenerating, setIsGenerating] = useState(false);
     const [imgList, setImgList] = useState<ImgCardModel[]>([])
     const [demoImgList, setDemoImgList] = useState<ImgCardModel[]>([])
     const user = useSelector((state: any) => state.user.info)
+
 
     //随机一个prompt
     const randomPrompt = () => {
@@ -36,7 +76,7 @@ const Dalle: React.FC = () => {
     //开始生成1
     const doGenerationAuzre = async () => {
         let prompt = text;
-        if (user.point_count < PAINTING_POINTS_ONE_TIME) {
+        if (user.point_count < price) {
             message.error('点数不足，请先充值');
             return;
         }
@@ -74,8 +114,7 @@ const Dalle: React.FC = () => {
         setIsGenerating(true);
         //如果长度大于 10，移除开头的 10 个
         console.log(imgList.length);
-
-        const paintInfo = await requestAliyunArt('dalle-painting', { caption: prompt })
+        const paintInfo = await requestAliyunArt('dalle-painting', { caption: prompt, size, style, quality, model: 'dall-e-3' })
         if (paintInfo.code !== 0) {
             message.error(paintInfo.message);
             setIsGenerating(false);
@@ -94,7 +133,7 @@ const Dalle: React.FC = () => {
             painting_type: PaintingType.DALLE,
         }
 
-        setImgList([imgCardPlaceHolder, ...imgList])
+        setImgList([imgCardPlaceHolder])
 
         //轮询查询图片生成状态
         let result = {} as any;
@@ -141,15 +180,15 @@ const Dalle: React.FC = () => {
             painting_type: PaintingType.DALLE,
         }
         //点数减少
-        store.dispatch({ type: 'user/pointChange', payload: user.point_count - PAINTING_POINTS_ONE_TIME })
+        store.dispatch({ type: 'user/pointChange', payload: user.point_count - data.cost })
         // 显示图片
-        setImgList(list => [imgCard, ...list.slice(1)])
+        setImgList(list => [imgCard])
     }
 
     //开始生成2
     const doGenerationOpenAi = async () => {
         let prompt = text;
-        if (user.point_count < PAINTING_POINTS_ONE_TIME) {
+        if (user.point_count < price) {
             message.error('点数不足，请先充值');
             return;
         }
@@ -197,37 +236,44 @@ const Dalle: React.FC = () => {
             thumb_up_count: 0,
             painting_type: PaintingType.DALLE,
         }
-
-        const result = await requestAliyunArt('openai-dalle-painting', { caption: prompt })
+        setImgList([imgCardPlaceHolder])
+        const result = await requestAliyunArt('openai-dalle-painting', { caption: prompt, model, size, style, quality })
         if (result.code !== 0) {
             message.error(result.message);
             setIsGenerating(false);
+            setImgList([])
             return;
         }
         console.log('生成结果', result);
 
         const id = result.data.id;
 
-        setImgList([imgCardPlaceHolder, ...imgList])
+        setImgList([imgCardPlaceHolder])
 
         //创建一个图片对象
         setIsGenerating(false);
         const { data } = result;
         //这里替换的时候一定要不能带上/
         const img_url = data.img_url.replace('https://oaidalleapiprodscus.blob.core.windows.net', '');
+        // let resParams = data.paint_params;
+        let resPrompt = data.prompt;
+        // if(resParams){
+        //     resParams = JSON.parse(resParams);
+        //     resPrompt = resParams.revised_prompt;
+        // }
         const imgCard: ImgCardModel = {
             id: id,
             img_url: img_url,
-            prompt: data.prompt,
+            prompt: resPrompt,
             create_time: new Date(),
             is_public: 0,
             thumb_up_count: 0,
             painting_type: PaintingType.DALLE,
         }
         //点数减少
-        store.dispatch({ type: 'user/pointChange', payload: user.point_count - PAINTING_POINTS_ONE_TIME })
+        store.dispatch({ type: 'user/pointChange', payload: user.point_count - data.cost })
         // 显示图片
-        setImgList(list => [imgCard, ...list.slice(1)])
+        setImgList(list => [imgCard])
     }
 
     const buildDalleDemoImgs = () => {
@@ -255,6 +301,15 @@ const Dalle: React.FC = () => {
         })
         setDemoImgList(imgCards);
     }
+
+    async function calcPoints() {
+        const { data } = await requestAliyunArt('calc-dalle-price', { model, size, quality });
+        setPrice(data);
+    }
+    //当模型，尺寸，质量变化时，重新计算所需要消耗的点数
+    useEffect(() => {
+        calcPoints();
+    }, [model, size, quality])
     //页面初始化
     useEffect(() => {
         buildDalleDemoImgs();
@@ -275,7 +330,7 @@ const Dalle: React.FC = () => {
 
             <div>
                 <div className='dalle-point-box'><PaintingPoint></PaintingPoint></div>
-                {imgList.length === 0 && <p className="no-content-tips">DALL·E 2 是和 ChatGPT 同属于OpenAI 公司的另一款人工智能绘画作品，适合各种艺术类风格的绘画。</p>}
+                {imgList.length === 0 && <p className="no-content-tips">DALL·E 3 相对于 DALL·E 2 版本大幅提升了出图质量，并可以自动优化提示词，出图质量同 midjourney 。</p>}
                 {/* 结果展示区 */}
                 <div className='painting-result-wrap'>
                     {
@@ -292,19 +347,59 @@ const Dalle: React.FC = () => {
                 <div className='dalle-input-box'>
                     <div style={{ color: "#777", fontSize: "13px" }}>
                         <Button size='small' onClick={randomPrompt}>随机一个prompt</Button>
+                        <span className='ml10'>模型：</span>
+                        <Select
+                            value={model}
+                            // style={{ width: 260, marginLeft: "10px" }}
+                            onChange={v => {
+                                setModel(v);
+                            }}
+                            options={models}
+                        />
+                        <span className='ml10'>质量：</span>
+                        <Select
+                            value={quality}
+                            // style={{ width: 260, marginLeft: "10px" }}
+                            onChange={v => {
+                                setQuality(v);
+                            }}
+                            options={qualitys}
+                        />
+                        <span className='ml10'>尺寸：</span>
+                        <Select
+                            value={size}
+                            // style={{ width: 260, marginLeft: "10px" }}
+                            onChange={v => {
+                                setSize(v);
+                            }}
+                            options={sizes}
+                        />
+                        <span className='ml10'>风格：</span>
+                        <Select
+                            value={style}
+                            // style={{ width: 260, marginLeft: "10px" }}
+                            onChange={v => {
+                                setStyle(v);
+                            }}
+                            options={styles}
+                        />
+                        <Tooltip className='ml5' title="选择强烈，将生成超级现实或者梦幻的图片；选择自然，图片风格将更加自然。">
+                            <QuestionCircleOutlined />
+                        </Tooltip>
                     </div>
-                    <div style={{ marginTop: "0px" }}>
+                    <div style={{ position: 'relative', marginTop: "0px" }}>
+                        <div className="sd-point-cost">点数：{price}</div>
                         <Space.Compact style={{ width: '100%' }}>
                             <Input placeholder="请尽量详细描述你要生成的作品" onKeyDown={(e) => {
                                 if (e.key === "Enter") {
-                                    doGenerationAuzre();
+                                    doGenerationOpenAi();
                                     e.preventDefault();
                                 }
                             }}
                                 value={text} onChange={(e) => {
                                     setText(e.target.value)
                                 }} />
-                            <Button type="primary" loading={isGenerating} onClick={doGenerationAuzre}>开始生成</Button>
+                            <Button type="primary" loading={isGenerating} onClick={doGenerationOpenAi}>开始生成</Button>
                         </Space.Compact>
                     </div>
                 </div>

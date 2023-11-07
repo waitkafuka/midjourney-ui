@@ -478,7 +478,7 @@ const Upscale: React.FC = () => {
                 </div> */}
                 </div>
                 <div>
-                    消耗点数：{pointCost}
+                    点数：{pointCost}
                 </div>
                 <Button type="primary" loading={isGenerating} onClick={doSubmit} style={{ width: "100%", marginTop: "10px" }}>
                     确定

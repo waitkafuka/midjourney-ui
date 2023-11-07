@@ -425,7 +425,7 @@ const SD: React.FC = () => {
             <div style={{ marginTop: "0px", position: "relative" }}>
                 {/* 消耗点数 */}
                 <div className="sd-point-cost">
-                    预计消耗点数：{pointNeed}点数
+                    点数：{pointNeed}
                 </div>
                 <Space.Compact style={{ width: '100%' }}>
                     <Input placeholder="请尽量详细描述你要生成的作品" onKeyDown={(e) => {

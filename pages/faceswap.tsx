@@ -351,7 +351,7 @@ const SwapFace: React.FC = () => {
                     }} placeholder="用来接收放大后的图片" value={params.email} />
                 </div>
                 <div style={{ marginTop: "20px" }}>
-                    消耗点数：{FACESWAP_COST}
+                    点数：{FACESWAP_COST}
                 </div>
                 <Button type="primary" loading={isGenerating} onClick={doSubmit} style={{ width: "100%", marginTop: "10px" }}>
                     开始合成

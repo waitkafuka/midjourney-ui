@@ -116,7 +116,7 @@ const App = ({ model, columnWidth, onImgDeleted, paint_params, type, onImgThumbU
             <div style={{ position: "absolute", left: "0", top: '-1px' }}>
                 {/* data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAABQAAAAEABAMAAAAehcbXAAAAHlBMVEX//2ZC//9R2Uv/bjs7Rv///2ZC//9R2kz/bjw8Rv+T0BPCAAAABXRSTlPf39/f3yHgI24AAAHRSURBVHgBYmQYYCA4ou0ftZ8pdADBKBgFTAOZ+kfBKGAaDQJAu3QsAAAAgADMnyXJCLp7NoYhIAKCgAgIAiIgCIiAICACgoAICAIiIAiIgCAgAoKACAgCIiAIiIAgIAKCgAgIAiIgCIiACAgCIiAIiIAgIAKCgAgIAiIgCIiAICACgoAICAIiIAiIgCAgAoKACAgCIiAIiIAgIAKCgAiIgCAgAoKACAgCIiAIiIAgIAKCgAgIAiIgCIiAICACgoAICAIiIAiIgCAgAoKACAgCIiACgoAICAIiIAiIgCAgAoKACAgCIiAIiIAgIAKCgAgIAiIgCIiAICACgoAICCsgCIiAICACgoAICAIiIAiIgCAgAoKACAgCIiAIiIAgIAKCgAgIAiIgCIiAICACgoAICAIiIAKCgAgIAiIgCIiAICACgoAICAIiIAiIgCAgAoKACAgCIiAIiIAgIAKCgAgIAiIgCIiACAgCIiAIiIAgIAKCgAgIAiIgCIiAICACgoAICAIiIAiIgCAgAoKACAgCIiAIiIAgIAKCgAiIgCAgAoKACAgCIiAIiIAgIAKCgAgIAiIgCIiAICACgoAICAIiIAiIgCAgAoKACAgCIiACBo4KVgKCYkXIHT4AAAAASUVORK5CYII=" */}
                 {model.painting_type === 'dalle' && <Tag color="rgba(96 108 93/70%)" >
-                    DALL·E
+                    DALL·E2
                 </Tag>}
                 {model.painting_type === 'mj' && <Tag color="rgba(76 76 109/70%)">
                     Midjourney

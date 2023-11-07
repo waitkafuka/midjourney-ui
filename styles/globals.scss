@@ -178,12 +178,20 @@ a:hover {
   }
 }
 
+.ml10 {
+  margin-left: 10px;
+}
+
+.ml5 {
+  margin-left: 5px;
+}
+
 /**
   * 小于 1000 像素时 移动端 手机端
   */
 
 @media (max-width: 1000px) {
-  .faceswap-alert{
+  .faceswap-alert {
     display: none;
   }
   .param-book {

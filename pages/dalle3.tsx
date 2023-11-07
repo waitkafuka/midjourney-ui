@@ -46,12 +46,12 @@ const qualitys = [{
 
 //'dall-e-2', 'dall-e-3'
 const models = [{
-    label: 'DALL·E 2',
-    value: 'dall-e-2'
-}, {
     label: 'DALL·E 3',
     value: 'dall-e-3'
-}];
+}, {
+    label: 'DALL·E 2',
+    value: 'dall-e-2'
+},];
 
 const Dalle: React.FC = () => {
     const [text, setText] = useState<string>('')

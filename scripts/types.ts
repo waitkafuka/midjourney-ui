@@ -23,6 +23,7 @@ export enum PaintingType {
     MJ = 'mj',
     SD = 'sd',
     DALLE = 'dalle',
+    DALLE3 = 'dalle3',
     QRCODE = 'qrcode',
     FACESWAP = 'faceswap'
 }

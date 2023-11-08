@@ -34,7 +34,10 @@ const AliyunOSSUploader: React.FC<AliyunOSSUploadProps> = ({ value, listType = '
             file.url = `https://oc.superx.chat/${file.url}`;
             return file;
         });
-        onChange?.([...fileList]);
+        //全部上传完成之后，才触发onChange 事件
+        if (fileList.every((file) => file.status === 'done')) {
+            onChange?.([...fileList]);
+        }
     };
 
     const onRemove = (file: UploadFile) => {

@@ -453,6 +453,7 @@ const Index: React.FC = () => {
 
   //图片描述
   const handleImgDescribe = async (imgUrl: string) => {
+    if (!imgUrl) return;
     setIsDescribeApiRequesting(true);
     try {
       const data = await requestAliyunArt('img-describe-mj', { imgUrl });
@@ -811,7 +812,7 @@ const Index: React.FC = () => {
         <div>
           <div style={{ padding: '15px', display: 'flex', justifyContent: 'center', flexWrap: 'wrap' }}>
             <OssUploader disabled={isDescribeApiRequesting} buttonText='点击选择图片进行解析' onChange={(files => {
-              console.log(files);
+              console.log("🚀 ~ file: index.tsx:814 ~ files:", files)
               setDescribeImageUrl(files[0].url || '');
               handleImgDescribe(files[0].url || '');
             })}></OssUploader>
@@ -819,7 +820,7 @@ const Index: React.FC = () => {
           </div>
           {/* 图片描述结果 */}
           <div>
-            {isDescribeApiRequesting && <div>正在解析图片描述，请稍候...</div>}
+            {isDescribeApiRequesting && <div>正在解析图片描述词，请稍候...</div>}
             {!isDescribeApiRequesting && imgDescribeTexts.length > 0 && <>
               <div style={{ marginTop: "15px" }}>描述词（已生成 4 条描述）：</div>
               {imgDescribeTexts.map(item => {
@@ -1193,7 +1194,7 @@ const Index: React.FC = () => {
             </Tooltip>
           </div>
           {/* 图片描述 */}
-          {/* <div className='line-change-box2'>
+          <div className='line-change-box2'>
             <div style={{ marginRight: '5px', marginLeft: '20px' }}>
               <Button onClick={() => {
                 setShowDescribeModal(true);
@@ -1202,7 +1203,7 @@ const Index: React.FC = () => {
             <Tooltip title={` midjourney 的describe功能。通过上传一个图片，可返回该图片的文本描述，方便后续生成。`}>
               <QuestionCircleOutlined style={{ cursor: 'pointer' }} />
             </Tooltip>
-          </div> */}
+          </div>
         </div>
 
 

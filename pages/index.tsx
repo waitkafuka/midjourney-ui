@@ -1200,7 +1200,7 @@ const Index: React.FC = () => {
                 setShowDescribeModal(true);
               }}>图片转提示词</Button>
             </div>
-            <Tooltip title={`describe功能。可通过上传一个图片，反向推断出图片对应相近的描述词，方便后续生成。`}>
+            <Tooltip title={`describe功能。可通过上传一张图片，反向推断出图片对应相近的描述词，方便后续生成。`}>
               <QuestionCircleOutlined style={{ cursor: 'pointer' }} />
             </Tooltip>
           </div>

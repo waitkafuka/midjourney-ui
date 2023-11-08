@@ -20,6 +20,7 @@ import ClipboardJS from 'clipboard';
 import LottieAnimation from '../components/LottieAnimation';
 import dkJson from '../components/dk.json'
 import { number } from 'echarts';
+import OssUploader from '../components/OssUploader';
 const imgBasePath = '//och.superx.chat'
 
 const baseWidth = 500;
@@ -58,8 +59,10 @@ const Index: React.FC = () => {
   const [inputValue, setInputValue] = useState('');
   const [seedPrompt, setSeedPrompt] = useState('');
   const inputValueRef = useRef(inputValue);
+  const [showDescribeModal, setShowDescribeModal] = useState(false);
   const [inputDisable, setInputDisable] = useState(false);
   const [showAlert, setShowAlert] = useState(true);
+  const [imgDescribeTexts, setImgDescribeTexts] = useState([]);
   const [isTranslating, setIsTranslating] = useState(false);
   const [referImg, setReferImg] = useState('');
   const [isShowBuyPointEntry, setIsShowBuyPointEntry] = useState<boolean>(true);
@@ -70,6 +73,7 @@ const Index: React.FC = () => {
   const [isShowParamsTips, setIsShowParamsTips] = useState(false);
   const [showSeed, setShowSeed] = useState(false);
   const [seed, setSeed] = useState('');
+  const [describeImageUrl, setDescribeImageUrl] = useState('');
   //自动纠错提示词
   const [isCorrectPrompt, setIsCorrectPrompt] = useState(false);
   const [showQrcodeModal, setShowQrcodeModal] = useState(true);
@@ -97,6 +101,7 @@ const Index: React.FC = () => {
   const [paintingTip, setPaintingTip] = useState<string>('');
   const [api, contextHolder2] = notification.useNotification();
   const [currentIndex, setCurrentIndex] = useState<number>(0);
+  const [isDescribeApiRequesting, setIsDescribeApiRequesting] = useState<boolean>(false);
 
   const scrollToBottom = () => {
     setTimeout(() => {
@@ -445,6 +450,24 @@ const Index: React.FC = () => {
     }
   };
 
+
+  //图片描述
+  const handleImgDescribe = async (imgUrl: string) => {
+    setIsDescribeApiRequesting(true);
+    try {
+      const data = await requestAliyunArt('img-describe-mj', { imgUrl });
+      setIsDescribeApiRequesting(false);
+      if (data.code === 0) {
+        setImgDescribeTexts(data.prompt.split('\n\n'));
+      } else {
+        message.error(data.message);
+      }
+    } catch (error) {
+      setIsDescribeApiRequesting(false);
+    }
+
+  };
+
   const handleArray = (direction: string) => {
     if (messages.length === 0) return;
     if (direction === 'down') {
@@ -759,6 +782,68 @@ const Index: React.FC = () => {
           </div>
         </div>
       </Modal>
+      {/* 上传图片进行描述弹窗 */}
+      <Modal
+        title='图片描述（describe）'
+        style={{ top: 20, width: '500px' }}
+        open={showDescribeModal}
+        destroyOnClose={true}
+        closable={true}
+        maskClosable={false}
+        okText='确定'
+        onCancel={() => {
+          setShowDescribeModal(false);
+        }}
+        footer={[
+          <Button
+            key='ok'
+            type='primary'
+            onClick={() => {
+              setShowDescribeModal(false);
+            }}
+          >
+            完成
+          </Button>,
+        ]}
+      // footer={null}
+      >
+        <div>
+          <div style={{ padding: '15px', display: 'flex', justifyContent: 'center' }}>
+            <OssUploader disabled={isDescribeApiRequesting} buttonText='点击选择图片进行解析' onChange={(files => {
+              console.log(files);
+              setDescribeImageUrl(files[0].url || '');
+              handleImgDescribe(files[0].url || '');
+            })}></OssUploader>
+          </div>
+          {/* 图片描述结果 */}
+          <div>
+            {isDescribeApiRequesting && <div>正在解析图片描述，请稍候...</div>}
+            {!isDescribeApiRequesting && imgDescribeTexts.length > 0 && <>
+              <div style={{ marginTop: "15px" }}>描述词（已生成 4 条描述）：</div>
+              {imgDescribeTexts.map(item => {
+                return (
+                  <>
+                    <div style={{ marginTop: "5px" }}>
+                      {item as string} &nbsp;&nbsp;
+                      <Button
+                        size='small'
+                        onClick={() => {
+                          setInputValue((item as string).replace(/1️⃣|2️⃣|3️⃣|4️⃣/g, ''));
+                          message.success('提示词已复制')
+                        }}
+                        data-clipboard-text={(item as string).replace(/1️⃣|2️⃣|3️⃣|4️⃣/g, '')}
+                        className='copy-prompt-btn'
+                      >
+                        复制
+                      </Button>
+                    </div>
+                  </>
+                );
+              })}</>}
+          </div>
+
+        </div>
+      </Modal>
       {/* 操作提示弹窗 */}
       <Modal
         title='使用指南'
@@ -986,10 +1071,11 @@ const Index: React.FC = () => {
         </div>
       ) : (
         <>
-        {/* 故障提示 */}
+          {/* 故障提示 */}
           {/* <Alert
-            message="midjourney 接口参数更改，正在修复中，服务暂不可用，预计半小时左右。其他服务不受影响。给您带来不便深表歉意。"
+            message={<>全网首家 DALLE·3 上线，点击体验：<a href='/art/dalle3'>https://aihuihua.ai/art/dalle3</a></>}
             banner
+            type='success'
             closable
           /> */}
           <p className='no-content-tips'>使用 midjourney 生成你的专属人工智能绘画作品。</p>
@@ -1104,8 +1190,19 @@ const Index: React.FC = () => {
               <QuestionCircleOutlined style={{ cursor: 'pointer' }} />
             </Tooltip>
           </div>
-
+          {/* 图片描述 */}
+          <div className='line-change-box2'>
+            <div style={{ marginRight: '5px', marginLeft: '20px' }}>
+              <Button onClick={() => {
+                setShowDescribeModal(true);
+              }}>图片描述</Button>
+            </div>
+            <Tooltip title={` midjourney 的describe功能。通过上传一个图片，可返回该图片的文本描述，方便后续生成。`}>
+              <QuestionCircleOutlined style={{ cursor: 'pointer' }} />
+            </Tooltip>
+          </div>
         </div>
+
 
         {referImg && (
           <div style={{ margin: '10px 0' }} className='refer-img-box'>

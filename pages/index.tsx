@@ -459,6 +459,7 @@ const Index: React.FC = () => {
       setIsDescribeApiRequesting(false);
       if (data.code === 0) {
         setImgDescribeTexts(data.prompt.split('\n\n'));
+        store.dispatch({ type: 'user/pointChange', payload: user.point_count - data.cost });
       } else {
         message.error(data.message);
       }
@@ -784,7 +785,7 @@ const Index: React.FC = () => {
       </Modal>
       {/* 上传图片进行描述弹窗 */}
       <Modal
-        title='图片描述（describe）'
+        title='描述图片（describe）'
         style={{ top: 20, width: '500px' }}
         open={showDescribeModal}
         destroyOnClose={true}
@@ -808,12 +809,13 @@ const Index: React.FC = () => {
       // footer={null}
       >
         <div>
-          <div style={{ padding: '15px', display: 'flex', justifyContent: 'center' }}>
+          <div style={{ padding: '15px', display: 'flex', justifyContent: 'center', flexWrap: 'wrap' }}>
             <OssUploader disabled={isDescribeApiRequesting} buttonText='点击选择图片进行解析' onChange={(files => {
               console.log(files);
               setDescribeImageUrl(files[0].url || '');
               handleImgDescribe(files[0].url || '');
             })}></OssUploader>
+            {/* <div style={{ fontSize: '12px', width: "100%", textAlign: 'center', }}>（消耗 1 点数）</div> */}
           </div>
           {/* 图片描述结果 */}
           <div>
@@ -1195,7 +1197,7 @@ const Index: React.FC = () => {
             <div style={{ marginRight: '5px', marginLeft: '20px' }}>
               <Button onClick={() => {
                 setShowDescribeModal(true);
-              }}>图片描述</Button>
+              }}>描述图片</Button>
             </div>
             <Tooltip title={` midjourney 的describe功能。通过上传一个图片，可返回该图片的文本描述，方便后续生成。`}>
               <QuestionCircleOutlined style={{ cursor: 'pointer' }} />

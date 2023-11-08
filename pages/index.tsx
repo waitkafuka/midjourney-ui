@@ -1198,9 +1198,9 @@ const Index: React.FC = () => {
             <div style={{ marginRight: '5px', marginLeft: '20px' }}>
               <Button onClick={() => {
                 setShowDescribeModal(true);
-              }}>描述图片</Button>
+              }}>图片转提示词</Button>
             </div>
-            <Tooltip title={` midjourney 的describe功能。通过上传一个图片，可返回该图片的文本描述，方便后续生成。`}>
+            <Tooltip title={`describe功能。可通过上传一个图片，反向推断出图片对应相近的描述词，方便后续生成。`}>
               <QuestionCircleOutlined style={{ cursor: 'pointer' }} />
             </Tooltip>
           </div>

@@ -217,14 +217,14 @@ const SwapFace: React.FC = () => {
         <meta name="description" content="这是我的页面描述" />
         <meta name="referrer" content="no-referrer" />
     </Head >
-        <Alert
+        {/* <Alert
             className="faceswap-alert"
             message="换脸限时优惠中，原价：60点数/张，现价：30点数/张。"
             banner
             style={{ width: 'calc(100% - 230px)' }}
             type="success"
             closable
-        />
+        /> */}
         <div className='dalle-point-box'><PaintingPoint></PaintingPoint></div>
         <div className="ai-qrcode-wrapper" style={{ marginTop: '50px', paddingTop: "0" }}>
 

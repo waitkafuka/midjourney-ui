@@ -155,14 +155,18 @@ const SwapFace: React.FC = () => {
             setQrCodeImage(undefined);
             return;
         }
-        const data = res.data;
         if (res.code !== 0) {
+            //未登录的提示
+            if (res.code === 40015) {
+                res.message = '您尚未登录，请先登录后再试'
+            }
             //这里取的是sd返回的message
-            message.error(res.data.message);
+            message.error(res.message);
             setIsGenerating(false);
             setQrCodeImage(undefined);
             return;
         }
+        const data = res.data;
         setIsGenerating(false);
         setQrCodeImage({ ...newQrcodeImage, img_base_path: 'https://oc.superx.chat', img_url: data.ossPath, id: data.id, width: imgData.width, height: imgData.height });
         const distImgUrl = `https://oc.superx.chat${data.ossPath}`;

@@ -134,7 +134,7 @@ const EmailBind = function () {
                     确定
                 </Button>
                 <p className="qrcode-demo-tips">如果您之前用邮箱购买过，可通过邮箱绑定同步权益。</p>
-                <p className="qrcode-demo-tips">注意：如果所绑定邮箱之前有相关权益，将使用之前邮箱覆盖当前账号权益。请谨慎操作。</p>
+                <p className="qrcode-demo-tips">注意：如果当前微信仍有相关权益，则请不要绑定之前已注册过的邮箱，以避免账号合并所带来的问题。可选择新邮箱进行绑定。请谨慎操作。</p>
             </Form.Item>
 
         </Form>

@@ -318,10 +318,10 @@ const PaingPoint = ({ }) => {
         </div>
         {/* 新版的支付，多套餐 */}
         <div className='buy-code-wrap-multiple'>
-          <div style={{ textAlign: 'center', color: "#e31414" }}>
+          {/* <div style={{ textAlign: 'center', color: "#e31414" }}>
             <div style={{ fontSize: "18px", fontWeight: 800, }}>🎉🎉🎉双十一大放价，全场无门槛八折！一年仅此一天！</div>
             <div>平日里68、188、298 的套餐，现在只要 54、150、238，并且额外多送 100 点数！加量还减价！错过再等一年！</div>
-          </div>
+          </div> */}
           {/* 楼层 1 */}
           <div className='qrcode-select-wrap'>
             {
@@ -331,7 +331,7 @@ const PaingPoint = ({ }) => {
                   setPricePoint(item.paint_point);
                   setModalQrcode(item.id);
                 }}> <div className='point-box'>{item.paint_point}点数</div>
-                  <div className='price-box'>￥ {Math.floor(item.price)} <span style={{textDecoration:'line-through',fontSize:"12px"}}>原价{Math.round(item.originPrice)}</span></div>
+                  <div className='price-box'>￥ {Math.floor(item.price)}</div>
                   <img className='check-png black' src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABQAAAAUCAYAAACNiR0NAAAABGdBTUEAALGPC/xhBQAAADhlWElmTU0AKgAAAAgAAYdpAAQAAAABAAAAGgAAAAAAAqACAAQAAAABAAAAFKADAAQAAAABAAAAFAAAAACRFdLHAAABm0lEQVQ4EaWUPUvDUBSGGxWUCuLgYpdSBF3cxMk6KyL4sXVUEDopOgg62MF/4Ori4qCT9j90CwQc7FIcOwgiVAQdND5v2lsTvUlLc+DJPfd8vLnJvYmTGdB83y/QugULkINJyDtc+jZEpijehzVowh3U5DuO80bexe9tFGahAh6UIGvrIt5bkKJteIAyjNiETIy8G1tAUq/jDPSOijxSyzQmjUO2JGKjxG9Aj7bZr5hNK6OVwS3sWQsSgvS4thXqMZ9Y1WVCb5BCYBxOYMZaS0IbUAXbjSI9qoF7kB0qyfi7y0x0NLSbE5HOmAl1FyCrwZhNsEKiHNMfCVN3ALIG6LAHht9eoYKgQxs5Rsyv4BHmQ00bzL/gBWZNXCPzruA5k1I42Sk4Ji5rwToswjt8wLKlvivoUhD3Oe2Q+wSt6hW+4d/NOwtwtcwCVP/eLTwnvwTPIDsN58I+uUDwCGc3nLD51EzDii1nYkbwGmfOBNOM6Hg6wPo56t+WyhArIlDXO/RSKdEsMdBHkdO5y+O0t3sw5WHa6rDK99/8AS9xZpi5oWsXAAAAAElFTkSuQmCC" alt="" />
                   <img className='check-png white' alt="" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABQAAAAUCAYAAACNiR0NAAAABGdBTUEAALGPC/xhBQAAADhlWElm
 TU0AKgAAAAgAAYdpAAQAAAABAAAAGgAAAAAAAqACAAQAAAABAAAAFKADAAQAAAABAAAAFAAAAACR

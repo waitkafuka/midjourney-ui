@@ -459,8 +459,8 @@ const Index: React.FC = () => {
       const data = await requestAliyunArt('img-describe-mj', { imgUrl });
       setIsDescribeApiRequesting(false);
       if (data.code === 0) {
-        setImgDescribeTexts(data.prompt.split('\n\n'));
-        store.dispatch({ type: 'user/pointChange', payload: user.point_count - data.cost });
+        setImgDescribeTexts(data.data.prompt.split('\n\n'));
+        store.dispatch({ type: 'user/pointChange', payload: user.point_count - data.data.cost });
       } else {
         message.error(data.message);
       }
@@ -561,6 +561,7 @@ const Index: React.FC = () => {
     if (result.code === 0) {
       setSeed(result.data.seed);
       setShowSeed(true);
+      store.dispatch({ type: 'user/pointChange', payload: user.point_count - result.data.cost });
     }
   }
 

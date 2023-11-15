@@ -60,7 +60,7 @@ const Index: React.FC = () => {
   const [seedPrompt, setSeedPrompt] = useState('');
   const inputValueRef = useRef(inputValue);
   const [showDescribeModal, setShowDescribeModal] = useState(false);
-  const [inputDisable, setInputDisable] = useState(false);
+  const [inputDisable, setInputDisable] = useState(true);
   const [showAlert, setShowAlert] = useState(true);
   const [imgDescribeTexts, setImgDescribeTexts] = useState([]);
   const [isTranslating, setIsTranslating] = useState(false);
@@ -1076,12 +1076,12 @@ const Index: React.FC = () => {
       ) : (
         <>
           {/* 故障提示 */}
-          {/* <Alert
-            message={<>全网首家 DALLE·3 上线，点击体验：<a href='/art/dalle3'>https://aihuihua.ai/art/dalle3</a></>}
+          <Alert
+            message={<>抱歉，midjourney 官方服务器故障，正在修复中，预计 30 分钟。给您带来不便深感抱歉。</>}
             banner
             type='success'
             closable
-          /> */}
+          />
           <p className='no-content-tips'>使用 midjourney 生成你的专属人工智能绘画作品。</p>
           {/* <p className="no-content-tips">请勿使用违禁词汇，违者将被封号。</p> */}
           {!user.secret && (

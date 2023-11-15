@@ -52,7 +52,7 @@ const ROUTES: Route = {
       }, {
         path: '/art/dalle3/',
         target: "_blank",
-        name: 'DALL·E 3（最新发布）',
+        name: 'DALL·E 3',
         key: "dalle3",
       }, {
         name: 'AI 艺术二维码',
@@ -111,11 +111,22 @@ const ROUTES: Route = {
         }]
     },
     {
-      path: '/art/mypaintings/',
-      target: '_blank',
-      name: '我的作品',
-      key: 'mypaintings',
+      name: '我的',
+      key: 'my',
       icon: <i className='iconfont icon-huihua'></i>,
+      children: [{
+        path: '/art/mypaintings',
+        target: '_blank',
+        name: '我的绘画',
+        key: 'mypaintings',
+        icon: <i className='iconfont icon-huihua'></i>,
+      },{
+        path: '/art/my/thumbup',
+        target: '_blank',
+        name: '我的点赞',
+        key: 'myThumbUp',
+        icon: <i className='iconfont icon-huihua'></i>,
+      }]
     },
     {
       path: '/art/paintings/',
@@ -416,11 +427,22 @@ export default function Main(children: JSX.Element) {
             }]
         },
         {
-          path: '/art/mypaintings/',
-          target: '_blank',
-          name: '我的作品',
-          key: 'mypaintings',
+          name: '我的',
+          key: 'myp',
           icon: <i className='iconfont icon-huihua'></i>,
+          children: [{
+            path: '/art/mypaintings',
+            target: '_blank',
+            name: '我的绘画',
+            key: 'mypaintings',
+            icon: <i className='iconfont icon-huihua'></i>,
+          },{
+            path: '/art/my/thumbup',
+            target: '_blank',
+            name: '我的点赞',
+            key: 'myThumbUp',
+            icon: <i className='iconfont icon-huihua'></i>,
+          }]
         },
       ]
 
@@ -465,11 +487,22 @@ export default function Main(children: JSX.Element) {
             }]
         },
         {
-          path: '/art/mypaintings/',
-          target: '_blank',
-          name: '我的作品',
-          key: 'mypaintings',
+          name: '我的',
+          key: 'myp',
           icon: <i className='iconfont icon-huihua'></i>,
+          children: [{
+            path: '/art/mypaintings',
+            target: '_blank',
+            name: '我的绘画',
+            key: 'mypaintings',
+            icon: <i className='iconfont icon-huihua'></i>,
+          },{
+            path: '/art/my/thumbup',
+            target: '_blank',
+            name: '我的点赞',
+            key: 'myThumbUp',
+            icon: <i className='iconfont icon-huihua'></i>,
+          }]
         },
         {
           path: '/art/paintings/',
@@ -524,7 +557,7 @@ export default function Main(children: JSX.Element) {
           }, {
             path: '/art/dalle3/',
             target: "_blank",
-            name: 'DALL·E 3（最新发布）',
+            name: 'DALL·E 3',
             key: "dalle3",
           },
           {
@@ -578,11 +611,22 @@ export default function Main(children: JSX.Element) {
             }]
         },
         {
-          path: '/art/mypaintings/',
-          target: '_blank',
-          name: '我的作品',
-          key: 'mypaintings',
+          name: '我的',
+          key: 'myp',
           icon: <i className='iconfont icon-huihua'></i>,
+          children: [{
+            path: '/art/mypaintings',
+            target: '_blank',
+            name: '我的绘画',
+            key: 'mypaintings',
+            icon: <i className='iconfont icon-huihua'></i>,
+          },{
+            path: '/art/my/thumbup',
+            target: '_blank',
+            name: '我的点赞',
+            key: 'myThumbUp',
+            icon: <i className='iconfont icon-huihua'></i>,
+          }]
         },
         {
           path: '/art/paintings/',
@@ -629,7 +673,7 @@ export default function Main(children: JSX.Element) {
           }, {
             path: '/art/dalle3/',
             target: "_blank",
-            name: 'DALL·E 3（最新发布）',
+            name: 'DALL·E 3',
             key: "dalle3",
           }, {
             name: 'AI 艺术二维码',
@@ -681,11 +725,22 @@ export default function Main(children: JSX.Element) {
             }]
         },
         {
-          path: '/art/mypaintings/',
-          target: '_blank',
-          name: '我的作品',
-          key: 'mypaintings',
+          name: '我的',
+          key: 'myp',
           icon: <i className='iconfont icon-huihua'></i>,
+          children: [{
+            path: '/art/mypaintings',
+            target: '_blank',
+            name: '我的绘画',
+            key: 'mypaintings',
+            icon: <i className='iconfont icon-huihua'></i>,
+          },{
+            path: '/art/my/thumbup',
+            target: '_blank',
+            name: '我的点赞',
+            key: 'myThumbUp',
+            icon: <i className='iconfont icon-huihua'></i>,
+          }]
         },
         {
           path: '/art/paintings/',

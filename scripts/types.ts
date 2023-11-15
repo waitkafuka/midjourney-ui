@@ -17,6 +17,7 @@ export enum ImgPageType {
     PUBLIC = 'public',
     MY = 'private',
     DALLE_PAINTING = 'dalle_painting',
+    MY_THUMB_UP_LIST = 'my_thumb_up_list',
 }
 
 export enum PaintingType {

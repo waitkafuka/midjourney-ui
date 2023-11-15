@@ -132,9 +132,10 @@ const App = ({ type, list, onPageRequest, onImgDeleted, isDataLoading, totalCoun
     return <>
         {/* style={{ height: "calc(100vh - 56px)" }} */}
         {/* 未登录，我的页面显示登录按钮 */}
-        {!isDataLoading && <> {type === ImgPageType.MY && (!user || !user.secret) && <div className={css['no-more-tips']}>您还未登录，请先<a href={`/${process.env.NODE_ENV === 'development' ? 'login' : 'login/'}?redirect=/art`}> 登录 </a>  </div>}
+        {!isDataLoading && <> {(type === ImgPageType.MY||type === ImgPageType.MY_THUMB_UP_LIST) && (!user || !user.secret) && <div className={css['no-more-tips']}>您还未登录，请先<a href={`/${process.env.NODE_ENV === 'development' ? 'login' : 'login/'}?redirect=/art`}> 登录 </a>  </div>}
             {type === ImgPageType.MY && (user.secret) && list.length === 0 && <div className={css['no-more-tips']}>暂无数据，<Link href='/'> 开始绘画！ </Link>  </div>}
             {type === ImgPageType.PUBLIC && list.length === 0 && <div className={css['no-more-tips']}>暂无数据，<Link href='/'> 开始绘画！ </Link>  </div>}
+            {type === ImgPageType.MY_THUMB_UP_LIST && list.length === 0 && <div className={css['no-more-tips']}>暂无数据，<Link href='/'> 快去点赞一个作品吧！ </Link>  </div>}
         </>}
         <div className="masonry-list-wrapper" style={{ height: "calc(100vh - 56px - 15px)", overflow: "scroll", boxSizing: "border-box", paddingTop: '20px', ...style, }}>
             {/* height: `${maxColumnHeight}px` */}

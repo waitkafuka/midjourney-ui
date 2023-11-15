@@ -35,7 +35,15 @@ const ImgListPage = ({ type }: ImgListPageProps) => {
         isLockRequest = true
         setIsDataLoading(true)
         pageIndex.current = pageIndex.current + 1;
-        const result = await requestAliyunArt(type === ImgPageType.MY ? 'my-paintings' : 'public-paintings', { pageIndex: pageIndex.current, keywords: keywordsRef.current })
+        let apiUrl = '';
+        if (type === ImgPageType.MY) {
+            apiUrl = 'my-paintings'
+        } else if (type === ImgPageType.MY_THUMB_UP_LIST) {
+            apiUrl = 'my-thumb-up-page'
+        } else {
+            apiUrl = 'public-paintings'
+        }
+        const result = await requestAliyunArt(apiUrl, { pageIndex: pageIndex.current, keywords: keywordsRef.current })
         //追加之前去除重复数据
         let newImgList: any = [];
         if (result.rows) {

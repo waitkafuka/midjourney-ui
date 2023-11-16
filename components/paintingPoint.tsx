@@ -97,6 +97,23 @@ const PaingPoint = ({ }) => {
     setQrCodeSrc(base64Url);
   };
 
+  const setBDVid = () => {
+    //从链接中获取bd_vid参数
+    const bd_vid = getQueryString('bd_vid');
+    const qhclickid = getQueryString('qhclickid');
+    if (bd_vid) {
+      localStorage.setItem('bd_vid', bd_vid);
+    }
+    if (qhclickid) {
+      localStorage.setItem('qhclickid', qhclickid);
+    }
+
+    const u = getQueryString('u');
+    if (u) {
+      localStorage.setItem('u', u);
+    }
+  };
+
   const showBuyModal = async () => {
     if (!user.secret) {
       //没有登录的时候跳转到登录页面
@@ -262,6 +279,7 @@ const PaingPoint = ({ }) => {
       setIsMobile(true);
     }
     getPkgs();
+    setBDVid();
   }, []);
 
   return (

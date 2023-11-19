@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useMemo, useState } from "react";
 import { Space, Tag, Tooltip } from "antd";
 
 const { CheckableTag } = Tag;
@@ -22,11 +22,22 @@ const App = ({ Data, onClick, type }: Props) => {
     setSelectedTags(nextSelectedTags);
   };
 
+  const calcTitle = (type: string, index: number) => {
+    if (type === 'upscale') {
+      return `高清绘制第${index + 1}张图片`
+    }
+    if (type === 'variation') {
+      return `以第${index + 1}张图片为基础创作四张变体`
+    }
+    return '';
+  }
+
+
   return (
     <>
       <Space className="operation-btn-space" size={16} wrap>
         {Data.map((tag, index) => (
-          <Tooltip key={tag} placement="top" title={type === 'upscale' ? `高清绘制第${index + 1}张图片` : `以第${index + 1}张图片为基础创作四张变体`} arrow={true}>
+          <Tooltip key={tag} placement="top" title={calcTitle(type, index)} arrow={true}>
             <CheckableTag
               className={
                 selectedTags.includes(tag) ? "tag-checked" : "tag-unchecked"

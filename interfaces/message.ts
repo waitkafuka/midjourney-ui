@@ -1,3 +1,13 @@
+export interface MJButton {
+  customId: string,
+  emoji: string,
+  label: string,
+  type: number,
+  style: number,
+  checked: boolean,
+}
+
+
 export interface Message {
   /**
    * text是用户输入的消息
@@ -24,4 +34,9 @@ export interface Message {
    * 进度百分比，比如：93% 完成
    */
   progress?: string;
+
+  /**
+   * 图片下方的按钮
+   */
+  buttons: Array<MJButton>;
 }

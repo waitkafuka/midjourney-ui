@@ -108,9 +108,11 @@ a:hover {
 }
 
 .img-list-box .ant-tag {
-  width: 50px;
+  min-width: 50px;
+  width: auto;
   text-align: center;
   border-radius: 4px;
+  margin-top: 15px;
 }
 
 .img-list-box .ant-image {
@@ -612,7 +614,12 @@ a {
 
 .ant-tag-checkable:not(.ant-tag-checkable-checked):hover {
   color: #fff;
-  background-color: #252525 !important;
+  background-color: #345b62 !important;
+}
+
+.ant-tag-checkable-checked,
+.ant-tag-checkable-checked:hover {
+  background-color: #345b62;
 }
 
 .anticon.anticon-loading svg {
@@ -661,6 +668,11 @@ button.ant-btn-primary:not(:disabled):hover {
 
 //在日间模式下
 @media (prefers-color-scheme: light) {
+  .ant-tag-checkable-checked,
+  .ant-tag-checkable-checked:hover,
+  .ant-tag-checkable:not(.ant-tag-checkable-checked):hover {
+    background-color: #1fa0b7 !important;
+  }
   .buy-code-wrap-multiple .qrcode-select-wrap .pkg-select-button {
     border-color: rgba(142, 142, 142, 1);
   }

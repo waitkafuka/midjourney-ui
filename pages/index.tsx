@@ -5,7 +5,7 @@ import { Imagine, Upscale, Variation } from '../request';
 import { MJMessage } from 'midjourney';
 import { Message } from '../interfaces/message';
 import MyTag from '../components/tag';
-import { requestAliyun, requestAliyunArt } from '../request/http';
+import { requestAliyun, requestAliyunArt, requestAliyunArtStream } from '../request/http';
 import { useSelector, useDispatch } from 'react-redux';
 import { downloadFile, getQueryString, hasChinese, shuffleArray, redirectToZoomPage, extractIdFromString, redirectToFaceswapPage } from '../scripts/utils';
 import { NEXT_PUBLIC_IMAGE_PREFIX, PAINTING_POINTS_ONE_TIME } from '../scripts/config';
@@ -21,7 +21,10 @@ import LottieAnimation from '../components/LottieAnimation';
 import dkJson from '../components/dk.json'
 import { number } from 'echarts';
 import OssUploader from '../components/OssUploader';
+
+const { CheckableTag } = Tag;
 const imgBasePath = '//och.superx.chat'
+const replaceExp = /<<.*>>/g;
 
 const baseWidth = 500;
 const { TextArea } = Input;
@@ -198,6 +201,7 @@ const Index: React.FC = () => {
       hasTag: false,
       progress: defaultTips,
       img: defaultImg,
+      buttons: []
     };
     const promptValidResult = isPromptValid(inputValue.trim());
     if (promptValidResult.isValid !== true) {
@@ -265,55 +269,63 @@ const Index: React.FC = () => {
         // return;
         // alert('翻译结果' + newMessage.text)
         // return;
-        await Imagine(JSON.stringify({ prompt: newMessage.text, clientId, isCorrectPrompt }), (data: any) => {
-          if (data.code === 40015) {
-            //未登录
-            setTimeout(() => {
-              window.location.href = process.env.NODE_ENV === 'development' ? '/login' : '/login/';
-            }, 1000);
-            return;
-          }
-          // 判断用户信息
-          if (data.code === 40016) {
-            //无权限
-            messageApi.error(data.message, 10);
-            return;
-          }
+        requestAliyunArtStream({
+          path: 'imagine',
+          data: {
+            prompt: newMessage.text, clientId, isCorrectPrompt
+          },
+          onDataChange(data: any) {
 
-          //mj 服务报错
-          if (data.code === 40024 || data.code === 40029 || data.code === 40030) {
-            notification.error({
-              message: '提示',
-              description: data.message,
-              duration: 0,
-            });
-            //取出最后一个msg
-            let errorMsg: Message = {
-              text: inputValue.trim(),
-              hasTag: false,
-              progress: 'error：' + data.message,
-              img: 'https://c.superx.chat/stuff/img-error.png',
-            };
-            setMessages((msgs) => [...msgs.slice(0, -1), errorMsg]);
-            setInputDisable(false);
-            return;
-          }
+            if (data.code === 40015) {
+              //未登录
+              setTimeout(() => {
+                window.location.href = process.env.NODE_ENV === 'development' ? '/login' : '/login/';
+              }, 1000);
+              return;
+            }
+            // 判断用户信息
+            if (data.code === 40016) {
+              //无权限
+              messageApi.error(data.message, 10);
+              return;
+            }
 
-          console.log('imagin dataing:', data);
-          newMessage.img = data.uri.replace('https://cdn.discordapp.com/', NEXT_PUBLIC_IMAGE_PREFIX);
-          if (data.id) {
-            newMessage.hasTag = true;
-            //扣减点数
-            store.dispatch({ type: 'user/pointChange', payload: user.point_count - PAINTING_POINTS_ONE_TIME });
-          }
+            //mj 服务报错
+            if (data.code === 40024 || data.code === 40029 || data.code === 40030) {
+              notification.error({
+                message: '提示',
+                description: data.message,
+                duration: 0,
+              });
+              //取出最后一个msg
+              let errorMsg: Message = {
+                text: inputValue.trim(),
+                hasTag: false,
+                progress: 'error：' + data.message,
+                img: 'https://c.superx.chat/stuff/img-error.png',
+                buttons: []
+              };
+              setMessages((msgs) => [...msgs.slice(0, -1), errorMsg]);
+              setInputDisable(false);
+              return;
+            }
 
-          newMessage.msgHash = data.hash;
-          newMessage.msgID = data.id;
-          newMessage.progress = data.progress;
-          newMessage.content = data.content;
-          const oldMessages = messages;
-          // setMessages(omsg => replaceLastElement(omsg, newMessage));
-          setMessages([...oldMessages, newMessage]);
+            newMessage.img = data.uri.replace('https://cdn.discordapp.com/', NEXT_PUBLIC_IMAGE_PREFIX);
+            if (data.id) {
+              newMessage.hasTag = true;
+              //扣减点数
+              store.dispatch({ type: 'user/pointChange', payload: user.point_count - PAINTING_POINTS_ONE_TIME });
+            }
+
+            newMessage.msgHash = data.hash;
+            newMessage.msgID = data.id;
+            newMessage.progress = data.progress;
+            newMessage.content = data.content;
+            newMessage.buttons = data.buttons;
+            const oldMessages = messages;
+            // setMessages(omsg => replaceLastElement(omsg, newMessage));
+            setMessages([...oldMessages, newMessage]);
+          }
         });
       } catch (error) {
         console.log('生成出错了：', error);
@@ -330,38 +342,46 @@ const Index: React.FC = () => {
       hasTag: false,
       progress: defaultTips,
       img: defaultImg,
+      buttons: []
     };
 
     setInputDisable(true);
     setMessages((omsg) => [...omsg, newMessage]);
     try {
-      await Variation(JSON.stringify({ content, index, msgId, msgHash, clientId }), (data: any) => {
-        //mj 服务报错
-        if (data.code === 40024) {
-          notification.error({
-            message: '提示',
-            description: data.message,
-            duration: 0,
-          });
+      requestAliyunArtStream({
+        path: 'variation',
+        data: {
+          content, index, msgId, msgHash, clientId
+        },
+        onDataChange(data: any) {
+          //mj 服务报错
+          if (data.code === 40024) {
+            notification.error({
+              message: '提示',
+              description: data.message,
+              duration: 0,
+            });
 
-          setInputDisable(false);
-          return;
+            setInputDisable(false);
+            return;
+          }
+          newMessage.img = data.uri.replace('https://cdn.discordapp.com/', NEXT_PUBLIC_IMAGE_PREFIX);
+          if (data.id) {
+            newMessage.hasTag = true;
+            //扣减点数
+            store.dispatch({ type: 'user/pointChange', payload: user.point_count - PAINTING_POINTS_ONE_TIME });
+          }
+          console.log('variation dataing:', data);
+          newMessage.msgHash = data.hash;
+          newMessage.msgID = data.id;
+          newMessage.content = data.content;
+          newMessage.progress = data.progress;
+          newMessage.buttons = data.buttons;
+          const oldMessages = messages;
+          // setMessages(omsg => replaceLastElement(omsg, newMessage));
+          setMessages([...oldMessages, newMessage]);
         }
-        newMessage.img = data.uri.replace('https://cdn.discordapp.com/', NEXT_PUBLIC_IMAGE_PREFIX);
-        if (data.id) {
-          newMessage.hasTag = true;
-          //扣减点数
-          store.dispatch({ type: 'user/pointChange', payload: user.point_count - PAINTING_POINTS_ONE_TIME });
-        }
-        console.log('variation dataing:', data);
-        newMessage.msgHash = data.hash;
-        newMessage.msgID = data.id;
-        newMessage.content = data.content;
-        newMessage.progress = data.progress;
-        const oldMessages = messages;
-        // setMessages(omsg => replaceLastElement(omsg, newMessage));
-        setMessages([...oldMessages, newMessage]);
-      });
+      })
     } catch (error) {
       console.log('variation出错了：', error);
       message.error('出错了:' + error, 30);
@@ -376,13 +396,76 @@ const Index: React.FC = () => {
       hasTag: false,
       progress: defaultTips,
       img: defaultImg,
+      buttons: []
     };
 
     setInputDisable(true);
     setMessages((omsg) => [...omsg, newMessage]);
     try {
-      await Upscale(JSON.stringify({ content: pormpt, index, msgId, msgHash, clientId }), (data: any) => {
-        console.log('upscale dataing:', data);
+      requestAliyunArtStream({
+        path: 'upscale',
+        data: {
+          content: pormpt, index, msgId, msgHash, clientId
+        },
+        onDataChange(data: any) {
+          console.log('upscale dataing:', data);
+          //mj 服务报错
+          if (data.code === 40024) {
+            notification.error({
+              message: '提示',
+              description: data.message,
+              duration: 0,
+            });
+
+            //删除最后一个messages
+            setMessages((msgs) => [...msgs.slice(0, -1)]);
+            setInputDisable(false);
+            return;
+          }
+          newMessage.img = data.uri.replace('https://cdn.discordapp.com/', NEXT_PUBLIC_IMAGE_PREFIX);
+          newMessage.msgHash = data.hash;
+          newMessage.msgID = data.id;
+          newMessage.content = data.content;
+          newMessage.progress = data.progress;
+          const oldMessages = messages;
+          if (data.id) {
+            // newMessage.hasTag = true;
+            //扣减点数
+            store.dispatch({ type: 'user/pointChange', payload: user.point_count - 2 });
+          }
+          // setMessages(omsg => replaceLastElement(omsg, newMessage));
+          setMessages([...oldMessages, newMessage]);
+        }
+      })
+    } catch (error) {
+      console.log('upscale出错了：', error);
+      message.error('出错了:' + error, 30);
+      setInputDisable(false);
+    }
+
+    setInputDisable(false);
+  };
+
+  //点击按钮
+  const onButtonClick = ({ buttonId, imgId, buttonLabel, prompt }: any) => {
+    let newMessage: Message = {
+      text: `${prompt}  <<${buttonLabel}>>`,
+      hasTag: false,
+      progress: defaultTips,
+      img: defaultImg,
+      buttons: []
+    };
+    setInputDisable(true);
+    setMessages((omsg) => [...omsg, newMessage]);
+    let messageIndex = messages.length;
+
+    requestAliyunArtStream({
+      path: 'do-button-click',
+      data: {
+        buttonId, imgId
+      },
+      onDataChange(data: any) {
+        console.log('button click dataing:', data);
         //mj 服务报错
         if (data.code === 40024) {
           notification.error({
@@ -401,55 +484,22 @@ const Index: React.FC = () => {
         newMessage.msgID = data.id;
         newMessage.content = data.content;
         newMessage.progress = data.progress;
+        newMessage.buttons = data.buttons;
         const oldMessages = messages;
         if (data.id) {
           // newMessage.hasTag = true;
           //扣减点数
-          store.dispatch({ type: 'user/pointChange', payload: user.point_count - 2 });
+          store.dispatch({ type: 'user/pointChange', payload: user.point_count - data.cost });
         }
         // setMessages(omsg => replaceLastElement(omsg, newMessage));
-        setMessages([...oldMessages, newMessage]);
-      });
-    } catch (error) {
-      console.log('upscale出错了：', error);
-      message.error('出错了:' + error, 30);
-      setInputDisable(false);
-    }
+        //从messages中根据msgId找到对应的msg，然后替换
 
+        oldMessages[messageIndex] = newMessage;
+        setMessages([...oldMessages]);
+      }
+    })
     setInputDisable(false);
-  };
-
-  const tagClick = (content: string, msgId: string, msgHash: string, tag: string) => {
-    switch (tag) {
-      case 'V1':
-        variation(content, msgId, msgHash, 1);
-        break;
-      case 'V2':
-        variation(content, msgId, msgHash, 2);
-        break;
-      case 'V3':
-        variation(content, msgId, msgHash, 3);
-        break;
-      case 'V4':
-        variation(content, msgId, msgHash, 4);
-        break;
-      case 'U1':
-        upscale(content, msgId, msgHash, 1);
-        break;
-      case 'U2':
-        upscale(content, msgId, msgHash, 2);
-        break;
-      case 'U3':
-        upscale(content, msgId, msgHash, 3);
-        break;
-      case 'U4':
-        upscale(content, msgId, msgHash, 4);
-        break;
-      default:
-        break;
-    }
-  };
-
+  }
 
   //图片描述
   const handleImgDescribe = async (imgUrl: string) => {
@@ -480,7 +530,7 @@ const Index: React.FC = () => {
     console.log('currentIndex:', currentIndex);
     console.log('message:', messages[currentIndex].text);
     const t = messages[currentIndex].text;
-    setInputValue(t.replace(/(variation|upscale) (V|U)\d/g, ''));
+    setInputValue(t.replace(replaceExp, ''));
   };
 
   //定义一个方法，取出链接参数中的prompt，放在 Input 中
@@ -565,10 +615,6 @@ const Index: React.FC = () => {
     }
   }
 
-  const setServerId = () => {
-
-  }
-
   //从链接中取出img_id参数，并查询图片信息
   const getImgInfo = async () => {
     const id = getQueryString('id');
@@ -602,6 +648,7 @@ const Index: React.FC = () => {
         text: data.prompt,
         hasTag,
         img: `${imgBasePath}${data.img_url}`,
+        buttons: []
       };
       newMessage.msgHash = '';
       newMessage.msgID = data.img_id;
@@ -925,7 +972,7 @@ const Index: React.FC = () => {
           }}
         >
           {/* 图片结果列表容器 */}
-          {messages.map(({ text, img, progress, hasTag, content, msgID, msgHash }, index) => (
+          {messages.map(({ text, img, progress, content, msgID, msgHash, buttons }, index) => (
             <div className='img-list-item' key={index}>
               <div className='mj-prompt-box'>
                 {' '}
@@ -933,15 +980,15 @@ const Index: React.FC = () => {
                 <Button
                   size='small'
                   onClick={() => {
-                    setInputValue(text.replace(/- <@\d+>\s*\([^)]*\)/g, '').replace(/(variation V\d+|upscale U\d+)/g, ''));
+                    setInputValue(text.replace(/- <@\d+>\s*\([^)]*\)/g, '').replace(replaceExp, ''));
                   }}
-                  data-clipboard-text={text.replace(/- <@\d+>\s*\([^)]*\)/g, '').replace(/(variation|upscale) (V|U)\d/g, '')}
+                  data-clipboard-text={text.replace(/- <@\d+>\s*\([^)]*\)/g, '').replace(replaceExp, '')}
                   className='copy-prompt-btn'
                 >
                   复制提示词
                 </Button>
               </div>
-              <div className='workspace-img-container' style={{ width: `${baseWidth}px`, height: getImgCalcHeight(img, text) }}>
+              <div className='workspace-img-container' style={{ width: `${baseWidth}px`, minHeight: getImgCalcHeight(img, text) }}>
                 {img && !progress?.includes('error') && (
                   <img
                     src={img}
@@ -1008,7 +1055,7 @@ const Index: React.FC = () => {
                   <Button
                     loading={!!requestingSeed && (msgID === requestingSeed)}
                     onClick={() => {
-                      setSeedPrompt(text.replace(/- <@\d+>\s*\([^)]*\)/g, '').replace(/(variation|upscale) (V|U)\d/g, ''))
+                      setSeedPrompt(text.replace(/- <@\d+>\s*\([^)]*\)/g, '').replace(replaceExp, ''))
                       getSeed(msgID)
                     }}
                   >
@@ -1032,26 +1079,51 @@ const Index: React.FC = () => {
                   </Button>
                 </Space.Compact>
               )}
-              {hasTag && (
+              {buttons && buttons.length > 0 && (
                 <>
-                  <div style={{ marginTop: '15px' }}>
-                    <MyTag
+                  <div>
+                    {buttons.map((button, index) => {
+                      return <><CheckableTag
+                        className={
+                          button.checked ? "tag-checked" : "tag-unchecked"
+                        }
+                        checked={button.checked}
+                        onChange={checked => {
+                          if (!checked) return;
+                          button.checked = true;
+                          // 执行button click动作
+                          onButtonClick({
+                            buttonId: button.customId, imgId: msgID, buttonLabel: button.label, prompt: content
+                          });
+                        }}
+                      >
+                        {button.label || button.emoji}
+                      </CheckableTag>
+                        {/* {(index + 1) % 4 === 0 && index !== buttons.length - 1 && <br />} */}
+                      </>
+                    })}
+                    {/* 按钮解释 */}
+                    <Tooltip title={`按钮说明：数字 1-4 对应四宫格的 1 2 3 4 号图片。U+图片编号，可获取单张高清图；V+图片编号，可对某张图进行变体；延展：保持内容不变，往指定方向扩展画面；缩放：保持画布尺寸不变，但是生成更多内容。点数消耗：U：2 个点数，V：8 个点数；延展： 8 个点数，缩放 1.5 倍： 15 个点数；缩放 2 倍： 20 个点数。`}>
+                      <QuestionCircleOutlined style={{ cursor: 'pointer' }} />
+                    </Tooltip>
+
+                    {/* <MyTag
                       Data={['U1', 'U2', 'U3', 'U4']}
                       type='upscale'
                       onClick={(tag) => {
                         scrollToBottom();
                         tagClick(String(content), String(msgID), String(msgHash), tag);
                       }}
-                    />
+                    /> */}
                   </div>
-                  <MyTag
+                  {/* <MyTag
                     Data={['V1', 'V2', 'V3', 'V4']}
                     type='variation'
                     onClick={(tag) => {
                       scrollToBottom();
                       tagClick(String(content), String(msgID), String(msgHash), tag);
                     }}
-                  />
+                  /> */}
                   {showTips && (
                     <p className='no-content-tips' style={{ marginTop: '0px', fontSize: '13px', textAlign: 'left', padding: '0' }}>
                       如果您觉得某张图片还不错，可以点击： U+“图片编号”，获取高清图片~{' '}

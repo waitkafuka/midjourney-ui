@@ -32,7 +32,7 @@ export const request = async function ({ path, data, method = "POST", headers = 
 
                         // 将获取的数据转换回字符串
                         const string = new TextDecoder("utf-8").decode(value);
-                        // console.log(new Date(), string); // 在此处你可以看到进度和图片URL
+                        console.log(new Date(),'---', string); // 在此处你可以看到进度和图片URL
                         const data = JSON.parse(string);
                         // console.log(data); // 在此处你可以看到进度和图片URL
 

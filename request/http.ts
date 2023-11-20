@@ -29,14 +29,24 @@ export const request = async function ({ path, data, method = "POST", headers = 
                             controller.close();
                             return;
                         }
-
                         // 将获取的数据转换回字符串
                         const string = new TextDecoder("utf-8").decode(value);
-                        console.log(new Date(),'---', string); // 在此处你可以看到进度和图片URL
+
+                        const arr = string.split(/(?<=\})(?=\{)/g);
+                        for (let item of arr) {
+                            try {
+                                const data = JSON.parse(item);
+                                if (data.code === 40015) return;
+                                onDataChange && onDataChange(data);
+                            } catch (error) {
+                                console.log("json解析报错", error, "--", item, "--");
+                            }
+                        }
+
+                        console.log(new Date(), '---', string); // 在此处你可以看到进度和图片URL
                         const data = JSON.parse(string);
                         // console.log(data); // 在此处你可以看到进度和图片URL
 
-                        onDataChange && onDataChange(data);
 
                         controller.enqueue(value);
                         push();

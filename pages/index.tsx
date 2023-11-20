@@ -1103,7 +1103,20 @@ const Index: React.FC = () => {
                       </>
                     })}
                     {/* 按钮解释 */}
-                    <Tooltip title={`按钮说明：数字 1-4 对应四宫格的 1 2 3 4 号图片。U+图片编号，可获取单张高清图；V+图片编号，可对某张图进行变体；延展：保持内容不变，往指定方向扩展画面；缩放：保持画布尺寸不变，但是生成更多内容。点数消耗：U：2 个点数，V：8 个点数；延展： 8 个点数，缩放 1.5 倍： 15 个点数；缩放 2 倍： 20 个点数。`}>
+                    <Tooltip title={<div className='button-desc-box'>
+                      <div className='title'>按钮说明：</div>
+                      <div className='line'>数字 1-4 对应四宫格的 1 2 3 4 号图片</div>
+                      <div className='line'><b>U+图片编号</b>：获取单张高清图</div>
+                      <div className='line'><b>V+图片编号</b>：对某张图进行变体（生成相似图）</div>
+                      <div className='line'><b>延伸</b>：保持内容不变，往指定方向扩展画面</div>
+                      <div className='line'><b>缩放</b>：保持画布尺寸不变，但是生成更多内容（主体变小）</div>
+                      <div className='title' style={{ marginTop: "10px" }}>点数消耗：</div>
+                      <div className='line'><b>U</b>：2 个点数</div>
+                      <div className='line'><b>V</b>：8 个点数</div>
+                      <div className='line'><b>延伸</b>： 8 个点数</div>
+                      <div className='line'><b>缩放 1.5 倍</b>： 15 个点数</div>
+                      <div className='line'><b>缩放 2 倍</b>： 20 个点数</div>
+                    </div>}>
                       <QuestionCircleOutlined style={{ cursor: 'pointer' }} />
                     </Tooltip>
 

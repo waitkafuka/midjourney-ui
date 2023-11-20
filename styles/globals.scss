@@ -64,6 +64,12 @@ a:hover {
   text-decoration: underline;
 }
 
+.button-desc-box{
+  .title{
+    font-weight: 800;
+  }
+}
+
 .qrcode-templates-wrap {
   display: flex;
   justify-content: space-around;

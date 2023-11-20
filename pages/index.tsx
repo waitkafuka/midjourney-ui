@@ -36,13 +36,11 @@ function replaceLastElement(arr: Message[], newElement: Message) {
 }
 
 const thumbUrl = (img: string, text: string) => {
-  console.log('计算缩略图：', img);
   if (img.endsWith('.png')) {
     const ratio = getRatio(text);
     const height = getHeight(ratio, baseWidth);
     return `${img}?x-oss-process=style/scale_500`;
   } else {
-    console.log('计算缩略图2：', img);
     return img;
   }
 };
@@ -455,9 +453,11 @@ const Index: React.FC = () => {
       img: defaultImg,
       buttons: []
     };
-    setInputDisable(true);
-    setMessages((omsg) => [...omsg, newMessage]);
     let messageIndex = messages.length;
+    setInputDisable(true);
+    setMessages((omsg) => {
+      return [...omsg, newMessage]
+    });
 
     requestAliyunArtStream({
       path: 'do-button-click',
@@ -465,7 +465,6 @@ const Index: React.FC = () => {
         buttonId, imgId
       },
       onDataChange(data: any) {
-        console.log('button click dataing:', data);
         //mj 服务报错
         if (data.code === 40024) {
           notification.error({
@@ -485,7 +484,7 @@ const Index: React.FC = () => {
         newMessage.content = data.content;
         newMessage.progress = data.progress;
         newMessage.buttons = data.buttons;
-        const oldMessages = messages;
+
         if (data.id) {
           // newMessage.hasTag = true;
           //扣减点数
@@ -494,8 +493,10 @@ const Index: React.FC = () => {
         // setMessages(omsg => replaceLastElement(omsg, newMessage));
         //从messages中根据msgId找到对应的msg，然后替换
 
-        oldMessages[messageIndex] = newMessage;
-        setMessages([...oldMessages]);
+        setMessages(imgs => {
+          imgs[messageIndex] = newMessage;
+          return [...imgs]
+        });
       }
     })
     setInputDisable(false);
@@ -527,8 +528,6 @@ const Index: React.FC = () => {
     } else {
       setCurrentIndex((prevIndex) => (prevIndex === 0 ? messages.length - 1 : prevIndex - 1));
     }
-    console.log('currentIndex:', currentIndex);
-    console.log('message:', messages[currentIndex].text);
     const t = messages[currentIndex].text;
     setInputValue(t.replace(replaceExp, ''));
   };
@@ -620,7 +619,6 @@ const Index: React.FC = () => {
     const id = getQueryString('id');
     if (id) {
       const result = await requestAliyunArt('get-my-img-detail', { id });
-      console.log(result);
       const data = result.data;
       //检查是否是自己的图片
       if (result.code !== 0) {
@@ -860,7 +858,6 @@ const Index: React.FC = () => {
         <div>
           <div style={{ padding: '15px', display: 'flex', justifyContent: 'center', flexWrap: 'wrap' }}>
             <OssUploader disabled={isDescribeApiRequesting} buttonText='点击选择图片进行解析' onChange={(files => {
-              console.log("🚀 ~ file: index.tsx:814 ~ files:", files)
               setDescribeImageUrl(files[0].url || '');
               handleImgDescribe(files[0].url || '');
             })}></OssUploader>

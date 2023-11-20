@@ -37,17 +37,12 @@ export const request = async function ({ path, data, method = "POST", headers = 
                             try {
                                 const data = JSON.parse(item);
                                 if (data.code === 40015) return;
+                                console.log(new Date(), '---', data); // 在此处你可以看到进度和图片URL
                                 onDataChange && onDataChange(data);
                             } catch (error) {
                                 console.log("json解析报错", error, "--", item, "--");
                             }
                         }
-
-                        console.log(new Date(), '---', string); // 在此处你可以看到进度和图片URL
-                        const data = JSON.parse(string);
-                        // console.log(data); // 在此处你可以看到进度和图片URL
-
-
                         controller.enqueue(value);
                         push();
                     });

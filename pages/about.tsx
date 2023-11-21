@@ -40,6 +40,15 @@ const Contact: React.FC = () => {
                 mail: 'yule@ciae.net'
             })
         }
+        if (url.includes('aihuihua')) {
+            setCompanyInfo({
+                //生成一个新的公司地址
+                address: '',
+                name: '',
+                phone: '18310949357',
+                mail: 'service@superx.chat'
+            })
+        }
     }, []);
     return <>
         <Space direction="vertical" size={16} align='center'>

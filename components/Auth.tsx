@@ -62,17 +62,20 @@ const AuthPage = ({ hidePage }: { hidePage: boolean }) => {
 
     useEffect(() => {
         //页面初始化
-        const hosts = ['superx.chat', 'nat.youyi.asia', 'ai.sunmen.cn','ciae.superx.chat','ai.superx.chat'];
-        if (isPCWeChatOrMobileWeChat() && !hosts.includes(window.location.host)) {
-            //将host替换为superx.chat，拼接新的url，然后跳转
-            const url = window.location.href.replace(`//${window.location.host}`, '//superx.chat');
-            window.location.href = url;
-            return;
-        }
-        if (isPCWeChatOrMobileWeChat() && (window.location.host === 'superx.chat' || window.location.host === 'nat.youyi.asia')) {
-            redirectUri.current = encodeURIComponent(window.location.href);
+        //这些host域名不进行跳转
+        // const hosts = ['superx.chat', 'nat.youyi.asia', 'ai.sunmen.cn','ciae.superx.chat','ai.superx.chat'];
+        // if (isPCWeChatOrMobileWeChat() && !hosts.includes(window.location.host)) {
+        //     //将host替换为superx.chat，拼接新的url，然后跳转
+        //     const url = window.location.href.replace(`//${window.location.host}`, '//superx.chat');
+        //     window.location.href = url;
+        //     return;
+        // }
+        if (isPCWeChatOrMobileWeChat()) {
+            // redirectUri.current = encodeURIComponent(window.location.href);
+            redirectUri.current = encodeURIComponent(`https://superx.chat/api/page-redirect/?originUrl=${window.location.href}`);
             init();
         }
+        // init();
     }, []); // 空数组是因为没有依赖项
 
     return <>

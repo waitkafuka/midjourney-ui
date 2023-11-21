@@ -45,7 +45,6 @@ const ImageLoader = () => {
             console.log('images4:', JSON.parse(JSON.stringify(images)));
             setImages(imgs => {
                 console.log('images5:', JSON.parse(JSON.stringify(imgs)));
-                imgs[imgIndex] = img;
                 return [...imgs]
             })
             // images[imgIndex] = img;

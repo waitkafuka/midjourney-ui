@@ -83,6 +83,7 @@ const Index: React.FC = () => {
   const [hasStartImagin, setHasStartImagin] = useState(false);
   const [seedCopyText, setSeedCopyText] = useState('复制');
   const [showStartTips, setShowStartTips] = useState(false);
+  const [isWrong, setIsWrong] = useState(true);
   const [requestingSeed, setRequestingSeed] = useState('');
   const [debug, setDebug] = useState(false);
 
@@ -1193,12 +1194,12 @@ const Index: React.FC = () => {
       ) : (
         <>
           {/* 故障提示 */}
-          {/* <Alert
+          {isWrong && <Alert
             message={<>抱歉，midjourney 官方服务器故障，正在修复中，预计 30 分钟。给您带来不便深感抱歉（除midjourney 之外的其他服务不受影响）。</>}
             banner
             type='success'
             closable
-          /> */}
+          />}
           <p className='no-content-tips'>使用 midjourney 生成你的专属人工智能绘画作品。</p>
           {/* <p className="no-content-tips">请勿使用违禁词汇，违者将被封号。</p> */}
           {!user.secret && (
@@ -1338,7 +1339,7 @@ const Index: React.FC = () => {
         <Space.Compact style={{ width: '100%' }}>
           <TextArea
             className='w-full'
-            disabled={inputDisable}
+            disabled={inputDisable || isWrong}
             value={inputValue}
             onChange={(e) => setInputValue(e.target.value)}
             onKeyDown={(e) => {

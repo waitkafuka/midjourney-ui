@@ -146,9 +146,25 @@ export const isPromptValid = (prompt: string): { isValid: boolean, message?: str
         };
     }
 
+    //检查除了链接之外是否为空
+    function checkLength() {
+        //去除掉<>包裹的内容
+        const len = 800;
+        if (prompt.trim().length <= len) {
+            return {
+                isValid: true,
+            };
+        }
+        return {
+            isValid: false,
+            message: `提示词过长，请控制在${len}字以内`,
+        };
+    }
+
     if (!validateArgs().isValid) return validateArgs();
     if (!checkAr().isValid) return checkAr();
     if (!checkLink().isValid) return checkLink();
+    if (!checkLength().isValid) return checkLength();
     return {
         isValid: true,
     };

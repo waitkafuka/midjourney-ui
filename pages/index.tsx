@@ -1195,7 +1195,7 @@ const Index: React.FC = () => {
         <>
           {/* 故障提示 */}
           {isWrong && <Alert
-            message={<>抱歉，midjourney 官方服务器故障，正在修复中，预计 30 分钟。给您带来不便深感抱歉（除midjourney 之外的其他服务不受影响）。</>}
+            message={<>亲爱的用户您好，midjourney 官方服务器故障，正在修复中，预计 30 分钟。给您带来不便深感抱歉（除midjourney 之外的其他服务不受影响）。</>}
             banner
             type='success'
             closable

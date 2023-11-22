@@ -614,8 +614,8 @@ const Index: React.FC = () => {
     }
   }
 
-  //从链接中取出img_id参数，并查询图片信息
-  const getImgInfo = async () => {
+  //从链接中取出img_id参数，并查询图片信息（根据id）
+  const getImgInfoById = async () => {
     const id = getQueryString('id');
     if (id) {
       const result = await requestAliyunArt('get-my-img-detail', { id });
@@ -650,6 +650,41 @@ const Index: React.FC = () => {
       };
       newMessage.msgHash = '';
       newMessage.msgID = data.img_id;
+      newMessage.content = data.prompt;
+      setMessages((msgs) => [newMessage]);
+
+      setClientId(Number(clientId));
+    }
+  };
+
+  //从链接中取出img_id参数，并查询图片信息（根据taskId）
+  const getImgInfo = async () => {
+    const id = getQueryString('id');
+    if (id) {
+      const result = await requestAliyunArt('get-my-img-detail-by-img-id', { imgId: id });
+      const data = result.data;
+      //如果状态码是40042，表示图片已超时，无法再次生成
+      if (result.code === 40042) {
+        message.warning('抱歉，图片已过期。图片生成之后请及时编辑，超过 2 天的图片不支持再次编辑。您可根据下方提示词再次生成。', 10);
+        setInputValue(data.prompt);
+        return;
+      }
+      //检查是否是自己的图片
+      if (result.code !== 0) {
+        message.error(result.message, 8);
+        return;
+      }
+      setInputValue(data.prompt);
+      let newMessage: Message = {
+        progress: "完成",
+        text: data.prompt,
+        hasTag: true,
+        img: `${imgBasePath}${data.img_url}`,
+        buttons: []
+      };
+      newMessage.msgHash = '';
+      newMessage.msgID = data.img_id;
+      newMessage.buttons = data.buttons;
       newMessage.content = data.prompt;
       setMessages((msgs) => [newMessage]);
 

@@ -40,7 +40,7 @@ const baseWidth = 500;
 
 
 const App = ({ model, columnWidth, onImgDeleted, paint_params, type, onImgThumbUpActionDone }: Props) => {
-    const { img_url, prompt, create_time, id, is_public, thumb_up_count, painting_type } = model;
+    const { img_url,img_id, prompt, create_time, id, is_public, thumb_up_count, painting_type } = model;
     const userThumbUpList = useSelector((state: any) => state.user.thumbUpList);
     const user = useSelector((state: any) => state.user.info);
     const [isShare, setIsShare] = useState(is_public === 0);
@@ -168,7 +168,7 @@ const App = ({ model, columnWidth, onImgDeleted, paint_params, type, onImgThumbU
                         //路由到编辑页面
                         // Router.push(`/?id=${id}`);
                         if (type === ImgPageType.MY) {
-                            Router.push(`/?id=${id}`);
+                            Router.push(`/?id=${img_id}`);
                         } else {
                             Router.push(`/?prompt=${encodeURIComponent(prompt)}`);
                         }

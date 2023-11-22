@@ -1,6 +1,7 @@
 export interface ImgCardModel {
     id: number,
     img_url: string | null,
+    img_id?:string,
     prompt: string,
     create_time: Date,
     is_public: number,

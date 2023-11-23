@@ -250,6 +250,7 @@ const Index: React.FC = () => {
       setHasStartImagin(true);
       try {
         newMessage.text = newMessage.text.replace(/[\r\n]/g, '');
+        newMessage.text = newMessage.text.replace(/--/g, ' --');
         if (!localStorage.getItem('beta-tips1')) {
           setShowStartTips(true);
           // notification.success({

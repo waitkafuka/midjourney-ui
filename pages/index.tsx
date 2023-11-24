@@ -5,6 +5,7 @@ import { Imagine, Upscale, Variation } from '../request';
 import { MJMessage } from 'midjourney';
 import { Message } from '../interfaces/message';
 import MyTag from '../components/tag';
+import Link from 'next/link';
 import Router from 'next/router';
 import { requestAliyun, requestAliyunArt, requestAliyunArtStream } from '../request/http';
 import { useSelector, useDispatch } from 'react-redux';
@@ -1218,7 +1219,12 @@ const Index: React.FC = () => {
           <p className='no-content-tips'>使用 midjourney 生成你的专属人工智能绘画作品。</p>
           {/* 走马灯作品展播 */}
 
-          {showSlidePaint && <div style={{ marginTop: "30px" }}> <SlidePaint></SlidePaint></div>}
+          {showSlidePaint && <div style={{ marginTop: "30px" }}>
+            <div style={{ textAlign: "center" }}>
+              <div style={{ fontWeight: 600, fontSize: '16px' }}>作品展示</div>
+              <div>查看更多作品，请点击：<Link href="/paintings" style={{ textDecoration: "underline" }}>艺术公园</Link></div>
+            </div>
+            <SlidePaint></SlidePaint></div>}
 
           {/* <p className="no-content-tips">请勿使用违禁词汇，违者将被封号。</p> */}
           {!user.secret && (

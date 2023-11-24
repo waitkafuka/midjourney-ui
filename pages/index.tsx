@@ -1382,7 +1382,7 @@ const Index: React.FC = () => {
                 e.preventDefault();
               }
             }}
-            placeholder='请详细描述你要生成的图片，如：一只猫在草地上玩耍。'
+            placeholder='请详细描述你要生成的图片，如：一只猫在草地上玩耍（支持中文，会自动翻译）。'
             autoSize={{ minRows: 1, maxRows: 6 }}
             style={{ paddingRight: 30 }}
           />

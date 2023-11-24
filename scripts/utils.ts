@@ -176,7 +176,7 @@ export const isPromptValid = (prompt: string): { isValid: boolean, message?: str
 export const getQueryString = (name: string) => {
     const url = window.location.href;
     const queryString = url.split('?')[1];
-    if(!queryString) return null;
+    if(!queryString) return '';
 
   // 将查询参数部分拆分为键值对数组
   const parameters = queryString.split('&');
@@ -190,7 +190,7 @@ export const getQueryString = (name: string) => {
   }
 
   // 如果未找到指定参数，则返回 null 或者可以根据需求进行调整
-  return null;
+  return '';
 }
 
 /**

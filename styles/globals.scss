@@ -64,8 +64,8 @@ a:hover {
   text-decoration: underline;
 }
 
-.button-desc-box{
-  .title{
+.button-desc-box {
+  .title {
     font-weight: 800;
   }
 }
@@ -123,6 +123,27 @@ a:hover {
 
 .img-list-box .ant-image {
   /* margin: 0 auto ; */
+}
+
+.slide-img-wrap {
+  width: 100%;
+  overflow: hidden;
+  padding: 10px 0;
+  position: relative;
+  height: 430px;
+  .slide-img-inner-wrap {
+    position: absolute;
+    // display: flex;
+    // flex-wrap: nowrap;
+    white-space: nowrap;
+    .slide-img-item {
+      display: inline-block;
+      margin-left: 20px;
+      .masonry-item{
+        position: relative;
+      }
+    }
+  }
 }
 
 .face-swap-demo-wrap {

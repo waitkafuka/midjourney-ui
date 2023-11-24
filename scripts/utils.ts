@@ -174,9 +174,23 @@ export const isPromptValid = (prompt: string): { isValid: boolean, message?: str
  * 从链接中获取指定参数
  */
 export const getQueryString = (name: string) => {
-    const regex = new RegExp(`${name}=([^&]*)`);
-    const match = regex.exec(window.location.search);
-    return match ? match[1] : '';
+    const url = window.location.href;
+    const queryString = url.split('?')[1];
+    if(!queryString) return null;
+
+  // 将查询参数部分拆分为键值对数组
+  const parameters = queryString.split('&');
+
+  // 遍历键值对数组，查找指定参数的值
+  for (let i = 0; i < parameters.length; i++) {
+    const [key, value] = parameters[i].split('=');
+    if (key === name) {
+      return decodeURIComponent(value); // 返回解码后的值
+    }
+  }
+
+  // 如果未找到指定参数，则返回 null 或者可以根据需求进行调整
+  return null;
 }
 
 /**

@@ -5,6 +5,7 @@ import { Imagine, Upscale, Variation } from '../request';
 import { MJMessage } from 'midjourney';
 import { Message } from '../interfaces/message';
 import MyTag from '../components/tag';
+import Router from 'next/router';
 import { requestAliyun, requestAliyunArt, requestAliyunArtStream } from '../request/http';
 import { useSelector, useDispatch } from 'react-redux';
 import { downloadFile, getQueryString, hasChinese, shuffleArray, redirectToZoomPage, extractIdFromString, redirectToFaceswapPage } from '../scripts/utils';
@@ -21,6 +22,7 @@ import LottieAnimation from '../components/LottieAnimation';
 import dkJson from '../components/dk.json'
 import { number } from 'echarts';
 import OssUploader from '../components/OssUploader';
+import SlidePaint from '../components/SlidePaint';
 
 const { CheckableTag } = Tag;
 const imgBasePath = '//och.superx.chat'
@@ -86,6 +88,8 @@ const Index: React.FC = () => {
   const [isWrong, setIsWrong] = useState(false);
   const [requestingSeed, setRequestingSeed] = useState('');
   const [debug, setDebug] = useState(false);
+  const [bdVid, setBdVid] = useState('');
+  const [qhclickid, setQhclickid] = useState('');
 
   //测试
   // const [messages, setMessages] = useState<Message[]>([{
@@ -113,6 +117,10 @@ const Index: React.FC = () => {
       }
     }, 500);
   };
+
+  const showSlidePaint = useMemo(() => {
+    return bdVid || qhclickid;
+  }, [bdVid, qhclickid]);
 
   interface DataType {
     name: string;
@@ -568,9 +576,11 @@ const Index: React.FC = () => {
     const bd_vid = getQueryString('bd_vid');
     const qhclickid = getQueryString('qhclickid');
     if (bd_vid) {
+      setBdVid(bd_vid);
       localStorage.setItem('bd_vid', bd_vid);
     }
     if (qhclickid) {
+      setQhclickid(qhclickid);
       localStorage.setItem('qhclickid', qhclickid);
     }
 
@@ -709,6 +719,7 @@ const Index: React.FC = () => {
 
   //页面初始化
   useEffect(() => {
+    Router.events.on('routeChangeComplete', getPrompt);
     new ClipboardJS('.copy-prompt-btn');
     //从页面链接中获取ddd参数
     const ddd = getQueryString('ddd');
@@ -730,6 +741,9 @@ const Index: React.FC = () => {
     const localIsCorrectPrompt = localStorage.getItem('isCorrectPrompt');
     if (localIsCorrectPrompt === 'false') {
       setIsCorrectPrompt(false);
+    }
+    return () => {
+      Router.events.off('routeChangeComplete', getPrompt);
     }
   }, []);
 
@@ -1202,6 +1216,10 @@ const Index: React.FC = () => {
             closable
           />}
           <p className='no-content-tips'>使用 midjourney 生成你的专属人工智能绘画作品。</p>
+          {/* 走马灯作品展播 */}
+
+          {showSlidePaint && <div style={{ marginTop: "30px" }}> <SlidePaint></SlidePaint></div>}
+
           {/* <p className="no-content-tips">请勿使用违禁词汇，违者将被封号。</p> */}
           {!user.secret && (
             <p className='no-content-tips'>

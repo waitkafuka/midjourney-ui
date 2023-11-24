@@ -14,6 +14,7 @@ import { ImgPageType } from "../../scripts/types";
 import { getRatio, getHeight } from "../../scripts/utils";
 import { useSelector } from "react-redux";
 import store from "../../store";
+import ReactDOM from 'react-dom';
 import Link from "next/link";
 
 interface Props {
@@ -23,6 +24,7 @@ interface Props {
     onImgDeleted?: (id: number) => void,
     // 类型，我的页面还是公开页面
     hasDelete: boolean,
+    //是否显示小的缩略图
     showThumbImg: boolean,
     copylink?: boolean,
     isLoading: boolean,
@@ -47,6 +49,7 @@ const App = ({ model, columnWidth = 400, hasLikeButton = false, onImgThumbUpActi
     const userThumbUpList = useSelector((state: any) => state.user.thumbUpList);
     const user = useSelector((state: any) => state.user.info);
     const [isShare, setIsShare] = useState(is_public === 0);
+    const [thumbCountText, setThumbCountText] = useState(thumb_up_count);
 
     const deleteImg = (id: number) => {
         confirm({
@@ -137,23 +140,22 @@ const App = ({ model, columnWidth = 400, hasLikeButton = false, onImgThumbUpActi
                     {/* 点赞 */}
                     {/* 点赞按钮 */}
                     {hasLikeButton && <div className={css["masonry-action-item"]} onClick={async () => {
-                        console.log('userThumbUpList:', userThumbUpList);
-                        console.log('id:', id);
                         const hasThumbUp = userThumbUpList.includes(id);
                         const url = hasThumbUp ? 'cancel-thumb-up' : 'thumb-up';
                         const result = await requestAliyunArt(url, { id });
-                        console.log('user:', user);
 
                         if (!user || !user.secret) {
                             message.error('登录之后才能点赞哦');
                             return;
                         }
-                        console.log('hasThumbUp:', hasThumbUp);
                         if (result.code === 0) {
                             // message.success('点赞成功');
                             store.dispatch({ type: hasThumbUp ? 'user/cancelThumbUp' : 'user/thumbUp', payload: id });
-                            thumb_up_count = thumb_up_count + (hasThumbUp ? -1 : 1);
+                            //强制刷新
+                            // thumb_up_count = thumb_up_count + (hasThumbUp ? -1 : 1);
+                            setThumbCountText(thumbCountText + (hasThumbUp ? -1 : 1));
                             //通知给父页面，更新list
+                            ReactDOM.flushSync(() => { });
                             onImgThumbUpActionDone && onImgThumbUpActionDone(id, hasThumbUp ? 'cancel' : 'add');
                         } else {
                             message.error(result.message);
@@ -161,7 +163,7 @@ const App = ({ model, columnWidth = 400, hasLikeButton = false, onImgThumbUpActi
 
                     }}>
                         {userThumbUpList.includes(id) ? <LikeFilled title="取消点赞" style={{ color: "#ff5722" }} /> : <LikeOutlined title="点赞" />}
-                        <p style={{ position: "relative", fontSize: "12px", marginLeft: "4px", top: "2px" }}>{thumb_up_count}</p>
+                        <p style={{ position: "relative", fontSize: "12px", marginLeft: "4px", top: "2px" }}>{thumbCountText}</p>
                         {/* <LikeOutlined title="点赞" style={{color:"#ff2626"}} /> */}
                     </div>}
                     {/* {JSON.stringify(userThumbUpList)} */}

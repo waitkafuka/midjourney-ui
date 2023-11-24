@@ -21,6 +21,7 @@ interface Props {
     // 实例模型
     model: ImgCardModel,
     columnWidth: number,
+    //paint_params为必传，因为用到了paint_params.width
     paint_params: any,
     onImgDeleted?: (id: number) => void,
     // 类型，我的页面还是公开页面
@@ -39,12 +40,13 @@ const baseWidth = 500;
 //从提示词中提取宽高比例
 
 
-const App = ({ model, columnWidth, onImgDeleted, paint_params, type, onImgThumbUpActionDone }: Props) => {
-    const { img_url,img_id, prompt, create_time, id, is_public, thumb_up_count, painting_type } = model;
+const ImgCard = ({ model, columnWidth, onImgDeleted, paint_params, type, onImgThumbUpActionDone }: Props) => {
+    const { img_url, img_id, prompt, create_time, id, is_public, thumb_up_count, painting_type } = model;
     const userThumbUpList = useSelector((state: any) => state.user.thumbUpList);
     const user = useSelector((state: any) => state.user.info);
     const [isShare, setIsShare] = useState(is_public === 0);
     const [hideShareButton, setHideShareButton] = useState(false);
+    const [thumbUpCountText, setThumbUpCountText] = useState(thumb_up_count);
 
     const deleteImg = (id: number) => {
         confirm({
@@ -94,10 +96,10 @@ const App = ({ model, columnWidth, onImgDeleted, paint_params, type, onImgThumbU
     }, [img_url, height])
 
     const HDsrc = useMemo(() => {
-        let hdsrc =  `${basePath}${img_url}`
+        let hdsrc = `${basePath}${img_url}`
         //如果是换脸图片
-        if(painting_type === PaintingType.FACESWAP){
-            hdsrc =  `${basePathOc}${img_url}`
+        if (painting_type === PaintingType.FACESWAP) {
+            hdsrc = `${basePathOc}${img_url}`
         }
         return hdsrc;
     }, [img_url])
@@ -154,10 +156,10 @@ const App = ({ model, columnWidth, onImgDeleted, paint_params, type, onImgThumbU
             <div className={css["masonry-action-wrap"]}>
                 <div className={css["masonry-action-box"]}>
                     {/* 复制提示词 */}
-                    <div className={`${css["masonry-action-item"]} copy-action`} data-clipboard-text={painting_type !== 'faceswap' ? prompt:`${basePathOc}${img_url}`} onClick={() => {
-                        if(painting_type !== 'faceswap'){
+                    <div className={`${css["masonry-action-item"]} copy-action`} data-clipboard-text={painting_type !== 'faceswap' ? prompt : `${basePathOc}${img_url}`} onClick={() => {
+                        if (painting_type !== 'faceswap') {
                             message.success('prompt已复制')
-                        }else{
+                        } else {
                             message.success('图片地址已复制')
                         }
                     }}>
@@ -217,6 +219,8 @@ const App = ({ model, columnWidth, onImgDeleted, paint_params, type, onImgThumbU
                         if (result.code === 0) {
                             // message.success('点赞成功');
                             store.dispatch({ type: hasThumbUp ? 'user/cancelThumbUp' : 'user/thumbUp', payload: id });
+                            //界面显示的数字修改
+                            setThumbUpCountText(hasThumbUp ? thumbUpCountText - 1 : thumbUpCountText + 1);
                             //通知给父页面，更新list
                             onImgThumbUpActionDone && onImgThumbUpActionDone(id, hasThumbUp ? 'cancel' : 'add');
                         } else {
@@ -225,7 +229,7 @@ const App = ({ model, columnWidth, onImgDeleted, paint_params, type, onImgThumbU
 
                     }}>
                         {userThumbUpList.includes(id) ? <LikeFilled title="取消点赞" style={{ color: "#ff5722" }} /> : <LikeOutlined title="点赞" />}
-                        <p style={{ position: "relative", fontSize: "12px", marginLeft: "4px", top: "2px" }}>{thumb_up_count}</p>
+                        <p style={{ position: "relative", fontSize: "12px", marginLeft: "4px", top: "2px" }}>{thumbUpCountText}</p>
                         {/* <LikeOutlined title="点赞" style={{color:"#ff2626"}} /> */}
                     </div>}
                     {/* 分享按钮 */}
@@ -278,4 +282,4 @@ const App = ({ model, columnWidth, onImgDeleted, paint_params, type, onImgThumbU
     </>
 };
 
-export default App;
+export default ImgCard;

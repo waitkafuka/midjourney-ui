@@ -110,6 +110,7 @@ const Index: React.FC = () => {
   const [currentIndex, setCurrentIndex] = useState<number>(0);
   const [isDescribeApiRequesting, setIsDescribeApiRequesting] = useState<boolean>(false);
 
+  const defaultPaintingText = '正在努力绘画...';
   const scrollToBottom = () => {
     setTimeout(() => {
       const chat = document.querySelector('.img-list-box');
@@ -209,8 +210,17 @@ const Index: React.FC = () => {
       hasTag: false,
       progress: defaultTips,
       img: defaultImg,
-      buttons: []
+      buttons: [],
+      paintingText: defaultPaintingText,
+      paintingTimer: setTimeout(() => {
+        newMessage.paintingText = `${defaultPaintingText}`;
+        // newMessage.paintingText = `${defaultPaintingText}，温馨提醒：如时间超过 3 分钟，可点击左侧“我的作品”，查看是否已完成。在我的作品页面点击编辑按钮可再次编辑。`;
+        setMessages((msgs) => {
+          return [...msgs];
+        })
+      }, 3 * 60000),
     };
+
     const promptValidResult = isPromptValid(inputValue.trim());
     if (promptValidResult.isValid !== true) {
       message.error(promptValidResult.message, 10);
@@ -284,7 +294,10 @@ const Index: React.FC = () => {
             prompt: newMessage.text, clientId, isCorrectPrompt
           },
           onDataChange(data: any) {
-
+            //清除定时器
+            clearTimeout(newMessage.paintingTimer);
+            newMessage.paintingText = defaultPaintingText;
+            setMessages((msgs) => [...msgs]);
             if (data.code === 40015) {
               //未登录
               setTimeout(() => {
@@ -306,15 +319,20 @@ const Index: React.FC = () => {
                 description: data.message,
                 duration: 0,
               });
-              //取出最后一个msg
-              let errorMsg: Message = {
-                text: inputValue.trim(),
-                hasTag: false,
-                progress: 'error：' + data.message,
-                img: 'https://c.superx.chat/stuff/img-error.png',
-                buttons: []
-              };
-              setMessages((msgs) => [...msgs.slice(0, -1), errorMsg]);
+              newMessage.text = inputValue.trim();
+              newMessage.hasTag = false;
+              newMessage.progress = '错误：' + data.message;
+              newMessage.img = 'https://c.superx.chat/stuff/img-error.png';
+              newMessage.buttons = [];
+              // //取出最后一个msg
+              // let errorMsg: Message = {
+              //   text: inputValue.trim(),
+              //   hasTag: false,
+              //   progress:,
+              //   img: 'https://c.superx.chat/stuff/img-error.png',
+              //   buttons: []
+              // };
+              setMessages((msgs) => [...msgs]);
               setInputDisable(false);
               return;
             }
@@ -333,7 +351,7 @@ const Index: React.FC = () => {
             newMessage.buttons = data.buttons;
             const oldMessages = messages;
             // setMessages(omsg => replaceLastElement(omsg, newMessage));
-            setMessages([...oldMessages, newMessage]);
+            setMessages(msgs => [...msgs]);
           }
         });
       } catch (error) {
@@ -987,7 +1005,7 @@ const Index: React.FC = () => {
         </div>
       </Modal>
       {/* 翻译中 */}
-      <Modal title='翻译中' style={{ top: 20 }} open={isTranslating} closable={false} cancelText='' okText='' footer={null}>
+      <Modal title='翻译中' style={{ top: 20 }} open={isTranslating && false} closable={false} cancelText='' okText='' footer={null}>
         <div>
           <Spin />
           正在翻译为英文...
@@ -1021,7 +1039,7 @@ const Index: React.FC = () => {
           }}
         >
           {/* 图片结果列表容器 */}
-          {messages.map(({ text, img, progress, content, msgID, msgHash, buttons }, index) => (
+          {messages.map(({ text, img, progress, content, msgID, msgHash, buttons, paintingText }, index) => (
             <div className='img-list-item' key={index}>
               <div className='mj-prompt-box'>
                 {' '}
@@ -1057,11 +1075,11 @@ const Index: React.FC = () => {
                 {!img && (
                   <div style={{ textAlign: 'center' }}>
                     {/* <img style={{ width: '130px' }} src='https://c.superx.chat/stuff/default.svg' alt='' /> <br /> */}
-                    <div style={{ width: "130px" }}>
+                    <div style={{ width: "130px", display: 'inline-block' }}>
                       <LottieAnimation animationData={dkJson}></LottieAnimation>
                     </div>
                     <div style={{ marginTop: '10px', display: 'flex', textAlign: 'center', justifyContent: 'center' }}>
-                      <Spin tip=''></Spin> <span style={{ color: '#888', fontSize: '13px' }}> 正在努力绘画...</span>
+                      <Spin tip=''></Spin> <span style={{ color: '#888', fontSize: '13px' }}> {paintingText}</span>
                     </div>
                   </div>
                 )}

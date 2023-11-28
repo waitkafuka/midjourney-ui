@@ -64,6 +64,7 @@ const Index: React.FC = () => {
   const [seedPrompt, setSeedPrompt] = useState('');
   const inputValueRef = useRef(inputValue);
   const [showDescribeModal, setShowDescribeModal] = useState(false);
+  const [showBlendModal, setShowBlendModal] = useState(false);
   const [inputDisable, setInputDisable] = useState(false);
   const [showAlert, setShowAlert] = useState(true);
   const [imgDescribeTexts, setImgDescribeTexts] = useState([]);
@@ -109,6 +110,7 @@ const Index: React.FC = () => {
   const [api, contextHolder2] = notification.useNotification();
   const [currentIndex, setCurrentIndex] = useState<number>(0);
   const [isDescribeApiRequesting, setIsDescribeApiRequesting] = useState<boolean>(false);
+  const [isBlendApiRequesting, setIsBlendApiRequesting] = useState<boolean>(false);
 
   const defaultPaintingText = '正在努力绘画...';
   const scrollToBottom = () => {
@@ -962,6 +964,72 @@ const Index: React.FC = () => {
 
         </div>
       </Modal>
+      {/* 多图混合blend弹窗 */}
+      <Modal
+        title='多图融合（blend）'
+        style={{ top: 20, width: '500px' }}
+        open={showBlendModal}
+        destroyOnClose={true}
+        closable={true}
+        maskClosable={false}
+        okText='确定'
+        onCancel={() => {
+          setShowBlendModal(false);
+        }}
+        footer={[
+          <Button
+            key='ok'
+            type='primary'
+            onClick={() => {
+              setShowBlendModal(false);
+            }}
+          >
+            完成
+          </Button>,
+        ]}
+      // footer={null}
+      >
+        <div>
+          <div style={{ padding: '15px', display: 'flex', justifyContent: 'center', flexWrap: 'wrap' }}>
+            <OssUploader disabled={isDescribeApiRequesting} buttonText='选择图片进行融合' onChange={(files => {
+              setDescribeImageUrl(files[0].url || '');
+              handleImgDescribe(files[0].url || '');
+            })}></OssUploader>
+            &nbsp;&nbsp;
+            <Tooltip title={`选择要混合的图片，最多可添加 5 张。建议两张最佳，前两张的权重最高。`}>
+              <QuestionCircleOutlined style={{ cursor: 'pointer' }} />
+            </Tooltip>
+            {/* <div style={{ fontSize: '12px', width: "100%", textAlign: 'center', }}>（消耗 1 点数）</div> */}
+          </div>
+          {/* 图片描述结果 */}
+          <div>
+            {isDescribeApiRequesting && <div>正在解析图片描述词，请稍候...</div>}
+            {!isDescribeApiRequesting && imgDescribeTexts.length > 0 && <>
+              <div style={{ marginTop: "15px" }}>描述词（已生成 4 条描述）：</div>
+              {imgDescribeTexts.map(item => {
+                return (
+                  <>
+                    <div style={{ marginTop: "5px" }}>
+                      {item as string} &nbsp;&nbsp;
+                      <Button
+                        size='small'
+                        onClick={() => {
+                          setInputValue((item as string).replace(/1️⃣|2️⃣|3️⃣|4️⃣/g, ''));
+                          message.success('提示词已复制')
+                        }}
+                        data-clipboard-text={(item as string).replace(/1️⃣|2️⃣|3️⃣|4️⃣/g, '')}
+                        className='copy-prompt-btn'
+                      >
+                        复制
+                      </Button>
+                    </div>
+                  </>
+                );
+              })}</>}
+          </div>
+
+        </div>
+      </Modal>
       {/* 操作提示弹窗 */}
       <Modal
         title='使用指南'
@@ -1363,6 +1431,17 @@ const Index: React.FC = () => {
               }}>图片转提示词</Button>
             </div>
             <Tooltip title={`describe功能。可通过上传一张图片，反向推断出图片对应相近的描述词，方便后续生成。`}>
+              <QuestionCircleOutlined style={{ cursor: 'pointer' }} />
+            </Tooltip>
+          </div>
+          {/* 图片 Blend */}
+          <div className='line-change-box2'>
+            <div style={{ marginRight: '5px', marginLeft: '20px' }}>
+              <Button onClick={() => {
+                setShowBlendModal(true);
+              }}>多图融合（Blend）</Button>
+            </div>
+            <Tooltip title={`Blend功能，可将最多 5 张图片混合为 1 张图片。`}>
               <QuestionCircleOutlined style={{ cursor: 'pointer' }} />
             </Tooltip>
           </div>

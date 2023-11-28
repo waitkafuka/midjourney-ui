@@ -1,5 +1,5 @@
 import React, { use, useEffect, useState, useRef, useMemo } from 'react';
-import { Input, Button, Table, Alert, Typography, message, Modal, Spin, Select, Space, Divider, Checkbox, notification, Tag, Switch, Tooltip } from 'antd';
+import { Input, Button, Table, Alert, Typography, message, Modal, Spin, Select, Space, Divider, Checkbox, notification, Tag, Switch, Tooltip, UploadFile } from 'antd';
 import { SendOutlined, UploadOutlined, QuestionCircleOutlined, CloseCircleOutlined } from '@ant-design/icons';
 import { Imagine, Upscale, Variation } from '../request';
 import { MJMessage } from 'midjourney';
@@ -79,6 +79,7 @@ const Index: React.FC = () => {
   const [showSeed, setShowSeed] = useState(false);
   const [seed, setSeed] = useState('');
   const [describeImageUrl, setDescribeImageUrl] = useState('');
+  const [blendImgs, setBlendImgs] = useState<UploadFile[]>([]);
   //自动纠错提示词
   const [isCorrectPrompt, setIsCorrectPrompt] = useState(false);
   const [showQrcodeModal, setShowQrcodeModal] = useState(true);
@@ -476,7 +477,7 @@ const Index: React.FC = () => {
   };
 
   //点击按钮
-  const onButtonClick = ({ buttonId, imgId, buttonLabel, prompt }: any) => {
+  const onButtonClick = ({ buttonId, imgId, buttonLabel, prompt = "" }: any) => {
     let newMessage: Message = {
       text: `${prompt}  <<${buttonLabel}>>`,
       hasTag: false,
@@ -552,21 +553,63 @@ const Index: React.FC = () => {
   };
 
   //图片融合
-  const handleImgBlend = async (imgs: string) => {
-    if (!imgUrl) return;
-    setIsDescribeApiRequesting(true);
-    try {
-      const data = await requestAliyunArt('img-describe-mj', { imgUrl });
-      setIsDescribeApiRequesting(false);
-      if (data.code === 0) {
-        setImgDescribeTexts(data.data.prompt.split('\n\n'));
-        store.dispatch({ type: 'user/pointChange', payload: user.point_count - data.data.cost });
-      } else {
-        message.error(data.message);
+  const handleImgBlend = async () => {
+    if (!blendImgs || blendImgs.length === 0) return;
+    let newMessage: Message = {
+      text: `image blend`,
+      hasTag: false,
+      progress: defaultTips,
+      img: defaultImg,
+      buttons: []
+    };
+    let messageIndex = messages.length;
+    setInputDisable(true);
+    setMessages((omsg) => {
+      return [...omsg, newMessage]
+    });
+
+    requestAliyunArtStream({
+      path: 'blend',
+      data: {
+        imgs: blendImgs.map(i => i.url)
+      },
+      onDataChange(data: any) {
+        //mj 服务报错
+        if (data.code === 40024) {
+          notification.error({
+            message: '提示',
+            description: data.message,
+            duration: 0,
+          });
+
+          //删除最后一个messages
+          setMessages((msgs) => [...msgs.slice(0, -1)]);
+          setInputDisable(false);
+          return;
+        }
+        newMessage.img = data.uri.replace('https://cdn.discordapp.com/', NEXT_PUBLIC_IMAGE_PREFIX);
+        newMessage.msgHash = data.hash;
+        newMessage.msgID = data.id;
+        newMessage.content = data.content;
+        newMessage.progress = data.progress;
+        newMessage.buttons = data.buttons;
+
+        if (data.id) {
+          // newMessage.hasTag = true;
+          //扣减点数
+          store.dispatch({ type: 'user/pointChange', payload: user.point_count - data.cost });
+        }
+        // setMessages(omsg => replaceLastElement(omsg, newMessage));
+        //从messages中根据msgId找到对应的msg，然后替换
+
+        setMessages(imgs => {
+          imgs[messageIndex] = newMessage;
+          return [...imgs]
+        });
       }
-    } catch (error) {
-      setIsDescribeApiRequesting(false);
-    }
+    })
+    setInputDisable(false);
+
   };
 
   const handleArray = (direction: string) => {
@@ -921,7 +964,7 @@ const Index: React.FC = () => {
       </Modal>
       {/* 上传图片进行描述弹窗 */}
       <Modal
-        title='描述图片（describe）'
+        title='描述图片（Describe）'
         style={{ top: 20, width: '500px' }}
         open={showDescribeModal}
         destroyOnClose={true}
@@ -986,14 +1029,15 @@ const Index: React.FC = () => {
       </Modal>
       {/* 多图混合blend弹窗 */}
       <Modal
-        title='多图融合（blend）'
+        title='多图融合（Blend）'
         style={{ top: 20, width: '500px' }}
         open={showBlendModal}
         destroyOnClose={true}
         closable={true}
         maskClosable={false}
-        okText="完成"
+        okText="开始融合"
         onOk={() => {
+          handleImgBlend();
           setShowBlendModal(false);
         }}
         onCancel={() => {
@@ -1002,44 +1046,20 @@ const Index: React.FC = () => {
       // footer={null}
       >
         <div>
-          <div style={{ padding: '15px', display: 'flex', justifyContent: 'center', flexWrap: 'wrap' }}>
-            <OssUploader disabled={isDescribeApiRequesting} buttonText='选择图片进行融合' multiple={true} maxCount={2} onChange={(files => {
-              console.log("🚀 ~ file: index.tsx:1007 ~ files:", files)
 
-              // setDescribeImageUrl(files[0].url || '');
-              // handleImgDescribe(files[0].url || '');
+          <div style={{ padding: '15px', display: 'flex', justifyContent: 'center', flexWrap: 'wrap' }}>
+            <OssUploader disabled={isDescribeApiRequesting} buttonText='选择图片' multiple={true} maxCount={2} onChange={(files => {
+              setBlendImgs(files)
             })}></OssUploader>
-            &nbsp;&nbsp;
-            <Tooltip title={`选择要混合的图片，最多可添加 5 张。建议两张最佳，前两张的权重最高。`}>
-              <QuestionCircleOutlined style={{ cursor: 'pointer' }} />
-            </Tooltip>
             {/* <div style={{ fontSize: '12px', width: "100%", textAlign: 'center', }}>（消耗 1 点数）</div> */}
           </div>
           {/* 图片描述结果 */}
-          <div>
-            {isDescribeApiRequesting && <div>正在解析图片描述词，请稍候...</div>}
-            {!isDescribeApiRequesting && imgDescribeTexts.length > 0 && <>
-              <div style={{ marginTop: "15px" }}>描述词（已生成 4 条描述）：</div>
-              {imgDescribeTexts.map(item => {
-                return (
-                  <>
-                    <div style={{ marginTop: "5px" }}>
-                      {item as string} &nbsp;&nbsp;
-                      <Button
-                        size='small'
-                        onClick={() => {
-                          setInputValue((item as string).replace(/1️⃣|2️⃣|3️⃣|4️⃣/g, ''));
-                          message.success('提示词已复制')
-                        }}
-                        data-clipboard-text={(item as string).replace(/1️⃣|2️⃣|3️⃣|4️⃣/g, '')}
-                        className='copy-prompt-btn'
-                      >
-                        复制
-                      </Button>
-                    </div>
-                  </>
-                );
-              })}</>}
+          <div style={{ textAlign: "center", cursor: "pointer" }}>
+            <Tooltip title={<div><p>将多张图片融合为一张。融合过程中 midjourney 会对图片进行艺术加工。</p>
+              <p>最多融合 5 张图片。建议两张最佳，前两张的权重最高。</p>
+              <p>点数消耗： 8 个点数。</p></div>}>
+              <span>融合说明</span> <QuestionCircleOutlined style={{ cursor: 'pointer' }} />
+            </Tooltip>
           </div>
 
         </div>

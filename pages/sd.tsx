@@ -231,7 +231,7 @@ const SD: React.FC = () => {
             setIsTranslating(true);
             let result = {} as any;
             try {
-                result = await requestAliyun('translate', { content: params.text });
+                result = await requestAliyun('trans', { content: params.text });
             } catch (error) {
                 message.error('翻译出错，请稍后重试，请确保您的输入词中不包含政治、色情、暴力等词汇', 10);
                 setIsGenerating(false);

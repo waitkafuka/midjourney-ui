@@ -549,7 +549,24 @@ const Index: React.FC = () => {
     } catch (error) {
       setIsDescribeApiRequesting(false);
     }
+  };
 
+  //图片融合
+  const handleImgBlend = async (imgs: string) => {
+    if (!imgUrl) return;
+    setIsDescribeApiRequesting(true);
+    try {
+      const data = await requestAliyunArt('img-describe-mj', { imgUrl });
+      setIsDescribeApiRequesting(false);
+      if (data.code === 0) {
+        setImgDescribeTexts(data.data.prompt.split('\n\n'));
+        store.dispatch({ type: 'user/pointChange', payload: user.point_count - data.data.cost });
+      } else {
+        message.error(data.message);
+      }
+    } catch (error) {
+      setIsDescribeApiRequesting(false);
+    }
   };
 
   const handleArray = (direction: string) => {
@@ -910,21 +927,24 @@ const Index: React.FC = () => {
         destroyOnClose={true}
         closable={true}
         maskClosable={false}
-        okText='确定'
+        okText="完成"
+        onOk={() => {
+          setShowDescribeModal(false);
+        }}
         onCancel={() => {
           setShowDescribeModal(false);
         }}
-        footer={[
-          <Button
-            key='ok'
-            type='primary'
-            onClick={() => {
-              setShowDescribeModal(false);
-            }}
-          >
-            完成
-          </Button>,
-        ]}
+      // footer={[
+      //   <Button
+      //     key='ok'
+      //     type='primary'
+      //     onClick={() => {
+      //       setShowDescribeModal(false);
+      //     }}
+      //   >
+      //     完成
+      //   </Button>,
+      // ]}
       // footer={null}
       >
         <div>
@@ -972,28 +992,22 @@ const Index: React.FC = () => {
         destroyOnClose={true}
         closable={true}
         maskClosable={false}
-        okText='确定'
+        okText="完成"
+        onOk={() => {
+          setShowBlendModal(false);
+        }}
         onCancel={() => {
           setShowBlendModal(false);
         }}
-        footer={[
-          <Button
-            key='ok'
-            type='primary'
-            onClick={() => {
-              setShowBlendModal(false);
-            }}
-          >
-            完成
-          </Button>,
-        ]}
       // footer={null}
       >
         <div>
           <div style={{ padding: '15px', display: 'flex', justifyContent: 'center', flexWrap: 'wrap' }}>
-            <OssUploader disabled={isDescribeApiRequesting} buttonText='选择图片进行融合' onChange={(files => {
-              setDescribeImageUrl(files[0].url || '');
-              handleImgDescribe(files[0].url || '');
+            <OssUploader disabled={isDescribeApiRequesting} buttonText='选择图片进行融合' multiple={true} maxCount={2} onChange={(files => {
+              console.log("🚀 ~ file: index.tsx:1007 ~ files:", files)
+
+              // setDescribeImageUrl(files[0].url || '');
+              // handleImgDescribe(files[0].url || '');
             })}></OssUploader>
             &nbsp;&nbsp;
             <Tooltip title={`选择要混合的图片，最多可添加 5 张。建议两张最佳，前两张的权重最高。`}>

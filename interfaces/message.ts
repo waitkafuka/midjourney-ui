@@ -39,4 +39,12 @@ export interface Message {
    * 图片下方的按钮
    */
   buttons: Array<MJButton>;
+  /**
+   * 绘画中的提示
+   */
+  paintingText?: string;
+  /**
+   * 绘画定时器对象
+   */
+  paintingTimer?: NodeJS.Timer;
 }

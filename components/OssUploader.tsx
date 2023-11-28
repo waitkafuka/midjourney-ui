@@ -20,18 +20,23 @@ interface AliyunOSSUploadProps {
     value?: UploadFile[];
     onChange?: (fileList: UploadFile[]) => void;
     buttonText?: string;
+    multiple?: boolean;//是否支持多选，默认false
+    maxCount?: number;//最大上传数量，默认为 1
     listType?: 'text' | 'picture' | 'picture-card' | 'picture-circle',
     slot?: React.ReactNode;
 }
 
 
-const AliyunOSSUploader: React.FC<AliyunOSSUploadProps> = ({ value, listType = 'text', onChange, buttonText, slot, disabled }) => {
+const AliyunOSSUploader: React.FC<AliyunOSSUploadProps> = ({ value, listType = 'text', onChange, buttonText, slot, maxCount = 1, multiple = false, disabled }) => {
     const [OSSData, setOSSData] = useState<OSSDataType>();
 
     const handleChange: UploadProps['onChange'] = ({ fileList }) => {
         console.log('handle change Aliyun OSS:', fileList);
         fileList = fileList.map((file) => {
-            file.url = `https://oc.superx.chat/${file.url}`;
+            //如果包含superx.chat
+            if (!file.url?.includes('superx.chat')) {
+                file.url = `https://oc.superx.chat/${file.url}`;
+            }
             return file;
         });
         //全部上传完成之后，才触发onChange 事件
@@ -77,7 +82,16 @@ const AliyunOSSUploader: React.FC<AliyunOSSUploadProps> = ({ value, listType = '
     };
 
     //上传第一步
-    const beforeUpload: UploadProps['beforeUpload'] = async (file) => {
+    const beforeUpload: UploadProps['beforeUpload'] = async (file, fileList) => {
+        //只允许上传前 maxCount 张图片
+        const whiteList = fileList.slice(0, maxCount);
+        //判断file在不在白名单里面
+        if (!whiteList.includes(file)) {
+            console.log('超出限制，不允许上传', file);
+            // message.error(`只能上传${maxCount}张图片`);
+            return false;
+        }
+
         console.log('beforeUpload', file, OSSData);
 
         if (!OSSData) return false;
@@ -107,7 +121,8 @@ const AliyunOSSUploader: React.FC<AliyunOSSUploadProps> = ({ value, listType = '
         onRemove,
         data: getExtraData,
         beforeUpload,
-        maxCount: 1,
+        maxCount,
+        multiple,
         accept: '.jpg,.jpeg,.png',
         listType,
         onPreview: async (file: UploadFile) => {

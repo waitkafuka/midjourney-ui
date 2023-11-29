@@ -1031,7 +1031,7 @@ const Index: React.FC = () => {
       <Modal
         title='多图融合（Blend）'
         style={{ top: 20, width: '500px' }}
-        open={showBlendModal}
+        open={showBlendModal && false}
         destroyOnClose={true}
         closable={true}
         maskClosable={false}
@@ -1053,7 +1053,7 @@ const Index: React.FC = () => {
             })}></OssUploader>
             {/* <div style={{ fontSize: '12px', width: "100%", textAlign: 'center', }}>（消耗 1 点数）</div> */}
           </div>
-          {/* 图片描述结果 */}
+          {/* 图片融合界面 */}
           <div style={{ textAlign: "center", cursor: "pointer" }}>
             <Tooltip title={<div><p>将多张图片融合为一张。融合过程中 midjourney 会对图片进行艺术加工。</p>
               <p>最多融合 5 张图片。建议两张最佳，前两张的权重最高。</p>

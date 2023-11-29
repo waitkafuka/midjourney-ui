@@ -1031,7 +1031,7 @@ const Index: React.FC = () => {
       <Modal
         title='多图融合（Blend）'
         style={{ top: 20, width: '500px' }}
-        open={showBlendModal && false}
+        open={showBlendModal}
         destroyOnClose={true}
         closable={true}
         maskClosable={false}
@@ -1469,7 +1469,7 @@ const Index: React.FC = () => {
             </Tooltip>
           </div>
           {/* 图片 Blend */}
-          <div className='line-change-box2'>
+          {/* <div className='line-change-box2'>
             <div style={{ marginRight: '5px', marginLeft: '20px' }}>
               <Button onClick={() => {
                 setShowBlendModal(true);
@@ -1478,7 +1478,7 @@ const Index: React.FC = () => {
             <Tooltip title={`Blend功能，可将最多 5 张图片混合为 1 张图片。`}>
               <QuestionCircleOutlined style={{ cursor: 'pointer' }} />
             </Tooltip>
-          </div>
+          </div> */}
         </div>
 
 

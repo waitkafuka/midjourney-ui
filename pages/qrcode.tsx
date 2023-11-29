@@ -189,7 +189,7 @@ const QrCode: React.FC = () => {
                     return;
                 }
                 if (data.code && data.code !== 0) {
-                    message.error(data.message || '生成失败，请稍后重试。');
+                    message.error('服务器错误，请截图联系微信公众号客服：' + data.message);
                     setIsGenerating(false);
                     initQrDemo();
                     return;

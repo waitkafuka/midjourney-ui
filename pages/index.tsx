@@ -1048,7 +1048,7 @@ const Index: React.FC = () => {
         <div>
 
           <div style={{ padding: '15px', display: 'flex', justifyContent: 'center', flexWrap: 'wrap' }}>
-            <OssUploader disabled={isDescribeApiRequesting} buttonText='选择图片' multiple={true} maxCount={2} onChange={(files => {
+            <OssUploader disabled={isDescribeApiRequesting} buttonText='选择图片' multiple={true} maxCount={5} onChange={(files => {
               setBlendImgs(files)
             })}></OssUploader>
             {/* <div style={{ fontSize: '12px', width: "100%", textAlign: 'center', }}>（消耗 1 点数）</div> */}

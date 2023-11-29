@@ -555,6 +555,14 @@ const Index: React.FC = () => {
   //图片融合
   const handleImgBlend = async () => {
     if (!blendImgs || blendImgs.length === 0) return;
+    if (blendImgs.length < 2) {
+      message.error('请至少选择两张图片');
+      return;
+    }
+    if (blendImgs.length > 5) {
+      message.error('最多只能选择五张图片');
+      return;
+    }
     let newMessage: Message = {
       text: `image blend`,
       hasTag: false,
@@ -567,6 +575,7 @@ const Index: React.FC = () => {
     setMessages((omsg) => {
       return [...omsg, newMessage]
     });
+    setShowBlendModal(false);
 
     requestAliyunArtStream({
       path: 'blend',
@@ -575,7 +584,7 @@ const Index: React.FC = () => {
       },
       onDataChange(data: any) {
         //mj 服务报错
-        if (data.code === 40024) {
+        if (data.code === 40025 || data.code === 40024) {
           notification.error({
             message: '提示',
             description: data.message,
@@ -1038,7 +1047,6 @@ const Index: React.FC = () => {
         okText="开始融合"
         onOk={() => {
           handleImgBlend();
-          setShowBlendModal(false);
         }}
         onCancel={() => {
           setShowBlendModal(false);

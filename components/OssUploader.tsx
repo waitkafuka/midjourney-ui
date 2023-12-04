@@ -24,10 +24,12 @@ interface AliyunOSSUploadProps {
     maxCount?: number;//最大上传数量，默认为 1
     listType?: 'text' | 'picture' | 'picture-card' | 'picture-circle',
     slot?: React.ReactNode;
+    accept?: string,
+    maxSize?: number;//最大上传文件大小，默认为 5M
 }
 
 
-const AliyunOSSUploader: React.FC<AliyunOSSUploadProps> = ({ value, listType = 'text', onChange, buttonText, slot, maxCount = 1, multiple = false, disabled }) => {
+const AliyunOSSUploader: React.FC<AliyunOSSUploadProps> = ({ value, accept = '.jpg,.jpeg,.png', maxSize = 1024 * 1024 * 5, listType = 'text', onChange, buttonText, slot, maxCount = 1, multiple = false, disabled }) => {
     const [OSSData, setOSSData] = useState<OSSDataType>();
 
     const handleChange: UploadProps['onChange'] = ({ fileList }) => {
@@ -106,8 +108,8 @@ const AliyunOSSUploader: React.FC<AliyunOSSUploadProps> = ({ value, listType = '
         // @ts-ignore
         file.url = OSSData.dir + filename;
         //判断文件是否超过大小
-        if (file.size > 1024 * 1024 * 5) {
-            message.error('文件不能超过5M');
+        if (file.size > maxSize) {
+            message.error(`文件不能超过${Math.round(maxSize / 1024 / 1024)}M`);
             return false;
         }
         return file;
@@ -123,7 +125,7 @@ const AliyunOSSUploader: React.FC<AliyunOSSUploadProps> = ({ value, listType = '
         beforeUpload,
         maxCount,
         multiple,
-        accept: '.jpg,.jpeg,.png',
+        accept,
         listType,
         onPreview: async (file: UploadFile) => {
             let src = file.url as string;
@@ -134,10 +136,15 @@ const AliyunOSSUploader: React.FC<AliyunOSSUploadProps> = ({ value, listType = '
                     reader.onload = () => resolve(reader.result as string);
                 });
             }
-            const image = new Image();
-            image.src = src;
-            const imgWindow = window.open(src);
-            imgWindow?.document.write(image.outerHTML);
+            if (file.type?.startsWith('video')) {
+                window.open(src);
+            } else {
+                const image = new Image();
+                image.src = src;
+                const imgWindow = window.open(src);
+                imgWindow?.document.write(image.outerHTML);
+            }
+
         }
         // previewFile: (file: any) => {
         //     console.log('previewFile', file);

@@ -20,20 +20,18 @@ const TextArea = Input.TextArea;
 
 const SwapFace: React.FC = () => {
     //初始化参数
+    const needCostDefault = '请先上传所要转换的视频，视频最大不能超过 200M';
     const user = useSelector((state: any) => state.user.info)
-    const [showOptions, setShowOptions] = useState<boolean>(false); //是否显示更多选项
     const [qrCodeImage, setQrCodeImage] = useState<ImgCardModel>(); //模板
-    const [useTemplate, setUseTemplate] = useState<boolean>(false); //是否使用模板
-    const [isTranslating, setIsTranslating] = useState(false);
     const [isGenerating, setIsGenerating] = useState(false);
-    const [ratio, setRatio] = useState<{ width: number, height: number }>({ width: 1, height: 1 }); //画布缩放比例
-    const [qrImg, setQrImg] = useState<string>(''); //二维码图片
     const [showDemo, setShowDemo] = useState<boolean>(true); //是否显示示例
+    const [needCostText, setNeedCostText] = useState<string>(needCostDefault); //需要的点数，文案
+    const [needCost, setNeedCost] = useState<number>(0); //需要的点数
     const [params, setParams] = useState<any>({
         source: {
             onlineImgUrl: process.env.NODE_ENV === 'development' ? 'https://oc.superx.chat/img/1696924547155.png' : '',
-            localImgUrl: '',
-            imgType: imgType.online
+            localImgUrl: 'https://oc.superx.chat/img/1701677670604.mp4',
+            imgType: imgType.local
         },
         target: {
             onlineImgUrl: '',
@@ -104,8 +102,13 @@ const SwapFace: React.FC = () => {
             return;
         }
         //校验点数
-        if (user.point_count < FACESWAP_COST) {
+        if (user.point_count < needCost) {
             message.error('点数不足，请先购买点数。');
+            return;
+        }
+        //必须添加邮箱
+        if (!params.email) {
+            message.error('由于视频换脸所需时间较长，请添加邮箱以接收结果。', 6);
             return;
         }
         //记录邮箱
@@ -113,68 +116,26 @@ const SwapFace: React.FC = () => {
             //存入localsotrage , notifyEmail 为key
             localStorage.setItem('notifyEmail', params.email)
         }
+        apiParams.email = params.email;
 
         setIsGenerating(true);
 
         //获取图片宽高
-        const { imgData } = await getImageData(apiParams.source);
-        const newQrcodeImage: ImgCardModel = {
-            id: 0,
-            img_url: '',
-            prompt: params.prompt,
-            create_time: new Date(),
-            is_public: 0,
-            thumb_up_count: 0,
-            painting_type: PaintingType.MJ,
-            width: imgData.width,
-            height: imgData.height,
-        };
-
-        apiParams.sourceImgWidth = imgData.width;
-        apiParams.sourceImgHeight = imgData.height;
-
-        setQrCodeImage({ ...newQrcodeImage, img_base_path: 'https://oc.superx.chat/' });
-        let res = null;
-        try {
-            console.log('提交参数：', apiParams);
-            res = await requestAliyunArt('face-swap', apiParams);
-        } catch (error: any) {
-            //error.message转为小写
-            if (error.message.toLowerCase().includes('time')) {
-                const tips = '由于图片较大，接口响应超时，后台任务仍在运算中，可直接关闭页面。稍后换脸结果将发送至预留邮箱。';
-                notification.error({
-                    message: '提示',
-                    description: tips,
-                    duration: 0,
-                });
-            } else {
-                message.error(error + '');
-            }
-
-            setIsGenerating(false);
-            setQrCodeImage(undefined);
-            return;
-        }
+        console.log('提交参数：', apiParams);
+        const res = await requestAliyunArt('video-face-swap', apiParams);
+        console.log("🚀 ~ file: faceswap-video.tsx:125 ~ doSubmit ~ res:", res)
+        setIsGenerating(false);
         if (res.code !== 0) {
-            //未登录的提示
-            if (res.code === 40015) {
-                res.message = '您尚未登录，请先登录后再试'
-            }
-            //这里取的是sd返回的message
             message.error(res.message);
             setIsGenerating(false);
-            setQrCodeImage(undefined);
             return;
+        } else {
+            notification.success({
+                message: '提交成功',
+                description: '请耐心等待，换脸需要较长时间，一般在 30 分钟-1 小时，根据时长不同有所不同。提交之后，可关闭网页，等待邮箱通知。',
+                duration: 0
+            });
         }
-        const data = res.data;
-        setIsGenerating(false);
-        setQrCodeImage({ ...newQrcodeImage, img_base_path: 'https://oc.superx.chat', img_url: data.ossPath, id: data.id, width: imgData.width, height: imgData.height });
-        const distImgUrl = `https://oc.superx.chat${data.ossPath}`;
-        //自动下载图片
-        downloadFile(distImgUrl);
-
-        //点数减少
-        store.dispatch({ type: 'user/pointChange', payload: user.point_count - data.cost })
     }
 
     //定义一个方法，从链接中获取url参数，并set到params中
@@ -232,12 +193,13 @@ const SwapFace: React.FC = () => {
             <div className="code-options-box">
                 {/* 底图 */}
                 <div className="face-box-wrap">
-                    <div className="face-box-title">添加原视频 {!showDemo && <a style={{ fontSize: "14px", fontWeight: "100" }} href="javascript:void(0)" onClick={() => {
+                    <div className="face-box-title">添加视频 {!showDemo && <a style={{ fontSize: "14px", fontWeight: "100" }} href="javascript:void(0)" onClick={() => {
                         setShowDemo(true);
                     }}>显示示例</a>}</div>
+                    <div style={{ textAlign: "center", fontSize: "13px", margin: "5px" }}>（禁止对涉政人物进行换脸，一经发现立即封号）</div>
                     <div className="face-box">
                         {/* 是否在线图片 */}
-                        <div style={{ display: "flex", justifyContent: "center", marginBottom: "20px" }}>
+                        {/* <div style={{ display: "flex", justifyContent: "center", marginBottom: "20px" }}>
                             <Radio.Group
                                 options={options}
                                 onChange={v => {
@@ -253,13 +215,13 @@ const SwapFace: React.FC = () => {
                                 optionType="button"
                                 buttonStyle="solid"
                             />
-                        </div>
+                        </div> */}
                         {/* 在线图片输入框 */}
                         <div className="art-form-item">
                             {/* <div className="form-item-label">
                             <span className="input-label">底图</span>
                         </div> */}
-                            <Input showCount maxLength={500} onChange={v => {
+                            {params.source.localImgUrl && <Input showCount maxLength={500} onChange={v => {
                                 setParams({
                                     ...params,
                                     source: {
@@ -267,13 +229,17 @@ const SwapFace: React.FC = () => {
                                         [params.source.imgType === imgType.online ? 'onlineImgUrl' : 'localImgUrl']: v.target.value
                                     }
                                 });
-                            }} placeholder="请粘贴或者本地上传底图链接" value={params.source.imgType === imgType.online ? params.source.onlineImgUrl : params.source.localImgUrl} />
+                            }} placeholder="请点击下方按钮上传视频" readOnly value={params.source.imgType === imgType.online ? params.source.onlineImgUrl : params.source.localImgUrl} />}
                         </div>
 
                         {/* 本地图片选择框 */}
                         {params.source.imgType === imgType.local && <div className="art-form-item">
-                            <AliyunOSSUploader onChange={fileList => {
+                            <AliyunOSSUploader accept="video/*" maxSize={200 * 1024 * 1024} onChange={async fileList => {
                                 console.log('fileList', fileList);
+                                const videoUrl = fileList[0].url;
+                                const { data } = await requestAliyunArt('get-video-info', { videoUrl });
+                                setNeedCostText(`${data.cost}（视频时长：${data.duration} 秒，共需换脸 ${data.frames} 张图片）`);
+                                setNeedCost(data.cost);
                                 setParams({
                                     ...params,
                                     source: {
@@ -281,7 +247,7 @@ const SwapFace: React.FC = () => {
                                         localImgUrl: fileList[0].url
                                     }
                                 });
-                            }} listType="picture-card" slot={<div>+ 上传图片</div>} />
+                            }} listType="picture-card" slot={<div>+ 上传视频</div>} />
                         </div>}
                     </div>
                 </div>
@@ -355,18 +321,18 @@ const SwapFace: React.FC = () => {
                     }} placeholder="用来接收放大后的图片" value={params.email} />
                 </div>
                 <div style={{ marginTop: "20px" }}>
-                    点数：{FACESWAP_COST}
+                    点数：{needCostText}
                 </div>
                 <Button type="primary" loading={isGenerating} onClick={doSubmit} style={{ width: "100%", marginTop: "10px" }}>
-                    开始合成
+                    提交任务
                 </Button>
                 <div style={{ marginTop: "20px", color: "#666", fontSize: "13px", lineHeight: "1.6", width: "100%" }}>
                     提示：
                     <ul>
-                        <ol>1. 底图可使用 midjourney 或者其他 AI 绘画生成的图片</ol>
+                        <ol>1. 只支持单个人物的换脸，如视频中出现多个人物，将无法预测换脸结果</ol>
                         <ol>2. 人脸照尽量选择清晰正脸照片，效果更佳</ol>
-                        <ol>3. 为保护用户隐私，服务器不对合成的图片进行保存，请生成后及时下载</ol>
-                        <ol>4. 换脸时长约 30 秒~ 1 分钟，请耐心等待</ol>
+                        <ol>3. 为保护用户隐私，服务器不对合成的视频进行保存，请生成后及时下载</ol>
+                        <ol>4. 换脸需较长时间， 一般在 30 分钟-1 小时，根据时长不同有所不同。提交之后，可关闭网页，等待邮箱通知。</ol>
                     </ul>
                 </div>
             </div>
@@ -380,7 +346,7 @@ const SwapFace: React.FC = () => {
                             setShowDemo(false);
                         }}>隐藏示例</a>
                     </div>
-                    <div className="img-title">底图：</div>
+                    <div className="img-title">原视频：</div>
                     <div className="img-box">
                         <video controls autoPlay src="//oc.superx.chat/face-video/10.mp4"></video>
                     </div>
@@ -388,7 +354,7 @@ const SwapFace: React.FC = () => {
                     <div className="img-box">
                         <img src="//oc.superx.chat/face-video/video-face.png" alt="" />
                     </div>
-                    <div className="img-title">换脸结果：</div>
+                    <div className="img-title">换脸视频：</div>
                     <div className="img-box">
                         <video controls autoPlay src="//oc.superx.chat/face-video/video-out.mp4"></video>
                     </div>

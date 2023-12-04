@@ -316,7 +316,8 @@ const Index: React.FC = () => {
             }
 
             //mj 服务报错
-            if (data.code === 40024 || data.code === 40029 || data.code === 40030) {
+            if (data && data.code && data.code !== 0) {
+              // if (data.code === 40024 || data.code === 40029 || data.code === 40030) {
               notification.error({
                 message: '提示',
                 description: data.message,

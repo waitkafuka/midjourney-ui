@@ -37,7 +37,7 @@ const ROUTES: Route = {
       children: [{
         path: '/art/',
         target: "_blank",
-        name: 'AI绘画·MJ（推荐）',
+        name: 'Midjourney',
         key: "midjourney",
       }, {
         path: '/art/sd',
@@ -658,7 +658,7 @@ export default function Main(children: JSX.Element) {
           children: [{
             path: '/art/',
             target: "_blank",
-            name: 'AI绘画·四宫格',
+            name: 'Midjourney',
             key: "aihuihua",
           }, {
             path: '/art/sd',

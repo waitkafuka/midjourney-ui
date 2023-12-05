@@ -95,9 +95,9 @@ const SwapFace: React.FC = () => {
 
     const doSubmit = async () => {
         const apiParams: any = {}
-        apiParams.source = params.source.imgType === imgType.online ? params.source.onlineImgUrl : params.source.localImgUrl;
-        apiParams.target = params.target.imgType === imgType.online ? params.target.onlineImgUrl : params.target.localImgUrl;
-        if (!apiParams.source || !apiParams.target) {
+        apiParams.videoUrl = params.source.imgType === imgType.online ? params.source.onlineImgUrl : params.source.localImgUrl;
+        apiParams.imgUrl = params.target.imgType === imgType.online ? params.target.onlineImgUrl : params.target.localImgUrl;
+        if (!apiParams.videoUrl || !apiParams.imgUrl) {
             message.error('请添加原视频和人脸照片');
             return;
         }
@@ -108,7 +108,7 @@ const SwapFace: React.FC = () => {
         }
         //必须添加邮箱
         if (!params.email) {
-            message.error('由于视频换脸所需时间较长，请添加邮箱以接收结果。', 6);
+            message.warning('由于视频换脸所需时间较长，请先添加邮箱以接收通知结果。', 6);
             return;
         }
         //记录邮箱
@@ -132,7 +132,7 @@ const SwapFace: React.FC = () => {
         } else {
             notification.success({
                 message: '提交成功',
-                description: '请耐心等待，换脸需要较长时间，一般在 30 分钟-1 小时，根据时长不同有所不同。提交之后，可关闭网页，等待邮箱通知。',
+                description: '视频换脸一般需要 30 分钟-1 小时，根据时长不同有所不同。提交之后，可关闭网页，等待邮箱通知。',
                 duration: 0
             });
         }

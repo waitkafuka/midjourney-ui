@@ -176,7 +176,7 @@ const SwapFace: React.FC = () => {
 
                     notification.success({
                         message: '提示',
-                        description: `提交成功，可关闭网页，等待邮箱通知。根据您的视频时长，预估所需时间为：${formatSeconds(videoInfo.duration * 30 * 1.5)}。`,
+                        description: `提交成功，可关闭网页，等待邮箱通知。根据您的视频时长，预估所需时间为：${formatSeconds(videoInfo.duration * 60 * 1.5)}。`,
                         duration: 0
                     });
                 }

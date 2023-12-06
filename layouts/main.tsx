@@ -69,13 +69,13 @@ const ROUTES: Route = {
       path: '/art/faceswap',
       target: "_blank",
     },
-    {
-      name: 'AI 视频换脸',
-      key: 'videofaceswap',
-      icon: <i className='iconfont icon-dilanxianxingiconyihuifu_huabanfuben'></i>,
-      path: '/art/faceswap-video',
-      target: "_blank",
-    },
+    // {
+    //   name: 'AI 视频换脸',
+    //   key: 'videofaceswap',
+    //   icon: <i className='iconfont icon-dilanxianxingiconyihuifu_huabanfuben'></i>,
+    //   path: '/art/faceswap-video',
+    //   target: "_blank",
+    // },
     {
       name: '图片高清放大',
       key: 'imgupscale',
@@ -583,13 +583,13 @@ export default function Main(children: JSX.Element) {
           path: '/art/faceswap',
           target: "_blank",
         },
-        {
-          name: 'AI 视频换脸',
-          key: 'videofaceswap',
-          icon: <i className='iconfont icon-dilanxianxingiconyihuifu_huabanfuben'></i>,
-          path: '/art/faceswap-video',
-          target: "_blank",
-        },
+        // {
+        //   name: 'AI 视频换脸',
+        //   key: 'videofaceswap',
+        //   icon: <i className='iconfont icon-dilanxianxingiconyihuifu_huabanfuben'></i>,
+        //   path: '/art/faceswap-video',
+        //   target: "_blank",
+        // },
         {
           name: '图片高清放大',
           key: 'imgupscale',
@@ -704,13 +704,13 @@ export default function Main(children: JSX.Element) {
           path: '/art/faceswap',
           target: "_blank",
         },
-        {
-          name: 'AI 视频换脸',
-          key: 'videofaceswap',
-          icon: <i className='iconfont icon-dilanxianxingiconyihuifu_huabanfuben'></i>,
-          path: '/art/faceswap-video',
-          target: "_blank",
-        },
+        // {
+        //   name: 'AI 视频换脸',
+        //   key: 'videofaceswap',
+        //   icon: <i className='iconfont icon-dilanxianxingiconyihuifu_huabanfuben'></i>,
+        //   path: '/art/faceswap-video',
+        //   target: "_blank",
+        // },
         {
           name: '图片高清放大',
           key: 'imgupscale',

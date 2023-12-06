@@ -70,6 +70,13 @@ const ROUTES: Route = {
       target: "_blank",
     },
     {
+      name: 'AI 视频换脸',
+      key: 'videofaceswap',
+      icon: <i className='iconfont icon-dilanxianxingiconyihuifu_huabanfuben'></i>,
+      path: '/art/faceswap-video',
+      target: "_blank",
+    },
+    {
       name: '图片高清放大',
       key: 'imgupscale',
       icon: <i className='iconfont icon-fangda'></i>,
@@ -577,6 +584,13 @@ export default function Main(children: JSX.Element) {
           target: "_blank",
         },
         {
+          name: 'AI 视频换脸',
+          key: 'videofaceswap',
+          icon: <i className='iconfont icon-dilanxianxingiconyihuifu_huabanfuben'></i>,
+          path: '/art/faceswap-video',
+          target: "_blank",
+        },
+        {
           name: '图片高清放大',
           key: 'imgupscale',
           icon: <i className='iconfont icon-fangda'></i>,
@@ -688,6 +702,13 @@ export default function Main(children: JSX.Element) {
           key: 'faceswap',
           icon: <i className='iconfont icon-abgangzhuanban'></i>,
           path: '/art/faceswap',
+          target: "_blank",
+        },
+        {
+          name: 'AI 视频换脸',
+          key: 'videofaceswap',
+          icon: <i className='iconfont icon-dilanxianxingiconyihuifu_huabanfuben'></i>,
+          path: '/art/faceswap-video',
           target: "_blank",
         },
         {

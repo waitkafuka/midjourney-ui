@@ -139,7 +139,7 @@ a:hover {
     .slide-img-item {
       display: inline-block;
       margin-left: 20px;
-      .masonry-item{
+      .masonry-item {
         position: relative;
       }
     }
@@ -164,7 +164,8 @@ a:hover {
     border: 5px solid #fff;
     // border-radius: 3px;
   }
-  img {
+  img,
+  video {
     width: 350px;
   }
 }

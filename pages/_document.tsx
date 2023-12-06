@@ -28,7 +28,7 @@ export default class MyDocument extends Document {
             rel="icon"
             href={logoPath}
           />
-          <link rel="stylesheet" href="//at.alicdn.com/t/c/font_4080772_oepiuqaynw.css" />
+          <link rel="stylesheet" href="//at.alicdn.com/t/c/font_4080772_8gdb32m01lw.css" />
         </Head>
         <body>
           <Main />

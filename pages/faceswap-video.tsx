@@ -2,7 +2,7 @@ import { useEffect, useMemo, useState } from "react";
 import { ImgCardModel, ImgPageType, PaintingType } from '../scripts/types'
 import { getQueryString, hasChinese, downloadFile, redirectToZoomPage } from "../scripts/utils";
 import { SendOutlined, StopOutlined, QuestionCircleOutlined } from '@ant-design/icons';
-import { Alert, Button, Col, Form, Input, InputNumber, Radio, Row, Select, Slider, Tooltip, message, notification } from "antd";
+import { Alert, Button, Col, Form, Input, InputNumber, Radio, Row, Select, Modal, Tooltip, message, notification } from "antd";
 import { FACESWAP_COST } from "../scripts/config";
 import PaintingPoint from "../components/paintingPoint";
 import { requestAliyunArt } from "../request/http";
@@ -11,6 +11,7 @@ import { useSelector } from 'react-redux';
 import Head from 'next/head';
 import AliyunOSSUploader from '../components/OssUploader';
 import PureImgCard from "../components/masonry/PureImgCard";
+const { confirm } = Modal;
 enum imgType {
     online = 'online',
     local = 'local'
@@ -123,50 +124,67 @@ const SwapFace: React.FC = () => {
     }
 
     const doSubmit = async () => {
-        const apiParams: any = {}
-        apiParams.videoUrl = params.source.imgType === imgType.online ? params.source.onlineImgUrl : params.source.localImgUrl;
-        apiParams.imgUrl = params.target.imgType === imgType.online ? params.target.onlineImgUrl : params.target.localImgUrl;
-        if (!apiParams.videoUrl || !apiParams.imgUrl) {
-            message.error('请添加原视频和人脸照片');
-            return;
-        }
-        //校验点数
-        if (user.point_count < needCost) {
-            message.error('点数不足，请先购买点数。');
-            return;
-        }
-        //必须添加邮箱
-        if (!params.email) {
-            message.warning('由于视频换脸所需时间较长，请先添加邮箱以接收通知结果。', 6);
-            return;
-        }
-        //记录邮箱
-        if (params.email) {
-            //存入localsotrage , notifyEmail 为key
-            localStorage.setItem('notifyEmail', params.email)
-        }
-        apiParams.email = params.email;
+        confirm({
+            title: '请再次确认：',
+            content: <>
+                <div></div>
+                <div>1.人脸照片清晰、正面、无遮挡，<b>且未佩戴眼镜（重要）</b></div>
+                <div>2. 视频中包含单个人脸，且未遮挡，不含多个人脸</div>
+                <div>3.不包含涉政、涉黄、涉暴，以及自己未有肖像权的人脸</div>
+                <div>4.如因以上原因无法换脸或导致换脸结果质量差，不以任何理由退款</div>
+            </>,
+            okText: '我已仔细阅读并同意',
+            cancelText: '取消',
+            async onOk() {
+                const apiParams: any = {}
+                apiParams.videoUrl = params.source.imgType === imgType.online ? params.source.onlineImgUrl : params.source.localImgUrl;
+                apiParams.imgUrl = params.target.imgType === imgType.online ? params.target.onlineImgUrl : params.target.localImgUrl;
+                if (!apiParams.videoUrl || !apiParams.imgUrl) {
+                    message.error('请添加原视频和人脸照片');
+                    return;
+                }
+                //校验点数
+                if (user.point_count < needCost) {
+                    message.error('点数不足，请先购买点数。');
+                    return;
+                }
+                //必须添加邮箱
+                if (!params.email) {
+                    message.warning('由于视频换脸所需时间较长，请先添加邮箱以接收通知结果。', 6);
+                    return;
+                }
+                //记录邮箱
+                if (params.email) {
+                    //存入localsotrage , notifyEmail 为key
+                    localStorage.setItem('notifyEmail', params.email)
+                }
+                apiParams.email = params.email;
 
-        setIsGenerating(true);
+                setIsGenerating(true);
 
-        //获取图片宽高
-        console.log('提交参数：', apiParams);
-        const res = await requestAliyunArt('video-face-swap', apiParams);
-        const { data } = res;
-        setIsGenerating(false);
-        if (res.code !== 0) {
-            message.error(res.message);
-            setIsGenerating(false);
-            return;
-        } else {
-            store.dispatch({ type: 'user/pointChange', payload: user.point_count - data.cost })
+                //获取图片宽高
+                console.log('提交参数：', apiParams);
+                const res = await requestAliyunArt('video-face-swap', apiParams);
+                const { data } = res;
+                setIsGenerating(false);
+                if (res.code !== 0) {
+                    message.error(res.message);
+                    setIsGenerating(false);
+                    return;
+                } else {
+                    store.dispatch({ type: 'user/pointChange', payload: user.point_count - data.cost })
 
-            notification.success({
-                message: '提示',
-                description: `提交成功，可关闭网页，等待邮箱通知。根据您的视频时长，预估所需时间为：${formatSeconds(videoInfo.duration * 30 * 1.5)}。`,
-                duration: 0
-            });
-        }
+                    notification.success({
+                        message: '提示',
+                        description: `提交成功，可关闭网页，等待邮箱通知。根据您的视频时长，预估所需时间为：${formatSeconds(videoInfo.duration * 30 * 1.5)}。`,
+                        duration: 0
+                    });
+                }
+            },
+            onCancel() {
+            },
+        });
+
     }
 
     //定义一个方法，从链接中获取url参数，并set到params中
@@ -364,9 +382,9 @@ const SwapFace: React.FC = () => {
                 <div style={{ marginTop: "20px", color: "#666", fontSize: "13px", lineHeight: "1.6", width: "100%" }}>
                     提示：
                     <ul>
-                        <ol>1. 请确保上传的视频和图片包含人脸，否则将换脸失败</ol>
+                        <ol>1. 请确保上传的视频和图片包含人脸。重要提示：照片不要戴眼镜，否则将换脸失败</ol>
                         <ol>2. 只支持单个人物的换脸，如视频中出现多个人物，将无法预测换脸结果</ol>
-                        <ol>3. 人脸照尽量选择清晰正脸照片，不要戴眼镜</ol>
+                        <ol>3. 人脸照尽量选择清晰正脸照片，再次提醒：不要戴眼镜</ol>
                         <ol>4. 为保护用户隐私，服务器不对合成的视频进行保存，请生成后及时下载</ol>
                         <ol>5. 换脸需较长时间， 一般在 30 分钟-1 小时，根据时长不同有所不同。提交之后，可关闭网页，等待邮箱通知。</ol>
                     </ul>

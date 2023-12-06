@@ -30,7 +30,7 @@ const SwapFace: React.FC = () => {
     const [params, setParams] = useState<any>({
         source: {
             onlineImgUrl: process.env.NODE_ENV === 'development' ? 'https://oc.superx.chat/img/1696924547155.png' : '',
-            localImgUrl: 'https://oc.superx.chat/img/1701677670604.mp4',
+            localImgUrl: process.env.NODE_ENV === 'development' ? 'https://oc.superx.chat/img/1701677670604.mp4' : '',
             imgType: imgType.local
         },
         target: {

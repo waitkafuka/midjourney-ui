@@ -108,6 +108,10 @@ const SwapFace: React.FC = () => {
             message.error('点数不足，请先购买点数。');
             return;
         }
+        if (!params.email) {
+            message.error('请填写邮箱');
+            return;
+        }
         //记录邮箱
         if (params.email) {
             //存入localsotrage , notifyEmail 为key

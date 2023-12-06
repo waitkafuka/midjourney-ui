@@ -50,7 +50,7 @@ const SwapFace: React.FC = () => {
 
     //当user.email更新的时候，重新设置params.email
     useEffect(() => {
-        if (user.email) {
+        if (user.email && !localStorage.getItem('notifyEmail')) {
             setParams({
                 ...params,
                 email: user.email
@@ -123,16 +123,18 @@ const SwapFace: React.FC = () => {
         //获取图片宽高
         console.log('提交参数：', apiParams);
         const res = await requestAliyunArt('video-face-swap', apiParams);
-        console.log("🚀 ~ file: faceswap-video.tsx:125 ~ doSubmit ~ res:", res)
+        const { data } = res;
         setIsGenerating(false);
         if (res.code !== 0) {
             message.error(res.message);
             setIsGenerating(false);
             return;
         } else {
+            store.dispatch({ type: 'user/pointChange', payload: user.point_count - data.cost })
+
             notification.success({
-                message: '提交成功',
-                description: '视频换脸一般需要 30 分钟-1 小时，根据时长不同有所不同。提交之后，可关闭网页，等待邮箱通知。',
+                message: '提示',
+                description: '提交成功，可关闭网页，等待邮箱通知。根据视频时长不同，渲染完成通常需要 20 分钟 ~ 1小时',
                 duration: 0
             });
         }
@@ -141,16 +143,18 @@ const SwapFace: React.FC = () => {
     //定义一个方法，从链接中获取url参数，并set到params中
     const setParamsFromUrl = () => {
         let imgUrl = getQueryString('url');
-        if (!imgUrl) return;
-        //decode一下
-        imgUrl = decodeURIComponent(imgUrl);
-        setParams({
-            ...params,
-            source: {
-                onlineImgUrl: imgUrl,
-                imgType: imgType.online
-            }
-        })
+        if (imgUrl) {
+            //decode一下
+            imgUrl = decodeURIComponent(imgUrl);
+            setParams({
+                ...params,
+                source: {
+                    onlineImgUrl: imgUrl,
+                    imgType: imgType.online
+                }
+            })
+        };
+
         const notifyEmail = localStorage.getItem('notifyEmail');
         if (notifyEmail) {
             setParams({
@@ -331,8 +335,9 @@ const SwapFace: React.FC = () => {
                     <ul>
                         <ol>1. 只支持单个人物的换脸，如视频中出现多个人物，将无法预测换脸结果</ol>
                         <ol>2. 人脸照尽量选择清晰正脸照片，效果更佳</ol>
-                        <ol>3. 为保护用户隐私，服务器不对合成的视频进行保存，请生成后及时下载</ol>
-                        <ol>4. 换脸需较长时间， 一般在 30 分钟-1 小时，根据时长不同有所不同。提交之后，可关闭网页，等待邮箱通知。</ol>
+                        <ol>3. 请确保上传的视频和图片包含人脸，否则将换脸失败</ol>
+                        <ol>4. 为保护用户隐私，服务器不对合成的视频进行保存，请生成后及时下载</ol>
+                        <ol>5. 换脸需较长时间， 一般在 30 分钟-1 小时，根据时长不同有所不同。提交之后，可关闭网页，等待邮箱通知。</ol>
                     </ul>
                 </div>
             </div>

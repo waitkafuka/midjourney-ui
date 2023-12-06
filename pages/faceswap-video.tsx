@@ -200,7 +200,7 @@ const SwapFace: React.FC = () => {
                     <div className="face-box-title">添加视频 {!showDemo && <a style={{ fontSize: "14px", fontWeight: "100" }} href="javascript:void(0)" onClick={() => {
                         setShowDemo(true);
                     }}>显示示例</a>}</div>
-                    <div style={{ textAlign: "center", fontSize: "13px", margin: "5px" }}>（禁止对涉政人物进行换脸，一经发现立即封号）</div>
+                    <div style={{ textAlign: "center", fontSize: "13px", margin: "5px" }}>（禁止涉政、涉黄、涉暴的换脸，一经发现立即封号）</div>
                     <div className="face-box">
                         {/* 是否在线图片 */}
                         {/* <div style={{ display: "flex", justifyContent: "center", marginBottom: "20px" }}>
@@ -333,9 +333,9 @@ const SwapFace: React.FC = () => {
                 <div style={{ marginTop: "20px", color: "#666", fontSize: "13px", lineHeight: "1.6", width: "100%" }}>
                     提示：
                     <ul>
-                        <ol>1. 只支持单个人物的换脸，如视频中出现多个人物，将无法预测换脸结果</ol>
-                        <ol>2. 人脸照尽量选择清晰正脸照片，效果更佳</ol>
-                        <ol>3. 请确保上传的视频和图片包含人脸，否则将换脸失败</ol>
+                        <ol>1. 请确保上传的视频和图片包含人脸，否则将换脸失败</ol>
+                        <ol>2. 只支持单个人物的换脸，如视频中出现多个人物，将无法预测换脸结果</ol>
+                        <ol>3. 人脸照尽量选择清晰正脸照片，不要戴眼镜</ol>
                         <ol>4. 为保护用户隐私，服务器不对合成的视频进行保存，请生成后及时下载</ol>
                         <ol>5. 换脸需较长时间， 一般在 30 分钟-1 小时，根据时长不同有所不同。提交之后，可关闭网页，等待邮箱通知。</ol>
                     </ul>

@@ -194,7 +194,7 @@ const SwapFace: React.FC = () => {
     }
 
     const showFaceDemo = () => {
-        const isHidden = localStorage.getItem('hideFaceDemo');
+        const isHidden = localStorage.getItem('hideFaceVideoDemo');
         if (isHidden) {
             setShowDemo(false);
         }
@@ -228,6 +228,7 @@ const SwapFace: React.FC = () => {
                 <div className="face-box-wrap">
                     <div className="face-box-title">添加视频 {!showDemo && <a style={{ fontSize: "14px", fontWeight: "100" }} href="javascript:void(0)" onClick={() => {
                         setShowDemo(true);
+                        localStorage.setItem('hideFaceVideoDemo', '');
                     }}>显示示例</a>}</div>
                     <div style={{ textAlign: "center", fontSize: "13px", margin: "5px" }}>（禁止涉政、涉黄、涉暴的换脸，一经发现立即封号）</div>
                     <div className="face-box">
@@ -377,7 +378,7 @@ const SwapFace: React.FC = () => {
                 <div className="face-swap-demo-wrap">
                     <div className="face-swap-demo-title">
                         效果示例 <a style={{ fontWeight: '100', fontSize: "14px" }} href="javascript:void(0)" onClick={() => {
-                            localStorage.setItem('hideFaceDemo', 'true');
+                            localStorage.setItem('hideFaceVideoDemo', 'true');
                             setShowDemo(false);
                         }}>隐藏示例</a>
                     </div>

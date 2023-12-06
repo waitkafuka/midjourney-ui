@@ -234,6 +234,7 @@ const SwapFace: React.FC = () => {
                 <div className="face-box-wrap">
                     <div className="face-box-title">添加底图 {!showDemo && <a style={{ fontSize: "14px", fontWeight: "100" }} href="javascript:void(0)" onClick={() => {
                         setShowDemo(true);
+                        localStorage.setItem('hideFaceDemo', '');
                     }}>显示示例</a>}</div>
                     <div className="face-box">
                         {/* 是否在线图片 */}

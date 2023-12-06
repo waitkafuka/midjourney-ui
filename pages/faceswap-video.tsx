@@ -26,6 +26,7 @@ const SwapFace: React.FC = () => {
     const [isGenerating, setIsGenerating] = useState(false);
     const [showDemo, setShowDemo] = useState<boolean>(true); //是否显示示例
     const [needCostText, setNeedCostText] = useState<string>(needCostDefault); //需要的点数，文案
+    const [videoInfo, setVideoInfo] = useState<any>({}); //视频信息
     const [needCost, setNeedCost] = useState<number>(0); //需要的点数
     const [params, setParams] = useState<any>({
         source: {
@@ -93,6 +94,34 @@ const SwapFace: React.FC = () => {
         });
     }
 
+    //将秒数转换为时分秒
+    const formatSeconds = (value: number) => {
+        let secondTime = value;// 秒
+        let minuteTime = 0;// 分
+        let hourTime = 0;// 小时
+        if (secondTime > 60) {//如果秒数大于60，将秒数转换成整数
+            //获取分钟，除以60取整数，得到整数分钟
+            minuteTime = Math.floor(secondTime / 60);
+            //获取秒数，秒数取佘，得到整数秒数
+            secondTime = Math.floor(secondTime % 60);
+            //如果分钟大于60，将分钟转换成小时
+            if (minuteTime > 60) {
+                //获取小时，获取分钟除以60，得到整数小时
+                hourTime = Math.floor(minuteTime / 60);
+                //获取小时后取佘的分，获取分钟除以60取佘的分
+                minuteTime = Math.floor(minuteTime % 60);
+            }
+        }
+        let result = "" + Math.floor(secondTime) + "秒";
+        if (minuteTime > 0) {
+            result = "" + Math.floor(minuteTime) + "分" + result;
+        }
+        if (hourTime > 0) {
+            result = "" + Math.floor(hourTime) + "小时" + result;
+        }
+        return result;
+    }
+
     const doSubmit = async () => {
         const apiParams: any = {}
         apiParams.videoUrl = params.source.imgType === imgType.online ? params.source.onlineImgUrl : params.source.localImgUrl;
@@ -134,7 +163,7 @@ const SwapFace: React.FC = () => {
 
             notification.success({
                 message: '提示',
-                description: '提交成功，可关闭网页，等待邮箱通知。根据视频时长不同，渲染完成通常需要 20 分钟 ~ 1小时',
+                description: `提交成功，可关闭网页，等待邮箱通知。根据您的视频时长，预估所需时间为：${formatSeconds(videoInfo.duration * 30 * 1.5)}。`,
                 duration: 0
             });
         }
@@ -244,6 +273,7 @@ const SwapFace: React.FC = () => {
                                 const { data } = await requestAliyunArt('get-video-info', { videoUrl });
                                 setNeedCostText(`${data.cost}（视频时长：${data.duration} 秒，共需换脸 ${data.frames} 张图片）`);
                                 setNeedCost(data.cost);
+                                setVideoInfo(data);
                                 setParams({
                                     ...params,
                                     source: {

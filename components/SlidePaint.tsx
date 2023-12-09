@@ -82,7 +82,7 @@ const SlidePaint = () => {
                 {paintList.map((item: ImgCardModel, index: number) => {
                     return (
                         <div key={index} className="slide-img-item" >
-                            <ImgCard columnWidth={300} model={item} type={ImgPageType.PUBLIC} paint_params={{}} />
+                            <ImgCard showTimeTag={false} columnWidth={300} model={item} type={ImgPageType.PUBLIC} paint_params={{}} />
                         </div>
                     )
                 })}

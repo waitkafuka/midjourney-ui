@@ -26,6 +26,8 @@ interface Props {
     onImgDeleted?: (id: number) => void,
     // 类型，我的页面还是公开页面
     type: ImgPageType,
+    //是否显示时间标签
+    showTimeTag?: boolean,
     onImgThumbUpActionDone?: (id: number, action: string) => void,
 }
 
@@ -40,7 +42,7 @@ const baseWidth = 500;
 //从提示词中提取宽高比例
 
 
-const ImgCard = ({ model, columnWidth, onImgDeleted, paint_params, type, onImgThumbUpActionDone }: Props) => {
+const ImgCard = ({ model, columnWidth, showTimeTag = true, onImgDeleted, paint_params, type, onImgThumbUpActionDone }: Props) => {
     const { img_url, img_id, prompt, create_time, id, is_public, thumb_up_count, painting_type } = model;
     const userThumbUpList = useSelector((state: any) => state.user.thumbUpList);
     const user = useSelector((state: any) => state.user.info);
@@ -136,11 +138,11 @@ const ImgCard = ({ model, columnWidth, onImgDeleted, paint_params, type, onImgTh
                     FACE
                 </Tag>}
             </div>
-            <div style={{ position: "absolute", right: "-8px", top: "-1px" }}>
+            {showTimeTag && <div style={{ position: "absolute", right: "-8px", top: "-1px" }}>
                 <Tag color={model.painting_type === 'mj' ? 'rgba(76 76 109/70%)' : 'rgba(96 108 93/70%)'}>
                     {moment.duration(moment().diff(model.create_time, "minutes"), 'minutes').humanize()}前
                 </Tag>
-            </div>
+            </div>}
             {img_url ? <a href={HDsrc} target="_blank">
                 <img onClick={onImgClick} style={{ height: `${columnWidth * height / baseWidth}px` }} className={css["masonry-cover-img"]} src={src} alt="" />
             </a> : <img style={{ height: `${columnWidth * 360 / 358}px` }} src={defaultImg} />}

@@ -127,7 +127,7 @@ const ROUTES: Route = {
         name: '我的绘画',
         key: 'mypaintings',
         icon: <i className='iconfont icon-huihua'></i>,
-      },{
+      }, {
         path: '/art/my/thumbup',
         target: '_blank',
         name: '我的点赞',
@@ -443,7 +443,7 @@ export default function Main(children: JSX.Element) {
             name: '我的绘画',
             key: 'mypaintings',
             icon: <i className='iconfont icon-huihua'></i>,
-          },{
+          }, {
             path: '/art/my/thumbup',
             target: '_blank',
             name: '我的点赞',
@@ -503,7 +503,7 @@ export default function Main(children: JSX.Element) {
             name: '我的绘画',
             key: 'mypaintings',
             icon: <i className='iconfont icon-huihua'></i>,
-          },{
+          }, {
             path: '/art/my/thumbup',
             target: '_blank',
             name: '我的点赞',
@@ -634,7 +634,7 @@ export default function Main(children: JSX.Element) {
             name: '我的绘画',
             key: 'mypaintings',
             icon: <i className='iconfont icon-huihua'></i>,
-          },{
+          }, {
             path: '/art/my/thumbup',
             target: '_blank',
             name: '我的点赞',
@@ -755,7 +755,7 @@ export default function Main(children: JSX.Element) {
             name: '我的绘画',
             key: 'mypaintings',
             icon: <i className='iconfont icon-huihua'></i>,
-          },{
+          }, {
             path: '/art/my/thumbup',
             target: '_blank',
             name: '我的点赞',
@@ -920,7 +920,7 @@ export default function Main(children: JSX.Element) {
             return (
               <>
                 {user && user.secret ? <Dropdown menu={{ items }} placement="top" arrow={{ pointAtCenter: true }}>
-                  <Button block>{user.nickname || user.email || '匿名用户'}</Button>
+                  <Button block>{user.nickname || user.email || user.phone || '匿名用户'}</Button>
                 </Dropdown> : <Dropdown menu={{ items: noLoginItems }} placement="top" arrow={{ pointAtCenter: true }}>
                   <Button block onClick={() => {
                     window.location.href = `/${process.env.NODE_ENV === 'development' ? 'login' : 'login/'}?redirect=/art`

@@ -471,6 +471,16 @@ export default function Main(children: JSX.Element) {
             target: "_blank",
             name: 'Midjourney',
             key: "midjourney",
+          }, {
+            path: '/art/sd',
+            target: "_blank",
+            name: 'Stable Diffusion',
+            key: "stablediffusion",
+          }, {
+            path: '/art/dalle3/',
+            target: "_blank",
+            name: 'DALL·E 3',
+            key: "dalle3",
           }]
         },
         {

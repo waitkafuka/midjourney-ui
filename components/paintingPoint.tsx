@@ -389,7 +389,7 @@ AABJRU5ErkJggg==" />
           {/* 楼层 3 */}
           <div className='price-desc'>
             <div className='price-title'>点数使用说明：</div>
-            <div className='price-item'>1. 可用于 Midjourney、Stable Diffusion、DALLE3、AI 艺术二维码等功能，点数永久有效</div>
+            <div className='price-item'>1. 可用于 Midjourney、Stable Diffusion、DALLE3、AI 艺术二维码、换脸等所有图片处理相关的功能，点数永久有效</div>
             <div className='price-item'>2. Midjourney 绘图价格为每张 8 个点数，获取单张高清图 2 个点数（Midjourney 四宫格算一张图。AI 艺术二维码 {qrcodeCost} 点数/张）。Stable Diffusion、换脸、图片高清放大等功能根据参数不同消耗不同点数。</div>
             <div className='price-item'>3. 出图速度在 30~90 秒之间</div>
             <div className='price-item'>4. 如需发票，请微信公众号联系客服</div>

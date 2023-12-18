@@ -55,7 +55,7 @@ const ImgListPage = ({ type }: ImgListPageProps) => {
         } else {
             apiUrl = 'public-paintings'
         }
-        const result = await requestAliyunArt(apiUrl, { pageIndex: pageIndex.current, keywords: keywordsRef.current, startTime: startDate, endTime: endDate })
+        const result = await requestAliyunArt(apiUrl, { pageIndex: pageIndex.current, keywords: keywordsRef.current, startTime: `${startDate} 00:00:00`, endTime: `${endDate} 23:59:59` })
         //追加之前去除重复数据
         let newImgList: any = [];
         // if (result.rows) {

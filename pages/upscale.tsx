@@ -68,7 +68,7 @@ const Upscale: React.FC = () => {
     const [qrCodeImage, setQrCodeImage] = useState<ImgCardModel>(); //模板
     const [useTemplate, setUseTemplate] = useState<boolean>(false); //是否使用模板
     const [isTranslating, setIsTranslating] = useState(false);
-    const [isWrong, setIsWrong] = useState<boolean>(true); //是否服务器故障
+    const [isWrong, setIsWrong] = useState<boolean>(false); //是否服务器故障
     const [isGenerating, setIsGenerating] = useState(false);
     const [ratio, setRatio] = useState<{ width: number, height: number }>({ width: 1, height: 1 }); //画布缩放比例
     const [qrImg, setQrImg] = useState<string>(''); //二维码图片

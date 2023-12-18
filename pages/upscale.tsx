@@ -2,7 +2,7 @@ import { useEffect, useMemo, useState } from "react";
 import { ImgCardModel, ImgPageType, PaintingType } from '../scripts/types'
 import { getQueryString, hasChinese } from "../scripts/utils";
 import { SendOutlined, StopOutlined, QuestionCircleOutlined } from '@ant-design/icons';
-import { Button, Col, Form, Input, InputNumber, Radio, Row, Select, Slider, Tooltip, message, notification } from "antd";
+import { Button, Col, Form, Input, InputNumber, Radio, Row,Alert, Select, Slider, Tooltip, message, notification } from "antd";
 import jsQR from "jsqr";
 import { qrTemplates, qrModels, qrVersions } from "../scripts/config";
 import PaintingPoint from "../components/paintingPoint";
@@ -68,6 +68,7 @@ const Upscale: React.FC = () => {
     const [qrCodeImage, setQrCodeImage] = useState<ImgCardModel>(); //模板
     const [useTemplate, setUseTemplate] = useState<boolean>(false); //是否使用模板
     const [isTranslating, setIsTranslating] = useState(false);
+    const [isWrong, setIsWrong] = useState<boolean>(true); //是否服务器故障
     const [isGenerating, setIsGenerating] = useState(false);
     const [ratio, setRatio] = useState<{ width: number, height: number }>({ width: 1, height: 1 }); //画布缩放比例
     const [qrImg, setQrImg] = useState<string>(''); //二维码图片
@@ -227,6 +228,12 @@ const Upscale: React.FC = () => {
         <meta name="referrer" content="no-referrer" />
     </Head >
         <div className='dalle-point-box'><PaintingPoint></PaintingPoint></div>
+        {isWrong && <Alert
+            message={<>服务器正在维护，图片放大功能暂不可用。请先试用其他功能，预计 30 分钟后恢复。</>}
+            banner
+            type='warning'
+            closable
+        />}
         <div className="ai-qrcode-wrapper" style={{ marginTop: '50px' }}>
 
             {/* 左侧区域 */}

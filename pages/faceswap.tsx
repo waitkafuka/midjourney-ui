@@ -24,6 +24,7 @@ const SwapFace: React.FC = () => {
     const [showOptions, setShowOptions] = useState<boolean>(false); //是否显示更多选项
     const [qrCodeImage, setQrCodeImage] = useState<ImgCardModel>(); //模板
     const [useTemplate, setUseTemplate] = useState<boolean>(false); //是否使用模板
+    const [isWrong, setIsWrong] = useState<boolean>(false); //是否服务器故障
     const [isTranslating, setIsTranslating] = useState(false);
     const [isGenerating, setIsGenerating] = useState(false);
     const [ratio, setRatio] = useState<{ width: number, height: number }>({ width: 1, height: 1 }); //画布缩放比例
@@ -230,6 +231,12 @@ const SwapFace: React.FC = () => {
             closable
         /> */}
         <div className='dalle-point-box'><PaintingPoint></PaintingPoint></div>
+        {isWrong && <Alert
+            message={<>服务器故障，换脸服务暂不可用，请使用其他功能。预计 30 分钟后恢复。</>}
+            banner
+            type='warning'
+            closable
+        />}
         <div className="ai-qrcode-wrapper" style={{ marginTop: '50px', paddingTop: "0" }}>
 
             {/* 左侧区域 */}

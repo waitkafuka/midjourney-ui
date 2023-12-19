@@ -121,8 +121,6 @@ const ImgListPage = ({ type }: ImgListPageProps) => {
     }, [])
     return (
         <div className="">
-            {startDate}
-            {endDate}
             {/* 我的页面，加上关键词和日期的搜索 */}
             {
                 type === ImgPageType.MY && <div style={{ padding: "10px 20px" }}>

@@ -29,6 +29,8 @@ const ImgListPage = ({ type }: ImgListPageProps) => {
     const [defaultPickerValue, setDefaultPickerValue] = useState<any>([dayjs().subtract(defaultDays, 'day'), dayjs()]);
     const [startDate, setStartDate] = useState<string>(dayjs().subtract(defaultDays, 'day').format(format));
     const [endDate, setEndDate] = useState<string>(dayjs().format(format));
+    const startDateRef = useRef(startDate);
+    const endDateRef = useRef(endDate);
     const [count, setCount] = useState(0)
     const [isDataLoading, setIsDataLoading] = useState(false);
     const onImgDeleted = (id: number) => {
@@ -55,7 +57,7 @@ const ImgListPage = ({ type }: ImgListPageProps) => {
         } else {
             apiUrl = 'public-paintings'
         }
-        const result = await requestAliyunArt(apiUrl, { pageIndex: pageIndex.current, keywords: keywordsRef.current, startTime: `${startDate} 00:00:00`, endTime: `${endDate} 23:59:59` })
+        const result = await requestAliyunArt(apiUrl, { pageIndex: pageIndex.current, keywords: keywordsRef.current, startTime: `${startDateRef.current} 00:00:00`, endTime: `${endDateRef.current} 23:59:59` })
         //追加之前去除重复数据
         let newImgList: any = [];
         // if (result.rows) {
@@ -92,7 +94,9 @@ const ImgListPage = ({ type }: ImgListPageProps) => {
 
     const dateOnChange = (dates: DatePickerProps['value'] | RangePickerProps['value'], dateStrings: [string, string]) => {
         setStartDate(dateStrings[0]);
+        startDateRef.current = dateStrings[0];
         setEndDate(dateStrings[1]);
+        endDateRef.current = dateStrings[1];
     };
 
     useEffect(() => {
@@ -117,6 +121,8 @@ const ImgListPage = ({ type }: ImgListPageProps) => {
     }, [])
     return (
         <div className="">
+            {startDate}
+            {endDate}
             {/* 我的页面，加上关键词和日期的搜索 */}
             {
                 type === ImgPageType.MY && <div style={{ padding: "10px 20px" }}>

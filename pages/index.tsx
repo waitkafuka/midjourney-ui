@@ -1346,7 +1346,7 @@ const Index: React.FC = () => {
             closable
           />}
           <Alert
-            message={<> 重磅更新：midjourney V6 版本现已全面支持！更快的速度，更丰富的细节！提示词最后添加 --v 6 （前后均有空格）即可体验！。</>}
+            message={<> 重磅更新：midjourney V6 版本现已全面支持！更快的速度，更丰富的细节！提示词最后添加 --v 6 （前后均有空格）即可体验！</>}
             banner
             type='success'
             closable

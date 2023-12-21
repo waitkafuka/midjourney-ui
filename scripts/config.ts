@@ -32,179 +32,303 @@ export const qrModels = [
         preview_img: "https://c.superx.chat/stuff/ai-qrcode-models/model-70.webp",
     },
 ];
-export const qrTemplates = [
-    {
-        "id": 0,
-        "name": '不使用模板',
-    },
-    {
-        "id": 1,
-        "name": "花绘",
-        "preview_img": "https://och.superx.chat/mx-qrcode/huahui.png",
-        "is_vip": 2,
-        "points": 10,
-        width: 920,
-        height: 920
-    },
-    {
-        "id": 10,
-        "name": "蛋糕",
-        "preview_img": "https://och.superx.chat/mx-qrcode/20230923180954276737.png",
-        "is_vip": 2,
-        width: 920,
-        height: 920,
-        "points": 10
-    },
-    {
-        "id": 12,
-        "name": "玫瑰礼服",
-        "preview_img": "https://och.superx.chat/mx-qrcode/20230923181526303896.png",
-        "is_vip": 1,
-        width: 740,
-        height: 1280,
-        "points": 10
-    },
-    {
-        "id": 13,
-        "name": "公主裙",
-        "preview_img": "https://och.superx.chat/mx-qrcode/20230923181050674046.png",
-        "is_vip": 1,
-        width: 740,
-        height: 1280,
-        "points": 10,
-    },
-    {
-        "id": 11,
-        "name": "蓝色礼服",
-        "preview_img": "https://och.superx.chat/mx-qrcode/lanselifu.png",
-        "is_vip": 1,
-        width: 740,
-        height: 1280,
-        "points": 10
-    },
-    {
-        "id": 14,
-        "name": "清新古风",
-        "preview_img": "https://och.superx.chat/mx-qrcode/20230923181124659318.png",
-        "is_vip": 1,
-        width: 740,
-        height: 1280,
-        "points": 10
-    },
-    {
-        "id": 4,
-        "name": "蝴蝶仙子",
-        "preview_img": "https://och.superx.chat/mx-qrcode/20230923181144279994.png",
-        "is_vip": 1,
-        width: 920,
-        height: 920,
-        "points": 10
-    },
-    {
-        "id": 6,
-        "name": "花嫁",
-        "preview_img": "https://och.superx.chat/mx-qrcode/20230923181219303263.png",
-        "is_vip": 1,
-        width: 920,
-        height: 920,
-        "points": 10
-    },
-    {
-        "id": 5,
-        "name": "国风写实",
-        "preview_img": "https://och.superx.chat/mx-qrcode/20230923181314645073.png",
-        "is_vip": 1,
-        width: 920,
-        height: 920,
-        "points": 10
-    },
-    {
-        "id": 2,
-        "name": "墨莲",
-        "preview_img": "https://och.superx.chat/mx-qrcode/2023092318173947705.png",
-        "is_vip": 1,
-        width: 920,
-        height: 920,
-        "points": 10
-    },
-    {
-        "id": 3,
-        "name": "钢铁侠",
-        "preview_img": "https://och.superx.chat/mx-qrcode/20230923181348781008.png",
-        "is_vip": 0,
-        width: 920,
-        height: 920,
-        "points": 2
-    },
-    {
-        "id": 7,
-        "name": "雪景",
-        "preview_img": "https://och.superx.chat/mx-qrcode/20230923181412919341.png",
-        "is_vip": 1,
-        width: 920,
-        height: 920,
-        "points": 10
-    },
-    {
-        "id": 9,
-        "name": "城堡",
-        "preview_img": "https://och.superx.chat/mx-qrcode/20230923181446603244.png",
-        "is_vip": 0,
-        width: 920,
-        height: 920,
-        "points": 2
-    },
-    {
-        "id": 54,
-        "name": "星河与你（七夕限定）",
-        "preview_img": "https://och.superx.chat/mx-qrcode/20230822101701873316.png",
-        "is_vip": 0,
-        width: 920,
-        height: 920,
-        "points": 10,
-        type: 'sevenseven'
-    },
-    {
-        "id": 53,
-        "name": "怦然心动（七夕限定）",
-        "preview_img": "https://och.superx.chat/mx-qrcode/20230821234355646757.png",
-        "is_vip": 0,
-        width: 920,
-        height: 920,
-        "points": 10,
-        type: 'sevenseven'
-    },
-
-    {
-        "id": 55,
-        "name": "月落星沉（七夕限定）",
-        "preview_img": "https://och.superx.chat/mx-qrcode/20230822092027334024.png",
-        "is_vip": 0,
-        width: 920,
-        height: 920,
-        "points": 10,
-        type: 'sevenseven'
-    },
-    {
-        "id": 57,
-        "name": "金色暖阳（七夕限定）",
-        "preview_img": "https://och.superx.chat/mx-qrcode/20230822092033510417.png",
-        "is_vip": 0,
-        width: 920,
-        height: 920,
-        "points": 10,
-        type: 'sevenseven'
-    },
-    {
-        "id": 58,
-        "name": "落日晚风（七夕限定）",
-        "preview_img": "https://och.superx.chat/mx-qrcode/20230822092031517270.png",
-        "is_vip": 0,
-        width: 920,
-        height: 920,
-        "points": 10,
-        type: 'sevenseven'
-    },
+export const qrTemplates = [{
+    "id": 0,
+    "name": "不使用模板"
+  },
+  {
+    "id": 1,
+    "name": "花绘",
+    "preview_img": "https://och.superx.chat/mx-qrcode/huahui.png",
+    "points": 10,
+    "width": 920,
+    "height": 920
+  },
+  {
+    "id": 10,
+    "name": "蛋糕",
+    "preview_img": "https://och.superx.chat/mx-qrcode/20230923180954276737.png",
+    "width": 920,
+    "height": 920,
+    "points": 10
+  },
+  {
+    "id": 12,
+    "name": "玫瑰礼服",
+    "preview_img": "https://och.superx.chat/mx-qrcode/20230923181526303896.png",
+    "width": 740,
+    "height": 1280,
+    "points": 10
+  },
+  {
+    "id": 13,
+    "name": "公主裙",
+    "preview_img": "https://och.superx.chat/mx-qrcode/20230923181050674046.png",
+    "width": 740,
+    "height": 1280,
+    "points": 10
+  },
+  {
+    "id": 11,
+    "name": "蓝色礼服",
+    "preview_img": "https://och.superx.chat/mx-qrcode/lanselifu.png",
+    "width": 740,
+    "height": 1280,
+    "points": 10
+  },
+  {
+    "id": 14,
+    "name": "清新古风",
+    "preview_img": "https://och.superx.chat/mx-qrcode/20230923181124659318.png",
+    "width": 740,
+    "height": 1280,
+    "points": 10
+  },
+  {
+    "id": 4,
+    "name": "蝴蝶仙子",
+    "preview_img": "https://och.superx.chat/mx-qrcode/20230923181144279994.png",
+    "width": 920,
+    "height": 920,
+    "points": 10
+  },
+  {
+    "id": 6,
+    "name": "花嫁",
+    "preview_img": "https://och.superx.chat/mx-qrcode/20230923181219303263.png",
+    "width": 920,
+    "height": 920,
+    "points": 10
+  },
+  {
+    "id": 5,
+    "name": "国风写实",
+    "preview_img": "https://och.superx.chat/mx-qrcode/20230923181314645073.png",
+    "width": 920,
+    "height": 920,
+    "points": 10
+  },
+  {
+    "id": 2,
+    "name": "墨莲",
+    "preview_img": "https://och.superx.chat/mx-qrcode/2023092318173947705.png",
+    "width": 920,
+    "height": 920,
+    "points": 10
+  },
+  {
+    "id": 3,
+    "name": "钢铁侠",
+    "preview_img": "https://och.superx.chat/mx-qrcode/20230923181348781008.png",
+    "width": 920,
+    "height": 920,
+    "points": 2
+  },
+  {
+    "id": 7,
+    "name": "雪景",
+    "preview_img": "https://och.superx.chat/mx-qrcode/20230923181412919341.png",
+    "width": 920,
+    "height": 920,
+    "points": 10
+  },
+  {
+    "id": 9,
+    "name": "城堡",
+    "preview_img": "https://och.superx.chat/mx-qrcode/20230923181446603244.png",
+    "width": 920,
+    "height": 920,
+    "points": 2
+  },
+  {
+    "id": 54,
+    "name": "星河与你（七夕限定）",
+    "preview_img": "https://och.superx.chat/mx-qrcode/20230822101701873316.png",
+    "width": 920,
+    "height": 920,
+    "points": 10,
+    "type": "sevenseven"
+  },
+  {
+    "id": 53,
+    "name": "怦然心动（七夕限定）",
+    "preview_img": "https://och.superx.chat/mx-qrcode/20230821234355646757.png",
+    "width": 920,
+    "height": 920,
+    "points": 10,
+    "type": "sevenseven"
+  },
+  {
+    "id": 55,
+    "name": "月落星沉（七夕限定）",
+    "preview_img": "https://och.superx.chat/mx-qrcode/20230822092027334024.png",
+    "width": 920,
+    "height": 920,
+    "points": 10,
+    "type": "sevenseven"
+  },
+  {
+    "id": 57,
+    "name": "金色暖阳（七夕限定）",
+    "preview_img": "https://och.superx.chat/mx-qrcode/20230822092033510417.png",
+    "width": 920,
+    "height": 920,
+    "points": 10,
+    "type": "sevenseven"
+  },
+  {
+    "id": 58,
+    "name": "落日晚风（七夕限定）",
+    "preview_img": "https://och.superx.chat/mx-qrcode/20230822092031517270.png",
+    "width": 920,
+    "height": 920,
+    "points": 10,
+    "type": "sevenseven"
+  },
+  {
+    "id": 82,
+    "name": "月下枫林",
+    "preview_img": "https://cdn.mewx.art/images/static/qr-template-preview/3994fae6-3550-4512-afe6-966d95f01257.jpeg",
+    "width": 1024,
+    "height": 1024,
+    "points": 10
+  },
+  {
+    "id": 83,
+    "name": "月下女孩",
+    "preview_img": "https://cdn.mewx.art/images/static/qr-template-preview/50db151f-c5b7-4662-bf9c-0b3a3169f6c1.jpeg",
+    "width": 1024,
+    "height": 1024,
+    "points": 10
+  },
+  {
+    "id": 72,
+    "name": "珊瑚",
+    "preview_img": "https://cdn.mewx.art/images/static/qr-template-preview/4a58dc02-ee8f-46e1-8d23-29894d209595.jpeg",
+    "width": 1024,
+    "height": 1024,
+    "points": 10
+  },
+  {
+    "id": 67,
+    "name": "薰衣草",
+    "preview_img": "https://cdn.mewx.art/images/static/qr-template-preview/147afc06-40f2-4b63-977b-974e66136048.jpeg",
+    "width": 1024,
+    "height": 1024,
+    "points": 10
+  },
+  {
+    "id": 68,
+    "name": "崎岖山脉",
+    "preview_img": "https://cdn.mewx.art/images/static/qr-template-preview/ce2c34f0-af01-4a7f-9d71-1db72f944c68.jpeg",
+    "width": 1024,
+    "height": 1024,
+    "points": 10
+  },
+  {
+    "id": 74,
+    "name": "小镇",
+    "preview_img": "https://cdn.mewx.art/images/static/qr-template-preview/eb73fcaf-5035-482a-aba4-ce0de32378a5.jpeg",
+    "width": 1024,
+    "height": 1024,
+    "points": 10
+  },
+  {
+    "id": 75,
+    "name": "青山",
+    "preview_img": "https://cdn.mewx.art/images/static/qr-template-preview/5fddce08-dcbc-4211-82b1-a2c2f4908a55.jpeg",
+    "width": 1024,
+    "height": 1024,
+    "points": 10
+  },
+  {
+    "id": 76,
+    "name": "冰川",
+    "preview_img": "https://cdn.mewx.art/images/static/qr-template-preview/619565fc-b876-4ecc-86e9-3bb378360182.jpeg",
+    "width": 1024,
+    "height": 1024,
+    "points": 10
+  },
+  {
+    "id": 77,
+    "name": "苹果",
+    "preview_img": "https://cdn.mewx.art/images/static/qr-template-preview/250859e4-3c33-4d57-baae-98092bc55e4e.jpeg",
+    "width": 1024,
+    "height": 1024,
+    "points": 10
+  },
+  {
+    "id": 73,
+    "name": "雪山",
+    "preview_img": "https://cdn.mewx.art/images/static/qr-template-preview/3a62e5df-d286-480d-95b9-0756a5540788.jpeg",
+    "width": 1024,
+    "height": 1024,
+    "points": 10
+  },
+  {
+    "id": 71,
+    "name": "棕榈树",
+    "preview_img": "https://cdn.mewx.art/images/static/qr-template-preview/7715a3a3-e8da-4124-a50c-1299a8813935.jpeg",
+    "width": 1024,
+    "height": 1024,
+    "points": 10
+  },
+  {
+    "id": 69,
+    "name": "村庄",
+    "preview_img": "https://cdn.mewx.art/images/static/qr-template-preview/5615e837-a720-48c2-987a-af8f43822c82.jpeg",
+    "width": 1024,
+    "height": 1024,
+    "points": 10
+  },
+  {
+    "id": 70,
+    "name": "玉石市场",
+    "preview_img": "https://cdn.mewx.art/images/static/qr-template-preview/93e9d226-676a-4185-b4d3-3c863387a487.jpeg",
+    "width": 1024,
+    "height": 1024,
+    "points": 10
+  },
+  {
+    "id": 24,
+    "name": "轻纱",
+    "preview_img": "https://cdn.mewx.art/images/static/qr-template-preview/be4d6f3e-025a-448a-a5f5-584cf3bd3016.jpeg",
+    "width": 1024,
+    "height": 1024,
+    "points": 10
+  },
+  {
+    "id": 23,
+    "name": "迷雾城堡",
+    "preview_img": "https://cdn.mewx.art/images/static/qr-template-preview/4b260c7d-7fd0-4d4f-bafe-b0bee05f01a8.jpeg",
+    "width": 1024,
+    "height": 1024,
+    "points": 10
+  },
+  {
+    "id": 22,
+    "name": "海滨城市",
+    "preview_img": "https://cdn.mewx.art/images/static/qr-template-preview/c67ed88c-11dc-45a0-a1a8-a058d525f867.jpeg",
+    "width": 1024,
+    "height": 1024,
+    "points": 10
+  },
+  {
+    "id": 19,
+    "name": "池塘",
+    "preview_img": "https://cdn.mewx.art/images/static/qr-template-preview/ea5d2fe0-beda-44e3-9500-5111f411b612.jpeg",
+    "width": 1024,
+    "height": 1024,
+    "points": 10
+  },
+  {
+    "id": 20,
+    "name": "花园",
+    "preview_img": "https://cdn.mewx.art/images/static/qr-template-preview/4f7868df-e8df-44fb-9b2a-fe6649cf5374.jpeg",
+    "width": 896,
+    "height": 1200,
+    "points": 10
+  }
 ]
 
 export const qrVersions = [{

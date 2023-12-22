@@ -768,7 +768,7 @@ const Index: React.FC = () => {
       const data = result.data;
       //如果状态码是40042，表示图片已超时，无法再次生成
       if (result.code === 40042) {
-        message.warning('超过 2 天的图片不支持再次编辑，可根据下方提示词再次生成。', 10);
+        message.warning('二次编辑功能仅针对网络问题造成的图片不显示可进行二次编辑，超过 1 小时之后的图片不支持二次编辑，请根据提示词再次生成。', 10);
         setInputValue(data.prompt);
         return;
       }

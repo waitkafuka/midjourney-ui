@@ -188,23 +188,23 @@ export const qrTemplates = [{
   {
     "id": 82,
     "name": "月下枫林",
-    "preview_img": "https://cdn.mewx.art/images/static/qr-template-preview/3994fae6-3550-4512-afe6-966d95f01257.jpeg",
+    "preview_img": "https://och.superx.chat/mx-qrcode/2023122211213744920.png",
     "width": 1024,
     "height": 1024,
     "points": 10
   },
-  {
-    "id": 83,
-    "name": "月下女孩",
-    "preview_img": "https://cdn.mewx.art/images/static/qr-template-preview/50db151f-c5b7-4662-bf9c-0b3a3169f6c1.jpeg",
-    "width": 1024,
-    "height": 1024,
-    "points": 10
-  },
+  // {
+  //   "id": 83,
+  //   "name": "月下女孩",
+  //   "preview_img": "https://cdn.mewx.art/images/static/qr-template-preview/50db151f-c5b7-4662-bf9c-0b3a3169f6c1.jpeg",
+  //   "width": 1024,
+  //   "height": 1024,
+  //   "points": 10
+  // },
   {
     "id": 72,
     "name": "珊瑚",
-    "preview_img": "https://cdn.mewx.art/images/static/qr-template-preview/4a58dc02-ee8f-46e1-8d23-29894d209595.jpeg",
+    "preview_img": "https://och.superx.chat/mx-qrcode/20231222112304861637.png",
     "width": 1024,
     "height": 1024,
     "points": 10
@@ -212,7 +212,7 @@ export const qrTemplates = [{
   {
     "id": 67,
     "name": "薰衣草",
-    "preview_img": "https://cdn.mewx.art/images/static/qr-template-preview/147afc06-40f2-4b63-977b-974e66136048.jpeg",
+    "preview_img": "https://och.superx.chat/mx-qrcode/2023122211265359165.png",
     "width": 1024,
     "height": 1024,
     "points": 10
@@ -220,7 +220,7 @@ export const qrTemplates = [{
   {
     "id": 68,
     "name": "崎岖山脉",
-    "preview_img": "https://cdn.mewx.art/images/static/qr-template-preview/ce2c34f0-af01-4a7f-9d71-1db72f944c68.jpeg",
+    "preview_img": "https://och.superx.chat/mx-qrcode/20231222112745243505.png",
     "width": 1024,
     "height": 1024,
     "points": 10
@@ -228,7 +228,7 @@ export const qrTemplates = [{
   {
     "id": 74,
     "name": "小镇",
-    "preview_img": "https://cdn.mewx.art/images/static/qr-template-preview/eb73fcaf-5035-482a-aba4-ce0de32378a5.jpeg",
+    "preview_img": "https://och.superx.chat/mx-qrcode/20231222112743440024.png",
     "width": 1024,
     "height": 1024,
     "points": 10
@@ -236,7 +236,7 @@ export const qrTemplates = [{
   {
     "id": 75,
     "name": "青山",
-    "preview_img": "https://cdn.mewx.art/images/static/qr-template-preview/5fddce08-dcbc-4211-82b1-a2c2f4908a55.jpeg",
+    "preview_img": "https://och.superx.chat/mx-qrcode/20231222112736651583.png",
     "width": 1024,
     "height": 1024,
     "points": 10
@@ -244,7 +244,7 @@ export const qrTemplates = [{
   {
     "id": 76,
     "name": "冰川",
-    "preview_img": "https://cdn.mewx.art/images/static/qr-template-preview/619565fc-b876-4ecc-86e9-3bb378360182.jpeg",
+    "preview_img": "https://och.superx.chat/mx-qrcode/20231222112800359590.png",
     "width": 1024,
     "height": 1024,
     "points": 10
@@ -252,7 +252,7 @@ export const qrTemplates = [{
   {
     "id": 77,
     "name": "苹果",
-    "preview_img": "https://cdn.mewx.art/images/static/qr-template-preview/250859e4-3c33-4d57-baae-98092bc55e4e.jpeg",
+    "preview_img": "https://och.superx.chat/mx-qrcode/20231222112829265325.png",
     "width": 1024,
     "height": 1024,
     "points": 10
@@ -260,7 +260,7 @@ export const qrTemplates = [{
   {
     "id": 73,
     "name": "雪山",
-    "preview_img": "https://cdn.mewx.art/images/static/qr-template-preview/3a62e5df-d286-480d-95b9-0756a5540788.jpeg",
+    "preview_img": "https://och.superx.chat/mx-qrcode/20231222112848950880.png",
     "width": 1024,
     "height": 1024,
     "points": 10
@@ -268,7 +268,7 @@ export const qrTemplates = [{
   {
     "id": 71,
     "name": "棕榈树",
-    "preview_img": "https://cdn.mewx.art/images/static/qr-template-preview/7715a3a3-e8da-4124-a50c-1299a8813935.jpeg",
+    "preview_img": "https://och.superx.chat/mx-qrcode/20231222113001293955.png",
     "width": 1024,
     "height": 1024,
     "points": 10
@@ -276,7 +276,7 @@ export const qrTemplates = [{
   {
     "id": 69,
     "name": "村庄",
-    "preview_img": "https://cdn.mewx.art/images/static/qr-template-preview/5615e837-a720-48c2-987a-af8f43822c82.jpeg",
+    "preview_img": "https://och.superx.chat/mx-qrcode/20231222113350867398.png",
     "width": 1024,
     "height": 1024,
     "points": 10
@@ -284,7 +284,7 @@ export const qrTemplates = [{
   {
     "id": 70,
     "name": "玉石市场",
-    "preview_img": "https://cdn.mewx.art/images/static/qr-template-preview/93e9d226-676a-4185-b4d3-3c863387a487.jpeg",
+    "preview_img": "https://och.superx.chat/mx-qrcode/20231222113105761247.png",
     "width": 1024,
     "height": 1024,
     "points": 10
@@ -292,7 +292,7 @@ export const qrTemplates = [{
   {
     "id": 24,
     "name": "轻纱",
-    "preview_img": "https://cdn.mewx.art/images/static/qr-template-preview/be4d6f3e-025a-448a-a5f5-584cf3bd3016.jpeg",
+    "preview_img": "https://och.superx.chat/mx-qrcode/20231222113104489965.png",
     "width": 1024,
     "height": 1024,
     "points": 10
@@ -300,7 +300,7 @@ export const qrTemplates = [{
   {
     "id": 23,
     "name": "迷雾城堡",
-    "preview_img": "https://cdn.mewx.art/images/static/qr-template-preview/4b260c7d-7fd0-4d4f-bafe-b0bee05f01a8.jpeg",
+    "preview_img": "https://och.superx.chat/mx-qrcode/20231222113130345374.png",
     "width": 1024,
     "height": 1024,
     "points": 10
@@ -308,7 +308,7 @@ export const qrTemplates = [{
   {
     "id": 22,
     "name": "海滨城市",
-    "preview_img": "https://cdn.mewx.art/images/static/qr-template-preview/c67ed88c-11dc-45a0-a1a8-a058d525f867.jpeg",
+    "preview_img": "https://och.superx.chat/mx-qrcode/20231222113205649779.png",
     "width": 1024,
     "height": 1024,
     "points": 10
@@ -316,7 +316,7 @@ export const qrTemplates = [{
   {
     "id": 19,
     "name": "池塘",
-    "preview_img": "https://cdn.mewx.art/images/static/qr-template-preview/ea5d2fe0-beda-44e3-9500-5111f411b612.jpeg",
+    "preview_img": "https://och.superx.chat/mx-qrcode/20231222113240223539.png",
     "width": 1024,
     "height": 1024,
     "points": 10
@@ -324,7 +324,7 @@ export const qrTemplates = [{
   {
     "id": 20,
     "name": "花园",
-    "preview_img": "https://cdn.mewx.art/images/static/qr-template-preview/4f7868df-e8df-44fb-9b2a-fe6649cf5374.jpeg",
+    "preview_img": "https://och.superx.chat/mx-qrcode/20231222113220153198.png",
     "width": 896,
     "height": 1200,
     "points": 10

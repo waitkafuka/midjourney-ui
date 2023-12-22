@@ -28,8 +28,10 @@ const AuthPage = ({ hidePage }: { hidePage: boolean }) => {
         //获取用户信息
         const urlParams = new URLSearchParams(window.location.search);
         const distPage = urlParams.get('distPage');
+        const openid = localStorage.getItem('openid');
         const userinfo = await requestAliyun('userinfo', {}, 'GET');
-        if (userinfo.user) {
+        //登录信息和openid都存在，说明已经登录过了，直接跳转到distPage
+        if (userinfo.user && openid) {
             distPage && (window.location.href = `https://${window.location.host}${decodeURIComponent(distPage)}`);
             return;
         }

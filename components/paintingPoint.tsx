@@ -194,7 +194,7 @@ const PaingPoint = ({ }) => {
     if (isMobileWeChat()) {
       const openid = localStorage.getItem('openid');
       if (!openid) {
-        message.error('获取openid失败，请刷新页面重试');
+        message.error('缺少 openid，请退出登录，然后关闭页面，重新打开。');
         return;
       }
       //创建订单

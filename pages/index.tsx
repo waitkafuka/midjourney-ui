@@ -1345,12 +1345,12 @@ const Index: React.FC = () => {
             type='success'
             closable
           />}
-          <Alert
+          {/* <Alert
             message={<> 重磅更新：midjourney V6 版本现已全面支持！更快的速度，更丰富的细节！提示词最后添加 --v 6 （前后均有空格）即可体验！</>}
             banner
             type='success'
             closable
-          />
+          /> */}
           <p className='no-content-tips'>使用 midjourney 生成你的专属人工智能绘画作品。</p>
           {/* 走马灯作品展播 */}
 

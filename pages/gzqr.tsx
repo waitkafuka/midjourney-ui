@@ -12,8 +12,14 @@ import { requestAliyun, requestAliyunArtStream } from "../request/http";
 import store from '../store';
 import { useSelector } from 'react-redux';
 import Head from 'next/head';
-import { QRCODE_COST } from '../scripts/config'
+import { setUserInfo } from '../store/userInfo';
+
+import { QRCODE_COST, appId } from '../scripts/config'
 import { Html5Qrcode } from "html5-qrcode";
+import { isMobileWeChat } from "../utils/app/env";
+declare let WeixinJSBridge: any;
+
+let pullTimer: NodeJS.Timer;
 
 const TextArea = Input.TextArea;
 
@@ -38,6 +44,8 @@ const QrCode: React.FC = () => {
     const [qrImg, setQrImg] = useState<string>(''); //二维码图片
     const [showDemo, setShowDemo] = useState<boolean>(true); //是否显示示例
     const user = useSelector((state: any) => state.user.info)
+    const [apiReuesting, setApiRequesting] = useState<boolean>(false);
+    const [isShowPaying, setIsShowPaying] = useState<boolean>(true);
 
     const setBDVid = () => {
         //从链接中取出bd_vid参数
@@ -90,6 +98,127 @@ const QrCode: React.FC = () => {
     // useEffect(() => {
     //     initQrDemo();
     // }, [params.prompt]);
+    interface OrderParams {
+        pkgId: number;
+        secret: string;
+        buyCount: number;
+        inviter?: string;
+        channel?: string;
+        openid?: string;
+        orderType: string;
+        deviceType?: 'android' | 'ios' | 'pc';
+    }
+
+    //获取用户信息，在支付完成后重新查询点数
+    const getUserInfo = async () => {
+        const data = await requestAliyun('userinfo', null, 'GET');
+        store.dispatch(setUserInfo(data.user || {}));
+        store.dispatch({
+            type: 'user/setIsShowBuyPointDialog',
+            payload: false,
+        });
+        //支付完成后，清除bd_vid和u
+        if (data.user.point_count >= 1000) {
+            console.log('支付成功');
+            localStorage.removeItem('bd_vid');
+            localStorage.removeItem('qhclickid');
+            localStorage.removeItem('u');
+        }
+
+        // dispatch(setUserInfo(data.user || {}))
+    };
+
+    //查询订单支付状态
+    const queryOrderStatus = async function (orderNo: string) {
+        const result = await requestAliyun('query-order-status', { out_trade_no: orderNo });
+        if (result && result.trade_state === 'SUCCESS') {
+            localStorage.removeItem('bd_vid')
+            store.dispatch({
+                type: 'user/setIsShowBuyPointDialog',
+                payload: false,
+            });
+            getUserInfo();
+        }
+        return result;
+    }
+
+    //轮询订单状态
+    const startPullOrderState = function (orderNo: string) {
+        pullTimer = setInterval(async () => {
+            let result = await queryOrderStatus(orderNo);
+            if (result && result.trade_state === 'SUCCESS') {
+                //关闭弹窗
+                store.dispatch({
+                    type: 'user/setIsShowBuyPointDialog',
+                    payload: false,
+                });
+                //重新获取用户信息
+                getUserInfo();
+                stopPullOrderState();
+                doSubmit();
+            }
+        }, 1000)
+    }
+
+    //停止轮询订单状态
+    const stopPullOrderState = function () {
+        clearInterval(pullTimer);
+    }
+
+    const callPay = function ({ timeStamp, nonceStr, packageStr, paySign }: { timeStamp: string, nonceStr: string, packageStr: string, paySign: string }) {
+        const param = {
+            appId,     //公众号ID，由商户传入     
+            timeStamp: String(timeStamp),     //时间戳，自1970年以来的秒数     
+            nonceStr,      //随机串     
+            package: packageStr,
+            signType: "RSA",     //微信签名方式：     
+            paySign //微信签名 
+        }
+        setIsShowPaying(false);
+        WeixinJSBridge.invoke('getBrandWCPayRequest', param,
+            function (res: any) {
+                stopPullOrderState();
+                if (res.err_msg == "get_brand_wcpay_request:ok") {
+                    // 使用以上方式判断前端返回,微信团队郑重提示：
+                    //res.err_msg将在用户支付成功后返回ok，但并不保证它绝对可靠。
+                }
+            });
+    }
+    const createAndCallWechatPay = async function () {
+        const params: OrderParams = {
+            pkgId: 32,
+            secret: user.secret,
+            buyCount: 1,
+            orderType: 'jsapi',
+        };
+        if (isMobileWeChat()) {
+            const openid = localStorage.getItem('openid');
+            if (!openid) {
+                message.error('缺少 openid，请退出登录，然后关闭页面，重新打开。');
+                return;
+            }
+            //创建订单
+            params.openid = openid;
+            params.orderType = 'jsapi';
+            setApiRequesting(true);
+            const result = await requestAliyun('create-order', params);
+            console.log('result:', result);
+            if (result.code !== 0) {
+                message.error('创建订单失败，请稍后重试');
+                console.log('创建订单失败:', result);
+            } else {
+                const out_trade_no = result.out_trade_no;
+                // 获取签名
+                const signObj = await requestAliyun('get-jsapi-sign', { package: `prepay_id=${result.prepay_id}` })
+                callPay(signObj);
+                //轮询订单状态
+                startPullOrderState(out_trade_no);
+            }
+
+            setApiRequesting(false);
+            return;
+        }
+    }
 
     const doSubmit = async () => {
         if (!params.qr_content) {
@@ -330,7 +459,7 @@ const QrCode: React.FC = () => {
         <meta name="description" content="这是我的页面描述" />
         <meta name="referrer" content="no-referrer" />
     </Head >
-        <div className='dalle-point-box'><PaintingPoint></PaintingPoint></div>
+        <div className='dalle-point-box' style={{ display: "none" }}><PaintingPoint></PaintingPoint></div>
         <div className="ai-qrcode-wrapper" style={{ marginTop: '50px' }}>
 
             {/* 左侧区域 */}
@@ -526,7 +655,7 @@ const QrCode: React.FC = () => {
                 </div> */}
                 </div>
 
-                <Button type="primary" loading={isGenerating} onClick={doSubmit} style={{ width: "100%", marginTop: "10px" }}>
+                <Button type="primary" loading={isGenerating} onClick={createAndCallWechatPay} style={{ width: "100%", marginTop: "10px" }}>
                     支付 4.99 元生成
                 </Button>
             </div>

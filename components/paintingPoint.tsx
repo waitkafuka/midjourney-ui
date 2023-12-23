@@ -8,10 +8,9 @@ import { useSelector } from 'react-redux';
 import store from '../store';
 import { setUserInfo } from '../store/userInfo';
 import { getQueryString } from '../scripts/utils';
-import { QRCODE_COST } from '../scripts/config';
+import { QRCODE_COST, appId } from '../scripts/config';
 import AuthPage from './Auth';
 import { getDeviceType, isMobileWeChat } from '../utils/app/env';
-const appId = 'wx924c1cf2d94b4258';
 declare let WeixinJSBridge: any;
 
 interface ImgListPageProps {

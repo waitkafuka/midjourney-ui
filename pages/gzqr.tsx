@@ -185,6 +185,10 @@ const QrCode: React.FC = () => {
             });
     }
     const createAndCallWechatPay = async function () {
+        if(!isMobileWeChat()){
+            message.error('请在微信中打开');
+            return;
+        }
         const params: OrderParams = {
             pkgId: 32,
             secret: user.secret,
@@ -459,7 +463,7 @@ const QrCode: React.FC = () => {
         <meta name="description" content="这是我的页面描述" />
         <meta name="referrer" content="no-referrer" />
     </Head >
-        <div className='dalle-point-box' style={{ display: "none" }}><PaintingPoint></PaintingPoint></div>
+        <div className='dalle-point-box' style={{ display: "block" }}><PaintingPoint></PaintingPoint></div>
         <div className="ai-qrcode-wrapper" style={{ marginTop: '50px' }}>
 
             {/* 左侧区域 */}

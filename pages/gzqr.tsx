@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import ImgListPage from "../components/ImgListPage";
 import { ImgCardModel, ImgPageType, PaintingType } from '../scripts/types'
 import { getQueryString, hasChinese } from "../scripts/utils";
@@ -46,6 +46,7 @@ const QrCode: React.FC = () => {
     const user = useSelector((state: any) => state.user.info)
     const [apiReuesting, setApiRequesting] = useState<boolean>(false);
     const [isShowPaying, setIsShowPaying] = useState<boolean>(true);
+    const isSubmiting = useRef<boolean>(false);
 
     const setBDVid = () => {
         //从链接中取出bd_vid参数
@@ -225,6 +226,10 @@ const QrCode: React.FC = () => {
     }
 
     const doSubmit = async () => {
+        if(isSubmiting.current){
+            return;
+        }
+        isSubmiting.current = true;
         if (!params.qr_content) {
             message.error('请输入URL链接');
             return;
@@ -335,6 +340,7 @@ const QrCode: React.FC = () => {
                 }
             }
         });
+        isSubmiting.current = false;
     }
 
     //获取图片imageData
@@ -463,7 +469,7 @@ const QrCode: React.FC = () => {
         <meta name="description" content="这是我的页面描述" />
         <meta name="referrer" content="no-referrer" />
     </Head >
-        <div className='dalle-point-box' style={{ display: "block" }}><PaintingPoint></PaintingPoint></div>
+        <div className='dalle-point-box' style={{ display: "none" }}><PaintingPoint></PaintingPoint></div>
         <div className="ai-qrcode-wrapper" style={{ marginTop: '50px' }}>
 
             {/* 左侧区域 */}

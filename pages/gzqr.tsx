@@ -186,7 +186,7 @@ const QrCode: React.FC = () => {
             });
     }
     const createAndCallWechatPay = async function () {
-        if(!isMobileWeChat()){
+        if (!isMobileWeChat()) {
             message.error('请在微信中打开');
             return;
         }
@@ -226,7 +226,7 @@ const QrCode: React.FC = () => {
     }
 
     const doSubmit = async () => {
-        if(isSubmiting.current){
+        if (isSubmiting.current) {
             return;
         }
         isSubmiting.current = true;
@@ -470,7 +470,7 @@ const QrCode: React.FC = () => {
         <meta name="referrer" content="no-referrer" />
     </Head >
         <div className='dalle-point-box' style={{ display: "none" }}><PaintingPoint></PaintingPoint></div>
-        <div className="ai-qrcode-wrapper" style={{ marginTop: '50px' }}>
+        <div className="ai-qrcode-wrapper" style={{ marginTop: '0px' }}>
 
             {/* 左侧区域 */}
             <div className="code-options-box">
@@ -666,7 +666,7 @@ const QrCode: React.FC = () => {
                 </div>
 
                 <Button type="primary" loading={isGenerating} onClick={createAndCallWechatPay} style={{ width: "100%", marginTop: "10px" }}>
-                    支付 4.99 元生成
+                    {isGenerating ? '生成中，大约需要 1 分钟...' : '支付 4.99 元生成'}
                 </Button>
             </div>
             {/* 二维码结果区域 */}

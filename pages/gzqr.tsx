@@ -666,7 +666,7 @@ const QrCode: React.FC = () => {
                 </div>
 
                 <Button type="primary" loading={isGenerating} onClick={createAndCallWechatPay} style={{ width: "100%", marginTop: "10px" }}>
-                    {isGenerating ? '生成中，大约需要 1 分钟...' : '支付 4.99 元生成'}
+                    {isGenerating ? '生成中，请稍后，大约需要 1 分钟...' : '支付 4.99 元生成'}
                 </Button>
             </div>
             {/* 二维码结果区域 */}

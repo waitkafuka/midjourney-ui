@@ -165,8 +165,12 @@ const SwapFace: React.FC = () => {
             if (res.code === 40015) {
                 res.message = '您尚未登录，请先登录后再试'
             }
-            //这里取的是sd返回的message
-            message.error(res.message);
+            if (res.code === 40038) {
+                message.error('没有检测到面部，请确保底图和照片中均有清晰人脸，以避免换脸失败。为获得最好效果，尽量不要戴眼镜、口罩、帽子等遮挡物。', 10);
+            } else {
+                //这里取的是sd返回的message
+                message.error(res.message);
+            }
             setIsGenerating(false);
             setQrCodeImage(undefined);
             return;

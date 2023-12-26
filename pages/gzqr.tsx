@@ -33,7 +33,7 @@ const QrCode: React.FC = () => {
         negative_prompt: '',
         qr_content: process.env.NODE_ENV === 'development' ? 'http://weixin.qq.com/r/OBxdRS3EnXDirWkm90kq' : '',
         model: '67',
-        template_id: 0,
+        template_id: 11,
     }); //表单参数
     const [showOptions, setShowOptions] = useState<boolean>(false); //是否显示更多选项
     const [qrCodeImage, setQrCodeImage] = useState<ImgCardModel>(); //模板
@@ -495,25 +495,42 @@ const QrCode: React.FC = () => {
                         });
                     }} placeholder="如：https://superx.chat/art/" value={params.qr_content} />
                 </div>
-                {/* 提示词 */}
-                {!params.template_id && <div className="art-form-item">
+                {/* 模板选择 */}
+                <div className="art-form-item horizontal">
                     <div className="form-item-label">
-                        <span className="input-label">图片提示词</span>
-                        <Tooltip title="要生成图片的描述词，和 midjourney 一样，支持中文，会自动进行翻译。不支持参数。">
+                        <span className="input-label">选择模板</span>
+                        <Tooltip title="选择模板的情况下，将直接使用系统图片模板进行二维码融合，而不会使用提示词、负面提示词和风格选择。">
                             <QuestionCircleOutlined />
                         </Tooltip>
-                        <div className="label-right" onClick={randomPrompt}>
-                            <i className="iconfont icon-shuaxin"></i>
-                            随机
-                        </div>
+                        <a href="/art/qrcode-templates" target="_blank" style={{ marginLeft: '20px', fontSize: '12px', textDecoration: "underline" }}>查看全部模板</a>
                     </div>
-                    <TextArea disabled={params.template_id} showCount maxLength={500} placeholder="如：https://superx.chat/art/" onChange={v => {
-                        setParams({
-                            ...params,
-                            prompt: v.target.value
-                        });
-                    }} value={params.prompt} autoSize={{ minRows: 3, maxRows: 5 }} />
-                </div>}
+                    <Select
+                        value={params.template_id}
+                        style={{ width: 180, marginLeft: "10px" }}
+                        onChange={v => {
+                            setParams({ ...params, template_id: v })
+                            if (v !== 0) {
+                                const tpl = qrTemplates.find(item => item.id === v);
+                                const newQrcodeImage: ImgCardModel = {
+                                    id: 0,
+                                    img_url: tpl?.preview_img?.replace('https://och.superx.chat', '') || '',
+                                    prompt: '生成效果示例',
+                                    create_time: new Date(),
+                                    is_public: 0,
+                                    thumb_up_count: 0,
+                                    painting_type: PaintingType.QRCODE,
+                                    width: tpl?.width,
+                                    height: tpl?.height
+                                };
+                                setQrCodeImage(img => newQrcodeImage);
+                            } else {
+                                initQrDemo();
+                            }
+                        }}
+                        options={qrTemplates.map(item => ({ value: item.id, label: item.name }))}
+                    />
+                </div>
+
                 {/* 更多选项 */}
                 <div className="art-form-item">
                     <div className="form-item-label cp inline-block" onClick={() => {
@@ -594,41 +611,25 @@ const QrCode: React.FC = () => {
                             }))}
                         />
                     </div>}
-                    {/* 模板选择 */}
-                    <div className="art-form-item horizontal">
+                    {/* 提示词 */}
+                    {!params.template_id && <div className="art-form-item">
                         <div className="form-item-label">
-                            <span className="input-label">选择模板</span>
-                            <Tooltip title="选择模板的情况下，将直接使用系统图片模板进行二维码融合，而不会使用提示词、负面提示词和风格选择。">
+                            <span className="input-label">图片提示词</span>
+                            <Tooltip title="要生成图片的描述词，和 midjourney 一样，支持中文，会自动进行翻译。不支持参数。">
                                 <QuestionCircleOutlined />
                             </Tooltip>
-                            <a href="/art/qrcode-templates" target="_blank" style={{ marginLeft: '20px', fontSize: '12px', textDecoration: "underline" }}>查看全部模板</a>
+                            <div className="label-right" onClick={randomPrompt}>
+                                <i className="iconfont icon-shuaxin"></i>
+                                随机
+                            </div>
                         </div>
-                        <Select
-                            value={params.template_id}
-                            style={{ width: 180, marginLeft: "10px" }}
-                            onChange={v => {
-                                setParams({ ...params, template_id: v })
-                                if (v !== 0) {
-                                    const tpl = qrTemplates.find(item => item.id === v);
-                                    const newQrcodeImage: ImgCardModel = {
-                                        id: 0,
-                                        img_url: tpl?.preview_img?.replace('https://och.superx.chat', '') || '',
-                                        prompt: '生成效果示例',
-                                        create_time: new Date(),
-                                        is_public: 0,
-                                        thumb_up_count: 0,
-                                        painting_type: PaintingType.QRCODE,
-                                        width: tpl?.width,
-                                        height: tpl?.height
-                                    };
-                                    setQrCodeImage(img => newQrcodeImage);
-                                } else {
-                                    initQrDemo();
-                                }
-                            }}
-                            options={qrTemplates.map(item => ({ value: item.id, label: item.name }))}
-                        />
-                    </div>
+                        <TextArea disabled={params.template_id} showCount maxLength={500} placeholder="如：https://superx.chat/art/" onChange={v => {
+                            setParams({
+                                ...params,
+                                prompt: v.target.value
+                            });
+                        }} value={params.prompt} autoSize={{ minRows: 3, maxRows: 5 }} />
+                    </div>}
                     {/* 版本选择 */}
                     {/* <div className="art-form-item horizontal" style={{ display: "flex" }}>
                         <div className="form-item-label">

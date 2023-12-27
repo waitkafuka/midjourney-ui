@@ -48,8 +48,8 @@ const Guide: React.FC = () => {
             <h1>midjourney入门指引</h1>
 
             <h3>强烈建议你在开始之前，先看一下这篇教程：<a href="https://mp.weixin.qq.com/s/I0342FeExlgyCBWWfckpBw" target="_blank">Midjourney简要使用指南</a></h3>
-            <h3>如果你想设计 logo，请看这一篇：<a href="https://learningprompt.wiki/docs/midjourney/mj-tutorial-text-prompt/scenario-2-brands-logo" target="_blank">Midjourney 设计品牌 Logo</a></h3>
-            <h3>如果你想设计插画，请看这一篇：<a href="https://learningprompt.wiki/docs/midjourney/mj-tutorial-text-prompt/scenario-4-illustrations" target="_blank">Midjourney 制作插画</a></h3>
+            <h3>如果你想设计 logo，请看这一篇：<a href="https://learningprompt.wiki/zh-Hans/docs/midjourney/mj-tutorial-text-prompt/scenario-2-brands-logo" target="_blank">Midjourney 设计品牌 Logo</a></h3>
+            <h3>如果你想设计插画，请看这一篇：<a href="https://learningprompt.wiki/zh-Hans/docs/midjourney/mj-tutorial-text-prompt/scenario-4-illustrations" target="_blank">Midjourney 制作插画</a></h3>
 
             <ReactMarkdown children={text} remarkPlugins={[remarkGfm]} />
             其他更多参数请参考：<Link href="/cookbook/">风格大全</Link> <br />

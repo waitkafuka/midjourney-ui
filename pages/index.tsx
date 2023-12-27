@@ -88,7 +88,7 @@ const Index: React.FC = () => {
   const [hasStartImagin, setHasStartImagin] = useState(false);
   const [seedCopyText, setSeedCopyText] = useState('复制');
   const [showStartTips, setShowStartTips] = useState(false);
-  const [isWrong, setIsWrong] = useState(false);
+  const [isWrong, setIsWrong] = useState(true);
   const [requestingSeed, setRequestingSeed] = useState('');
   const [debug, setDebug] = useState(false);
   const [bdVid, setBdVid] = useState('');

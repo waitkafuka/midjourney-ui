@@ -137,6 +137,7 @@ const SwapFace: React.FC = () => {
 
         apiParams.sourceImgWidth = imgData.width;
         apiParams.sourceImgHeight = imgData.height;
+        apiParams.email = params.email;
 
         setQrCodeImage({ ...newQrcodeImage, img_base_path: 'https://oc.superx.chat/' });
         let res = null;

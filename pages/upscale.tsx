@@ -2,7 +2,7 @@ import { useEffect, useMemo, useState } from "react";
 import { ImgCardModel, ImgPageType, PaintingType } from '../scripts/types'
 import { getQueryString, hasChinese } from "../scripts/utils";
 import { SendOutlined, StopOutlined, QuestionCircleOutlined } from '@ant-design/icons';
-import { Button, Col, Form, Input, InputNumber, Radio, Row,Alert, Select, Slider, Tooltip, message, notification } from "antd";
+import { Button, Col, Form, Input, InputNumber, Radio, Row, Alert, Select, Slider, Tooltip, message, notification } from "antd";
 import jsQR from "jsqr";
 import { qrTemplates, qrModels, qrVersions } from "../scripts/config";
 import PaintingPoint from "../components/paintingPoint";
@@ -121,7 +121,7 @@ const Upscale: React.FC = () => {
             return;
         }
         //放大倍数是 4 倍以上的时候，必须输入邮箱
-        if (params.scale_num >= 4 && !params.email) {
+        if (!params.email) {
             message.error('请输入邮箱，以便接收放大后的图片。');
             return;
         }

@@ -25,7 +25,7 @@ const ImgListPage = ({ type }: ImgListPageProps) => {
 
     //默认最近几天的数据
     // const defaultDays = 6;
-    const defaultDays = 30;
+    const defaultDays = 180;
     const [defaultPickerValue, setDefaultPickerValue] = useState<any>([dayjs().subtract(defaultDays, 'day'), dayjs()]);
     const [startDate, setStartDate] = useState<string>(dayjs().subtract(defaultDays, 'day').format(format));
     const [endDate, setEndDate] = useState<string>(dayjs().format(format));

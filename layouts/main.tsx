@@ -87,7 +87,7 @@ const ROUTES: Route = {
       name: '数字人制作',
       key: 'humanrobot',
       icon: <i className='iconfont icon-kefu'></i>,
-      path: 'https://human.iiii.com/operate/index',
+      path: 'https://human.iiii.com/digit-human/index?type=5',
       target: "_blank",
     },
     // {
@@ -611,7 +611,7 @@ export default function Main(children: JSX.Element) {
           name: '数字人制作',
           key: 'humanrobot',
           icon: <i className='iconfont icon-kefu'></i>,
-          path: 'https://human.iiii.com/operate/index',
+          path: 'https://human.iiii.com/digit-human/index?type=5',
           target: "_blank",
         },
         {
@@ -732,7 +732,7 @@ export default function Main(children: JSX.Element) {
           name: '数字人制作🔥',
           key: 'humanrobot',
           icon: <i className='iconfont icon-kefu'></i>,
-          path: 'https://human.iiii.com/operate/index',
+          path: 'https://human.iiii.com/digit-human/index?type=5',
           target: "_blank",
         },
         {

@@ -88,7 +88,7 @@ const Index: React.FC = () => {
   const [hasStartImagin, setHasStartImagin] = useState(false);
   const [seedCopyText, setSeedCopyText] = useState('复制');
   const [showStartTips, setShowStartTips] = useState(false);
-  const [isWrong, setIsWrong] = useState(false);
+  const [isWrong, setIsWrong] = useState(true);
   const [requestingSeed, setRequestingSeed] = useState('');
   const [debug, setDebug] = useState(false);
   const [bdVid, setBdVid] = useState('');
@@ -1503,7 +1503,7 @@ const Index: React.FC = () => {
             <a href={referImg} target='_blank'>
               {referImg}
             </a>
-            （下方提示词中的链接请勿删除）。将在此图基础上，结合您的提示词生成新的作品。
+            （下方提示词输入框中的链接请勿删除）。将在此图基础上，结合您的提示词生成新的作品。
           </div>
         )}
 

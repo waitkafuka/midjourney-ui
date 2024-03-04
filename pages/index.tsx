@@ -521,7 +521,7 @@ const Index: React.FC = () => {
         if (data.id) {
           // newMessage.hasTag = true;
           //扣减点数
-          store.dispatch({ type: 'user/pointChange', payload: user.point_count - data.cost });
+          store.dispatch({ type: 'user/makePointChange', payload: -data.cost });
         }
         // setMessages(omsg => replaceLastElement(omsg, newMessage));
         //从messages中根据msgId找到对应的msg，然后替换

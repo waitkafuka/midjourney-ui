@@ -62,8 +62,12 @@ const userSlice = createSlice({
     },
     pointChange: (state, action) => {
       state.info.point_count = action.payload;
+    },
+    makePointChange: (state, action) => {
+      state.info.point_count += action.payload;
+      console.log('makePointChange', state.info.point_count);
+      
     }
-
   },
 });
 

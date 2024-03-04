@@ -345,7 +345,7 @@ const Index: React.FC = () => {
             if (data.id) {
               newMessage.hasTag = true;
               //扣减点数
-              store.dispatch({ type: 'user/pointChange', payload: user.point_count - PAINTING_POINTS_ONE_TIME });
+              store.dispatch({ type: 'user/makePointChange', payload: -PAINTING_POINTS_ONE_TIME });
             }
 
             newMessage.msgHash = data.hash;
@@ -400,7 +400,7 @@ const Index: React.FC = () => {
           if (data.id) {
             newMessage.hasTag = true;
             //扣减点数
-            store.dispatch({ type: 'user/pointChange', payload: user.point_count - PAINTING_POINTS_ONE_TIME });
+            store.dispatch({ type: 'user/makePointChange', payload: -PAINTING_POINTS_ONE_TIME });
           }
           console.log('variation dataing:', data);
           newMessage.msgHash = data.hash;
@@ -462,7 +462,7 @@ const Index: React.FC = () => {
           if (data.id) {
             // newMessage.hasTag = true;
             //扣减点数
-            store.dispatch({ type: 'user/pointChange', payload: user.point_count - 2 });
+            store.dispatch({ type: 'user/makePointChange', payload: -2 });
           }
           // setMessages(omsg => replaceLastElement(omsg, newMessage));
           setMessages([...oldMessages, newMessage]);
@@ -544,7 +544,7 @@ const Index: React.FC = () => {
       setIsDescribeApiRequesting(false);
       if (data.code === 0) {
         setImgDescribeTexts(data.data.prompt.split('\n\n'));
-        store.dispatch({ type: 'user/pointChange', payload: user.point_count - data.data.cost });
+        store.dispatch({ type: 'user/makePointChange', payload: -data.data.cost });
       } else {
         message.error(data.message);
       }
@@ -607,7 +607,7 @@ const Index: React.FC = () => {
         if (data.id) {
           // newMessage.hasTag = true;
           //扣减点数
-          store.dispatch({ type: 'user/pointChange', payload: user.point_count - data.cost });
+          store.dispatch({ type: 'user/makePointChange', payload: -data.cost });
         }
         // setMessages(omsg => replaceLastElement(omsg, newMessage));
         //从messages中根据msgId找到对应的msg，然后替换
@@ -713,7 +713,7 @@ const Index: React.FC = () => {
     if (result.code === 0) {
       setSeed(result.data.seed);
       setShowSeed(true);
-      store.dispatch({ type: 'user/pointChange', payload: user.point_count - result.data.cost });
+      store.dispatch({ type: 'user/makePointChange', payload: -result.data.cost });
     }
   }
 

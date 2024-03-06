@@ -320,7 +320,7 @@ const SD: React.FC = () => {
         </Head> */}
         <div className='dalle-point-box'><PaintingPoint></PaintingPoint></div>
         {/* 图片列表 */}
-        <div className='painting-result-wrap sd-result'>
+        <div className='painting-result-wrap sd-result sd-one-result'>
             {imgList.map((model, index) => {
                 return <PureImgCard ratio={{ width: model.width || 0, height: (model.height || 0) }} imgBasePath={model.img_base_path} isLoading={true} showThumbImg={false} columnWidth={300} key={model.id} model={model} hasDelete={true} onImgDeleted={(id) => {
                     console.log('imgid1:', id);
@@ -328,7 +328,7 @@ const SD: React.FC = () => {
                 }} />
             })}
         </div>
-        <div className='dalle-input-box'>
+        <div className='dalle-input-box sd-one-dalle-input-box'>
             {/* <div style={{ color: "#777", fontSize: "13px" }}>
                 <Button size='small' >随机一个prompt</Button>
             </div> */}

@@ -226,6 +226,13 @@ a:hover {
   */
 
 @media (max-width: 1000px) {
+  div.painting-result-wrap.sd-result{
+    padding-bottom: 20px;
+    padding-top: 30px;
+  }
+  div.sd-one-dalle-input-box{
+    position: static;
+  }
   .faceswap-alert {
     display: none;
   }

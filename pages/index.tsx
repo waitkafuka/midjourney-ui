@@ -1,4 +1,5 @@
 import React, { use, useEffect, useState, useRef, useMemo } from 'react';
+import Head from 'next/head';
 import { Input, Button, Table, Alert, Typography, message, Modal, Spin, Select, Space, Divider, Checkbox, notification, Tag, Switch, Tooltip, UploadFile } from 'antd';
 import { SendOutlined, UploadOutlined, QuestionCircleOutlined, CloseCircleOutlined } from '@ant-design/icons';
 import { Imagine, Upscale, Variation } from '../request';
@@ -59,7 +60,14 @@ const isDone = (progress: string | undefined) => {
   return progress && (progress.indexOf('done') > -1 || progress.indexOf('完成') > -1);
 };
 
-const Index: React.FC = () => {
+// 定义Props的类型
+interface PageProps {
+  title: string;
+  description: string;
+  keywords: string;
+}
+
+const Index: React.FC<PageProps> = ({ title, description, keywords }) => {
   const [inputValue, setInputValue] = useState('');
   const [seedPrompt, setSeedPrompt] = useState('');
   const inputValueRef = useRef(inputValue);
@@ -839,290 +847,255 @@ const Index: React.FC = () => {
   }, []);
 
   return (
-    // <div>
-
-    //   <div className="prompt-input-wrap">
-    //     <TextArea
-    //       className="w-full"
-    //       disabled={true}
-    //       value={inputValue}
-    //       onChange={(e) => setInputValue(e.target.value)}
-    //       onKeyDown={(e) => {
-    //         if (e.key === "Enter" && e.shiftKey) {
-    //           setInputValue(`${inputValue}\n`);
-    //           e.preventDefault();
-    //         } else if (e.key === "Enter") {
-    //           handleMessageSend();
-    //           e.preventDefault();
-    //         }
-    //       }}
-    //       placeholder="请描述你要绘画的作品。（例如：a cat。midjourney本身不支持中文，但您仍然可以输入中文，生成时系统将自动为您翻译为英文。可以使用ChatGPT生成你的提示词prompt。）"
-    //       autoSize={{ minRows: 1, maxRows: 6 }}
-    //       style={{ paddingRight: 30 }}
-    //     />
-    //     <Button
-    //       className="absolute"
-    //       type="primary"
-    //       onClick={handleMessageSend}
-    //       loading={inputDisable}
-    //       disabled={true}
-    //       icon={<SendOutlined className="send-prompt-btn" />}
-    //       title="Send"
-    //       style={{
-    //         position: "absolute",
-    //         bottom: 0,
-    //         right: 0,
-    //         background: "transparent",
-    //         border: "none",
-    //         boxShadow: "none",
-    //       }}
-    //     />
-    //   </div>
-    //   <div className="no-content-tips">当前使用人数过多，服务器已无法继续提供服务。图片渲染需要耗费大量计算资源，请稍后再试。</div>
-    // </div>
-    <div className='w-full mx-auto px-4 h-full overflow-y-hidden list-input-container'>
-      {/* 购买点数 */}
-      {isShowBuyPointEntry && (
-        <div className='dalle-point-box'>
-          <PaintingPoint></PaintingPoint>
-        </div>
-      )}
-
-      {contextHolder}
-      {/* <Spin>{paintingTip}</Spin> */}
-      {/* 价格提示弹窗 */}
-      <Modal
-        title='MJ 使用提示'
-        style={{ top: 20, width: '500px' }}
-        open={showStartTips}
-        destroyOnClose={true}
-        closable={true}
-        maskClosable={false}
-        okText='确定'
-        onCancel={() => {
-          setShowStartTips(false);
-        }}
-        footer={[
-          <Button
-            key='ok'
-            type='primary'
-            onClick={() => {
-              setShowStartTips(false);
-            }}
-          >
-            确定
-          </Button>,
-        ]}
-      // footer={null}
-      >
-        <div>
-          <div>💐 MJ 绘画 8 点数/张</div>
-          <div>💐 点 V（变体）8 点数/张</div>
-          <div>💐 点 U（高清某一张）2 点数/张</div>
-          <div>💐 可在左侧“我的作品”中查看全部已生成作品</div>
-          <div>💐 如有任何问题和反馈建议，均可联系公众号客服</div>
-        </div>
-      </Modal>
-      {/* 种子结果提示 */}
-      <Modal
-        title='提示'
-        style={{ top: 20, width: '500px' }}
-        open={showSeed}
-        destroyOnClose={true}
-        closable={true}
-        maskClosable={false}
-        okText='确定'
-        onCancel={() => {
-          setShowSeed(false);
-        }}
-        footer={[
-          <Button
-            key='ok'
-            type='primary'
-            onClick={() => {
-              setSeedCopyText('复制')
-              setShowSeed(false);
-              setSeed('')
-            }}
-          >
-            确定
-          </Button>,
-        ]}
-      // footer={null}
-      >
-        <div>
-          <div>seed（种子）值：{seed}</div>
-          <div style={{ marginTop: "15px" }}>带种子提示词：{seedPrompt} --seed {seed}  <Button
-            size='small'
-            onClick={() => {
-              setSeedCopyText('已复制')
-              setInputValue(`${seedPrompt} --seed ${seed}`)
-            }}
-            data-clipboard-text={`${seedPrompt} --seed ${seed}`}
-            className='copy-prompt-btn'
-          >
-            {seedCopyText}
-          </Button></div>
-          <div style={{ marginTop: "15px", fontSize: "13px" }}>
-            <p>种子使用说明：</p>
-            <p>种子决定了一次生成的初始图像。相同的种子+相同的提示词将得到100%完全相同的两张图片（如果不固定种子，即使提示词相同，两次生成的图片也会不一样）。因此，通过固定种子数，然后略微修改提示词，可达到“在一张底图上进行微调”的效果。</p>
-            <p style={{ marginTop: "15px" }}>举例：第一次生成：通过 a girl 得到一张女孩的照片，然后获取种子，假设种子数是：123</p>
-            <p>此时修改提示词（按个人意图进行修改）为：a girl, Wear glasses --seed 123（通过固定种子复用第一张图片） ，然后再次生成，将在第一张图的基础上为人物戴上眼镜。</p>
-            {/* <p>点击上方复制按钮将复制完整参数，然后略微修改提示词再次生成，以生成你想要的图片。</p> */}
+    <>
+      <Head>
+        <title>Midjourney - 中国官网</title>
+        <meta name="description" content="Midjourney中国区官网，通过Midjourney AI让绘画如此简单，您只需要在Midjourney AI中描述你的画面即可，这里为您为准备了Midjourney AI基本的使用教程，Stable Diffusion、Dalle3等，是在中国使用Midjourney一站式平台！" />
+        <meta name="keywords" content="Midjourney,Midjourney中文网,Midjourney中国官网,MJ AI,Midjourney培训、MJ咒语" />
+      </Head>
+      <div className='w-full mx-auto px-4 h-full overflow-y-hidden list-input-container'>
+        {/* 购买点数 */}
+        {isShowBuyPointEntry && (
+          <div className='dalle-point-box'>
+            <PaintingPoint></PaintingPoint>
           </div>
-        </div>
-      </Modal>
-      {/* 上传图片进行描述弹窗 */}
-      <Modal
-        title='描述图片（Describe）'
-        style={{ top: 20, width: '500px' }}
-        open={showDescribeModal}
-        destroyOnClose={true}
-        closable={true}
-        maskClosable={false}
-        okText="完成"
-        onOk={() => {
-          setShowDescribeModal(false);
-        }}
-        onCancel={() => {
-          setShowDescribeModal(false);
-        }}
-      // footer={[
-      //   <Button
-      //     key='ok'
-      //     type='primary'
-      //     onClick={() => {
-      //       setShowDescribeModal(false);
-      //     }}
-      //   >
-      //     完成
-      //   </Button>,
-      // ]}
-      // footer={null}
-      >
-        <div>
-          <div style={{ padding: '15px', display: 'flex', justifyContent: 'center', flexWrap: 'wrap' }}>
-            <OssUploader disabled={isDescribeApiRequesting} buttonText='点击选择图片进行解析' onChange={(files => {
-              setDescribeImageUrl(files[0].url || '');
-              handleImgDescribe(files[0].url || '');
-            })}></OssUploader>
-            {/* <div style={{ fontSize: '12px', width: "100%", textAlign: 'center', }}>（消耗 1 点数）</div> */}
-          </div>
-          {/* 图片描述结果 */}
+        )}
+
+        {contextHolder}
+        {/* <Spin>{paintingTip}</Spin> */}
+        {/* 价格提示弹窗 */}
+        <Modal
+          title='MJ 使用提示'
+          style={{ top: 20, width: '500px' }}
+          open={showStartTips}
+          destroyOnClose={true}
+          closable={true}
+          maskClosable={false}
+          okText='确定'
+          onCancel={() => {
+            setShowStartTips(false);
+          }}
+          footer={[
+            <Button
+              key='ok'
+              type='primary'
+              onClick={() => {
+                setShowStartTips(false);
+              }}
+            >
+              确定
+            </Button>,
+          ]}
+        // footer={null}
+        >
           <div>
-            {isDescribeApiRequesting && <div>正在解析图片描述词，请稍候...</div>}
-            {!isDescribeApiRequesting && imgDescribeTexts.length > 0 && <>
-              <div style={{ marginTop: "15px" }}>描述词（已生成 4 条描述）：</div>
-              {imgDescribeTexts.map(item => {
-                return (
-                  <>
-                    <div style={{ marginTop: "5px" }}>
-                      {item as string} &nbsp;&nbsp;
-                      <Button
-                        size='small'
-                        onClick={() => {
-                          setInputValue((item as string).replace(/1️⃣|2️⃣|3️⃣|4️⃣/g, ''));
-                          message.success('提示词已复制')
-                        }}
-                        data-clipboard-text={(item as string).replace(/1️⃣|2️⃣|3️⃣|4️⃣/g, '')}
-                        className='copy-prompt-btn'
-                      >
-                        复制
-                      </Button>
-                    </div>
-                  </>
-                );
-              })}</>}
+            <div>💐 MJ 绘画 8 点数/张</div>
+            <div>💐 点 V（变体）8 点数/张</div>
+            <div>💐 点 U（高清某一张）2 点数/张</div>
+            <div>💐 可在左侧“我的作品”中查看全部已生成作品</div>
+            <div>💐 如有任何问题和反馈建议，均可联系公众号客服</div>
+          </div>
+        </Modal>
+        {/* 种子结果提示 */}
+        <Modal
+          title='提示'
+          style={{ top: 20, width: '500px' }}
+          open={showSeed}
+          destroyOnClose={true}
+          closable={true}
+          maskClosable={false}
+          okText='确定'
+          onCancel={() => {
+            setShowSeed(false);
+          }}
+          footer={[
+            <Button
+              key='ok'
+              type='primary'
+              onClick={() => {
+                setSeedCopyText('复制')
+                setShowSeed(false);
+                setSeed('')
+              }}
+            >
+              确定
+            </Button>,
+          ]}
+        // footer={null}
+        >
+          <div>
+            <div>seed（种子）值：{seed}</div>
+            <div style={{ marginTop: "15px" }}>带种子提示词：{seedPrompt} --seed {seed}  <Button
+              size='small'
+              onClick={() => {
+                setSeedCopyText('已复制')
+                setInputValue(`${seedPrompt} --seed ${seed}`)
+              }}
+              data-clipboard-text={`${seedPrompt} --seed ${seed}`}
+              className='copy-prompt-btn'
+            >
+              {seedCopyText}
+            </Button></div>
+            <div style={{ marginTop: "15px", fontSize: "13px" }}>
+              <p>种子使用说明：</p>
+              <p>种子决定了一次生成的初始图像。相同的种子+相同的提示词将得到100%完全相同的两张图片（如果不固定种子，即使提示词相同，两次生成的图片也会不一样）。因此，通过固定种子数，然后略微修改提示词，可达到“在一张底图上进行微调”的效果。</p>
+              <p style={{ marginTop: "15px" }}>举例：第一次生成：通过 a girl 得到一张女孩的照片，然后获取种子，假设种子数是：123</p>
+              <p>此时修改提示词（按个人意图进行修改）为：a girl, Wear glasses --seed 123（通过固定种子复用第一张图片） ，然后再次生成，将在第一张图的基础上为人物戴上眼镜。</p>
+              {/* <p>点击上方复制按钮将复制完整参数，然后略微修改提示词再次生成，以生成你想要的图片。</p> */}
+            </div>
+          </div>
+        </Modal>
+        {/* 上传图片进行描述弹窗 */}
+        <Modal
+          title='描述图片（Describe）'
+          style={{ top: 20, width: '500px' }}
+          open={showDescribeModal}
+          destroyOnClose={true}
+          closable={true}
+          maskClosable={false}
+          okText="完成"
+          onOk={() => {
+            setShowDescribeModal(false);
+          }}
+          onCancel={() => {
+            setShowDescribeModal(false);
+          }}
+        // footer={[
+        //   <Button
+        //     key='ok'
+        //     type='primary'
+        //     onClick={() => {
+        //       setShowDescribeModal(false);
+        //     }}
+        //   >
+        //     完成
+        //   </Button>,
+        // ]}
+        // footer={null}
+        >
+          <div>
+            <div style={{ padding: '15px', display: 'flex', justifyContent: 'center', flexWrap: 'wrap' }}>
+              <OssUploader disabled={isDescribeApiRequesting} buttonText='点击选择图片进行解析' onChange={(files => {
+                setDescribeImageUrl(files[0].url || '');
+                handleImgDescribe(files[0].url || '');
+              })}></OssUploader>
+              {/* <div style={{ fontSize: '12px', width: "100%", textAlign: 'center', }}>（消耗 1 点数）</div> */}
+            </div>
+            {/* 图片描述结果 */}
+            <div>
+              {isDescribeApiRequesting && <div>正在解析图片描述词，请稍候...</div>}
+              {!isDescribeApiRequesting && imgDescribeTexts.length > 0 && <>
+                <div style={{ marginTop: "15px" }}>描述词（已生成 4 条描述）：</div>
+                {imgDescribeTexts.map(item => {
+                  return (
+                    <>
+                      <div style={{ marginTop: "5px" }}>
+                        {item as string} &nbsp;&nbsp;
+                        <Button
+                          size='small'
+                          onClick={() => {
+                            setInputValue((item as string).replace(/1️⃣|2️⃣|3️⃣|4️⃣/g, ''));
+                            message.success('提示词已复制')
+                          }}
+                          data-clipboard-text={(item as string).replace(/1️⃣|2️⃣|3️⃣|4️⃣/g, '')}
+                          className='copy-prompt-btn'
+                        >
+                          复制
+                        </Button>
+                      </div>
+                    </>
+                  );
+                })}</>}
+            </div>
+
+          </div>
+        </Modal>
+        {/* 多图混合blend弹窗 */}
+        <Modal
+          title='多图融合（Blend）'
+          style={{ top: 20, width: '500px' }}
+          open={showBlendModal}
+          destroyOnClose={true}
+          closable={true}
+          maskClosable={false}
+          okText="开始融合"
+          onOk={() => {
+            handleImgBlend();
+          }}
+          onCancel={() => {
+            setShowBlendModal(false);
+          }}
+        // footer={null}
+        >
+          <div>
+
+            <div style={{ padding: '15px', display: 'flex', justifyContent: 'center', flexWrap: 'wrap' }}>
+              <OssUploader disabled={isDescribeApiRequesting} buttonText='选择图片' multiple={true} maxCount={5} onChange={(files => {
+                setBlendImgs(files)
+              })}></OssUploader>
+              {/* <div style={{ fontSize: '12px', width: "100%", textAlign: 'center', }}>（消耗 1 点数）</div> */}
+            </div>
+            {/* 图片融合界面 */}
+            <div style={{ textAlign: "center", cursor: "pointer" }}>
+              <Tooltip title={<div><p>将多张图片融合为一张。融合过程中 midjourney 会对图片进行艺术加工。</p>
+                <p>最多融合 5 张图片。建议两张最佳，前两张的权重最高。</p>
+                <p>点数消耗： 8 个点数。</p></div>}>
+                <span>融合说明</span> <QuestionCircleOutlined style={{ cursor: 'pointer' }} />
+              </Tooltip>
+            </div>
+
+          </div>
+        </Modal>
+        {/* 操作提示弹窗 */}
+        <Modal
+          title='使用指南'
+          style={{ top: 20, width: '500px' }}
+          open={showOperationtTips && false}
+          destroyOnClose={true}
+          closable={true}
+          maskClosable={false}
+          okText='确定'
+          footer={[
+            <Button
+              key='ok'
+              type='primary'
+              onClick={() => {
+                setShowOperationtTips(false);
+              }}
+            >
+              确定
+            </Button>,
+          ]}
+        // footer={null}
+        >
+          <div style={{ lineHeight: '1.6' }}>
+            <p>💐 每次绘图消耗 8 个点数；点一次 V（重新变体），消耗 8 个点数；点 U（放大单图）消耗 2 个点数。</p>
+            <p>💐 由于midjourney有内容风控，如果超过 3 分钟无结果，请检查您的提示词内容是否有敏感内容，参数是否有误。可以更换提示词再试。</p>
+            <p>💐 绘图过程中请不要刷新页面</p>
+            <p>💐 绘画作品默认公开分享在“艺术公园”，供点赞和交流，如需关闭，可在“我的作品”中进行关闭分享</p>
+            <p>💐 为保护隐私，有参考图的作品默认不会分享。如需分享，同样可以在“我的作品”中打开分享</p>
+            {/* <p>6. 为使您可以绘制出高质量的作品，本站左侧提供了入门和提升教程，您可以一边阅读一边对比尝试</p> */}
           </div>
 
-        </div>
-      </Modal>
-      {/* 多图混合blend弹窗 */}
-      <Modal
-        title='多图融合（Blend）'
-        style={{ top: 20, width: '500px' }}
-        open={showBlendModal}
-        destroyOnClose={true}
-        closable={true}
-        maskClosable={false}
-        okText="开始融合"
-        onOk={() => {
-          handleImgBlend();
-        }}
-        onCancel={() => {
-          setShowBlendModal(false);
-        }}
-      // footer={null}
-      >
-        <div>
-
-          <div style={{ padding: '15px', display: 'flex', justifyContent: 'center', flexWrap: 'wrap' }}>
-            <OssUploader disabled={isDescribeApiRequesting} buttonText='选择图片' multiple={true} maxCount={5} onChange={(files => {
-              setBlendImgs(files)
-            })}></OssUploader>
-            {/* <div style={{ fontSize: '12px', width: "100%", textAlign: 'center', }}>（消耗 1 点数）</div> */}
+          <div style={{ marginTop: '20px', textAlign: 'right' }}>
+            <Checkbox
+              onChange={(e) => {
+                const checked = e.target.checked;
+                checked ? localStorage.setItem('noAllowOperationTips', 'true') : localStorage.removeItem('noAllowOperationTips');
+              }}
+            >
+              不再提示
+            </Checkbox>
           </div>
-          {/* 图片融合界面 */}
-          <div style={{ textAlign: "center", cursor: "pointer" }}>
-            <Tooltip title={<div><p>将多张图片融合为一张。融合过程中 midjourney 会对图片进行艺术加工。</p>
-              <p>最多融合 5 张图片。建议两张最佳，前两张的权重最高。</p>
-              <p>点数消耗： 8 个点数。</p></div>}>
-              <span>融合说明</span> <QuestionCircleOutlined style={{ cursor: 'pointer' }} />
-            </Tooltip>
+        </Modal>
+        {/* 翻译中 */}
+        <Modal title='翻译中' style={{ top: 20 }} open={isTranslating && false} closable={false} cancelText='' okText='' footer={null}>
+          <div>
+            <Spin />
+            正在翻译为英文...
           </div>
-
-        </div>
-      </Modal>
-      {/* 操作提示弹窗 */}
-      <Modal
-        title='使用指南'
-        style={{ top: 20, width: '500px' }}
-        open={showOperationtTips && false}
-        destroyOnClose={true}
-        closable={true}
-        maskClosable={false}
-        okText='确定'
-        footer={[
-          <Button
-            key='ok'
-            type='primary'
-            onClick={() => {
-              setShowOperationtTips(false);
-            }}
-          >
-            确定
-          </Button>,
-        ]}
-      // footer={null}
-      >
-        <div style={{ lineHeight: '1.6' }}>
-          <p>💐 每次绘图消耗 8 个点数；点一次 V（重新变体），消耗 8 个点数；点 U（放大单图）消耗 2 个点数。</p>
-          <p>💐 由于midjourney有内容风控，如果超过 3 分钟无结果，请检查您的提示词内容是否有敏感内容，参数是否有误。可以更换提示词再试。</p>
-          <p>💐 绘图过程中请不要刷新页面</p>
-          <p>💐 绘画作品默认公开分享在“艺术公园”，供点赞和交流，如需关闭，可在“我的作品”中进行关闭分享</p>
-          <p>💐 为保护隐私，有参考图的作品默认不会分享。如需分享，同样可以在“我的作品”中打开分享</p>
-          {/* <p>6. 为使您可以绘制出高质量的作品，本站左侧提供了入门和提升教程，您可以一边阅读一边对比尝试</p> */}
-        </div>
-
-        <div style={{ marginTop: '20px', textAlign: 'right' }}>
-          <Checkbox
-            onChange={(e) => {
-              const checked = e.target.checked;
-              checked ? localStorage.setItem('noAllowOperationTips', 'true') : localStorage.removeItem('noAllowOperationTips');
-            }}
-          >
-            不再提示
-          </Checkbox>
-        </div>
-      </Modal>
-      {/* 翻译中 */}
-      <Modal title='翻译中' style={{ top: 20 }} open={isTranslating && false} closable={false} cancelText='' okText='' footer={null}>
-        <div>
-          <Spin />
-          正在翻译为英文...
-        </div>
-      </Modal>
-      {/* <div className="qr-code-modal" style={{ display: showQrcodeModal ? 'block' : 'none' }}>
+        </Modal>
+        {/* <div className="qr-code-modal" style={{ display: showQrcodeModal ? 'block' : 'none' }}>
         <CloseCircleOutlined onClick={() => {
           setShowQrcodeModal(false)
           localStorage.setItem('noAllowQrcode', 'true')
@@ -1130,7 +1103,7 @@ const Index: React.FC = () => {
         <p>加入绘画交流群：</p>
         <img src="//c.superx.chat/stuff/1.png" alt="" />
       </div> */}
-      {/* <List
+        {/* <List
         className="mx-auto justify-start overflow-y-auto img-list-box"
         style={{
           height: "calc(100vh - 96px)",
@@ -1141,164 +1114,164 @@ const Index: React.FC = () => {
         locale={{ emptyText: '使用 midjourney 来生成你的第一幅人工智能绘画作品。' }}
       /> */}
 
-      {messages.length > 0 ? (
-        <div
-          className='workspace-img-wrap img-list-box'
-          style={{
-            height: 'calc(100vh - 96px)',
-            overflowY: 'auto',
-          }}
-        >
-          {/* 图片结果列表容器 */}
-          {messages.map(({ text, img, progress, content, msgID, msgHash, buttons, paintingText }, index) => (
-            <div className='img-list-item' key={index}>
-              <div className='mj-prompt-box'>
-                {' '}
-                {text.replace(/- <@\d+>\s*\([^)]*\)/g, '')} {`(${progress === 'done' ? '完成' : progress})`}{' '}
-                <Button
-                  size='small'
-                  onClick={() => {
-                    setInputValue(text.replace(/- <@\d+>\s*\([^)]*\)/g, '').replace(replaceExp, ''));
-                  }}
-                  data-clipboard-text={text.replace(/- <@\d+>\s*\([^)]*\)/g, '').replace(replaceExp, '')}
-                  className='copy-prompt-btn'
-                >
-                  复制提示词
-                </Button>
-              </div>
-              <div className='workspace-img-container' style={{ width: `${baseWidth}px`, minHeight: getImgCalcHeight(img, text) }}>
-                {img && !progress?.includes('error') && (
-                  <img
-                    src={img}
-                    style={{ cursor: isDone(progress) ? 'zoom-in' : 'auto' }}
-                    onClick={() => {
-                      // <img src={thumbUrl(img, text)} style={{ cursor: isDone(progress) ? 'zoom-in' : 'auto' }} onClick={() => {
-                      if (isDone(progress)) {
-                        window.open(img, '_blank');
-                      }
-                    }}
-                  />
-                )}
-
-                {img && progress?.includes('error') && <img src={img} style={{ width: '150px', filter: 'grayscale(100%)' }} />}
-
-                {/* {!img && <Spin tip="绘画中，正常 1 分钟内可完成，如遇排队，可能需要 1-2 分钟。"></Spin>} */}
-                {!img && (
-                  <div style={{ textAlign: 'center' }}>
-                    {/* <img style={{ width: '130px' }} src='https://c.superx.chat/stuff/default.svg' alt='' /> <br /> */}
-                    <div style={{ width: "130px", display: 'inline-block' }}>
-                      <LottieAnimation animationData={dkJson}></LottieAnimation>
-                    </div>
-                    <div style={{ marginTop: '10px', display: 'flex', textAlign: 'center', justifyContent: 'center' }}>
-                      <Spin tip=''></Spin> <span style={{ color: '#888', fontSize: '13px' }}> {paintingText}</span>
-                    </div>
-                  </div>
-                )}
-                {/* 隐藏一个原图，这是为了提前缓存，以便在后面点击查看大图的时候能够更快加载 */}
-                {/* <img src={img} style={{ display: 'none' }} /> */}
-              </div>
-              {img && showPublicTips && !progress?.includes('error') && (
-                <p className='no-content-tips' style={{ position: 'static', marginTop: '0px', marginBottom: '15px', fontSize: '13px', textAlign: 'left', padding: '0' }}>
-                  图片默认公开展示在“艺术公园”，可在左侧“我的作品”中进行管理。
+        {messages.length > 0 ? (
+          <div
+            className='workspace-img-wrap img-list-box'
+            style={{
+              height: 'calc(100vh - 96px)',
+              overflowY: 'auto',
+            }}
+          >
+            {/* 图片结果列表容器 */}
+            {messages.map(({ text, img, progress, content, msgID, msgHash, buttons, paintingText }, index) => (
+              <div className='img-list-item' key={index}>
+                <div className='mj-prompt-box'>
+                  {' '}
+                  {text.replace(/- <@\d+>\s*\([^)]*\)/g, '')} {`(${progress === 'done' ? '完成' : progress})`}{' '}
                   <Button
-                    style={{ fontSize: '12px' }}
                     size='small'
                     onClick={() => {
-                      localStorage.setItem('showPublicTips', 'false');
-                      setShowPublicTips(false);
+                      setInputValue(text.replace(/- <@\d+>\s*\([^)]*\)/g, '').replace(replaceExp, ''));
                     }}
+                    data-clipboard-text={text.replace(/- <@\d+>\s*\([^)]*\)/g, '').replace(replaceExp, '')}
+                    className='copy-prompt-btn'
                   >
-                    不再提示
+                    复制提示词
                   </Button>
-                </p>
-              )}
-
-              {/* ，如果您不希望展示，可进入“<Link href="/mypaintings">我的作品</Link>”进行关闭。 */}
-              {img && !progress?.includes('error') && (progress?.includes('完成') || progress?.includes('done')) && img !== defaultImg && (
-                <Space.Compact style={{ width: '100%', marginTop: '0px' }}>
-                  <Button
-                    onClick={() => {
-                      window.open(img, '_blank');
-                    }}
-                  >
-                    查看大图
-                  </Button>
-                  <Button
-                    onClick={() => {
-                      downloadFile(img);
-                    }}
-                  >
-                    下载原图
-                  </Button>
-                  <Button
-                    loading={!!requestingSeed && (msgID === requestingSeed)}
-                    onClick={() => {
-                      setSeedPrompt(text.replace(/- <@\d+>\s*\([^)]*\)/g, '').replace(replaceExp, ''))
-                      getSeed(msgID)
-                    }}
-                  >
-                    获取seed <Tooltip title={`seed值作为图片的“种子”和唯一标识，可在下次生成时，以： --seed xxx(替换成获取到的数字) 参数追加在提示词最后。然后略微修改描述词，以达到在该图片的基础上，进行微调的效果。`}>
-                      <QuestionCircleOutlined style={{ cursor: 'pointer' }} />
-                    </Tooltip>
-                  </Button>
-                  <Button
-                    onClick={() => {
-                      redirectToZoomPage(img);
-                    }}
-                  >
-                    一键放大
-                  </Button>
-                  <Button
-                    onClick={() => {
-                      redirectToFaceswapPage(img);
-                    }}
-                  >
-                    一键换脸
-                  </Button>
-                </Space.Compact>
-              )}
-              {buttons && buttons.length > 0 && (
-                <>
-                  <div>
-                    {buttons.map((button, index) => {
-                      return <><CheckableTag
-                        className={
-                          button.checked ? "tag-checked" : "tag-unchecked"
+                </div>
+                <div className='workspace-img-container' style={{ width: `${baseWidth}px`, minHeight: getImgCalcHeight(img, text) }}>
+                  {img && !progress?.includes('error') && (
+                    <img
+                      src={img}
+                      style={{ cursor: isDone(progress) ? 'zoom-in' : 'auto' }}
+                      onClick={() => {
+                        // <img src={thumbUrl(img, text)} style={{ cursor: isDone(progress) ? 'zoom-in' : 'auto' }} onClick={() => {
+                        if (isDone(progress)) {
+                          window.open(img, '_blank');
                         }
-                        checked={button.checked}
-                        onChange={checked => {
-                          if (!checked) return;
-                          button.checked = true;
-                          // 执行button click动作
-                          onButtonClick({
-                            buttonId: button.customId, imgId: msgID, buttonLabel: button.label, prompt: content
-                          });
-                        }}
-                      >
-                        {button.label || button.emoji}
-                      </CheckableTag>
-                        {/* {(index + 1) % 4 === 0 && index !== buttons.length - 1 && <br />} */}
-                      </>
-                    })}
-                    {/* 按钮解释 */}
-                    <Tooltip title={<div className='button-desc-box'>
-                      <div className='title'>按钮说明：</div>
-                      <div className='line'>数字 1-4 对应四宫格的 1 2 3 4 号图片</div>
-                      <div className='line'><b>U+图片编号</b>：获取单张高清图</div>
-                      <div className='line'><b>V+图片编号</b>：对某张图进行变体（生成相似图）</div>
-                      <div className='line'><b>延伸</b>：保持内容不变，往指定方向扩展画面</div>
-                      <div className='line'><b>缩放</b>：保持画布尺寸不变，但是生成更多内容（主体变小）</div>
-                      <div className='title' style={{ marginTop: "10px" }}>点数消耗：</div>
-                      <div className='line'><b>U</b>：2 个点数</div>
-                      <div className='line'><b>V</b>：8 个点数</div>
-                      <div className='line'><b>延伸</b>： 8 个点数</div>
-                      <div className='line'><b>缩放 1.5 倍</b>： 15 个点数</div>
-                      <div className='line'><b>缩放 2 倍</b>： 20 个点数</div>
-                    </div>}>
-                      <QuestionCircleOutlined style={{ cursor: 'pointer' }} />
-                    </Tooltip>
+                      }}
+                    />
+                  )}
 
-                    {/* <MyTag
+                  {img && progress?.includes('error') && <img src={img} style={{ width: '150px', filter: 'grayscale(100%)' }} />}
+
+                  {/* {!img && <Spin tip="绘画中，正常 1 分钟内可完成，如遇排队，可能需要 1-2 分钟。"></Spin>} */}
+                  {!img && (
+                    <div style={{ textAlign: 'center' }}>
+                      {/* <img style={{ width: '130px' }} src='https://c.superx.chat/stuff/default.svg' alt='' /> <br /> */}
+                      <div style={{ width: "130px", display: 'inline-block' }}>
+                        <LottieAnimation animationData={dkJson}></LottieAnimation>
+                      </div>
+                      <div style={{ marginTop: '10px', display: 'flex', textAlign: 'center', justifyContent: 'center' }}>
+                        <Spin tip=''></Spin> <span style={{ color: '#888', fontSize: '13px' }}> {paintingText}</span>
+                      </div>
+                    </div>
+                  )}
+                  {/* 隐藏一个原图，这是为了提前缓存，以便在后面点击查看大图的时候能够更快加载 */}
+                  {/* <img src={img} style={{ display: 'none' }} /> */}
+                </div>
+                {img && showPublicTips && !progress?.includes('error') && (
+                  <p className='no-content-tips' style={{ position: 'static', marginTop: '0px', marginBottom: '15px', fontSize: '13px', textAlign: 'left', padding: '0' }}>
+                    图片默认公开展示在“艺术公园”，可在左侧“我的作品”中进行管理。
+                    <Button
+                      style={{ fontSize: '12px' }}
+                      size='small'
+                      onClick={() => {
+                        localStorage.setItem('showPublicTips', 'false');
+                        setShowPublicTips(false);
+                      }}
+                    >
+                      不再提示
+                    </Button>
+                  </p>
+                )}
+
+                {/* ，如果您不希望展示，可进入“<Link href="/mypaintings">我的作品</Link>”进行关闭。 */}
+                {img && !progress?.includes('error') && (progress?.includes('完成') || progress?.includes('done')) && img !== defaultImg && (
+                  <Space.Compact style={{ width: '100%', marginTop: '0px' }}>
+                    <Button
+                      onClick={() => {
+                        window.open(img, '_blank');
+                      }}
+                    >
+                      查看大图
+                    </Button>
+                    <Button
+                      onClick={() => {
+                        downloadFile(img);
+                      }}
+                    >
+                      下载原图
+                    </Button>
+                    <Button
+                      loading={!!requestingSeed && (msgID === requestingSeed)}
+                      onClick={() => {
+                        setSeedPrompt(text.replace(/- <@\d+>\s*\([^)]*\)/g, '').replace(replaceExp, ''))
+                        getSeed(msgID)
+                      }}
+                    >
+                      获取seed <Tooltip title={`seed值作为图片的“种子”和唯一标识，可在下次生成时，以： --seed xxx(替换成获取到的数字) 参数追加在提示词最后。然后略微修改描述词，以达到在该图片的基础上，进行微调的效果。`}>
+                        <QuestionCircleOutlined style={{ cursor: 'pointer' }} />
+                      </Tooltip>
+                    </Button>
+                    <Button
+                      onClick={() => {
+                        redirectToZoomPage(img);
+                      }}
+                    >
+                      一键放大
+                    </Button>
+                    <Button
+                      onClick={() => {
+                        redirectToFaceswapPage(img);
+                      }}
+                    >
+                      一键换脸
+                    </Button>
+                  </Space.Compact>
+                )}
+                {buttons && buttons.length > 0 && (
+                  <>
+                    <div>
+                      {buttons.map((button, index) => {
+                        return <><CheckableTag
+                          className={
+                            button.checked ? "tag-checked" : "tag-unchecked"
+                          }
+                          checked={button.checked}
+                          onChange={checked => {
+                            if (!checked) return;
+                            button.checked = true;
+                            // 执行button click动作
+                            onButtonClick({
+                              buttonId: button.customId, imgId: msgID, buttonLabel: button.label, prompt: content
+                            });
+                          }}
+                        >
+                          {button.label || button.emoji}
+                        </CheckableTag>
+                          {/* {(index + 1) % 4 === 0 && index !== buttons.length - 1 && <br />} */}
+                        </>
+                      })}
+                      {/* 按钮解释 */}
+                      <Tooltip title={<div className='button-desc-box'>
+                        <div className='title'>按钮说明：</div>
+                        <div className='line'>数字 1-4 对应四宫格的 1 2 3 4 号图片</div>
+                        <div className='line'><b>U+图片编号</b>：获取单张高清图</div>
+                        <div className='line'><b>V+图片编号</b>：对某张图进行变体（生成相似图）</div>
+                        <div className='line'><b>延伸</b>：保持内容不变，往指定方向扩展画面</div>
+                        <div className='line'><b>缩放</b>：保持画布尺寸不变，但是生成更多内容（主体变小）</div>
+                        <div className='title' style={{ marginTop: "10px" }}>点数消耗：</div>
+                        <div className='line'><b>U</b>：2 个点数</div>
+                        <div className='line'><b>V</b>：8 个点数</div>
+                        <div className='line'><b>延伸</b>： 8 个点数</div>
+                        <div className='line'><b>缩放 1.5 倍</b>： 15 个点数</div>
+                        <div className='line'><b>缩放 2 倍</b>： 20 个点数</div>
+                      </div>}>
+                        <QuestionCircleOutlined style={{ cursor: 'pointer' }} />
+                      </Tooltip>
+
+                      {/* <MyTag
                       Data={['U1', 'U2', 'U3', 'U4']}
                       type='upscale'
                       onClick={(tag) => {
@@ -1306,8 +1279,8 @@ const Index: React.FC = () => {
                         tagClick(String(content), String(msgID), String(msgHash), tag);
                       }}
                     /> */}
-                  </div>
-                  {/* <MyTag
+                    </div>
+                    {/* <MyTag
                     Data={['V1', 'V2', 'V3', 'V4']}
                     type='variation'
                     onClick={(tag) => {
@@ -1315,148 +1288,67 @@ const Index: React.FC = () => {
                       tagClick(String(content), String(msgID), String(msgHash), tag);
                     }}
                   /> */}
-                  {showTips && (
-                    <p className='no-content-tips' style={{ marginTop: '0px', fontSize: '13px', textAlign: 'left', padding: '0' }}>
-                      如果您觉得某张图片还不错，可以点击： U+“图片编号”，获取高清图片~{' '}
-                      <Button
-                        style={{ fontSize: '12px' }}
-                        size='small'
-                        onClick={() => {
-                          localStorage.setItem('showTips', 'false');
-                          setShowTips(false);
-                        }}
-                      >
-                        不再提示
-                      </Button>
-                    </p>
-                  )}
-                </>
-              )}
-              <Divider></Divider>
-            </div>
-          ))}
-        </div>
-      ) : (
-        <>
-          {/* 故障提示 */}
-          {isWrong && <Alert
-            message={<>亲爱的用户您好，midjourney 官方服务器故障，正在修复。给您带来不便深感抱歉（可尝试Stable Diffusion，DALLE3 等，除midjourney 之外的其他服务不受影响）。</>}
-            banner
-            type='success'
-            closable
-          />}
-          {/* <Alert
+                    {showTips && (
+                      <p className='no-content-tips' style={{ marginTop: '0px', fontSize: '13px', textAlign: 'left', padding: '0' }}>
+                        如果您觉得某张图片还不错，可以点击： U+“图片编号”，获取高清图片~{' '}
+                        <Button
+                          style={{ fontSize: '12px' }}
+                          size='small'
+                          onClick={() => {
+                            localStorage.setItem('showTips', 'false');
+                            setShowTips(false);
+                          }}
+                        >
+                          不再提示
+                        </Button>
+                      </p>
+                    )}
+                  </>
+                )}
+                <Divider></Divider>
+              </div>
+            ))}
+          </div>
+        ) : (
+          <>
+            {/* 故障提示 */}
+            {isWrong && <Alert
+              message={<>亲爱的用户您好，midjourney 官方服务器故障，正在修复。给您带来不便深感抱歉（可尝试Stable Diffusion，DALLE3 等，除midjourney 之外的其他服务不受影响）。</>}
+              banner
+              type='success'
+              closable
+            />}
+            {/* <Alert
             message={<> 重磅更新：midjourney V6 版本现已全面支持！更快的速度，更丰富的细节！提示词最后添加 --v 6 （前后均有空格）即可体验！</>}
             banner
             type='success'
             closable
           /> */}
-          <p className='no-content-tips'>使用 midjourney 生成你的专属人工智能绘画作品。</p>
-          {/* 走马灯作品展播 */}
+            <p className='no-content-tips'>使用 midjourney 生成你的专属人工智能绘画作品。</p>
+            {/* 走马灯作品展播 */}
 
-          {showSlidePaint && <div style={{ marginTop: "30px" }}>
-            <div style={{ textAlign: "center" }}>
-              <div style={{ fontWeight: 600, fontSize: '16px' }}>作品展示</div>
-              <div>查看更多作品，请点击：<Link href="/paintings" style={{ textDecoration: "underline" }}>艺术公园</Link></div>
-            </div>
-            <SlidePaint></SlidePaint></div>}
-
-          {/* <p className="no-content-tips">请勿使用违禁词汇，违者将被封号。</p> */}
-          {!user.secret && (
-            <p className='no-content-tips'>
-              您尚未登录，请先
-              <a href='/login/?redirect=/art' style={{ fontSize: '14px', textDecoration: 'underline' }}>
-                {' '}
-                登录
-              </a>
-            </p>
-          )}
-        </>
-      )}
-      <div className='prompt-input-wrap'>
-        {/* 线路切换1 */}
-        <div className='line-change-box1'>
-          <div style={{ marginRight: '5px', marginLeft: '20px' }}>
-            <Select
-              options={nodes}
-              value={clientId}
-              disabled={hasStartImagin}
-              style={{ width: 140 }}
-              onChange={(v) => {
-                setClientId(v);
-              }}
-            />
-          </div>
-          <Tooltip title={`为保证服务高可用，缩短等待时间，特新增${clientCount}个服务器节点。如果您生成出错或时间过长，可以选择切换节点。一般情况下不需要切换。（生成开始后不可切换，如需切换请刷新页面。）`}>
-            <QuestionCircleOutlined style={{ cursor: 'pointer' }} />
-          </Tooltip>
-        </div>
-        {/* 参考图上传 */}
-        <div style={{ display: 'flex', alignItems: 'center', flexWrap: 'wrap' }}>
-          <AliyunOSSUploader
-            buttonText='添加参考图'
-            onChange={(fileList) => {
-              if (fileList.length > 0) {
-                //只在上传完成后做操作
-                if (fileList[0].status === 'done') {
-                  const imgUrl = `${fileList[0].url}`;
-                  setReferImg(imgUrl);
-                  const exp = /< .*? >/;
-                  //用正则表达式替换掉输入框中的图片地址，图片地址用<>包裹
-                  //判断inputValue 中是否有图片地址
-                  if (exp.test(inputValue)) {
-                    //如果有，替换掉
-                    setInputValue(inputValue.replace(exp, `< ${imgUrl} >`));
-                  } else {
-                    //如果没有，加到开头
-                    setInputValue(`< ${imgUrl} > ${inputValue}`);
-                  }
-                }
-              } else {
-                setReferImg('');
-                setInputValue((v) => v.replace(/< \s*([^<>]+)\s* >/g, ''));
-                // setInputValue(v => v.replace(`<${referImg}> `, ''))
-              }
-            }}
-          ></AliyunOSSUploader>
-          {/* 参数手册 */}
-          <div style={{ position: 'relative', marginRight: '0' }} className='param-book'>
-            <div className='param-wrap' style={{ width: '100%', maxWidth: '800px', position: 'fixed', left: '50%', transform: 'translateX(-50%)', top: '0', display: `${isShowParamsTips ? 'block' : 'none'}` }}>
-              <div className='param-table-box'>
-                <Table columns={columns} dataSource={data} pagination={false} />
+            {showSlidePaint && <div style={{ marginTop: "30px" }}>
+              <div style={{ textAlign: "center" }}>
+                <div style={{ fontWeight: 600, fontSize: '16px' }}>作品展示</div>
+                <div>查看更多作品，请点击：<Link href="/paintings" style={{ textDecoration: "underline" }}>艺术公园</Link></div>
               </div>
-              <div style={{ marginTop: '10px', padding: '10px' }}>示例：a cat --ar 4:3 --style cute --niji（1.参数放在提示词之后 2.参数和值之间用空格分隔 3.参数与参数之间也需要用空格分隔 4.参数之后不要加任何多余符号，如句号、小数点、其他字符等。）</div>
-              <div style={{ marginTop: '5px', padding: '10px' }}>常见错误：1. a cat--niji(--前缺少空格) 2.a cat --niji.（最后多一个小数点） 3.--ar 16:9 a cat（参数应该在提示词之后）4.a cat -- ar 16:9（--和ar之间不能有空格）</div>
-            </div>
-            <span style={{ marginLeft: '20px', cursor: 'pointer', fontSize: '13px' }} className='param-book-label'>
-              参数手册
-              <Switch
-                size='small'
-                onChange={(v) => {
-                  setIsShowParamsTips(v);
-                }}
-              />
-            </span>
-          </div>
-          {/* 提示词优化 */}
-          {/* <div style={{ position: 'relative' }} className='correct-prompt-box'>
-            <span style={{ marginLeft: '20px', cursor: 'pointer', fontSize: '13px' }} className='correct-prompt-label'>
-              优化提示词
-              <Switch
-                size='small'
-                checked={isCorrectPrompt}
-                onChange={(v) => {
-                  setIsCorrectPrompt(v);
-                  localStorage.setItem('isCorrectPrompt', String(v));
-                }}
-              />
-            </span>
-            <Tooltip title={`开启后，将自动优化提示词。可能会改变原有提示词，如果不想改变原有提示词，可关闭此功能。`}>
-              <QuestionCircleOutlined style={{ cursor: 'pointer', verticalAlign: '-3px', marginLeft: '3px' }} />
-            </Tooltip>
-          </div> */}
-          {/* 线路切换1,pc端显示 */}
-          <div className='line-change-box2'>
+              <SlidePaint></SlidePaint></div>}
+
+            {/* <p className="no-content-tips">请勿使用违禁词汇，违者将被封号。</p> */}
+            {!user.secret && (
+              <p className='no-content-tips'>
+                您尚未登录，请先
+                <a href='/login/?redirect=/art' style={{ fontSize: '14px', textDecoration: 'underline' }}>
+                  {' '}
+                  登录
+                </a>
+              </p>
+            )}
+          </>
+        )}
+        <div className='prompt-input-wrap'>
+          {/* 线路切换1 */}
+          <div className='line-change-box1'>
             <div style={{ marginRight: '5px', marginLeft: '20px' }}>
               <Select
                 options={nodes}
@@ -1472,85 +1364,167 @@ const Index: React.FC = () => {
               <QuestionCircleOutlined style={{ cursor: 'pointer' }} />
             </Tooltip>
           </div>
-          {/* 图片描述 */}
-          <div className='line-change-box2'>
-            <div style={{ marginRight: '5px', marginLeft: '20px' }}>
-              <Button onClick={() => {
-                setShowDescribeModal(true);
-              }}>图片转提示词</Button>
+          {/* 参考图上传 */}
+          <div style={{ display: 'flex', alignItems: 'center', flexWrap: 'wrap' }}>
+            <AliyunOSSUploader
+              buttonText='添加参考图'
+              onChange={(fileList) => {
+                if (fileList.length > 0) {
+                  //只在上传完成后做操作
+                  if (fileList[0].status === 'done') {
+                    const imgUrl = `${fileList[0].url}`;
+                    setReferImg(imgUrl);
+                    const exp = /< .*? >/;
+                    //用正则表达式替换掉输入框中的图片地址，图片地址用<>包裹
+                    //判断inputValue 中是否有图片地址
+                    if (exp.test(inputValue)) {
+                      //如果有，替换掉
+                      setInputValue(inputValue.replace(exp, `< ${imgUrl} >`));
+                    } else {
+                      //如果没有，加到开头
+                      setInputValue(`< ${imgUrl} > ${inputValue}`);
+                    }
+                  }
+                } else {
+                  setReferImg('');
+                  setInputValue((v) => v.replace(/< \s*([^<>]+)\s* >/g, ''));
+                  // setInputValue(v => v.replace(`<${referImg}> `, ''))
+                }
+              }}
+            ></AliyunOSSUploader>
+            {/* 参数手册 */}
+            <div style={{ position: 'relative', marginRight: '0' }} className='param-book'>
+              <div className='param-wrap' style={{ width: '100%', maxWidth: '800px', position: 'fixed', left: '50%', transform: 'translateX(-50%)', top: '0', display: `${isShowParamsTips ? 'block' : 'none'}` }}>
+                <div className='param-table-box'>
+                  <Table columns={columns} dataSource={data} pagination={false} />
+                </div>
+                <div style={{ marginTop: '10px', padding: '10px' }}>示例：a cat --ar 4:3 --style cute --niji（1.参数放在提示词之后 2.参数和值之间用空格分隔 3.参数与参数之间也需要用空格分隔 4.参数之后不要加任何多余符号，如句号、小数点、其他字符等。）</div>
+                <div style={{ marginTop: '5px', padding: '10px' }}>常见错误：1. a cat--niji(--前缺少空格) 2.a cat --niji.（最后多一个小数点） 3.--ar 16:9 a cat（参数应该在提示词之后）4.a cat -- ar 16:9（--和ar之间不能有空格）</div>
+              </div>
+              <span style={{ marginLeft: '20px', cursor: 'pointer', fontSize: '13px' }} className='param-book-label'>
+                参数手册
+                <Switch
+                  size='small'
+                  onChange={(v) => {
+                    setIsShowParamsTips(v);
+                  }}
+                />
+              </span>
             </div>
-            <Tooltip title={`describe功能。可通过上传一张图片，反向推断出图片对应相近的描述词，方便后续生成。`}>
-              <QuestionCircleOutlined style={{ cursor: 'pointer' }} />
+            {/* 提示词优化 */}
+            {/* <div style={{ position: 'relative' }} className='correct-prompt-box'>
+            <span style={{ marginLeft: '20px', cursor: 'pointer', fontSize: '13px' }} className='correct-prompt-label'>
+              优化提示词
+              <Switch
+                size='small'
+                checked={isCorrectPrompt}
+                onChange={(v) => {
+                  setIsCorrectPrompt(v);
+                  localStorage.setItem('isCorrectPrompt', String(v));
+                }}
+              />
+            </span>
+            <Tooltip title={`开启后，将自动优化提示词。可能会改变原有提示词，如果不想改变原有提示词，可关闭此功能。`}>
+              <QuestionCircleOutlined style={{ cursor: 'pointer', verticalAlign: '-3px', marginLeft: '3px' }} />
             </Tooltip>
-          </div>
-          {/* 图片 Blend */}
-          <div className='line-change-box2'>
-            <div style={{ marginRight: '5px', marginLeft: '20px' }}>
-              <Button onClick={() => {
-                setShowBlendModal(true);
-              }}>多图融合（Blend）</Button>
+          </div> */}
+            {/* 线路切换1,pc端显示 */}
+            <div className='line-change-box2'>
+              <div style={{ marginRight: '5px', marginLeft: '20px' }}>
+                <Select
+                  options={nodes}
+                  value={clientId}
+                  disabled={hasStartImagin}
+                  style={{ width: 140 }}
+                  onChange={(v) => {
+                    setClientId(v);
+                  }}
+                />
+              </div>
+              <Tooltip title={`为保证服务高可用，缩短等待时间，特新增${clientCount}个服务器节点。如果您生成出错或时间过长，可以选择切换节点。一般情况下不需要切换。（生成开始后不可切换，如需切换请刷新页面。）`}>
+                <QuestionCircleOutlined style={{ cursor: 'pointer' }} />
+              </Tooltip>
             </div>
-            <Tooltip title={`Blend功能，可将最多 5 张图片混合为 1 张图片。`}>
-              <QuestionCircleOutlined style={{ cursor: 'pointer' }} />
-            </Tooltip>
+            {/* 图片描述 */}
+            <div className='line-change-box2'>
+              <div style={{ marginRight: '5px', marginLeft: '20px' }}>
+                <Button onClick={() => {
+                  setShowDescribeModal(true);
+                }}>图片转提示词</Button>
+              </div>
+              <Tooltip title={`describe功能。可通过上传一张图片，反向推断出图片对应相近的描述词，方便后续生成。`}>
+                <QuestionCircleOutlined style={{ cursor: 'pointer' }} />
+              </Tooltip>
+            </div>
+            {/* 图片 Blend */}
+            <div className='line-change-box2'>
+              <div style={{ marginRight: '5px', marginLeft: '20px' }}>
+                <Button onClick={() => {
+                  setShowBlendModal(true);
+                }}>多图融合（Blend）</Button>
+              </div>
+              <Tooltip title={`Blend功能，可将最多 5 张图片混合为 1 张图片。`}>
+                <QuestionCircleOutlined style={{ cursor: 'pointer' }} />
+              </Tooltip>
+            </div>
           </div>
+
+
+          {referImg && (
+            <div style={{ margin: '10px 0' }} className='refer-img-box'>
+              参考图已添加：
+              <a href={referImg} target='_blank'>
+                {referImg}
+              </a>
+              （下方提示词输入框中的链接请勿删除）。将在此图基础上，结合您的提示词生成新的作品。
+            </div>
+          )}
+
+          <Space.Compact style={{ width: '100%' }}>
+            <TextArea
+              className='w-full'
+              disabled={inputDisable || isWrong}
+              value={inputValue}
+              onChange={(e) => setInputValue(e.target.value)}
+              onKeyDown={(e) => {
+                if (e.key === 'Enter' && e.shiftKey) {
+                  setInputValue(`${inputValue}\n`);
+                  e.preventDefault();
+                } else if (e.key === 'Enter') {
+                  handleMessageSend();
+                  e.preventDefault();
+                } else if (e.key === 'ArrowUp' || e.keyCode === 38) {
+                  handleArray('up');
+                  e.preventDefault();
+                } else if (e.key === 'ArrowDown' || e.keyCode === 40) {
+                  handleArray('down');
+                  e.preventDefault();
+                }
+              }}
+              placeholder='请详细描述你要生成的图片，如：一只猫在草地上玩耍（支持中文，会自动翻译）。'
+              autoSize={{ minRows: 1, maxRows: 6 }}
+              style={{ paddingRight: 30 }}
+            />
+            <Button
+              className='absolute'
+              type='primary'
+              onClick={handleMessageSend}
+              loading={inputDisable}
+              icon={<SendOutlined className='send-prompt-btn' />}
+              title='Send'
+              style={{
+                position: 'absolute',
+                bottom: 0,
+                right: 0,
+                background: 'transparent',
+                border: 'none',
+                boxShadow: 'none',
+              }}
+            />
+          </Space.Compact>
         </div>
-
-
-        {referImg && (
-          <div style={{ margin: '10px 0' }} className='refer-img-box'>
-            参考图已添加：
-            <a href={referImg} target='_blank'>
-              {referImg}
-            </a>
-            （下方提示词输入框中的链接请勿删除）。将在此图基础上，结合您的提示词生成新的作品。
-          </div>
-        )}
-
-        <Space.Compact style={{ width: '100%' }}>
-          <TextArea
-            className='w-full'
-            disabled={inputDisable || isWrong}
-            value={inputValue}
-            onChange={(e) => setInputValue(e.target.value)}
-            onKeyDown={(e) => {
-              if (e.key === 'Enter' && e.shiftKey) {
-                setInputValue(`${inputValue}\n`);
-                e.preventDefault();
-              } else if (e.key === 'Enter') {
-                handleMessageSend();
-                e.preventDefault();
-              } else if (e.key === 'ArrowUp' || e.keyCode === 38) {
-                handleArray('up');
-                e.preventDefault();
-              } else if (e.key === 'ArrowDown' || e.keyCode === 40) {
-                handleArray('down');
-                e.preventDefault();
-              }
-            }}
-            placeholder='请详细描述你要生成的图片，如：一只猫在草地上玩耍（支持中文，会自动翻译）。'
-            autoSize={{ minRows: 1, maxRows: 6 }}
-            style={{ paddingRight: 30 }}
-          />
-          <Button
-            className='absolute'
-            type='primary'
-            onClick={handleMessageSend}
-            loading={inputDisable}
-            icon={<SendOutlined className='send-prompt-btn' />}
-            title='Send'
-            style={{
-              position: 'absolute',
-              bottom: 0,
-              right: 0,
-              background: 'transparent',
-              border: 'none',
-              boxShadow: 'none',
-            }}
-          />
-        </Space.Compact>
       </div>
-    </div>
+    </>
   );
 };
 

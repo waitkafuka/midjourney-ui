@@ -19,6 +19,7 @@ import { useSelector } from 'react-redux';
 import store from '../store';
 import AliyunOSSUploader from "../components/OssUploader";
 import { Model } from '../interfaces/sd'
+import Head from "next/head";
 
 const SD: React.FC = () => {
     const sizeLimit = {
@@ -184,7 +185,7 @@ const SD: React.FC = () => {
             if (!rightSizes.includes(imgSize)) {
                 notification.error({
                     message: '提示',
-                    description: <div style={{lineHeight:"1.7"}}>
+                    description: <div style={{ lineHeight: "1.7" }}>
                         <div>参考图尺寸有误。</div>
                         <div>针对 SDXL1.0 和 SDXL0.9 模型，请确保参考图的尺寸符合以下要求之一：{rightSizes.join(', ')}。</div>
                         <div>您当前的参考图尺寸为：<b>{imgSize}</b>。</div>
@@ -312,6 +313,11 @@ const SD: React.FC = () => {
     }, [])
 
     return <>
+        <Head>
+            <title>Stable Diffusion</title>
+            <meta name="description" content="Stable diffusion中国区官网，通过Stable diffusion AI让绘画如此简单，您只需要在Stable diffusion AI中描述你的画面即可，这里为您为准备了Stable diffusion AI基本的使用教程，Stable Diffusion、Dalle3等，是在中国使用Midjourney一站式平台！" />
+            <meta name="keywords" content="Stable diffusion,Midjourney中文网,Midjourney中国官网,MJ AI,Midjourney培训、MJ咒语" />
+        </Head>
         <div className='dalle-point-box'><PaintingPoint></PaintingPoint></div>
         {/* 图片列表 */}
         <div className='painting-result-wrap sd-result'>

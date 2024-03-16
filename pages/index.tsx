@@ -68,6 +68,7 @@ interface PageProps {
 }
 
 const Index: React.FC<PageProps> = ({ title, description, keywords }) => {
+  const dontShowBuyIds = ['e07a76e01eaccf7771be3d2a2a26a797', '4851200e9127baff7fab63ec5d1c8c2e1'];
   const [inputValue, setInputValue] = useState('');
   const [seedPrompt, setSeedPrompt] = useState('');
   const inputValueRef = useRef(inputValue);
@@ -88,6 +89,8 @@ const Index: React.FC<PageProps> = ({ title, description, keywords }) => {
   const [seed, setSeed] = useState('');
   const [describeImageUrl, setDescribeImageUrl] = useState('');
   const [blendImgs, setBlendImgs] = useState<UploadFile[]>([]);
+  const [showCourseBuyModal, setShowCourseBuyModal] = useState(true);
+
   //自动纠错提示词
   const [isCorrectPrompt, setIsCorrectPrompt] = useState(false);
   const [showQrcodeModal, setShowQrcodeModal] = useState(true);
@@ -815,9 +818,20 @@ const Index: React.FC<PageProps> = ({ title, description, keywords }) => {
       setShowQrcodeModal(false);
     }
   };
+  //当redux中user.id改变时，隐藏购买弹窗
+  useEffect(() => {
+    if (user.secret) {
+      if (dontShowBuyIds.indexOf(user.secret) > -1) {
+        setShowCourseBuyModal(false);
+      }
+    }
+  }, [user.secret]);
 
   //页面初始化
   useEffect(() => {
+    if(localStorage.getItem('hiddenBuyModal') === 'true') {
+      setShowCourseBuyModal(false);
+    }
     Router.events.on('routeChangeComplete', getPrompt);
     new ClipboardJS('.copy-prompt-btn');
     //从页面链接中获取ddd参数
@@ -854,6 +868,22 @@ const Index: React.FC<PageProps> = ({ title, description, keywords }) => {
         <meta name="keywords" content="Midjourney,Midjourney中文网,Midjourney中国官网,MJ AI,Midjourney培训、MJ咒语" />
       </Head> */}
       <div className='w-full mx-auto px-4 h-full overflow-y-hidden list-input-container'>
+        {/* 右下角的购买课程按钮弹窗 */}
+        {
+          showCourseBuyModal && <div className='course-buy-box'>
+            <div className='course-buy-close-btn' onClick={() => {
+              // localStorage.setItem('hiddenBuyModal', 'true');
+              setShowCourseBuyModal(false);
+            }}>
+              <i className='iconfont icon-guanbi'></i>
+            </div>
+            <a href='https://mp.weixin.qq.com/s?__biz=MzkxNzUwMTIyMQ==&mid=2247483792&idx=1&sn=5a6dc3d39b81efe5c545c5db15c3cfa1&chksm=c1bee5daf6c96ccc44cce587e5e0f99b2a26a8718603d4832968068e5a4078d6121687f8476c&token=1720764114&lang=zh_CN#rd' target='_blank'>
+              <img className='buy-course-img' src='https://superx.chat/stuff/course.jpg' alt='购买课程' />
+              <div className='buy-course-title'>视频课</div>
+            </a>
+          </div>
+        }
+
         {/* 购买点数 */}
         {isShowBuyPointEntry && (
           <div className='dalle-point-box'>

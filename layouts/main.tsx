@@ -115,6 +115,12 @@ const ROUTES: Route = {
           name: '参数大全',
           key: 'cookbook',
           icon: <i className='iconfont icon-canshushezhi'></i>,
+        },{
+          path: 'https://mp.weixin.qq.com/s?__biz=MzkxNzUwMTIyMQ==&mid=2247483792&idx=1&sn=5a6dc3d39b81efe5c545c5db15c3cfa1&chksm=c1bee5daf6c96ccc44cce587e5e0f99b2a26a8718603d4832968068e5a4078d6121687f8476c&token=1720764114&lang=zh_CN#rd',
+          target: "_blank",
+          name: '视频课程',
+          key: 'course',
+          icon: <BulbOutlined />,
         }]
     },
     {
@@ -431,6 +437,12 @@ export default function Main(children: JSX.Element) {
               name: '参数大全',
               key: 'cookbook',
               icon: <i className='iconfont icon-canshushezhi'></i>,
+            },{
+              path: 'https://mp.weixin.qq.com/s?__biz=MzkxNzUwMTIyMQ==&mid=2247483792&idx=1&sn=5a6dc3d39b81efe5c545c5db15c3cfa1&chksm=c1bee5daf6c96ccc44cce587e5e0f99b2a26a8718603d4832968068e5a4078d6121687f8476c&token=1720764114&lang=zh_CN#rd',
+              target: "_blank",
+              name: '视频课程',
+              key: 'course',
+              icon: <BulbOutlined />,
             }]
         },
         {
@@ -501,6 +513,12 @@ export default function Main(children: JSX.Element) {
               name: '参数大全',
               key: 'cookbook',
               icon: <i className='iconfont icon-canshushezhi'></i>,
+            },{
+              path: 'https://mp.weixin.qq.com/s?__biz=MzkxNzUwMTIyMQ==&mid=2247483792&idx=1&sn=5a6dc3d39b81efe5c545c5db15c3cfa1&chksm=c1bee5daf6c96ccc44cce587e5e0f99b2a26a8718603d4832968068e5a4078d6121687f8476c&token=1720764114&lang=zh_CN#rd',
+              target: "_blank",
+              name: '视频课程',
+              key: 'course',
+              icon: <BulbOutlined />,
             }]
         },
         {
@@ -632,6 +650,12 @@ export default function Main(children: JSX.Element) {
               name: '参数大全',
               key: 'cookbook',
               icon: <i className='iconfont icon-canshushezhi'></i>,
+            },{
+              path: 'https://mp.weixin.qq.com/s?__biz=MzkxNzUwMTIyMQ==&mid=2247483792&idx=1&sn=5a6dc3d39b81efe5c545c5db15c3cfa1&chksm=c1bee5daf6c96ccc44cce587e5e0f99b2a26a8718603d4832968068e5a4078d6121687f8476c&token=1720764114&lang=zh_CN#rd',
+              target: "_blank",
+              name: '视频课程',
+              key: 'course',
+              icon: <BulbOutlined />,
             }]
         },
         {
@@ -753,6 +777,12 @@ export default function Main(children: JSX.Element) {
               name: '参数大全',
               key: 'cookbook',
               icon: <i className='iconfont icon-canshushezhi'></i>,
+            },{
+              path: 'https://mp.weixin.qq.com/s?__biz=MzkxNzUwMTIyMQ==&mid=2247483792&idx=1&sn=5a6dc3d39b81efe5c545c5db15c3cfa1&chksm=c1bee5daf6c96ccc44cce587e5e0f99b2a26a8718603d4832968068e5a4078d6121687f8476c&token=1720764114&lang=zh_CN#rd',
+              target: "_blank",
+              name: '视频课程',
+              key: 'course',
+              icon: <BulbOutlined />,
             }]
         },
         {

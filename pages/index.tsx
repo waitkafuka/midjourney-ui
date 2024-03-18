@@ -68,7 +68,7 @@ interface PageProps {
 }
 
 const Index: React.FC<PageProps> = ({ title, description, keywords }) => {
-  const dontShowBuyIds = ['e07a76e01eaccf7771be3d2a2a26a797', '4851200e9127baff7fab63ec5d1c8c2e1'];
+  const dontShowBuyIds = ['e07a76e01eaccf7771be3d2a2a26a797', '4851200e9127baff7fab63ec5d1c8c2exx'];
   const [inputValue, setInputValue] = useState('');
   const [seedPrompt, setSeedPrompt] = useState('');
   const inputValueRef = useRef(inputValue);
@@ -89,7 +89,7 @@ const Index: React.FC<PageProps> = ({ title, description, keywords }) => {
   const [seed, setSeed] = useState('');
   const [describeImageUrl, setDescribeImageUrl] = useState('');
   const [blendImgs, setBlendImgs] = useState<UploadFile[]>([]);
-  const [showCourseBuyModal, setShowCourseBuyModal] = useState(false);
+  const [showCourseBuyModal, setShowCourseBuyModal] = useState(true);
 
   //自动纠错提示词
   const [isCorrectPrompt, setIsCorrectPrompt] = useState(false);
@@ -829,7 +829,7 @@ const Index: React.FC<PageProps> = ({ title, description, keywords }) => {
 
   //页面初始化
   useEffect(() => {
-    if(localStorage.getItem('hiddenBuyModal') === 'true') {
+    if (localStorage.getItem('hiddenBuyModal') === 'true') {
       setShowCourseBuyModal(false);
     }
     Router.events.on('routeChangeComplete', getPrompt);
@@ -870,7 +870,7 @@ const Index: React.FC<PageProps> = ({ title, description, keywords }) => {
       <div className='w-full mx-auto px-4 h-full overflow-y-hidden list-input-container'>
         {/* 右下角的购买课程按钮弹窗 */}
         {
-          showCourseBuyModal && <div className='course-buy-box'>
+          false && <div className='course-buy-box'>
             <div className='course-buy-close-btn' onClick={() => {
               // localStorage.setItem('hiddenBuyModal', 'true');
               setShowCourseBuyModal(false);
@@ -893,6 +893,55 @@ const Index: React.FC<PageProps> = ({ title, description, keywords }) => {
 
         {contextHolder}
         {/* <Spin>{paintingTip}</Spin> */}
+        {/* 课程广告弹窗 */}
+        {/* 价格提示弹窗 */}
+        <Modal
+          title='Midjourney 视频教程'
+          style={{ top: 20, width: '700px' }}
+          open={showCourseBuyModal}
+          destroyOnClose={true}
+          closable={true}
+          maskClosable={false}
+          okText='去看看1'
+          onCancel={() => {
+            setShowCourseBuyModal(false);
+          }}
+          footer={[
+            <Button
+              key='ok'
+              onClick={() => {
+                setShowCourseBuyModal(false);
+              }}
+            >
+              取消
+            </Button>,
+            <Button
+              key='ok'
+              type='primary'
+              onClick={() => {
+                // window.location.href = 'https://superx.chat/stuff/course/';
+                window.open('https://superx.chat/stuff/course/');
+              }}
+            >
+              去看看
+            </Button>,
+          ]}
+        // footer={null}
+        >
+          <a href='https://superx.chat/stuff/course/' target='_blank'>
+            <img src="https://superx.chat/stuff/course-ad-modal.png" alt="" style={{ width: "100%", borderRadius: "20px" }} />
+          </a>
+          <div style={{ textAlign: "right" }}>
+            <Checkbox
+              onChange={(e) => {
+                const checked = e.target.checked;
+                checked ? localStorage.setItem('hiddenBuyModal', 'true') : localStorage.removeItem('hiddenBuyModal');
+              }}
+            >
+              不再提示
+            </Checkbox>
+          </div>
+        </Modal>
         {/* 价格提示弹窗 */}
         <Modal
           title='MJ 使用提示'

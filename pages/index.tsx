@@ -89,7 +89,7 @@ const Index: React.FC<PageProps> = ({ title, description, keywords }) => {
   const [seed, setSeed] = useState('');
   const [describeImageUrl, setDescribeImageUrl] = useState('');
   const [blendImgs, setBlendImgs] = useState<UploadFile[]>([]);
-  const [showCourseBuyModal, setShowCourseBuyModal] = useState(true);
+  const [showCourseBuyModal, setShowCourseBuyModal] = useState(false);
 
   //自动纠错提示词
   const [isCorrectPrompt, setIsCorrectPrompt] = useState(false);

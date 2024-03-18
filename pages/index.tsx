@@ -89,7 +89,7 @@ const Index: React.FC<PageProps> = ({ title, description, keywords }) => {
   const [seed, setSeed] = useState('');
   const [describeImageUrl, setDescribeImageUrl] = useState('');
   const [blendImgs, setBlendImgs] = useState<UploadFile[]>([]);
-  const [showCourseBuyModal, setShowCourseBuyModal] = useState(true);
+  const [showCourseBuyModal, setShowCourseBuyModal] = useState(false);
 
   //自动纠错提示词
   const [isCorrectPrompt, setIsCorrectPrompt] = useState(false);
@@ -822,6 +822,7 @@ const Index: React.FC<PageProps> = ({ title, description, keywords }) => {
   useEffect(() => {
     if (user.secret) {
       if (dontShowBuyIds.indexOf(user.secret) > -1) {
+        localStorage.setItem('hiddenBuyModal2', 'true');
         setShowCourseBuyModal(false);
       }
     }
@@ -829,8 +830,10 @@ const Index: React.FC<PageProps> = ({ title, description, keywords }) => {
 
   //页面初始化
   useEffect(() => {
-    if (localStorage.getItem('hiddenBuyModal') === 'true') {
+    if (localStorage.getItem('hiddenBuyModal2') === 'true') {
       setShowCourseBuyModal(false);
+    } else {
+      setShowCourseBuyModal(true);
     }
     Router.events.on('routeChangeComplete', getPrompt);
     new ClipboardJS('.copy-prompt-btn');
@@ -872,7 +875,7 @@ const Index: React.FC<PageProps> = ({ title, description, keywords }) => {
         {
           false && <div className='course-buy-box'>
             <div className='course-buy-close-btn' onClick={() => {
-              // localStorage.setItem('hiddenBuyModal', 'true');
+              // localStorage.setItem('hiddenBuyModal2', 'true');
               setShowCourseBuyModal(false);
             }}>
               <i className='iconfont icon-guanbi'></i>
@@ -935,7 +938,7 @@ const Index: React.FC<PageProps> = ({ title, description, keywords }) => {
             <Checkbox
               onChange={(e) => {
                 const checked = e.target.checked;
-                checked ? localStorage.setItem('hiddenBuyModal', 'true') : localStorage.removeItem('hiddenBuyModal');
+                checked ? localStorage.setItem('hiddenBuyModal2', 'true') : localStorage.removeItem('hiddenBuyModal2');
               }}
             >
               不再提示

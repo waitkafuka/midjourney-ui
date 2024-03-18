@@ -905,7 +905,7 @@ const Index: React.FC<PageProps> = ({ title, description, keywords }) => {
           destroyOnClose={true}
           closable={true}
           maskClosable={false}
-          okText='去看看1'
+          okText='去看看'
           onCancel={() => {
             setShowCourseBuyModal(false);
           }}
@@ -926,7 +926,7 @@ const Index: React.FC<PageProps> = ({ title, description, keywords }) => {
                 window.open('https://superx.chat/stuff/course/');
               }}
             >
-              去看看
+              立即观看
             </Button>,
           ]}
         // footer={null}

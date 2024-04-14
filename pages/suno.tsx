@@ -5,12 +5,14 @@ import { SendOutlined, StopOutlined, QuestionCircleOutlined } from '@ant-design/
 import { Alert, Button, Col, Form, Input, InputNumber, Radio, Row, Select, Slider, Switch, Tooltip, message, notification } from "antd";
 import { SUNO_COST } from "../scripts/config";
 import PaintingPoint from "../components/paintingPoint";
-import { requestAliyunArt } from "../request/http";
+import { requestAliyunArt, requestAliyunArtStream } from "../request/http";
 import store from '../store';
 import { useSelector } from 'react-redux';
 import Head from 'next/head';
 import AliyunOSSUploader from '../components/OssUploader';
 import PureImgCard from "../components/masonry/PureImgCard";
+//导入音乐播放器
+import MusicCard from "../components/MusicCard";
 enum generateType {
     type_desc = 'type_desc',
     type_manual = 'type_manual'
@@ -57,6 +59,23 @@ const randomPrompt = [
     '一首充满阳光与欢笑的流行乐曲，歌词传递着对美好生活的向往与热爱，旋律中充满了积极乐观的能量。',
     '一首充满活力与动感的嘻哈音乐，节奏饱满，歌词中流露着对自由与独立的追求，让人难以抑制地跟着节拍摇摆。',
     '一首深情绵长的钢琴小品，音符如同涓涓细流，温柔而动人，唤起内心最柔软的情感与回忆。',]
+const defaultLyric = `[Verse]
+黑暗笼罩着这座城市
+血液沸腾 在静谧的夜晚
+疯狂的节奏穿越街区
+放肆地燃烧 吞噬我内心的宿命
+
+[Chorus]
+狂欢之夜 我们尽情飞舞
+挥洒汗水 荡起生命的热情
+放肆燃烧 烧毁所有束缚
+狂欢之夜 尽情释放自由
+
+[Verse]
+嘶吼声撕裂黑夜的寂静
+火焰熊熊 点燃心中的骚动
+尽情嘶吼 将所有痛苦抛弃
+释放内心的怒吼 我们不再屈服`;
 
 const randomMusicStyle = ['uplifting salsa', 'experimental synthpop', 'heartfelt blues', 'smooth rumba', 'dreamy swing', 'infectious grunge', 'acoustic raga', 'bouncy emo', 'bouncy kids music', 'futuristic folk', 'groovy punk', 'romantic bluegrass', 'dreamy salsa', 'aggressive uk garage', 'powerful gospel', 'powerful emo', 'dark edm', 'uplifting opera', 'melodic delta blues', 'dark synthwave', 'smooth metal', 'aggressive classical', 'experimental anime', 'bouncy sertanejo', 'mellow rumba', 'uplifting edm']
 
@@ -72,6 +91,8 @@ const SunoAI: React.FC = () => {
     const [isWrong, setIsWrong] = useState<boolean>(false); //是否服务器故障
     const [isTranslating, setIsTranslating] = useState(false);
     const [isGenerating, setIsGenerating] = useState(false);
+    //音乐列表
+    const [musicList, setMusicList] = useState<any[]>([]);
     const [ratio, setRatio] = useState<{ width: number, height: number }>({ width: 1, height: 1 }); //画布缩放比例
     const [qrImg, setQrImg] = useState<string>(''); //二维码图片
     const [showDemo, setShowDemo] = useState<boolean>(true); //是否显示示例
@@ -144,7 +165,12 @@ const SunoAI: React.FC = () => {
             apiParams.prompt = params.prompt || params.defaultPrompt;
         } else {
             //按歌词生成
-            apiParams.lyric = params.lyric || '';
+            if (params.lyric) {
+                apiParams.lyric = params.lyric
+            } else {
+                apiParams.lyric = params.lyric = defaultLyric;
+            }
+
             apiParams.musicStyle = params.musicStyle;
             apiParams.musicTitle = params.musicTitle;
             //如果不是纯音乐，歌词或者音乐风格至少输入一个
@@ -153,62 +179,67 @@ const SunoAI: React.FC = () => {
                 return;
             }
             //如果是纯音乐，则必须输入音乐风格
-            if (apiParams.pureMusic && !apiParams.musicStyle) {
+            if (apiParams.musicStyle) {
                 message.error('请填写音乐风格');
                 return;
             }
         }
-       
+
         //校验点数
         if (user.point_count < SUNO_COST) {
             message.error('点数不足，请先购买点数。');
             return;
         }
-       
         let res = null;
         try {
             console.log('提交参数：', apiParams);
-            res = await requestAliyunArt('suno-music-generate', apiParams);
-        } catch (error: any) {
-            //error.message转为小写
-            if (error.message.toLowerCase().includes('time')) {
-                const tips = '由于图片较大，接口响应超时，后台任务仍在运算中，可直接关闭页面。稍后换脸结果将发送至预留邮箱。';
-                notification.error({
-                    message: '提示',
-                    description: tips,
-                    duration: 0,
-                });
-            } else {
-                message.error(error + '');
+            //构建两个生成中的音乐实体
+            let music1 = {
+                title: '生成中...',
+                tags: '',
+                duration: '',
+                imgUrl: '',
+                imgLargeUrl: '',
+                audioUrl: ''
             }
+            let music2 = JSON.parse(JSON.stringify(music1));
+            let buildingMusicList: any[] = [music1, music2];
+            //作为placeholder放进去
+            setMusicList(list => [...list, ...buildingMusicList]);
+            res = await requestAliyunArtStream({
+                path: 'suno-music-generate', data: apiParams,
+                onDataChange: (data: any) => {
+                    console.log('data:', JSON.stringify(data, null, 2));
+                    if (data.code) {
+                        //未登录
+                        notification.error({
+                            message: '提示',
+                            description: data.message,
+                            duration: 0,
+                        });
+                        music1.title = music2.title = data.message;
+                        music1.tags = music2.tags = '';
+                        setMusicList((list) => [...list]);
+                        return;
+                    }
+                    if (data.state === 'complete') {
+                        store.dispatch({ type: 'user/pointChange', payload: user.point_count - data.cost })
+                    } else {
+                        //点数减少
+                        music1 = Object.assign(music1, data.audioResult[0]);
+                        music2 = Object.assign(music2, data.audioResult[0]);
+                        setMusicList(list => [...list]);
+                    }
+                }
+            });
 
+        } catch (error: any) {
+            message.error(error + '');
             setIsGenerating(false);
-            setQrCodeImage(undefined);
             return;
         }
-        if (res.code !== 0) {
-            //未登录的提示
-            if (res.code === 40015) {
-                res.message = '您尚未登录，请先登录后再试'
-            }
-            if (res.code === 40038) {
-                notification.error({
-                    message: '提示',
-                    description: '没有检测到面部，请确保底图和照片中均有清晰人脸，以避免换脸失败。可通过裁剪图像只保留人物腰部以上部分重试。为获得最好效果，尽量不要戴眼镜、口罩、帽子等遮挡物。',
-                    duration: 0,
-                });
-            } else {
-                //这里取的是sd返回的message
-                message.error(res.message);
-            }
-            setIsGenerating(false);
-            setQrCodeImage(undefined);
-            return;
-        }
-        const data = res.data;
+
         setIsGenerating(false);
-        //点数减少
-        store.dispatch({ type: 'user/pointChange', payload: user.point_count - data.cost })
     }
 
     //定义一个方法，从链接中获取url参数，并set到params中
@@ -254,8 +285,19 @@ const SunoAI: React.FC = () => {
         const randomIndex = Math.floor(Math.random() * randomMusicStyle.length);
         setParams({
             ...params,
-            defaultMusicStyle: randomMusicStyle[randomIndex]
+            musicStyle: randomMusicStyle[randomIndex]
         })
+    }
+
+    //初始化选中生成类型，从localStorage 中获取默认值
+    const initGenerateType = () => {
+        const generateType = localStorage.getItem('sunoGenerateType');
+        if (generateType) {
+            setParams({
+                ...params,
+                generateType
+            })
+        }
     }
 
 
@@ -264,6 +306,8 @@ const SunoAI: React.FC = () => {
         setParamsFromUrl();
         showFaceDemo();
         randomPromptFunc();
+        randomMusicStyleFunc();
+        initGenerateType();
     }, [])
 
     return <><Head>
@@ -301,6 +345,7 @@ const SunoAI: React.FC = () => {
                                         ...params,
                                         generateType: v.target.value
                                     });
+                                    localStorage.setItem('sunoGenerateType', v.target.value);
                                 }}
                                 value={params.generateType}
                                 optionType="button"
@@ -331,6 +376,7 @@ const SunoAI: React.FC = () => {
                                     });
                                 }} value={params.prompt} autoSize={{ minRows: 3, maxRows: 5 }} />
                             </div>
+                            <div style={{ fontSize: '12px', color: "#999" }}>Tips: Suno目前对中文的支持尚不完善，偶尔会出现中文被识别为敏感词的情况，此时可以稍后重试或者修改为英文提示词。</div>
 
                         </div>}
 
@@ -344,12 +390,12 @@ const SunoAI: React.FC = () => {
                                     </Tooltip>
                                     {(params.pureMusic && params.lyric) && <span className="small-tips">&nbsp;&nbsp;&nbsp;勾选纯音乐之后，将不使用歌词</span>}
                                 </div>
-                                <TextArea showCount maxLength={1000} disabled={params.pureMusic} placeholder="请输入歌词" onChange={v => {
+                                <TextArea showCount maxLength={1000} onResize={() => { }} disabled={params.pureMusic} placeholder={defaultLyric} onChange={v => {
                                     setParams({
                                         ...params,
                                         lyric: v.target.value
                                     });
-                                }} value={params.lyric} autoSize={{ minRows: 3, maxRows: 5 }} />
+                                }} value={params.lyric} autoSize={{ minRows: 3, }} />
                             </div>
                             {/* 音乐风格 */}
                             <div className="art-form-item" style={{ marginTop: "30px" }}>
@@ -360,15 +406,15 @@ const SunoAI: React.FC = () => {
                                     </Tooltip>
                                     <div className="label-right" onClick={randomMusicStyleFunc}>
                                         <i className="iconfont icon-shuaxin"></i>
-                                        随机
+                                        随机{params.musicStyle}
                                     </div>
                                 </div>
-                                <TextArea showCount maxLength={300} placeholder="请输入歌词" onChange={v => {
+                                <TextArea showCount maxLength={300} placeholder="请输入风格，也可以点击右上角随机一个风格"  onChange={v => {
                                     setParams({
                                         ...params,
                                         musicStyle: v.target.value
                                     });
-                                }} value={params.defaultMusicStyle} autoSize={{ minRows: 3, maxRows: 5 }} />
+                                }} value={params.musicStyle} autoSize={{ minRows: 3, maxRows: 5 }} />
                             </div>
 
                             {/* 音乐标题 */}
@@ -379,7 +425,7 @@ const SunoAI: React.FC = () => {
                                         <QuestionCircleOutlined />
                                     </Tooltip>
                                 </div>
-                                <Input showCount maxLength={100} placeholder="请输入标题" onChange={v => {
+                                <Input showCount maxLength={100} placeholder="请输入标题，可以不填，将由 AI 生成标题" onChange={v => {
                                     setParams({
                                         ...params,
                                         musicTitle: v.target.value
@@ -438,21 +484,25 @@ const SunoAI: React.FC = () => {
                 <div style={{ marginTop: "20px", color: "#666", fontSize: "13px", lineHeight: "1.6", width: "100%" }}>
                     使用必读：
                     <ul>
-                        <ol>1. 每段音乐长度为 1:30~2:00，生成时间 1-3 分钟</ol>
+                        <ol>1. 每段音乐长度为 1:00~2:00不等，生成时间约为 1-3 分钟</ol>
                         <ol>2. 两种生成方式：按AI描述生成和按指定歌词生成。按描述生成方式无需指定歌词，将由 AI 自动生成歌词；若想指定歌词，请选择按歌词生成的方式。</ol>
                         <ol>3. 不管是描述还是指定歌词，均支持中文。生成的歌曲歌词也为中文声音。</ol>
                         <ol>4. 生成的音乐默认私有，可商用。</ol>
+                        <ol>5. 每次生成 2 首音乐备选，共消耗 20 点数</ol>
                     </ul>
                 </div>
             </div>
-            {/* 放大结果区域 */}
-            {!qrCodeImage && showDemo && <div className="code-result">
-
-                <div className="face-swap-demo-wrap">
-
+            {/* 右侧结果区域 */}
+            {musicList.length > 0 && <div className="code-result">
+                <div className="face-swap-demo-wrap" style={{ paddingLeft: "30px" }}>
+                    {musicList.map((item: any, index: number) => {
+                        return <div style={{ marginTop: "30px", width: '100%' }} key={index}>
+                            <MusicCard title={item.title} tags={item.tags} duration={item.duration} imgUrl={item.imgUrl} imgLargeUrl={item.imgLargeUrl} audioUrl={item.audioUrl} status={item.status} prompt={item.prompt}></MusicCard>
+                        </div>
+                    })}
                 </div>
             </div>}
-            {qrCodeImage && <div className="code-result">
+            <div className="suno-result">
                 <div style={{ display: "flex", justifyContent: "center", flexDirection: 'column', alignItems: 'center' }}>
                     {qrCodeImage && <><PureImgCard
                         imgBasePath="https://oc.superx.chat"
@@ -478,7 +528,7 @@ const SunoAI: React.FC = () => {
                         </Button>
                     </>}
                 </div>
-            </div>}
+            </div>
 
         </div>
         {/* 说明区域 */}

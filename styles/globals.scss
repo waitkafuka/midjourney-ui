@@ -109,7 +109,7 @@ a:hover {
   display: inline;
 }
 
-.small-tips{
+.small-tips {
   font-size: 12px;
   color: rgb(216, 81, 81);
 }
@@ -151,12 +151,13 @@ a:hover {
   }
 }
 
-.painting-search-box{
+.painting-search-box {
   display: flex;
   justify-content: center;
 }
 
 .face-swap-demo-wrap {
+  width: 100%;
   .face-swap-demo-title {
     font-weight: bold;
     font-size: 18px;
@@ -226,33 +227,33 @@ a:hover {
   margin-left: 5px;
 }
 
-.course-buy-box{
+.course-buy-box {
   position: absolute;
   bottom: 200px;
   right: 20px;
   text-align: center;
   padding-top: 50px;
-  &:hover{
-    .course-buy-close-btn{
+  &:hover {
+    .course-buy-close-btn {
       display: block;
     }
   }
-  .buy-course-img{
+  .buy-course-img {
     width: 40px;
     //让图片上下弹跳的动画css
     animation: bounce 2s infinite;
     border-radius: 5px;
   }
-  .course-buy-close-btn{
+  .course-buy-close-btn {
     position: absolute;
     right: 0;
     top: 25px;
     cursor: pointer;
-    opacity: .7;
+    opacity: 0.7;
     display: block;
   }
 
-  .buy-course-title{
+  .buy-course-title {
     font-size: 13px;
     font-weight: bold;
     margin-top: 1px;
@@ -261,7 +262,11 @@ a:hover {
 }
 //bounce
 @keyframes bounce {
-  0%, 20%, 50%, 80%, 100% {
+  0%,
+  20%,
+  50%,
+  80%,
+  100% {
     transform: translateY(0);
   }
   40% {
@@ -277,11 +282,11 @@ a:hover {
   */
 
 @media (max-width: 1000px) {
-  div.painting-result-wrap.sd-result{
+  div.painting-result-wrap.sd-result {
     padding-bottom: 20px;
     padding-top: 30px;
   }
-  div.sd-one-dalle-input-box{
+  div.sd-one-dalle-input-box {
     position: static;
   }
   .faceswap-alert {
@@ -1126,4 +1131,78 @@ button.ant-btn-primary:not(:disabled):hover {
 }
 .code-result img {
   display: block;
+}
+.music-player {
+  width: 100%;
+  background: linear-gradient(
+      0deg,
+      hsla(38, 93%, 77%, 0),
+      hsla(38, 93%, 77%, 0.2) 200%
+    ),
+    #272626;
+  border-radius: 10px;
+  display: flex;
+  padding: 15px;
+  //上下排列
+  flex-direction: column;
+  .music-player__box {
+    display: flex;
+    .music-player__cover {
+      .music-download-btn {
+        display: none;
+      }
+      &:hover {
+        .music-download-btn {
+          display: block;
+        }
+      }
+      width: 70px;
+      height: 70px;
+      line-height: 70px;
+      border-radius: 3px;
+      text-align: center;
+      .iconfont {
+        font-size: 40px;
+        color: #fff;
+      }
+      img {
+        width: 100%;
+      }
+    }
+  }
+  .music-player__info {
+    margin-left: 20px;
+    width: calc(100% - 90px);
+
+    .music-player__title {
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+      margin-top: 6px;
+      font-size: 20px;
+      font-weight: 600;
+      color: #fff;
+    }
+    .music-player__prompt {
+      margin-top: 5px;
+      font-size: 13px;
+    }
+    .music-player__state {
+      margin-top: 5px;
+      font-size: 12px;
+      color: rgba(255, 255, 255, 0.5);
+    }
+    .music-player__tag {
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+      font-size: 14px;
+      color: rgba(255, 255, 255, 0.5);
+      margin-top: 5px;
+    }
+  }
+  .music-player__audio {
+    width: 100%;
+    margin-top: 20px;
+  }
 }

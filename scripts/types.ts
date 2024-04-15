@@ -14,10 +14,34 @@ export interface ImgCardModel {
     like_count?: number,
 }
 
+
+export interface MusicModel {
+    id?: number;
+    imgUrl: string;
+    imgLargeUrl: string;
+    title: string;
+    tags: string;
+    duration: number;
+    audioUrl: string;
+    status: string;
+    //歌词
+    prompt: string;
+    //是否显示状态
+    showStatus?: boolean;
+    //是否显示歌词
+    showPrompt?: boolean;
+}
+
 export enum ImgPageType {
     PUBLIC = 'public',
     MY = 'private',
     DALLE_PAINTING = 'dalle_painting',
+    MY_THUMB_UP_LIST = 'my_thumb_up_list',
+}
+
+export enum MusicPageType {
+    PUBLIC = 'public',
+    MY = 'private',
     MY_THUMB_UP_LIST = 'my_thumb_up_list',
 }
 

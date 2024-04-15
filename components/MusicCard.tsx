@@ -1,24 +1,10 @@
 import React, { useMemo, useState } from "react";
 import { Button, Space, Tag, Tooltip } from "antd";
+import { MusicModel } from '../scripts/types'
 import { downloadFile } from '../scripts/utils'
 
 const { CheckableTag } = Tag;
 
-interface Props {
-    imgUrl: string;
-    imgLargeUrl: string;
-    title: string;
-    tags: string;
-    duration: number;
-    audioUrl: string;
-    status: string;
-    //歌词
-    prompt: string;
-    //是否显示状态
-    showStatus?: boolean;
-    //是否显示歌词
-    showPrompt?: boolean;
-}
 
 function convertSecondsToMinutes(seconds: number) {
     // 计算分钟数
@@ -31,7 +17,7 @@ function convertSecondsToMinutes(seconds: number) {
     return `${minutes}:${formattedSeconds}`;
 }
 
-const App = (info: Props) => {
+const App = (info: MusicModel) => {
     const [selectedTags, setSelectedTags] = useState<string[]>([]);
     // submitted queued streaming complete error
     return (

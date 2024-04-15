@@ -58,7 +58,7 @@ const randomPrompt = [
     '一首迷幻梦幻的实验音乐作品，音符间流淌着超现实的旋律，引领听者探索未知的音乐境界。',
     '一首充满阳光与欢笑的流行乐曲，歌词传递着对美好生活的向往与热爱，旋律中充满了积极乐观的能量。',
     '一首充满活力与动感的嘻哈音乐，节奏饱满，歌词中流露着对自由与独立的追求，让人难以抑制地跟着节拍摇摆。',
-    '一首深情绵长的钢琴小品，音符如同涓涓细流，温柔而动人，唤起内心最柔软的情感与回忆。',]
+    '一首深情绵长的钢琴小品，音符如同涓涓细流，温柔而动人，唤起内心最柔软的情感与回忆。',];
 const defaultLyric = `[Verse]
 黑暗笼罩着这座城市
 血液沸腾 在静谧的夜晚
@@ -78,7 +78,6 @@ const defaultLyric = `[Verse]
 释放内心的怒吼 我们不再屈服`;
 
 const randomMusicStyle = ['uplifting salsa', 'experimental synthpop', 'heartfelt blues', 'smooth rumba', 'dreamy swing', 'infectious grunge', 'acoustic raga', 'bouncy emo', 'bouncy kids music', 'futuristic folk', 'groovy punk', 'romantic bluegrass', 'dreamy salsa', 'aggressive uk garage', 'powerful gospel', 'powerful emo', 'dark edm', 'uplifting opera', 'melodic delta blues', 'dark synthwave', 'smooth metal', 'aggressive classical', 'experimental anime', 'bouncy sertanejo', 'mellow rumba', 'uplifting edm']
-
 
 const TextArea = Input.TextArea;
 
@@ -100,7 +99,8 @@ const SunoAI: React.FC = () => {
         generateType: generateType.type_desc,
         prompt: '',
         modelVersion: 'v3',
-        email: ''
+        email: '',
+        // musicStyle: ''
     }); //表单参数
     const options = [{
         label: '按描述生成',
@@ -120,46 +120,12 @@ const SunoAI: React.FC = () => {
         }
     }, [user.email])
 
-
-
-    //获取图片imageData
-    function getImageData(imgUrl: string): any {
-        return new Promise((resolve, reject) => {
-            const img = new Image();
-
-            img.onload = function () {
-                const canvas = document.createElement('canvas');
-                const ctx = canvas.getContext('2d');
-
-                canvas.width = img.width;
-                canvas.height = img.height;
-
-                if (!ctx) return reject(new Error('无法加载图像'));
-                ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
-
-                const imgData = ctx.getImageData(0, 0, canvas.width, canvas.height);
-                resolve({
-                    imgData,
-                    img,
-                    canvas
-                });
-            };
-
-            img.onerror = function () {
-                message.error('无法加载图像');
-                setIsGenerating(false);
-                reject(new Error('无法加载图像'));
-            };
-            img.setAttribute("crossOrigin", 'anonymous')
-            img.src = imgUrl;
-        });
-    }
-
     const doSubmit = async () => {
         const apiParams: any = {};
         apiParams.isPureMusic = params.pureMusic;
         apiParams.modelVersion = params.modelVersion;
         apiParams.generateType = params.generateType;
+        apiParams.musicStyle = params.musicStyle;
         //按描述生成
         if (params.generateType === generateType.type_desc) {
             apiParams.prompt = params.prompt || params.defaultPrompt;
@@ -171,7 +137,9 @@ const SunoAI: React.FC = () => {
                 apiParams.lyric = params.lyric = defaultLyric;
             }
 
-            apiParams.musicStyle = params.musicStyle;
+            if (!apiParams.musicStyle) {
+                apiParams.musicStyle = params.musicStyle = randomMusicStyleFunc();
+            }
             apiParams.musicTitle = params.musicTitle;
             //如果不是纯音乐，歌词或者音乐风格至少输入一个
             if (!apiParams.pureMusic && !apiParams.lyric && !apiParams.musicStyle) {
@@ -179,8 +147,13 @@ const SunoAI: React.FC = () => {
                 return;
             }
             //如果是纯音乐，则必须输入音乐风格
-            if (apiParams.musicStyle) {
+            if (apiParams.pureMusic && !apiParams.musicStyle) {
                 message.error('请填写音乐风格');
+                return;
+            }
+            //标题必填
+            if (!apiParams.musicTitle) {
+                message.error('请填写音乐标题');
                 return;
             }
         }
@@ -242,60 +215,40 @@ const SunoAI: React.FC = () => {
         setIsGenerating(false);
     }
 
-    //定义一个方法，从链接中获取url参数，并set到params中
-    const setParamsFromUrl = () => {
-        let imgUrl = getQueryString('url');
-        if (!imgUrl) return;
-        //decode一下
-        imgUrl = decodeURIComponent(imgUrl);
-        setParams({
-            ...params,
-            source: {
-                onlineImgUrl: imgUrl,
-                imgType: generateType.type_desc
-            }
-        })
-        const notifyEmail = localStorage.getItem('notifyEmail');
-        if (notifyEmail) {
-            setParams({
-                ...params,
-                email: notifyEmail
-            })
-        }
-    }
-
-    const showFaceDemo = () => {
-        const isHidden = localStorage.getItem('hideFaceDemo');
-        if (isHidden) {
-            setShowDemo(false);
-        }
-    }
-
     //随机一个描述
     const randomPromptFunc = () => {
         const randomIndex = Math.floor(Math.random() * randomPrompt.length);
-        setParams({
-            ...params,
-            defaultPrompt: randomPrompt[randomIndex]
+        setParams((p: any) => {
+            return {
+                ...p,
+                defaultPrompt: randomPrompt[randomIndex]
+            }
         })
     }
 
     //随机一个音乐风格
     const randomMusicStyleFunc = () => {
         const randomIndex = Math.floor(Math.random() * randomMusicStyle.length);
-        setParams({
-            ...params,
-            musicStyle: randomMusicStyle[randomIndex]
+        let musicStyle = randomMusicStyle[randomIndex];
+
+        setParams((p: any) => {
+            return {
+                ...p,
+                musicStyle
+            }
         })
+        return musicStyle;
     }
 
     //初始化选中生成类型，从localStorage 中获取默认值
     const initGenerateType = () => {
         const generateType = localStorage.getItem('sunoGenerateType');
         if (generateType) {
-            setParams({
-                ...params,
-                generateType
+            setParams((p: any) => {
+                return {
+                    ...p,
+                    generateType
+                }
             })
         }
     }
@@ -303,8 +256,6 @@ const SunoAI: React.FC = () => {
 
     //页面初始化
     useEffect(() => {
-        setParamsFromUrl();
-        showFaceDemo();
         randomPromptFunc();
         randomMusicStyleFunc();
         initGenerateType();
@@ -406,10 +357,10 @@ const SunoAI: React.FC = () => {
                                     </Tooltip>
                                     <div className="label-right" onClick={randomMusicStyleFunc}>
                                         <i className="iconfont icon-shuaxin"></i>
-                                        随机{params.musicStyle}
+                                        随机
                                     </div>
                                 </div>
-                                <TextArea showCount maxLength={300} placeholder="请输入风格，也可以点击右上角随机一个风格"  onChange={v => {
+                                <TextArea showCount maxLength={300} placeholder="请输入风格，也可以点击右上角随机一个风格" onChange={v => {
                                     setParams({
                                         ...params,
                                         musicStyle: v.target.value
@@ -425,7 +376,7 @@ const SunoAI: React.FC = () => {
                                         <QuestionCircleOutlined />
                                     </Tooltip>
                                 </div>
-                                <Input showCount maxLength={100} placeholder="请输入标题，可以不填，将由 AI 生成标题" onChange={v => {
+                                <Input showCount maxLength={100} placeholder="请输入音乐标题" onChange={v => {
                                     setParams({
                                         ...params,
                                         musicTitle: v.target.value
@@ -455,7 +406,7 @@ const SunoAI: React.FC = () => {
                         </div>
 
                         {/* 模型版本 */}
-                        <div className="art-form-item horizontal" style={{ marginTop: "30px" }}>
+                        {/* <div className="art-form-item horizontal" style={{ marginTop: "30px" }}>
                             <div className="form-item-label">
                                 <span className="input-label">Suno模型版本</span>
                             </div>
@@ -470,7 +421,7 @@ const SunoAI: React.FC = () => {
                                 }}
                                 options={[{ label: 'v3', value: 'v3' }, { label: 'v2', value: 'v2' }]}
                             />
-                        </div>
+                        </div> */}
 
                     </div>
                 </div>
@@ -494,7 +445,7 @@ const SunoAI: React.FC = () => {
             </div>
             {/* 右侧结果区域 */}
             {musicList.length > 0 && <div className="code-result">
-                <div className="face-swap-demo-wrap" style={{ paddingLeft: "30px" }}>
+                <div className="face-swap-demo-wrap">
                     {musicList.map((item: any, index: number) => {
                         return <div style={{ marginTop: "30px", width: '100%' }} key={index}>
                             <MusicCard title={item.title} tags={item.tags} duration={item.duration} imgUrl={item.imgUrl} imgLargeUrl={item.imgLargeUrl} audioUrl={item.audioUrl} status={item.status} prompt={item.prompt}></MusicCard>

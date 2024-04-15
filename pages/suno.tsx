@@ -196,9 +196,9 @@ const SunoAI: React.FC = () => {
                         return;
                     }
                     if (data.state === 'complete') {
-                        store.dispatch({ type: 'user/pointChange', payload: user.point_count - data.cost })
+                        // store.dispatch({ type: 'user/pointChange', payload: user.point_count - data.cost })
+                        store.dispatch({ type: 'user/makePointChange', payload: - data.cost });
                     } else {
-                        //点数减少
                         music1 = Object.assign(music1, data.audioResult[0]);
                         music2 = Object.assign(music2, data.audioResult[0]);
                         setMusicList(list => [...list]);

@@ -253,12 +253,20 @@ const SunoAI: React.FC = () => {
         }
     }
 
+    const showFaceDemo = () => {
+        const isHidden = localStorage.getItem('hideSunoDemo');
+        if (isHidden) {
+            setShowDemo(false);
+        }
+    }
+
 
     //页面初始化
     useEffect(() => {
         randomPromptFunc();
         randomMusicStyleFunc();
         initGenerateType();
+        showFaceDemo();
     }, [])
 
     return <><Head>
@@ -285,7 +293,10 @@ const SunoAI: React.FC = () => {
             {/* 左侧区域 */}
             <div className="code-options-box">
                 <div className="face-box-wrap">
-
+                    <div className="face-box-title"> {!showDemo && <a style={{ fontSize: "14px", fontWeight: "100" }} href="javascript:void(0)" onClick={() => {
+                        setShowDemo(true);
+                        localStorage.setItem('hideSunoDemo', '');
+                    }}>显示示例</a>}</div>
                     <div className="face-box">
                         {/* 生成类型 */}
                         <div style={{ display: "flex", justifyContent: "center", marginBottom: "20px" }}>
@@ -444,6 +455,71 @@ const SunoAI: React.FC = () => {
                 </div>
             </div>
             {/* 右侧结果区域 */}
+            {musicList.length === 0 && showDemo && <div className="face-swap-demo-title" style={{ marginLeft: "20px", textAlign: "center", marginBottom: "20px" }}>
+                <span style={{ fontSize: "18px", color: "#fff" }}>效果示例</span> <a style={{ fontWeight: '100', fontSize: "14px" }} href="javascript:void(0)" onClick={() => {
+                    localStorage.setItem('hideSunoDemo', 'true');
+                    setShowDemo(false);
+                }}>隐藏示例</a>
+                <div>
+                    <MusicCard duration={120} audioUrl="https://superx.chat/stuff/demo-music.mp3" status="complete" imgUrl="https://cdn1.suno.ai/image_034e83da-25ab-4cd1-8b20-db6abb0ad906.png" imgLargeUrl="https://cdn1.suno.ai/image_034e83da-25ab-4cd1-8b20-db6abb0ad906.png" title="美丽远方" tags="synthwave, female singer, 80's" prompt={`哦-哦-哦-啊-啊-哦-哦
+
+远方传来的声音多么美妙， 
+清晨银露中它轻声响起。 
+那诱人的呼唤，让道路在招摇， 
+它让我的脑海如童年般旋转欢快。
+
+美丽的远方， 
+请别对我冷漠无情， 
+别对我冷漠无情， 请别无情。
+ 从纯洁的源头 我启程前往那美丽的远方，
+ 那美丽的远方 是我旅程的新起点。
+
+远方的声音再次响起， 
+在神秘的土地上它呼唤着我。 
+那声音质问，
+今天我是否为明天付出， 
+它的提问如此严厉而直接。
+
+美丽的远方， 
+请别对我冷漠无情，
+ 别对我冷漠无情， 请别无情。 
+从纯洁的源头 我启程前往那美丽的远方， 
+那美丽的远方 是我旅程的新起点。
+
+我发誓我将变得更加纯净善良， 
+在逆境中，我绝不会离开朋友。 
+那声音呼唤，我迅速地回应， 
+在无痕的路上，我加速前行。
+ 
+美丽的远方，
+ 请别对我冷漠无情， 
+别对我冷漠无情， 请别无情。 
+从纯洁的源头 我启程前往那美丽的远方， 
+那美丽的远方 是我旅程的新起点。
+
+美丽的远方… 哦-哦-哦…
+
+我启程前往那美丽的远方， 
+那美丽的远方 是我旅程的新起点。
+
+我发誓我将变得更加纯净善良， 
+在逆境中，我绝不会离开朋友。 
+那声音呼唤，我迅速地回应， 
+在无痕的路上，我加速前行。
+ 
+美丽的远方，
+ 请别对我冷漠无情， 
+别对我冷漠无情， 请别无情。 
+从纯洁的源头 我启程前往那美丽的远方， 
+那美丽的远方 是我旅程的新起点。
+
+美丽的远方… 哦-哦-哦…
+
+
+ 美丽的远方，
+ 请别对我冷漠无情， `}></MusicCard>
+                </div>
+            </div>}
             {musicList.length > 0 && <div className="code-result">
                 <div className="face-swap-demo-wrap">
                     {musicList.map((item: any, index: number) => {

@@ -455,11 +455,13 @@ const SunoAI: React.FC = () => {
                 </div>
             </div>
             {/* 右侧结果区域 */}
-            {musicList.length === 0 && showDemo && <div className="face-swap-demo-title" style={{ marginLeft: "20px", textAlign: "center", marginBottom: "20px" }}>
-                <span style={{ fontSize: "18px", color: "#fff" }}>效果示例</span> <a style={{ fontWeight: '100', fontSize: "14px" }} href="javascript:void(0)" onClick={() => {
-                    localStorage.setItem('hideSunoDemo', 'true');
-                    setShowDemo(false);
-                }}>隐藏示例</a>
+            {musicList.length === 0 && showDemo && <div className="face-swap-demo-title" style={{ marginLeft: "20px", marginBottom: "20px" }}>
+                <div style={{ textAlign: "center" }}>
+                    <span style={{ fontSize: "18px", color: "#fff" }}>效果示例</span> <a style={{ fontWeight: '100', fontSize: "14px" }} href="javascript:void(0)" onClick={() => {
+                        localStorage.setItem('hideSunoDemo', 'true');
+                        setShowDemo(false);
+                    }}>隐藏示例</a>
+                </div>
                 <div>
                     <MusicCard duration={120} audioUrl="https://superx.chat/stuff/demo-music.mp3" status="complete" imgUrl="https://cdn1.suno.ai/image_034e83da-25ab-4cd1-8b20-db6abb0ad906.png" imgLargeUrl="https://cdn1.suno.ai/image_034e83da-25ab-4cd1-8b20-db6abb0ad906.png" title="美丽远方" tags="synthwave, female singer, 80's" prompt={`哦-哦-哦-啊-啊-哦-哦
 
@@ -471,8 +473,8 @@ const SunoAI: React.FC = () => {
 美丽的远方， 
 请别对我冷漠无情， 
 别对我冷漠无情， 请别无情。
- 从纯洁的源头 我启程前往那美丽的远方，
- 那美丽的远方 是我旅程的新起点。
+从纯洁的源头 我启程前往那美丽的远方，
+那美丽的远方 是我旅程的新起点。
 
 远方的声音再次响起， 
 在神秘的土地上它呼唤着我。 
@@ -482,7 +484,7 @@ const SunoAI: React.FC = () => {
 
 美丽的远方， 
 请别对我冷漠无情，
- 别对我冷漠无情， 请别无情。 
+别对我冷漠无情， 请别无情。 
 从纯洁的源头 我启程前往那美丽的远方， 
 那美丽的远方 是我旅程的新起点。
 
@@ -492,32 +494,11 @@ const SunoAI: React.FC = () => {
 在无痕的路上，我加速前行。
  
 美丽的远方，
- 请别对我冷漠无情， 
+请别对我冷漠无情， 
 别对我冷漠无情， 请别无情。 
 从纯洁的源头 我启程前往那美丽的远方， 
 那美丽的远方 是我旅程的新起点。
-
-美丽的远方… 哦-哦-哦…
-
-我启程前往那美丽的远方， 
-那美丽的远方 是我旅程的新起点。
-
-我发誓我将变得更加纯净善良， 
-在逆境中，我绝不会离开朋友。 
-那声音呼唤，我迅速地回应， 
-在无痕的路上，我加速前行。
- 
-美丽的远方，
- 请别对我冷漠无情， 
-别对我冷漠无情， 请别无情。 
-从纯洁的源头 我启程前往那美丽的远方， 
-那美丽的远方 是我旅程的新起点。
-
-美丽的远方… 哦-哦-哦…
-
-
- 美丽的远方，
- 请别对我冷漠无情， `}></MusicCard>
+ `}></MusicCard>
                 </div>
             </div>}
             {musicList.length > 0 && <div className="code-result">

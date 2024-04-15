@@ -122,7 +122,7 @@ const ROUTES: Route = {
           name: '参数大全',
           key: 'cookbook',
           icon: <i className='iconfont icon-canshushezhi'></i>,
-        },{
+        }, {
           path: 'https://superx.chat/stuff/course/',
           target: "_blank",
           name: '视频课程',
@@ -145,6 +145,13 @@ const ROUTES: Route = {
         target: '_blank',
         name: '我的点赞',
         key: 'myThumbUp',
+        icon: <i className='iconfont icon-huihua'></i>,
+      },
+      {
+        path: '/art/my/music/',
+        target: '_blank',
+        name: '我的音乐',
+        key: 'my-music',
         icon: <i className='iconfont icon-huihua'></i>,
       }]
     },
@@ -444,7 +451,7 @@ export default function Main(children: JSX.Element) {
               name: '参数大全',
               key: 'cookbook',
               icon: <i className='iconfont icon-canshushezhi'></i>,
-            },{
+            }, {
               path: 'https://superx.chat/stuff/course/',
               target: "_blank",
               name: '视频课程',
@@ -467,6 +474,13 @@ export default function Main(children: JSX.Element) {
             target: '_blank',
             name: '我的点赞',
             key: 'myThumbUp',
+            icon: <i className='iconfont icon-huihua'></i>,
+          },
+          {
+            path: '/art/my/music/',
+            target: '_blank',
+            name: '我的音乐',
+            key: 'my-music',
             icon: <i className='iconfont icon-huihua'></i>,
           }]
         },
@@ -520,7 +534,7 @@ export default function Main(children: JSX.Element) {
               name: '参数大全',
               key: 'cookbook',
               icon: <i className='iconfont icon-canshushezhi'></i>,
-            },{
+            }, {
               path: 'https://superx.chat/stuff/course/',
               target: "_blank",
               name: '视频课程',
@@ -543,6 +557,13 @@ export default function Main(children: JSX.Element) {
             target: '_blank',
             name: '我的点赞',
             key: 'myThumbUp',
+            icon: <i className='iconfont icon-huihua'></i>,
+          },
+          {
+            path: '/art/my/music/',
+            target: '_blank',
+            name: '我的音乐',
+            key: 'my-music',
             icon: <i className='iconfont icon-huihua'></i>,
           }]
         },
@@ -664,7 +685,7 @@ export default function Main(children: JSX.Element) {
               name: '参数大全',
               key: 'cookbook',
               icon: <i className='iconfont icon-canshushezhi'></i>,
-            },{
+            }, {
               path: 'https://superx.chat/stuff/course/',
               target: "_blank",
               name: '视频课程',
@@ -687,6 +708,12 @@ export default function Main(children: JSX.Element) {
             target: '_blank',
             name: '我的点赞',
             key: 'myThumbUp',
+            icon: <i className='iconfont icon-huihua'></i>,
+          },{
+            path: '/art/my/music/',
+            target: '_blank',
+            name: '我的音乐',
+            key: 'my-music',
             icon: <i className='iconfont icon-huihua'></i>,
           }]
         },
@@ -798,7 +825,7 @@ export default function Main(children: JSX.Element) {
               name: '参数大全',
               key: 'cookbook',
               icon: <i className='iconfont icon-canshushezhi'></i>,
-            },{
+            }, {
               path: 'https://superx.chat/stuff/course/',
               target: "_blank",
               name: '视频课程',
@@ -821,6 +848,12 @@ export default function Main(children: JSX.Element) {
             target: '_blank',
             name: '我的点赞',
             key: 'myThumbUp',
+            icon: <i className='iconfont icon-huihua'></i>,
+          },{
+            path: '/art/my/music/',
+            target: '_blank',
+            name: '我的音乐',
+            key: 'my-music',
             icon: <i className='iconfont icon-huihua'></i>,
           }]
         },

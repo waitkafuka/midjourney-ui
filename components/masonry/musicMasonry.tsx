@@ -139,11 +139,11 @@ const App = ({ type, list, onPageRequest, onImgDeleted, isDataLoading, totalCoun
         </>}
         <div className="masonry-list-wrapper" style={{ height: "calc(100vh - 56px - 15px)", overflow: "scroll", boxSizing: "border-box", paddingTop: '20px', ...style, }}>
             {/* height: `${maxColumnHeight}px` */}
-            <><div className="music-list-container">
+            <><div className={css["masonry-list-container"]} style={{ width: `${containerWidth}px`, height: `${maxColumnHeight}px`, minHeight: "100vh" }}>
                 {list.map((musicInfo: ImgCardModel) => {
                     const musics = JSON.parse(musicInfo.img_url || '');
                     return musics.map((music: MusicModel, index: number) => {
-                        return <div key={music.id} className="my-music-item">
+                        return <div key={music.id} className={`${css['masonry-item']} masonry-item`} style={{ width: `${columnWidth}px`, color: "#fff", background: "linear-gradient(0deg, hsla(38, 93%, 77%, 0), hsla(38, 93%, 77%, 0.2) 200%), #272626" }}>
                             <MusicCard {...music} />
                         </div>
                     })

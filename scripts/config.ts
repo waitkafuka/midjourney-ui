@@ -2,7 +2,7 @@ export const NEXT_PUBLIC_IMAGE_PREFIX = 'https://och.superx.chat/';
 export const PAINTING_POINTS_ONE_TIME = 8;
 export const QRCODE_COST = 30;
 export const FACESWAP_COST = 60;
-export const SUNO_COST = 20;
+export const SUNO_COST = 40;
 export const appId = 'wx924c1cf2d94b4258';
 
 

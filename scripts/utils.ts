@@ -16,6 +16,27 @@ export const openWindow = (url: string) => {
     a.click();
 }
 
+//
+// 转换数字到复杂形式
+export function convertNumberToComplexForm(number: number) {
+    if(!number) return '';  
+    const mapping = ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j'];
+    // 将数字映射到字母
+    let letterString = number.toString().split('').map(digit => mapping[parseInt(digit)]).join('');
+    // 对字母字符串进行Base64编码
+    let base64Encoded = btoa(letterString);
+    return base64Encoded;
+}
+
+// 将复杂形式还原为数字
+export function convertComplexFormToNumber(complexForm: string) {
+    const mapping:any = {a: '0', b: '1', c: '2', d: '3', e: '4', f: '5', g: '6', h: '7', i: '8', j: '9'};
+    // 对Base64编码的字符串进行解码
+    let decodedString = atob(complexForm);
+    // 将字母映射回数字
+    let number = decodedString.split('').map(char => mapping[char]).join('');
+    return parseInt(number);
+}
 
 export const downloadFile = (url: string, filename: string = 'midjourney.png') => {
     message.info('正在下载图片...', 200);

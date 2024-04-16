@@ -1151,6 +1151,16 @@ button.ant-btn-primary:not(:disabled):hover {
   flex-direction: column;
   .music-player__box {
     display: flex;
+    position: relative;
+    .music-share-btn {
+      cursor: pointer;
+      position: absolute;
+      right: 0;
+      top: 0;
+      .iconfont {
+        font-size: 20px;
+      }
+    }
     .music-player__cover {
       .music-download-btn {
         display: none;
@@ -1162,7 +1172,7 @@ button.ant-btn-primary:not(:disabled):hover {
       }
       width: 70px;
       height: 70px;
-      line-height: 70px;
+      // line-height: 70px;
       border-radius: 3px;
       text-align: center;
       .iconfont {
@@ -1190,6 +1200,7 @@ button.ant-btn-primary:not(:disabled):hover {
     .music-player__prompt {
       margin-top: 5px;
       font-size: 13px;
+      white-space: pre-line;
     }
     .music-player__state {
       margin-top: 5px;
@@ -1210,7 +1221,7 @@ button.ant-btn-primary:not(:disabled):hover {
     margin-top: 20px;
   }
 }
-.music-list-container{
+.music-list-container {
   display: flex;
   flex-wrap: wrap;
   justify-content: space-evenly;
@@ -1221,4 +1232,8 @@ button.ant-btn-primary:not(:disabled):hover {
   flex: 1 1;
   width: 300px;
   display: inline-block;
+}
+.share-music-card-box {
+  width: 400px;
+  margin: 0 auto;
 }

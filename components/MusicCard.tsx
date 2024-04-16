@@ -1,9 +1,9 @@
 import React, { useMemo, useState } from "react";
-import { Button, Space, Tag, Tooltip } from "antd";
+import { Button, Space, Tag, Tooltip, message } from "antd";
 import { MusicModel } from '../scripts/types'
 import { downloadFile } from '../scripts/utils'
-
-const { CheckableTag } = Tag;
+import { sunoCdnDomain, sunoCdnDomainChina } from "../scripts/config";
+import { convertNumberToComplexForm } from '../scripts/utils'
 
 
 function convertSecondsToMinutes(seconds: number) {
@@ -19,16 +19,31 @@ function convertSecondsToMinutes(seconds: number) {
 
 const App = (info: MusicModel) => {
     const [selectedTags, setSelectedTags] = useState<string[]>([]);
+    //始终将info.imgUrl 中的字符串做一个替换，将abc替换为def，并具有响应式的能力
+    const imgUrl = useMemo(() => info.imgUrl?.replace(sunoCdnDomain, `${sunoCdnDomainChina}suno-img/`), [info.imgUrl]);
+    const imgLargeUrl = useMemo(() => info.imgLargeUrl?.replace(sunoCdnDomain, `${sunoCdnDomainChina}suno-img/`), [info.imgLargeUrl]);
+    const audioUrl = useMemo(() => info.audioUrl?.replace(sunoCdnDomain, `${sunoCdnDomainChina}suno-audio/`), [info.audioUrl]);
+
+
+
     // submitted queued streaming complete error
     return (
         <>
             {/* 创建一个美观的音乐播放器 */}
             <div className="music-player">
                 <div className="music-player__box">
+                    <div className="music-share-btn" onClick={() => {
+                        // 复制链接
+                        navigator.clipboard.writeText(`https://superx.chat/art/music/${info.id || 0}`)
+                        //提示已复制
+                        message.info('链接已复制，可发送至微信进行分享');
+                    }}>
+                        <i className="iconfont icon-share"></i>
+                    </div>
                     <div className="music-player__cover">
-                        {info.imgUrl ? <img src={info.imgUrl} alt={info.title} /> : <i className="iconfont icon-music" />}
+                        {imgUrl ? <img src={imgUrl} /> : <i className="iconfont icon-music" />}
                         <Button className="music-download-btn" size="small" onClick={() => {
-                            downloadFile(info.imgLargeUrl)
+                            downloadFile(imgLargeUrl)
                         }}>下载大图</Button>
                     </div>
                     <div className="music-player__info">
@@ -53,7 +68,7 @@ const App = (info: MusicModel) => {
                 <audio
                     className="music-player__audio"
                     controls
-                    src={info.audioUrl}
+                    src={audioUrl}
                 ></audio>
             </div>
         </>

@@ -1201,6 +1201,9 @@ button.ant-btn-primary:not(:disabled):hover {
       margin-top: 5px;
       font-size: 13px;
       white-space: pre-line;
+      max-height: 500px;
+      overflow: auto;
+      margin-top: 12px;
     }
     .music-player__state {
       margin-top: 5px;

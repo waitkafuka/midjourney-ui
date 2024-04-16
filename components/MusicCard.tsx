@@ -34,7 +34,7 @@ const App = (info: MusicModel) => {
                 <div className="music-player__box">
                     <div className="music-share-btn" onClick={() => {
                         // 复制链接
-                        navigator.clipboard.writeText(`https://superx.chat/art/music/${info.id || 0}`)
+                        navigator.clipboard.writeText(`https://superx.chat/art/music/suno?id=${info.id || 0}`)
                         //提示已复制
                         message.info('链接已复制，可发送至微信进行分享');
                     }}>

@@ -3,10 +3,11 @@ import { requestAliyunArt, requestAliyunArtStream } from "../../request/http";
 import { useEffect, useState } from 'react';
 import { Button, message } from 'antd';
 import MusicCard from '../../components/MusicCard'
+import { getQueryString } from '../../scripts/utils';
 
 export default function MusicPage({ params }: any) {
     const router = useRouter();
-    const { id } = router.query;
+    const id = getQueryString('id');
     //设置音乐详情
     const [musicDetail, setMusicDetail] = useState<any>({});
     //查询音乐详情
@@ -28,7 +29,7 @@ export default function MusicPage({ params }: any) {
         <div className='share-music-card-box'>
             <MusicCard {...musicDetail}></MusicCard>
             <div style={{ marginTop: "20px", display: "flex", justifyContent: "center" }}>
-                <Button onClick={()=>{
+                <Button onClick={() => {
                     router.push(`/suno`)
                 }}>立即创作</Button>
             </div>

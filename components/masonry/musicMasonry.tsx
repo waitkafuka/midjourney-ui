@@ -143,6 +143,7 @@ const App = ({ type, list, onPageRequest, onImgDeleted, isDataLoading, totalCoun
                 {list.map((musicInfo: ImgCardModel) => {
                     let musics: MusicModel[] = [];
                     try {
+                        musicInfo.img_url = musicInfo.img_url?.replace(/[\r|\n|\t]/g, "")
                         musics = JSON.parse(musicInfo.img_url || '');
                     } catch (error) {
                         console.log('解析音乐数据出错', error);

@@ -16,7 +16,7 @@ export interface ImgCardModel {
 
 
 export interface MusicModel {
-    id?: number;
+    id?: string;
     imgUrl: string;
     imgLargeUrl: string;
     title: string;

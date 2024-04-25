@@ -463,7 +463,7 @@ const SunoAI: React.FC = () => {
                     }}>隐藏示例</a>
                 </div>
                 <div>
-                    <MusicCard duration={120} audioUrl="https://superx.chat/stuff/demo-music.mp3" status="complete" imgUrl="https://cdn1.suno.ai/image_034e83da-25ab-4cd1-8b20-db6abb0ad906.png" imgLargeUrl="https://cdn1.suno.ai/image_034e83da-25ab-4cd1-8b20-db6abb0ad906.png" title="美丽远方" tags="synthwave, female singer, 80's" prompt={`哦-哦-哦-啊-啊-哦-哦
+                    <MusicCard duration={120} id='3b8c31e6-95b2-488e-9ed0-633a027f8150' audioUrl="https://superx.chat/stuff/demo-music.mp3" status="complete" imgUrl="https://cdn1.suno.ai/image_034e83da-25ab-4cd1-8b20-db6abb0ad906.png" imgLargeUrl="https://cdn1.suno.ai/image_034e83da-25ab-4cd1-8b20-db6abb0ad906.png" title="美丽远方" tags="synthwave, female singer, 80's" prompt={`哦-哦-哦-啊-啊-哦-哦
 
 远方传来的声音多么美妙， 
 清晨银露中它轻声响起。 

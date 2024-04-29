@@ -51,14 +51,15 @@ export default function OrderList() {
     { app_name: "Stable Diffution", app_id: 'sd' },
     { app_name: "AI二维码", app_id: 'qrcode' },
     { app_name: "图片高清放大", app_id: 'upscale' },
-    { app_name: "换脸", app_id: 'faceswap' }];
+    { app_name: "换脸", app_id: 'faceswap' },
+    { app_name: "Suno 音乐", app_id: 'suno' }];
 
   const columns: any = [
     {
       title: '绘画类型',
       dataIndex: 'painting_type',
       width: 80,
-      render: (text: number) => <span>{painting_type_map.find((item: { app_id: number; }) => item.app_id === text).app_name}</span>,
+      render: (text: number) => <span>{painting_type_map.find((item: { app_id: number; }) => item.app_id === text)?.app_name}</span>,
     },
     {
       title: '生成时间',

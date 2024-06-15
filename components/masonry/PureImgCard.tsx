@@ -32,6 +32,8 @@ interface Props {
     hasLikeButton?: boolean,
     ratio?: { width: number, height: number },
     hasPrompt?: boolean,
+    //是否有放大按钮
+    hasZoomButton?: boolean,
     //点赞完成的回调，需要在父页面更新点赞数量
     onImgThumbUpActionDone?: (id: number, action: string) => void,
 }

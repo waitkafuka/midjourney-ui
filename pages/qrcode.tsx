@@ -326,10 +326,16 @@ const QrCode: React.FC = () => {
         parseUrlParams();
     }, [])
 
-    return <><Head>
-        <meta name="description" content="这是我的页面描述" />
-        <meta name="referrer" content="no-referrer" />
-    </Head >
+    return <>
+        <Head>
+            <title>AI 艺术二维码</title>
+            <meta name="keywords" content="Midjourne、AI绘画,  人工智能绘画, Dalle 绘画, Stable Diffusion，AI换脸，AI图片放大，AI 二维码" />
+            <meta name="description" content="AI绘画, Midjourney绘画, 人工智能绘画, Stable Diffusion。使用人工智能+描述词画出你想要绘制的图像。" />
+            <meta
+                name="viewport"
+                content="width=device-width,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no"
+            />
+        </Head>
         <div className='dalle-point-box'><PaintingPoint></PaintingPoint></div>
         <div className="ai-qrcode-wrapper" style={{ marginTop: '50px' }}>
 

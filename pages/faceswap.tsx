@@ -227,10 +227,16 @@ const SwapFace: React.FC = () => {
         showFaceDemo();
     }, [])
 
-    return <><Head>
-        <meta name="description" content="这是我的页面描述" />
-        <meta name="referrer" content="no-referrer" />
-    </Head >
+    return <>
+        <Head>
+            <title>AI绘画, Midjourney, Midjourney中国官网, 人工智能绘画，AI换脸，AI图片放大，AI 二维码</title>
+            <meta name="keywords" content="Midjourne、AI绘画,  人工智能绘画, Dalle 绘画, Stable Diffusion，AI换脸，AI图片放大，AI 二维码" />
+            <meta name="description" content="AI绘画, Midjourney绘画, 人工智能绘画, Stable Diffusion。使用人工智能+描述词画出你想要绘制的图像。" />
+            <meta
+                name="viewport"
+                content="width=device-width,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no"
+            />
+        </Head>
         {/* <Alert
             className="faceswap-alert"
             message="换脸限时优惠中，原价：60点数/张，现价：30点数/张。"

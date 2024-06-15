@@ -20,7 +20,6 @@ export default class MyDocument extends Document {
 
   render() {
     let logoPath = '/art/logo.png';
-    //如果链接中包含ai.sunmen.cn，使用ai.sunmen.cn的logo
     return (
       <Html lang='en'>
         <Head >

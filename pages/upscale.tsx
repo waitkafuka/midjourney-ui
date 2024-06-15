@@ -1,6 +1,6 @@
 import { useEffect, useMemo, useState } from "react";
 import { ImgCardModel, ImgPageType, PaintingType } from '../scripts/types'
-import { getQueryString, hasChinese } from "../scripts/utils";
+import { downloadFile, getQueryString, hasChinese } from "../scripts/utils";
 import { SendOutlined, StopOutlined, QuestionCircleOutlined } from '@ant-design/icons';
 import { Button, Col, Form, Input, InputNumber, Radio, Row, Alert, Select, Slider, Tooltip, message, notification } from "antd";
 import jsQR from "jsqr";
@@ -192,6 +192,9 @@ const Upscale: React.FC = () => {
             setQrCodeImage(undefined);
             return;
         }
+        const distImgUrl = `https://oc.superx.chat${data.ossPath}`;
+        downloadFile(distImgUrl);
+
         setIsGenerating(false);
         setQrCodeImage({ ...newQrcodeImage, img_base_path: 'https://oc.superx.chat/', img_url: data.ossPath, id: data.id, width: data.width, height: data.height });
         //点数减少

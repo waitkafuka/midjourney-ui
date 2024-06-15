@@ -16,6 +16,7 @@ import { ImgCardModel, PaintingType, ImgPageType } from '../scripts/types';
 import PaintingPoint from '../components/paintingPoint';
 import { useSelector } from 'react-redux';
 import store from '../store';
+import Head from 'next/head';
 
 //'1024x1024', '1792x1024', '1024x1792'
 const sizes = [{
@@ -316,6 +317,15 @@ const Dalle: React.FC = () => {
     }, [])
     return (
         <div style={{ padding: "20px", paddingTop: "0" }}>
+            <Head>
+                <title>AI绘画, Midjourney, Midjourney中国官网, 人工智能绘画，AI换脸，AI图片放大，AI 二维码</title>
+                <meta name="keywords" content="Midjourne、AI绘画,  人工智能绘画, Dalle 绘画, Stable Diffusion，AI换脸，AI图片放大，AI 二维码" />
+                <meta name="description" content="AI绘画, Midjourney绘画, 人工智能绘画, Stable Diffusion。使用人工智能+描述词画出你想要绘制的图像。" />
+                <meta
+                    name="viewport"
+                    content="width=device-width,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no"
+                />
+            </Head>
             <Modal
                 title="翻译中"
                 style={{ top: 20 }}

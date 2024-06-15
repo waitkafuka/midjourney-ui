@@ -830,34 +830,11 @@ const Index: React.FC<PageProps> = ({ title, description, keywords }) => {
 
   //页面初始化
   useEffect(() => {
-    if (localStorage.getItem('hiddenBuyModal2') === 'true') {
-      setShowCourseBuyModal(false);
-    } else {
-      setShowCourseBuyModal(true);
-    }
-    Router.events.on('routeChangeComplete', getPrompt);
-    new ClipboardJS('.copy-prompt-btn');
-    //从页面链接中获取ddd参数
-    const ddd = getQueryString('ddd');
-    if (ddd) {
-      setDebug(true);
-      setInputDisable(false);
-    }
     getPrompt();
     checkTips();
     setBDVid();
     showQRcode();
     setRandomClientId();
-    //页面初始化
-    //如果链接中包含ued参数，隐藏购买入口
-    if (window.location.href.indexOf('ued') > -1) {
-      setIsShowBuyPointEntry(false);
-    }
-    //从localstorage中获取isCorrectPrompt的状态
-    const localIsCorrectPrompt = localStorage.getItem('isCorrectPrompt');
-    if (localIsCorrectPrompt === 'false') {
-      setIsCorrectPrompt(false);
-    }
     return () => {
       Router.events.off('routeChangeComplete', getPrompt);
     }
@@ -865,11 +842,11 @@ const Index: React.FC<PageProps> = ({ title, description, keywords }) => {
 
   return (
     <>
-      {/* <Head>
+      <Head>
         <title>Midjourney - 中国官网</title>
         <meta name="description" content="Midjourney中国区官网，通过Midjourney AI让绘画如此简单，您只需要在Midjourney AI中描述你的画面即可，这里为您为准备了Midjourney AI基本的使用教程，Stable Diffusion、Dalle3等，是在中国使用Midjourney一站式平台！" />
         <meta name="keywords" content="Midjourney,Midjourney中文网,Midjourney中国官网,MJ AI,Midjourney培训、MJ咒语" />
-      </Head> */}
+      </Head>
       <div className='w-full mx-auto px-4 h-full overflow-y-hidden list-input-container'>
         {/* 右下角的购买课程按钮弹窗 */}
         {

@@ -355,6 +355,9 @@ const Index: React.FC<PageProps> = ({ title, description, keywords }) => {
             newMessage.img = data.uri.replace('https://cdn.discordapp.com/', NEXT_PUBLIC_IMAGE_PREFIX);
             if (data.id) {
               newMessage.hasTag = true;
+              newMessage.img = data.uri.replace('https://cdn.discordapp.com/', NEXT_PUBLIC_IMAGE_PREFIX);
+              //截取?ex之前的部分
+              newMessage.img = newMessage.img.split('?ex')[0];
               //扣减点数
               store.dispatch({ type: 'user/makePointChange', payload: -PAINTING_POINTS_ONE_TIME });
             }
@@ -377,115 +380,6 @@ const Index: React.FC<PageProps> = ({ title, description, keywords }) => {
       setInputValue('');
       setInputDisable(false);
     }
-  };
-  const variation = async (content: string, msgId: string, msgHash: string, index: number) => {
-    let newMessage: Message = {
-      text: `${content} variation V${index}`,
-      hasTag: false,
-      progress: defaultTips,
-      img: defaultImg,
-      buttons: []
-    };
-
-    setInputDisable(true);
-    setMessages((omsg) => [...omsg, newMessage]);
-    try {
-      requestAliyunArtStream({
-        path: 'variation',
-        data: {
-          content, index, msgId, msgHash, clientId
-        },
-        onDataChange(data: any) {
-          //mj 服务报错
-          if (data.code === 40024) {
-            notification.error({
-              message: '提示',
-              description: data.message,
-              duration: 0,
-            });
-
-            setInputDisable(false);
-            return;
-          }
-          newMessage.img = data.uri.replace('https://cdn.discordapp.com/', NEXT_PUBLIC_IMAGE_PREFIX);
-          if (data.id) {
-            newMessage.hasTag = true;
-            //扣减点数
-            store.dispatch({ type: 'user/makePointChange', payload: -PAINTING_POINTS_ONE_TIME });
-          }
-          console.log('variation dataing:', data);
-          newMessage.msgHash = data.hash;
-          newMessage.msgID = data.id;
-          newMessage.content = data.content;
-          newMessage.progress = data.progress;
-          newMessage.buttons = data.buttons;
-          const oldMessages = messages;
-          // setMessages(omsg => replaceLastElement(omsg, newMessage));
-          setMessages([...oldMessages, newMessage]);
-        }
-      })
-    } catch (error) {
-      console.log('variation出错了：', error);
-      message.error('出错了:' + error, 30);
-      setInputDisable(false);
-    }
-
-    setInputDisable(false);
-  };
-  const upscale = async (pormpt: string, msgId: string, msgHash: string, index: number) => {
-    let newMessage: Message = {
-      text: `${pormpt} upscale U${index}`,
-      hasTag: false,
-      progress: defaultTips,
-      img: defaultImg,
-      buttons: []
-    };
-
-    setInputDisable(true);
-    setMessages((omsg) => [...omsg, newMessage]);
-    try {
-      requestAliyunArtStream({
-        path: 'upscale',
-        data: {
-          content: pormpt, index, msgId, msgHash, clientId
-        },
-        onDataChange(data: any) {
-          console.log('upscale dataing:', data);
-          //mj 服务报错
-          if (data.code === 40024) {
-            notification.error({
-              message: '提示',
-              description: data.message,
-              duration: 0,
-            });
-
-            //删除最后一个messages
-            setMessages((msgs) => [...msgs.slice(0, -1)]);
-            setInputDisable(false);
-            return;
-          }
-          newMessage.img = data.uri.replace('https://cdn.discordapp.com/', NEXT_PUBLIC_IMAGE_PREFIX);
-          newMessage.msgHash = data.hash;
-          newMessage.msgID = data.id;
-          newMessage.content = data.content;
-          newMessage.progress = data.progress;
-          const oldMessages = messages;
-          if (data.id) {
-            // newMessage.hasTag = true;
-            //扣减点数
-            store.dispatch({ type: 'user/makePointChange', payload: -2 });
-          }
-          // setMessages(omsg => replaceLastElement(omsg, newMessage));
-          setMessages([...oldMessages, newMessage]);
-        }
-      })
-    } catch (error) {
-      console.log('upscale出错了：', error);
-      message.error('出错了:' + error, 30);
-      setInputDisable(false);
-    }
-
-    setInputDisable(false);
   };
 
   //点击按钮

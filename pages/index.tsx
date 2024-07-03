@@ -89,7 +89,7 @@ const Index: React.FC<PageProps> = ({ title, description, keywords }) => {
   const [seed, setSeed] = useState('');
   const [describeImageUrl, setDescribeImageUrl] = useState('');
   const [blendImgs, setBlendImgs] = useState<UploadFile[]>([]);
-  const [showCourseBuyModal, setShowCourseBuyModal] = useState(false);
+  const [showCourseBuyModal, setShowCourseBuyModal] = useState(true);
 
   //自动纠错提示词
   const [isCorrectPrompt, setIsCorrectPrompt] = useState(false);
@@ -716,7 +716,7 @@ const Index: React.FC<PageProps> = ({ title, description, keywords }) => {
   useEffect(() => {
     if (user.secret) {
       if (dontShowBuyIds.indexOf(user.secret) > -1) {
-        localStorage.setItem('hiddenBuyModal2', 'true');
+        localStorage.setItem('hiddenBuyModal3', 'true');
         setShowCourseBuyModal(false);
       }
     }
@@ -746,7 +746,7 @@ const Index: React.FC<PageProps> = ({ title, description, keywords }) => {
         {
           false && <div className='course-buy-box'>
             <div className='course-buy-close-btn' onClick={() => {
-              // localStorage.setItem('hiddenBuyModal2', 'true');
+              // localStorage.setItem('hiddenBuyModal3', 'true');
               setShowCourseBuyModal(false);
             }}>
               <i className='iconfont icon-guanbi'></i>
@@ -809,7 +809,7 @@ const Index: React.FC<PageProps> = ({ title, description, keywords }) => {
             <Checkbox
               onChange={(e) => {
                 const checked = e.target.checked;
-                checked ? localStorage.setItem('hiddenBuyModal2', 'true') : localStorage.removeItem('hiddenBuyModal2');
+                checked ? localStorage.setItem('hiddenBuyModal3', 'true') : localStorage.removeItem('hiddenBuyModal3');
               }}
             >
               不再提示

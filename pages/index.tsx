@@ -729,6 +729,10 @@ const Index: React.FC<PageProps> = ({ title, description, keywords }) => {
     setBDVid();
     showQRcode();
     setRandomClientId();
+    //如果hiddenBuyModal3存在，就不显示购买弹窗
+    if (localStorage.getItem('hiddenBuyModal3')) {
+      setShowCourseBuyModal(false);
+    }
     return () => {
       Router.events.off('routeChangeComplete', getPrompt);
     }

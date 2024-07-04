@@ -89,7 +89,8 @@ const Index: React.FC<PageProps> = ({ title, description, keywords }) => {
   const [seed, setSeed] = useState('');
   const [describeImageUrl, setDescribeImageUrl] = useState('');
   const [blendImgs, setBlendImgs] = useState<UploadFile[]>([]);
-  const [showCourseBuyModal, setShowCourseBuyModal] = useState(true);
+  //购买课程弹窗
+  const [showCourseBuyModal, setShowCourseBuyModal] = useState(false);
 
   //自动纠错提示词
   const [isCorrectPrompt, setIsCorrectPrompt] = useState(false);
@@ -729,9 +730,9 @@ const Index: React.FC<PageProps> = ({ title, description, keywords }) => {
     setBDVid();
     showQRcode();
     setRandomClientId();
-    //如果hiddenBuyModal3存在，就不显示购买弹窗
-    if (localStorage.getItem('hiddenBuyModal3')) {
-      setShowCourseBuyModal(false);
+    //如果hiddenBuyModal3不存在，显示弹窗
+    if (!localStorage.getItem('hiddenBuyModal3')) {
+      setShowCourseBuyModal(true);
     }
     return () => {
       Router.events.off('routeChangeComplete', getPrompt);

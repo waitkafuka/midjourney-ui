@@ -426,6 +426,8 @@ const Index: React.FC<PageProps> = ({ title, description, keywords }) => {
 
         if (data.id) {
           // newMessage.hasTag = true;
+          //截取?ex之前的部分
+          newMessage.img = newMessage.img.split('?ex')[0];
           //扣减点数
           store.dispatch({ type: 'user/makePointChange', payload: -data.cost });
         }

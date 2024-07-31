@@ -356,9 +356,6 @@ const Index: React.FC<PageProps> = ({ title, description, keywords }) => {
             newMessage.img = data.uri.replace('https://cdn.discordapp.com/', NEXT_PUBLIC_IMAGE_PREFIX);
             if (data.id) {
               newMessage.hasTag = true;
-              newMessage.img = data.uri.replace('https://cdn.discordapp.com/', NEXT_PUBLIC_IMAGE_PREFIX);
-              //截取?ex之前的部分
-              newMessage.img = newMessage.img.split('?ex')[0];
               //扣减点数
               store.dispatch({ type: 'user/makePointChange', payload: -PAINTING_POINTS_ONE_TIME });
             }
@@ -426,8 +423,6 @@ const Index: React.FC<PageProps> = ({ title, description, keywords }) => {
 
         if (data.id) {
           // newMessage.hasTag = true;
-          //截取?ex之前的部分
-          newMessage.img = newMessage.img.split('?ex')[0];
           //扣减点数
           store.dispatch({ type: 'user/makePointChange', payload: -data.cost });
         }

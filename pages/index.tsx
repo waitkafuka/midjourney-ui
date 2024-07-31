@@ -367,7 +367,15 @@ const Index: React.FC<PageProps> = ({ title, description, keywords }) => {
             newMessage.buttons = data.buttons;
             const oldMessages = messages;
             // setMessages(omsg => replaceLastElement(omsg, newMessage));
-            setMessages(msgs => [...msgs]);
+            //两秒之后，再setMessages
+            setTimeout(() => {
+              // setMessages((omsg) => {
+              //   return [...omsg, newMessage];
+              // });
+              setMessages(msgs => [...msgs]);
+
+            }, 1000);
+            // setMessages(msgs => [...msgs]);
           }
         });
       } catch (error) {
@@ -429,10 +437,13 @@ const Index: React.FC<PageProps> = ({ title, description, keywords }) => {
         // setMessages(omsg => replaceLastElement(omsg, newMessage));
         //从messages中根据msgId找到对应的msg，然后替换
 
-        setMessages(imgs => {
-          imgs[messageIndex] = newMessage;
-          return [...imgs]
-        });
+        setTimeout(() => {
+          setMessages(imgs => {
+            imgs[messageIndex] = newMessage;
+            return [...imgs]
+          });
+        }, 1000);
+
       }
     })
     setInputDisable(false);

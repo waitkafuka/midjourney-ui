@@ -66,7 +66,7 @@ const ImageDisplayPage: React.FC = () => {
     return (
         <div className=" mx-auto">
             <Head>
-                <title>全尺寸交互式图片展示页面</title>
+                <title>midjourney官网</title>
                 <meta name="description" content="展示从URL路径中获取的可交互全尺寸图片" />
                 <style>{`
           .zoom-cursor { cursor: zoom-in; }
@@ -81,8 +81,11 @@ const ImageDisplayPage: React.FC = () => {
             <main>
                 {imageUrl ? (
                     <>
-                        <div style={{ textAlign: "center" }} className={`mb-4 ${isExpanded ? 'image-container' : ' overflow-hidden'}`}>
-
+                        <div ref={containerRef}
+                            style={{ textAlign: "center" }}
+                            className={`mb-4 ${isExpanded ? 'image-container' : ' overflow-hidden'}`}
+                            onTouchStart={isExpanded ? handleTouchStart : undefined}
+                            onTouchMove={isExpanded ? handleTouchMove : undefined}>
                             <img
                                 ref={imgRef}
                                 src={imageUrl}

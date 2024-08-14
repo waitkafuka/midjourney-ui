@@ -6,6 +6,7 @@ const ImageDisplayPage: React.FC = () => {
     const router = useRouter();
     const [imageUrl, setImageUrl] = useState<string | null>(null);
     const [isExpanded, setIsExpanded] = useState(false);
+    const [showSize, setShowSize] = useState(false);
     const [imageDimensions, setImageDimensions] = useState({ width: 0, height: 0 });
     const imgRef = useRef<HTMLImageElement>(null);
 
@@ -68,15 +69,18 @@ const ImageDisplayPage: React.FC = () => {
                                 onError={() => setImageUrl(null)}
                             />
                         </div>
-                        <p className="mt-2 text-sm text-center">
-                            <strong>图片完整尺寸:</strong> {imageDimensions.width} x {imageDimensions.height} 像素
-                        </p>
-                        <p className="mt-2 text-sm text-gray-600 text-center">
-                            点击图片可以 {isExpanded ? '缩小' : '放大'} 查看。{isExpanded && '可以滚动查看完整图片。'}
-                        </p>
-                        <p className="mt-2 text-sm text-gray-600 text-center">
-                            右键可以保存图片（手机端可以长按保存）。
-                        </p>
+                        {imageDimensions.width ? <>
+                            <p className="mt-2 text-sm text-center">
+                                <strong>图片完整尺寸:</strong> {imageDimensions.width} x {imageDimensions.height} 像素
+                            </p>
+                            <p className="mt-2 text-sm text-gray-600 text-center">
+                                点击图片可以 {isExpanded ? '缩小' : '放大'} 查看。{isExpanded && '可以滚动查看完整图片。'}
+                            </p>
+                            <p className="mt-2 text-sm text-gray-600 text-center">
+                                右键可以保存图片（手机端可以长按保存）。
+                            </p>
+                        </> : <p className="mt-2 text-sm text-gray-600 text-center">
+                        </p>}
                     </>
                 ) : (
                     <p>没有找到有效的图片URL或图片加载失败。</p>

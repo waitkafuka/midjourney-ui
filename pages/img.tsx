@@ -62,13 +62,16 @@ const ImageDisplayPage: React.FC = () => {
     };
 
     const handleTouchMove = (e: React.TouchEvent<HTMLDivElement>) => {
-        if (e.touches.length === 2) {
+        if (e.touches.length === 2 && imgRef.current) {
             e.preventDefault();
             const distance = getDistance(e.touches[0] as Touch, e.touches[1] as Touch);
-            const newScale = Math.min(Math.max((distance / initialDistance) * initialScale, 0.5), 3);
-            console.log(newScale);
-            
-            setScale(newScale);
+            const newScale = (distance / initialDistance) * initialScale;
+
+            // Calculate the minimum scale to reach 200px width
+            const minScale = 200 / imgRef.current.naturalWidth;
+
+            // Apply the new scale, with a minimum of minScale and a maximum of 3
+            setScale(Math.min(Math.max(newScale, minScale), 3));
         }
     };
 
@@ -105,7 +108,7 @@ const ImageDisplayPage: React.FC = () => {
                             className={`mb-4 ${isExpanded ? 'image-container' : 'overflow-hidden'}`}
                             onTouchStart={isExpanded ? handleTouchStart : undefined}
                             onTouchMove={isExpanded ? handleTouchMove : undefined}
-                            // onWheel={handleWheel}
+                        // onWheel={handleWheel}
                         >
                             <img
                                 ref={imgRef}
@@ -130,11 +133,12 @@ const ImageDisplayPage: React.FC = () => {
                                     <strong>图片尺寸:</strong> {imageDimensions.width} x {imageDimensions.height} px
                                 </p>
                                 <p className="mt-2 text-sm text-gray-600 text-center">
-                                   点击图片 {isExpanded ? '缩小' : '放大'}. {isExpanded && 'You can scroll to view the full image.'}
+                                    点击图片放大/缩小。
                                 </p>
                                 <p className="mt-2 text-sm text-gray-600 text-center">
                                     右键保存图片（手机端可长按保存）
                                 </p>
+                                <div style={{ height: "20px" }}></div>
                                 {isExpanded && (
                                     <p className="mt-2 text-sm text-gray-600 text-center">
                                         {/* Use pinch gestures or mouse wheel to zoom in/out. */}

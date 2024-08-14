@@ -1,7 +1,6 @@
 import { useRouter } from 'next/router';
 import { useState, useEffect, useRef } from 'react';
 import Head from 'next/head';
-import { TransformWrapper, TransformComponent } from 'react-zoom-pan-pinch';
 
 const ImageDisplayPage: React.FC = () => {
     const router = useRouter();
@@ -9,7 +8,9 @@ const ImageDisplayPage: React.FC = () => {
     const [isExpanded, setIsExpanded] = useState(false);
     const [showSize, setShowSize] = useState(false);
     const [imageDimensions, setImageDimensions] = useState({ width: 0, height: 0 });
+    const [scale, setScale] = useState(1);
     const imgRef = useRef<HTMLImageElement>(null);
+    const containerRef = useRef<HTMLDivElement>(null);
 
     useEffect(() => {
         if (router.isReady) {
@@ -29,6 +30,7 @@ const ImageDisplayPage: React.FC = () => {
 
     const toggleImageSize = () => {
         setIsExpanded(!isExpanded);
+        setScale(1);
     };
 
     const handleImageLoad = () => {
@@ -39,6 +41,27 @@ const ImageDisplayPage: React.FC = () => {
             });
         }
     };
+
+    const handleTouchStart = (e: React.TouchEvent) => {
+        if (e.touches.length === 2) {
+            e.preventDefault();
+        }
+    };
+
+    const handleTouchMove = (e: React.TouchEvent) => {
+        if (e.touches.length === 2) {
+            e.preventDefault();
+            const touch1 = e.touches[0];
+            const touch2 = e.touches[1];
+            const distance = Math.sqrt(
+                Math.pow(touch1.clientX - touch2.clientX, 2) +
+                Math.pow(touch1.clientY - touch2.clientY, 2)
+            );
+
+            const newScale = Math.min(Math.max(scale * (distance / 100), 0.5), 3);
+            setScale(newScale);
+        }
+    }
 
     return (
         <div className=" mx-auto">
@@ -59,26 +82,23 @@ const ImageDisplayPage: React.FC = () => {
                 {imageUrl ? (
                     <>
                         <div style={{ textAlign: "center" }} className={`mb-4 ${isExpanded ? 'image-container' : ' overflow-hidden'}`}>
-                            <TransformWrapper
-                                initialScale={1}
-                                minScale={200 / Math.max(imageDimensions.width, imageDimensions.height)}
-                                maxScale={1}
-                                limitToBounds={true}
-                                doubleClick={{ disabled: false }}
-                            >
-                                <TransformComponent>
-                                    <img
-                                        ref={imgRef}
-                                        src={imageUrl}
-                                        alt="展示的图片"
-                                        className={isExpanded ? 'zoom-out-cursor' : 'zoom-cursor'}
-                                        style={{ width: isExpanded ? 'auto' : '50%', height: 'auto' }}
-                                        onClick={toggleImageSize}
-                                        onLoad={handleImageLoad}
-                                        onError={() => setImageUrl(null)}
-                                    />
-                                </TransformComponent>
-                            </TransformWrapper>
+
+                            <img
+                                ref={imgRef}
+                                src={imageUrl}
+                                alt="展示的图片"
+                                className={isExpanded ? 'zoom-out-cursor' : 'zoom-cursor'}
+                                style={{
+                                    width: isExpanded ? 'auto' : '50%',
+                                    height: 'auto',
+                                    transform: `scale(${scale})`,
+                                    transformOrigin: 'center',
+                                    transition: 'transform 0.1s ease-out'
+                                }}
+                                onClick={toggleImageSize}
+                                onLoad={handleImageLoad}
+                                onError={() => setImageUrl(null)}
+                            />
 
                         </div>
                         {imageDimensions.width ? <>

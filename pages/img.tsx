@@ -6,9 +6,10 @@ const ImageDisplayPage: React.FC = () => {
     const router = useRouter();
     const [imageUrl, setImageUrl] = useState<string | null>(null);
     const [isExpanded, setIsExpanded] = useState(false);
-    const [showSize, setShowSize] = useState(false);
     const [imageDimensions, setImageDimensions] = useState({ width: 0, height: 0 });
     const [scale, setScale] = useState(1);
+    const [initialDistance, setInitialDistance] = useState(0);
+    const [initialScale, setInitialScale] = useState(1);
     const imgRef = useRef<HTMLImageElement>(null);
     const containerRef = useRef<HTMLDivElement>(null);
 
@@ -42,54 +43,74 @@ const ImageDisplayPage: React.FC = () => {
         }
     };
 
-    const handleTouchStart = (e: React.TouchEvent) => {
+    const getDistance = (touch1: Touch, touch2: Touch) => {
+        return Math.hypot(
+            touch1.clientX - touch2.clientX,
+            touch1.clientY - touch2.clientY
+        );
+    };
+
+    const handleTouchStart = (e: React.TouchEvent<HTMLDivElement>) => {
         if (e.touches.length === 2) {
             e.preventDefault();
+            const touch1 = e.touches[0] as Touch;
+            const touch2 = e.touches[1] as Touch;
+            const distance = getDistance(touch1, touch2);
+            setInitialDistance(distance);
+            setInitialScale(scale);
         }
     };
 
-    const handleTouchMove = (e: React.TouchEvent) => {
+    const handleTouchMove = (e: React.TouchEvent<HTMLDivElement>) => {
         if (e.touches.length === 2) {
             e.preventDefault();
-            const touch1 = e.touches[0];
-            const touch2 = e.touches[1];
-            const distance = Math.sqrt(
-                Math.pow(touch1.clientX - touch2.clientX, 2) +
-                Math.pow(touch1.clientY - touch2.clientY, 2)
-            );
-
-            const newScale = Math.min(Math.max(scale * (distance / 100), 0.5), 3);
+            const distance = getDistance(e.touches[0] as Touch, e.touches[1] as Touch);
+            const newScale = Math.min(Math.max((distance / initialDistance) * initialScale, 0.5), 3);
+            console.log(newScale);
+            
             setScale(newScale);
         }
-    }
+    };
+
+    const handleWheel = (e: React.WheelEvent<HTMLDivElement>) => {
+        if (isExpanded) {
+            e.preventDefault();
+            const newScale = Math.min(Math.max(scale - e.deltaY * 0.001, 0.5), 3);
+            setScale(newScale);
+        }
+    };
 
     return (
-        <div className=" mx-auto">
+        <div className="mx-auto">
             <Head>
-                <title>midjourney官网</title>
-                <meta name="description" content="展示从URL路径中获取的可交互全尺寸图片" />
+                <title>Image Display</title>
+                <meta name="description" content="Interactive full-size image display" />
                 <style>{`
-          .zoom-cursor { cursor: zoom-in; }
-          .zoom-out-cursor { cursor: zoom-out; }
-          .image-container {
-            overflow: auto;
-            max-width:90vw;
-          }
-        `}</style>
+                    .zoom-cursor { cursor: zoom-in; }
+                    .zoom-out-cursor { cursor: zoom-out; }
+                    .image-container {
+                        overflow: auto;
+                        max-width: 90vw;
+                        max-height: 80vh;
+                    }
+                `}</style>
             </Head>
 
             <main>
                 {imageUrl ? (
                     <>
-                        <div ref={containerRef}
+                        <div
+                            ref={containerRef}
                             style={{ textAlign: "center" }}
-                            className={`mb-4 ${isExpanded ? 'image-container' : ' overflow-hidden'}`}
+                            className={`mb-4 ${isExpanded ? 'image-container' : 'overflow-hidden'}`}
                             onTouchStart={isExpanded ? handleTouchStart : undefined}
-                            onTouchMove={isExpanded ? handleTouchMove : undefined}>
+                            onTouchMove={isExpanded ? handleTouchMove : undefined}
+                            // onWheel={handleWheel}
+                        >
                             <img
                                 ref={imgRef}
                                 src={imageUrl}
-                                alt="展示的图片"
+                                alt="Displayed image"
                                 className={isExpanded ? 'zoom-out-cursor' : 'zoom-cursor'}
                                 style={{
                                     width: isExpanded ? 'auto' : '50%',
@@ -102,23 +123,32 @@ const ImageDisplayPage: React.FC = () => {
                                 onLoad={handleImageLoad}
                                 onError={() => setImageUrl(null)}
                             />
-
                         </div>
-                        {imageDimensions.width ? <>
-                            <p className="mt-2 text-sm text-center">
-                                <strong>图片完整尺寸:</strong> {imageDimensions.width} x {imageDimensions.height} 像素
-                            </p>
+                        {imageDimensions.width ? (
+                            <>
+                                <p className="mt-2 text-sm text-center">
+                                    <strong>图片尺寸:</strong> {imageDimensions.width} x {imageDimensions.height} px
+                                </p>
+                                <p className="mt-2 text-sm text-gray-600 text-center">
+                                   点击图片 {isExpanded ? '缩小' : '放大'}. {isExpanded && 'You can scroll to view the full image.'}
+                                </p>
+                                <p className="mt-2 text-sm text-gray-600 text-center">
+                                    右键保存图片（手机端可长按保存）
+                                </p>
+                                {isExpanded && (
+                                    <p className="mt-2 text-sm text-gray-600 text-center">
+                                        {/* Use pinch gestures or mouse wheel to zoom in/out. */}
+                                    </p>
+                                )}
+                            </>
+                        ) : (
                             <p className="mt-2 text-sm text-gray-600 text-center">
-                                点击图片可以 {isExpanded ? '缩小' : '放大'} 查看。{isExpanded && '可以滚动查看完整图片。'}
+                                {/* Loading image details... */}
                             </p>
-                            <p className="mt-2 text-sm text-gray-600 text-center">
-                                右键可以保存图片（手机端可以长按保存）。
-                            </p>
-                        </> : <p className="mt-2 text-sm text-gray-600 text-center">
-                        </p>}
+                        )}
                     </>
                 ) : (
-                    <p>没有找到有效的图片URL或图片加载失败。</p>
+                    <p>No valid image URL found or image loading failed.</p>
                 )}
             </main>
         </div>

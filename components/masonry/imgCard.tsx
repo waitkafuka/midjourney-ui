@@ -16,6 +16,7 @@ import { getRatio, getHeight, redirectToZoomPage } from "../../scripts/utils";
 import { useSelector } from "react-redux";
 import store from "../../store";
 import Link from "next/link";
+import { isPCWeChatOrMobileWeChat } from "../../utils/app/env";
 
 interface Props {
     // 实例模型
@@ -143,7 +144,7 @@ const ImgCard = ({ model, columnWidth, showTimeTag = true, onImgDeleted, paint_p
                     {moment.duration(moment().diff(model.create_time, "minutes"), 'minutes').humanize()}前
                 </Tag>
             </div>}
-            {img_url ? <a href={`/art/img?img=${encodeURIComponent(HDsrc)}`} target="_blank">
+            {img_url ? <a href={isPCWeChatOrMobileWeChat() ? `/art/img?img=${encodeURIComponent(HDsrc)}` : HDsrc} target="_blank">
                 <img onClick={onImgClick} style={{ height: `${columnWidth * height / baseWidth}px` }} className={css["masonry-cover-img"]} src={src} alt="" />
             </a> : <img style={{ height: `${columnWidth * 360 / 358}px` }} src={defaultImg} />}
 

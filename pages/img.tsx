@@ -106,8 +106,8 @@ const ImageDisplayPage: React.FC = () => {
                             ref={containerRef}
                             style={{ textAlign: "center" }}
                             className={`mb-4 ${isExpanded ? 'image-container' : 'overflow-hidden'}`}
-                            onTouchStart={isExpanded ? handleTouchStart : undefined}
-                            onTouchMove={isExpanded ? handleTouchMove : undefined}
+                            onTouchStart={handleTouchStart}
+                            onTouchMove={handleTouchMove}
                         // onWheel={handleWheel}
                         >
                             <img

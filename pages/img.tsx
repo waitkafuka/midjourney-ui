@@ -86,7 +86,7 @@ const ImageDisplayPage: React.FC = () => {
     return (
         <div className="mx-auto">
             <Head>
-                <title>Image Display</title>
+                <title>midjourney中国官网</title>
                 <meta name="description" content="Interactive full-size image display" />
                 <style>{`
                     .zoom-cursor { cursor: zoom-in; }

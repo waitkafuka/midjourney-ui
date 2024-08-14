@@ -1,6 +1,7 @@
 import { useRouter } from 'next/router';
 import { useState, useEffect, useRef } from 'react';
 import Head from 'next/head';
+import { TransformWrapper, TransformComponent } from 'react-zoom-pan-pinch';
 
 const ImageDisplayPage: React.FC = () => {
     const router = useRouter();
@@ -58,16 +59,27 @@ const ImageDisplayPage: React.FC = () => {
                 {imageUrl ? (
                     <>
                         <div style={{ textAlign: "center" }} className={`mb-4 ${isExpanded ? 'image-container' : ' overflow-hidden'}`}>
-                            <img
-                                ref={imgRef}
-                                src={imageUrl}
-                                alt="展示的图片"
-                                className={isExpanded ? 'zoom-out-cursor' : 'zoom-cursor'}
-                                style={{ width: isExpanded ? 'auto' : '50%', height: 'auto' }}
-                                onClick={toggleImageSize}
-                                onLoad={handleImageLoad}
-                                onError={() => setImageUrl(null)}
-                            />
+                            <TransformWrapper
+                                initialScale={1}
+                                minScale={200 / Math.max(imageDimensions.width, imageDimensions.height)}
+                                maxScale={1}
+                                limitToBounds={true}
+                                doubleClick={{ disabled: false }}
+                            >
+                                <TransformComponent>
+                                    <img
+                                        ref={imgRef}
+                                        src={imageUrl}
+                                        alt="展示的图片"
+                                        className={isExpanded ? 'zoom-out-cursor' : 'zoom-cursor'}
+                                        style={{ width: isExpanded ? 'auto' : '50%', height: 'auto' }}
+                                        onClick={toggleImageSize}
+                                        onLoad={handleImageLoad}
+                                        onError={() => setImageUrl(null)}
+                                    />
+                                </TransformComponent>
+                            </TransformWrapper>
+
                         </div>
                         {imageDimensions.width ? <>
                             <p className="mt-2 text-sm text-center">

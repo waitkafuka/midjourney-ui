@@ -174,7 +174,7 @@ const ROUTES: Route = {
     //   icon: <i className='iconfont icon-canshushezhi'></i>,
     // },
     {
-      path: '/',
+      path: 'https://aihuihua.ai/',
       target: '_blank',
       name: 'ChatAI',
       key: 'chatgpt',
@@ -725,7 +725,7 @@ export default function Main(children: JSX.Element) {
           icon: <i className='iconfont icon-fengjing-01'></i>,
         },
         {
-          path: '/',
+          path: 'https://aihuihua.ai/',
           target: '_blank',
           name: 'ChatAI',
           key: 'chatgpt',

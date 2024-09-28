@@ -1,3 +1,4 @@
+import axios from 'axios';
 
 declare const window: Window & { browserFinger: string }
 
@@ -85,4 +86,16 @@ export const requestAliyunArtStream = async function ({
 }: { path: string, data?: any, method?: string, headers?: any, onDataChange: Function }) {
     return request({ path: `/art/api/${path}`, data, method, headers, stream: true, onDataChange });
 }
+
+export const checkAuthStatus = async (): Promise<boolean> => {
+    try {
+        const response = await axios.get('/api/userinfo');
+        console.log('response', response.data);
+        
+        return response.data.code !== 40015;
+    } catch (error) {
+        console.error('Error checking auth status:', error);
+        return false;
+    }
+};
 

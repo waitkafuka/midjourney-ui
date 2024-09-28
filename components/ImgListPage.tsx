@@ -66,6 +66,9 @@ const ImgListPage = ({ type }: ImgListPageProps) => {
         //     })
         // }
         newImgList = result.rows;
+        if (!newImgList) {
+            return
+        }
         if (result.keywords !== keywordsRef.current) {
             setKeywords(result.keywords);
             keywordsRef.current = result.keywords;

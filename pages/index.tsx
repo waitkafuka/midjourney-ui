@@ -1284,12 +1284,14 @@ const Index: React.FC<PageProps> = ({ title, description, keywords }) => {
               type='success'
               closable
             />}
-            {/* <Alert
-            message={<> 重磅更新：midjourney V6 版本现已全面支持！更快的速度，更丰富的细节！提示词最后添加 --v 6 （前后均有空格）即可体验！</>}
-            banner
-            type='success'
-            closable
-          /> */}
+            <Alert
+              message={<> 重大更新：本站始终以用户体验为第一原则，在保持出图质量和价格不变的前提下，生成速度提升了2倍！飞一般的生成速度，欢迎体验！</>}
+              banner
+              style={{ width: 'calc(100vw - 480px)' }}
+              
+              type='success'
+              closable
+            />
             <p className='no-content-tips'>使用 midjourney 生成你的专属人工智能绘画作品。</p>
             {/* 走马灯作品展播 */}
 

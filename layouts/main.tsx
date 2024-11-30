@@ -90,13 +90,13 @@ const ROUTES: Route = {
     //   path: 'https://human.iiii.com/digit-human/index?type=5',
     //   target: "_blank",
     // },
-    {
-      name: 'AI 音乐（Suno）🔥',
-      key: 'aisuno',
-      icon: <i className='iconfont icon-music'></i>,
-      path: '/art/suno',
-      target: "_blank",
-    },
+    // {
+    //   name: 'AI 音乐（Suno）🔥',
+    //   key: 'aisuno',
+    //   icon: <i className='iconfont icon-music'></i>,
+    //   path: '/art/suno',
+    //   target: "_blank",
+    // },
     // {
     //   name: '七夕玫瑰二维码（限定）',
     //   key: 'artqrcode77',
@@ -660,13 +660,13 @@ export default function Main(children: JSX.Element) {
         //   path: 'https://human.iiii.com/digit-human/index?type=5',
         //   target: "_blank",
         // },
-        {
-          name: 'AI 音乐（Suno）🔥',
-          key: 'aisuno',
-          icon: <i className='iconfont icon-music'></i>,
-          path: '/art/suno',
-          target: "_blank",
-        },
+        // {
+        //   name: 'AI 音乐（Suno）🔥',
+        //   key: 'aisuno',
+        //   icon: <i className='iconfont icon-music'></i>,
+        //   path: '/art/suno',
+        //   target: "_blank",
+        // },
         {
           name: '教程',
           key: "guideParent",
@@ -800,13 +800,13 @@ export default function Main(children: JSX.Element) {
         //   path: 'https://human.iiii.com/digit-human/index?type=5',
         //   target: "_blank",
         // },
-        {
-          name: 'AI 音乐（Suno）🔥',
-          key: 'aisuno',
-          icon: <i className='iconfont icon-music'></i>,
-          path: '/art/suno',
-          target: "_blank",
-        },
+        // {
+        //   name: 'AI 音乐（Suno）🔥',
+        //   key: 'aisuno',
+        //   icon: <i className='iconfont icon-music'></i>,
+        //   path: '/art/suno',
+        //   target: "_blank",
+        // },
         {
           name: '教程',
           key: "guideParent",

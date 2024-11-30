@@ -109,7 +109,7 @@ const ActivityResult = () => {
             width: 100,
         },
         {
-            title: `奖励${isBeforeThirdDay ? '(公示中，公示期结束将发放奖励)' : '（均已发放到位，如无收到请联系客服邮箱service@superx.chat）'}`,
+            title: `奖励${isBeforeThirdDay ? '(公示中，公示期结束将发放奖励)' : '（均已发放到位，如无收到请联系客服邮箱service@superx360.com）'}`,
             dataIndex: 'award',
             key: 'award',
             render: (d, _, index) => <div>

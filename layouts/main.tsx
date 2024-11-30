@@ -91,10 +91,17 @@ const ROUTES: Route = {
     //   target: "_blank",
     // },
     {
-      name: 'AI 音乐（Suno）🔥',
+      name: 'AI 音乐（Suno）',
       key: 'aisuno',
       icon: <i className='iconfont icon-music'></i>,
       path: '/art/suno',
+      target: "_blank",
+    },
+    {
+      name: 'AI 数字人🔥🔥',
+      key: 'aidigitalhuman',
+      icon: <i className='iconfont icon-shuziren'></i>,
+      path: '/art/digital-human',
       target: "_blank",
     },
     // {
@@ -668,6 +675,13 @@ export default function Main(children: JSX.Element) {
           target: "_blank",
         },
         {
+          name: 'AI 数字人🔥🔥',
+          key: 'aidigitalhuman',
+          icon: <i className='iconfont icon-shuziren'></i>,
+          path: '/art/digital-human',
+          target: "_blank",
+        },
+        {
           name: '教程',
           key: "guideParent",
           icon: <BulbOutlined />,
@@ -805,6 +819,13 @@ export default function Main(children: JSX.Element) {
           key: 'aisuno',
           icon: <i className='iconfont icon-music'></i>,
           path: '/art/suno',
+          target: "_blank",
+        },
+        {
+          name: 'AI 数字人🔥🔥',
+          key: 'aidigitalhuman',
+          icon: <i className='iconfont icon-shuziren'></i>,
+          path: '/art/digital-human',
           target: "_blank",
         },
         {

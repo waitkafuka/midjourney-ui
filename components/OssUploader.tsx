@@ -4,6 +4,7 @@ import type { RcFile, UploadFile } from 'antd/es/upload/interface';
 import type { UploadProps } from 'antd';
 import { useEffect, useState } from "react";
 import { requestAliyun } from "../request/http";
+import { useSelector } from 'react-redux';
 
 interface OSSDataType {
     dir: string;
@@ -26,11 +27,29 @@ interface AliyunOSSUploadProps {
     slot?: React.ReactNode;
     accept?: string,
     maxSize?: number;//最大上传文件大小，默认为 5M
+    style?: React.CSSProperties;
+    maxMP3Size?: number;//最大上传音频文件大小，默认为 10M
 }
 
 
-const AliyunOSSUploader: React.FC<AliyunOSSUploadProps> = ({ value, accept = '.jpg,.jpeg,.png', maxSize = 1024 * 1024 * 5, listType = 'text', onChange, buttonText, slot, maxCount = 1, multiple = false, disabled }) => {
+const AliyunOSSUploader: React.FC<AliyunOSSUploadProps> = (props) => {
+    const {
+        value,
+        style,
+        accept = '.jpg,.jpeg,.png',
+        maxSize = 1024 * 1024 * 10,
+        maxMP3Size = 1024 * 1024 * 2,
+        listType = 'text',
+        onChange,
+        buttonText,
+        slot,
+        maxCount = 1,
+        multiple = false,
+        disabled,
+    } = props;
+
     const [OSSData, setOSSData] = useState<OSSDataType>();
+    const user = useSelector((state: any) => state.user.info);
 
     const handleChange: UploadProps['onChange'] = ({ fileList }) => {
         console.log('handle change Aliyun OSS:', fileList);
@@ -85,13 +104,19 @@ const AliyunOSSUploader: React.FC<AliyunOSSUploadProps> = ({ value, accept = '.j
 
     //上传第一步
     const beforeUpload: UploadProps['beforeUpload'] = async (file, fileList) => {
-        //只允许上传前 maxCount 张图片
+        // Check if the user is logged in
+        if (!user || !user.secret) {
+            message.error('请先登录后再上传'); // Prompt the user to log in
+            return Upload.LIST_IGNORE; // Prevent the file from being uploaded
+        }
+
+        // Only allow uploading up to maxCount files
         const whiteList = fileList.slice(0, maxCount);
-        //判断file在不在白名单里面
+        
+        // Check if the file is in the allowed list
         if (!whiteList.includes(file)) {
             console.log('超出限制，不允许上传', file);
-            // message.error(`只能上传${maxCount}张图片`);
-            return false;
+            return Upload.LIST_IGNORE;
         }
 
         console.log('beforeUpload', file, OSSData);
@@ -110,7 +135,17 @@ const AliyunOSSUploader: React.FC<AliyunOSSUploadProps> = ({ value, accept = '.j
         //判断文件是否超过大小
         if (file.size > maxSize) {
             message.error(`文件不能超过${Math.round(maxSize / 1024 / 1024)}M`);
-            return false;
+            // 删除文件
+            fileList.splice(fileList.indexOf(file), 1);
+            return Upload.LIST_IGNORE;
+        }
+
+        //如果是音频文件，判断是否超过最大大小
+        if (file.type?.startsWith('audio') && file.size > maxMP3Size) {
+            message.error(`音频文件最大不能超过${Math.round(maxMP3Size / 1024 / 1024)}M`);
+            // 删除文件
+            fileList.splice(fileList.indexOf(file), 1);
+            return Upload.LIST_IGNORE;
         }
         return file;
     };
@@ -157,10 +192,9 @@ const AliyunOSSUploader: React.FC<AliyunOSSUploadProps> = ({ value, accept = '.j
     }, []);
 
     return <>
-        <Upload {...uploadParams} disabled={disabled}>
-            {listType === 'text' ? <Button icon={<UploadOutlined />}>{buttonText}</Button> : buttonText}
+        <Upload {...uploadParams} disabled={disabled} style={{ width: '100%'}}>
+            {listType === 'text' ? <Button icon={<UploadOutlined />} style={{ width: '100%' }}>{buttonText}</Button> : buttonText}
             {slot}
-
         </Upload>
     </>
 };

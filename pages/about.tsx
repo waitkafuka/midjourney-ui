@@ -7,7 +7,7 @@ const Contact: React.FC = () => {
         address: "丰慧中路7号新材料创业大厦10层10层南侧办公1114号",
         name: '北京以诚智控科技有限公司是一家专注于人工智能软件开发和企业级智能知识库应用的创新型科技公司。我们致力于为客户提供先进的人工智能解决方案，帮助他们实现业务的数字化转型和智能化升级。',
         phone: '18310949357',
-        mail: 'service@superx.chat'
+        mail: 'service@superx360.com'
     })
     useEffect(() => {
         //取出链接地址
@@ -19,7 +19,7 @@ const Contact: React.FC = () => {
                 address: '北京市朝阳区望京东路8号望京SOHO塔3B座1709室',
                 name: '北京市智伴互动科技有限公司',
                 phone: '18310949357',
-                mail: 'service@superx.chat'
+                mail: 'service@superx360.com'
             })
         }
         if (url.includes('ai.sunmen.cn')) {
@@ -46,7 +46,7 @@ const Contact: React.FC = () => {
                 address: '',
                 name: '',
                 phone: '18310949357',
-                mail: 'service@superx.chat'
+                mail: 'service@superx360.com'
             })
         }
     }, []);
@@ -60,7 +60,7 @@ const Contact: React.FC = () => {
                     <p>联系邮箱： <a href={`mailto:${companyInfo.mail}`} style={{ textDecoration: "underline" }}>{companyInfo.mail}</a></p>
 
                 </div>
-                {/* <p>客服邮箱：service@superx.chat</p> */}
+                {/* <p>客服邮箱：service@superx360.com</p> */}
             </Card>
         </Space>
     </>

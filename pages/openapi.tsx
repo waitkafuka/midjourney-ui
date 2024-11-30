@@ -4,7 +4,7 @@ import { useEffect, useState } from 'react';
 
 const Contact: React.FC = () => {
     const [contactInfo, setContactInfo] = useState({
-        mail: 'service@superx.chat',
+        mail: 'service@superx360.com',
         phone: '18310949357'
     })
     useEffect(() => {
@@ -33,7 +33,7 @@ const Contact: React.FC = () => {
                     <p>联系邮箱： <a href={`mailto:${contactInfo.mail}`} style={{ textDecoration: "underline" }}>{contactInfo.mail}</a></p>
                     <p>联系电话：{contactInfo.phone}</p>
                 </div>
-                {/* <p>客服邮箱：service@superx.chat</p> */}
+                {/* <p>客服邮箱：service@superx360.com</p> */}
             </Card>
         </Space>
     </>

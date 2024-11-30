@@ -315,24 +315,6 @@ const PaingPoint = ({ }) => {
           <Button type="primary" onClick={getUserInfo}>支付完成</Button>
         </div>}
       >
-        {/* 旧版的支付，单套餐 */}
-        <div className='buy-code-wrap-multiple' style={{ display: 'none', }}>
-          {/* 二维码 */}
-          <div className='buy-code-box'>
-            <img src={qrCodeSrc} />
-            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-              <img style={{ marginRight: '5px', width: '20px' }} src='https://c.superx.chat/wechatlogo.png' />
-              请使用微信扫码支付
-            </div>
-          </div>
-          {/* 描述 */}
-          <div className='buy-code-desc' style={{ flexGrow: 1, lineHeight: 1.6, textAlign: 'center', alignItems: 'center', justifyContent: 'center', flexDirection: 'column' }}>
-            <div>{pricePoint} 个点数 / {price} 元</div>
-            <div>可应用于 Stable Diffusion、Midjourney、DALLE、AI 艺术二维码，点数永久有效。</div>
-            <div>每张图消耗 8 个点数，变体 4 个点数，获取单张高清图 2 个点数。（SD 根据参数消耗不同点数，AI 艺术二维码 {qrcodeCost} 点数/每张）</div>
-            <div>（ midjourney四宫格算一张图）</div>
-          </div>
-        </div>
         {/* 新版的支付，多套餐 */}
         <div className='buy-code-wrap-multiple'>
           {/* <div style={{ textAlign: 'center', color: "#e31414" }}>

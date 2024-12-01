@@ -89,14 +89,18 @@ const AliyunOSSUploader: React.FC<AliyunOSSUploadProps> = (props) => {
 
     //页面初始化的时候加载
     const getOSSSignature = async () => {
-        const { data } = await requestAliyun('get-oss-signature');
-        return data;
+        const res = await requestAliyun('get-oss-signature');
+        if (res.code === 429) {
+            message.error('获取太多oss签名，请稍后再试。如是正常使用，请联系微信客服协助解决。', 10);
+            return null;
+        }
+        return res.data;
     }
 
     const init = async () => {
         try {
             const result = await getOSSSignature();
-            setOSSData(result);
+            result && setOSSData(result);
         } catch (error) {
             message.error(error + '');
         }
@@ -112,7 +116,7 @@ const AliyunOSSUploader: React.FC<AliyunOSSUploadProps> = (props) => {
 
         // Only allow uploading up to maxCount files
         const whiteList = fileList.slice(0, maxCount);
-        
+
         // Check if the file is in the allowed list
         if (!whiteList.includes(file)) {
             console.log('超出限制，不允许上传', file);
@@ -192,7 +196,7 @@ const AliyunOSSUploader: React.FC<AliyunOSSUploadProps> = (props) => {
     }, []);
 
     return <>
-        <Upload {...uploadParams} disabled={disabled} style={{ width: '100%'}}>
+        <Upload {...uploadParams} disabled={disabled} style={{ width: '100%' }}>
             {listType === 'text' ? <Button icon={<UploadOutlined />} style={{ width: '100%' }}>{buttonText}</Button> : buttonText}
             {slot}
         </Upload>

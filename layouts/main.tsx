@@ -143,22 +143,24 @@ const ROUTES: Route = {
       icon: <i className='iconfont icon-huihua'></i>,
       children: [{
         path: '/art/mypaintings',
-        target: '_blank',
         name: '我的绘画',
         key: 'mypaintings',
         icon: <i className='iconfont icon-huihua'></i>,
       }, {
         path: '/art/my/thumbup',
-        target: '_blank',
         name: '我的点赞',
         key: 'myThumbUp',
         icon: <i className='iconfont icon-huihua'></i>,
       },
       {
         path: '/art/my/music/',
-        target: '_blank',
         name: '我的音乐',
         key: 'my-music',
+        icon: <i className='iconfont icon-huihua'></i>,
+      },{
+        path: '/art/my/digital-human/',
+        name: '我的数字人',
+        key: 'my-digital-human',
         icon: <i className='iconfont icon-huihua'></i>,
       }]
     },
@@ -472,22 +474,24 @@ export default function Main(children: JSX.Element) {
           icon: <i className='iconfont icon-huihua'></i>,
           children: [{
             path: '/art/mypaintings',
-            target: '_blank',
             name: '我的绘画',
             key: 'mypaintings',
             icon: <i className='iconfont icon-huihua'></i>,
           }, {
             path: '/art/my/thumbup',
-            target: '_blank',
             name: '我的点赞',
             key: 'myThumbUp',
             icon: <i className='iconfont icon-huihua'></i>,
           },
           {
             path: '/art/my/music/',
-            target: '_blank',
             name: '我的音乐',
             key: 'my-music',
+            icon: <i className='iconfont icon-huihua'></i>,
+          },{
+            path: '/art/my/digital-human/',
+            name: '我的数字人',
+            key: 'my-digital-human',
             icon: <i className='iconfont icon-huihua'></i>,
           }]
         },
@@ -555,22 +559,24 @@ export default function Main(children: JSX.Element) {
           icon: <i className='iconfont icon-huihua'></i>,
           children: [{
             path: '/art/mypaintings',
-            target: '_blank',
             name: '我的绘画',
             key: 'mypaintings',
             icon: <i className='iconfont icon-huihua'></i>,
           }, {
             path: '/art/my/thumbup',
-            target: '_blank',
             name: '我的点赞',
             key: 'myThumbUp',
             icon: <i className='iconfont icon-huihua'></i>,
           },
           {
             path: '/art/my/music/',
-            target: '_blank',
             name: '我的音乐',
             key: 'my-music',
+            icon: <i className='iconfont icon-huihua'></i>,
+          },{
+            path: '/art/my/digital-human/',
+            name: '我的数字人',
+            key: 'my-digital-human',
             icon: <i className='iconfont icon-huihua'></i>,
           }]
         },
@@ -713,21 +719,23 @@ export default function Main(children: JSX.Element) {
           icon: <i className='iconfont icon-huihua'></i>,
           children: [{
             path: '/art/mypaintings',
-            target: '_blank',
             name: '我的绘画',
             key: 'mypaintings',
             icon: <i className='iconfont icon-huihua'></i>,
           }, {
             path: '/art/my/thumbup',
-            target: '_blank',
             name: '我的点赞',
             key: 'myThumbUp',
             icon: <i className='iconfont icon-huihua'></i>,
           },{
             path: '/art/my/music/',
-            target: '_blank',
             name: '我的音乐',
             key: 'my-music',
+            icon: <i className='iconfont icon-huihua'></i>,
+          },{
+            path: '/art/my/digital-human/',
+            name: '我的数字人',
+            key: 'my-digital-human',
             icon: <i className='iconfont icon-huihua'></i>,
           }]
         },
@@ -860,21 +868,24 @@ export default function Main(children: JSX.Element) {
           icon: <i className='iconfont icon-huihua'></i>,
           children: [{
             path: '/art/mypaintings',
-            target: '_blank',
             name: '我的绘画',
             key: 'mypaintings',
             icon: <i className='iconfont icon-huihua'></i>,
           }, {
             path: '/art/my/thumbup',
-            target: '_blank',
             name: '我的点赞',
             key: 'myThumbUp',
             icon: <i className='iconfont icon-huihua'></i>,
           },{
             path: '/art/my/music/',
-            target: '_blank',
             name: '我的音乐',
             key: 'my-music',
+            icon: <i className='iconfont icon-huihua'></i>,
+          },
+          {
+            path: '/art/my/digital-human/',
+            name: '我的数字人',
+            key: 'my-digital-human',
             icon: <i className='iconfont icon-huihua'></i>,
           }]
         },

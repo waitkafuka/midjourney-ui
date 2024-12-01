@@ -1,277 +1,316 @@
-import { message } from 'antd';
+import { message } from "antd";
+import { requestAliyun } from "../request/http";
 
 export const paintingTips = [
-    '通过添加--ar可以设置图片宽高比例哦，例如：--ar 16:9',
-    '即使因为网络问题生成失败了，您也可以在左侧“我的作品”中看到生成的图片呢',
-]
+  "通过添加--ar可以设置图片宽高比例哦，例如：--ar 16:9",
+  "即使因为网络问题生成失败了，您也可以在左侧“我的作品”中看到生成的图片呢",
+];
 
 //创建a标签，模拟window.open
 export const openWindow = (url: string) => {
-    const a = document.createElement('a');
-    a.setAttribute('href', url);
-    a.setAttribute('target', '_blank');
-    //随机一个 5 位的英文字母
-    const id = Math.random().toString(36).slice(-5);
-    a.setAttribute('id', id);
-    a.click();
-}
+  const a = document.createElement("a");
+  a.setAttribute("href", url);
+  a.setAttribute("target", "_blank");
+  //随机一个 5 位的英文字母
+  const id = Math.random().toString(36).slice(-5);
+  a.setAttribute("id", id);
+  a.click();
+};
 
 //
 // 转换数字到复杂形式
 export function convertNumberToComplexForm(number: number) {
-    if(!number) return '';  
-    const mapping = ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j'];
-    // 将数字映射到字母
-    let letterString = number.toString().split('').map(digit => mapping[parseInt(digit)]).join('');
-    // 对字母字符串进行Base64编码
-    let base64Encoded = btoa(letterString);
-    return base64Encoded;
+  if (!number) return "";
+  const mapping = ["a", "b", "c", "d", "e", "f", "g", "h", "i", "j"];
+  // 将数字映射到字母
+  let letterString = number
+    .toString()
+    .split("")
+    .map((digit) => mapping[parseInt(digit)])
+    .join("");
+  // 对字母字符串进行Base64编码
+  let base64Encoded = btoa(letterString);
+  return base64Encoded;
 }
 
 // 将复杂形式还原为数字
 export function convertComplexFormToNumber(complexForm: string) {
-    const mapping:any = {a: '0', b: '1', c: '2', d: '3', e: '4', f: '5', g: '6', h: '7', i: '8', j: '9'};
-    // 对Base64编码的字符串进行解码
-    let decodedString = atob(complexForm);
-    // 将字母映射回数字
-    let number = decodedString.split('').map(char => mapping[char]).join('');
-    return parseInt(number);
+  const mapping: any = {
+    a: "0",
+    b: "1",
+    c: "2",
+    d: "3",
+    e: "4",
+    f: "5",
+    g: "6",
+    h: "7",
+    i: "8",
+    j: "9",
+  };
+  // 对Base64编码的字符串进行解码
+  let decodedString = atob(complexForm);
+  // 将字母映射回数字
+  let number = decodedString
+    .split("")
+    .map((char) => mapping[char])
+    .join("");
+  return parseInt(number);
 }
 
-export const downloadFile = (url: string, filename: string = 'midjourney.png') => {
-    message.info('正在下载图片...', 200);
-    const regex = /\/([\w-]+\.(png|jpg|jpeg|gif|webp))/;
-    const execResult = regex.exec(url);
-    let fileName = execResult ? execResult[1] : 'midjourney.png';
-    fileName = fileName.replace('waitkafuka_', '')
-    const canvas = document.createElement("canvas");
-    document.body.appendChild(canvas);
-    canvas.style.display = 'none';
-    const cxt = canvas.getContext("2d");
-    const img = new Image();
-    img.crossOrigin = 'anonymous';
-    img.onload = function () {
-        canvas.width = img.width;
-        canvas.height = img.height;
-        cxt?.drawImage(img, 0, 0);
-        const image = canvas.toDataURL("image/png")
-        const dlLink = document.createElement('a');
-        dlLink.download = fileName;
-        dlLink.href = image;
-        document.body.appendChild(dlLink);
-        dlLink.click();
-        document.body.removeChild(dlLink);
-        document.body.removeChild(canvas);
-        message.destroy();
-    };
-    img.src = url;
-}
+export const downloadFile = (
+  url: string,
+  filename: string = "midjourney.png"
+) => {
+  message.info("正在下载图片...", 200);
+  const regex = /\/([\w-]+\.(png|jpg|jpeg|gif|webp))/;
+  const execResult = regex.exec(url);
+  let fileName = execResult ? execResult[1] : "midjourney.png";
+  fileName = fileName.replace("waitkafuka_", "");
+  const canvas = document.createElement("canvas");
+  document.body.appendChild(canvas);
+  canvas.style.display = "none";
+  const cxt = canvas.getContext("2d");
+  const img = new Image();
+  img.crossOrigin = "anonymous";
+  img.onload = function () {
+    canvas.width = img.width;
+    canvas.height = img.height;
+    cxt?.drawImage(img, 0, 0);
+    const image = canvas.toDataURL("image/png");
+    const dlLink = document.createElement("a");
+    dlLink.download = fileName;
+    dlLink.href = image;
+    document.body.appendChild(dlLink);
+    dlLink.click();
+    document.body.removeChild(dlLink);
+    document.body.removeChild(canvas);
+    message.destroy();
+  };
+  img.src = url;
+};
 
 /**
  * 从字符串中提取出clientId
- * @param str 
- * @returns 
+ * @param str
+ * @returns
  */
 export const extractIdFromString = function (str: string) {
-    const regex = /id-(\d+)/;  // 正则表达式匹配 id- 后面的数字
-    const match = str.match(regex);  // 使用 match 方法匹配字符串
+  const regex = /id-(\d+)/; // 正则表达式匹配 id- 后面的数字
+  const match = str.match(regex); // 使用 match 方法匹配字符串
 
-    if (match && match[1]) {
-        return Number(match[1]);  // 返回匹配到的数字
-    } else {
-        return null;  // 如果没有找到匹配的数字，返回 null
-    }
-}
+  if (match && match[1]) {
+    return Number(match[1]); // 返回匹配到的数字
+  } else {
+    return null; // 如果没有找到匹配的数字，返回 null
+  }
+};
 
-const inputString = 'lingyun5100@126.com,lingyun5100, id-17, http://8.218.209.122:8004';
+const inputString =
+  "lingyun5100@126.com,lingyun5100, id-17, http://8.218.209.122:8004";
 const extractedId = extractIdFromString(inputString);
-console.log(extractedId);  // 输出：17
+console.log(extractedId); // 输出：17
 
 //封装一个方法，自动跳转到放大页面，并携带图片链接参数
-export const redirectToZoomPage = (url: string, openType = 'new_window') => {
-    //新标签打开
-    if (!url) return;
-    //替换掉url中的?x-oss-process=style/scale_500
-    url = url.replace(/\?x-oss-process=style\/scale_500/, '');
-    const href = `/art/upscale?url=${encodeURIComponent(url)}`;
-    if (openType === 'new_window') {
-        openWindow(href);
-    } else {
-        window.location.href = href;
-    }
-}
+export const redirectToZoomPage = (url: string, openType = "new_window") => {
+  //新标签打开
+  if (!url) return;
+  //替换掉url中的?x-oss-process=style/scale_500
+  url = url.replace(/\?x-oss-process=style\/scale_500/, "");
+  const href = `/art/upscale?url=${encodeURIComponent(url)}`;
+  if (openType === "new_window") {
+    openWindow(href);
+  } else {
+    window.location.href = href;
+  }
+};
 
 //自动跳转到换脸页面
-export const redirectToFaceswapPage = (url: string, openType = 'new_window') => {
-    //新标签打开
-    if (!url) return;
-    //替换掉url中的?x-oss-process=style/scale_500
-    url = url.replace(/\?x-oss-process=style\/scale_500/, '');
-    const href = `/art/faceswap?url=${encodeURIComponent(url)}`;
-    if (openType === 'new_window') {
-        openWindow(href);
-    } else {
-        window.location.href = href;
-    }
-}
-
+export const redirectToFaceswapPage = (
+  url: string,
+  openType = "new_window"
+) => {
+  //新标签打开
+  if (!url) return;
+  //替换掉url中的?x-oss-process=style/scale_500
+  url = url.replace(/\?x-oss-process=style\/scale_500/, "");
+  const href = `/art/faceswap?url=${encodeURIComponent(url)}`;
+  if (openType === "new_window") {
+    openWindow(href);
+  } else {
+    window.location.href = href;
+  }
+};
 
 /**
  * 判断mj prompt参数是否合法
  */
-export const isPromptValid = (prompt: string): { isValid: boolean, message?: string } => {
-    function validateArgs() {
-        const invalidPattern = / -\w+/g;
-        const hasInvalid = invalidPattern.test(prompt);
-        if (hasInvalid) {
-            return {
-                isValid: false,
-                message: '参数不合法，参数前面必须是：--，不能是：-',
-            };
-        }
-        return {
-            isValid: true,
-        }
+export const isPromptValid = (
+  prompt: string
+): { isValid: boolean; message?: string } => {
+  function validateArgs() {
+    const invalidPattern = / -\w+/g;
+    const hasInvalid = invalidPattern.test(prompt);
+    if (hasInvalid) {
+      return {
+        isValid: false,
+        message: "参数不合法，参数前面必须是：--，不能是：-",
+      };
     }
-    function checkAr() {
-        if (prompt.indexOf('--ar') === -1) return { isValid: true, message: "" };
-        const regex = /--ar\s+(\d+):(\d+(?=\s|$))/;
-        const match = regex.exec(prompt);
-        if (match) {
-            const width = parseInt(match[1]);
-            const height = parseInt(match[2]);
-            if (width > 0 && height > 0) {
-                return {
-                    isValid: true,
-                };
-            }
-        }
-        return {
-            isValid: false,
-            message: 'ar 参数不合法，正确写法是：--ar m:n。例如：--ar 16:9，数字后需要有空格，不能有其他字符。'
-        };
-    }
-    //检查除了链接之外是否为空
-    function checkLink() {
-        //去除掉<>包裹的内容
-        const regex = /<[^>]*>/g;
-        const match = prompt.replace(regex, '');
-        if (match.trim().length > 0) {
-            return {
-                isValid: true,
-            };
-        }
-        return {
-            isValid: false,
-            message: '除了垫图之外提示词不能为空哦',
-        };
-    }
-
-    //检查除了链接之外是否为空
-    function checkLength() {
-        //去除掉<>包裹的内容
-        const len = 800;
-        if (prompt.trim().length <= len) {
-            return {
-                isValid: true,
-            };
-        }
-        return {
-            isValid: false,
-            message: `提示词过长，请控制在${len}字以内`,
-        };
-    }
-
-    if (!validateArgs().isValid) return validateArgs();
-    if (!checkAr().isValid) return checkAr();
-    if (!checkLink().isValid) return checkLink();
-    if (!checkLength().isValid) return checkLength();
     return {
-        isValid: true,
+      isValid: true,
     };
-}
+  }
+  function checkAr() {
+    if (prompt.indexOf("--ar") === -1) return { isValid: true, message: "" };
+    const regex = /--ar\s+(\d+):(\d+(?=\s|$))/;
+    const match = regex.exec(prompt);
+    if (match) {
+      const width = parseInt(match[1]);
+      const height = parseInt(match[2]);
+      if (width > 0 && height > 0) {
+        return {
+          isValid: true,
+        };
+      }
+    }
+    return {
+      isValid: false,
+      message:
+        "ar 参数不合法，正确写法是：--ar m:n。例如：--ar 16:9，数字后需要有空格，不能有其他字符。",
+    };
+  }
+  //检查除了链接之外是否为空
+  function checkLink() {
+    //去除掉<>包裹的内容
+    const regex = /<[^>]*>/g;
+    const match = prompt.replace(regex, "");
+    if (match.trim().length > 0) {
+      return {
+        isValid: true,
+      };
+    }
+    return {
+      isValid: false,
+      message: "除了垫图之外提示词不能为空哦",
+    };
+  }
+
+  //检查除了链接之外是否为空
+  function checkLength() {
+    //去除掉<>包裹的内容
+    const len = 800;
+    if (prompt.trim().length <= len) {
+      return {
+        isValid: true,
+      };
+    }
+    return {
+      isValid: false,
+      message: `提示词过长，请控制在${len}字以内`,
+    };
+  }
+
+  if (!validateArgs().isValid) return validateArgs();
+  if (!checkAr().isValid) return checkAr();
+  if (!checkLink().isValid) return checkLink();
+  if (!checkLength().isValid) return checkLength();
+  return {
+    isValid: true,
+  };
+};
 
 /**
  * 从链接中获取指定参数
  */
 export const getQueryString = (name: string) => {
-    const url = window.location.href;
-    const queryString = url.split('?')[1];
-    if(!queryString) return '';
+  const url = window.location.href;
+  const queryString = url.split("?")[1];
+  if (!queryString) return "";
 
   // 将查询参数部分拆分为键值对数组
-  const parameters = queryString.split('&');
+  const parameters = queryString.split("&");
 
   // 遍历键值对数组，查找指定参数的值
   for (let i = 0; i < parameters.length; i++) {
-    const [key, value] = parameters[i].split('=');
+    const [key, value] = parameters[i].split("=");
     if (key === name) {
       return decodeURIComponent(value); // 返回解码后的值
     }
   }
 
   // 如果未找到指定参数，则返回 null 或者可以根据需求进行调整
-  return '';
-}
+  return "";
+};
+
+/**
+ * 查询所有的套餐列表
+ */
+export const getPkgList = async () => {
+  const result = await requestAliyun(`get-pkg-list`, null, "GET");
+  return result;
+};
 
 /**
  * 从字符串中获取指定参数
  * @param name
  */
-export const getQueryFromString = (string: string, name: string,) => {
-    const regex = new RegExp(`${name}=([^&]*)`);
-    const match = regex.exec(string);
-    return match ? match[1] : '';
-}
+export const getQueryFromString = (string: string, name: string) => {
+  const regex = new RegExp(`${name}=([^&]*)`);
+  const match = regex.exec(string);
+  return match ? match[1] : "";
+};
 
 /**
  * 使用洗牌算法打乱数组
- * @param array 
- * @returns 
+ * @param array
+ * @returns
  */
 export const shuffleArray = (array: any) => {
-    const newArray = [...array]; // 复制原始数组，避免修改原数组
-    for (let i = newArray.length - 1; i > 0; i--) {
-        const j = Math.floor(Math.random() * (i + 1)); // 生成随机索引
-        [newArray[i], newArray[j]] = [newArray[j], newArray[i]]; // 交换元素
-    }
-    return newArray;
-}
+  const newArray = [...array]; // 复制原始数组，避免修改原数组
+  for (let i = newArray.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1)); // 生成随机索引
+    [newArray[i], newArray[j]] = [newArray[j], newArray[i]]; // 交换元素
+  }
+  return newArray;
+};
 
 /**
  * 检测字符串是否包含中文
- * @param str 
- * @returns 
+ * @param str
+ * @returns
  */
 export const hasChinese = function (str: string) {
-    var reg = /[\u4E00-\u9FA5\uF900-\uFA2D]/;
-    return reg.test(str);
-}
+  var reg = /[\u4E00-\u9FA5\uF900-\uFA2D]/;
+  return reg.test(str);
+};
 
 /**
  * 从prompt中提取图片的宽高比
  */
-export const getRatio = (prompt: string): { width: number, height: number } => {
-    const regex = / --(aspect|ar)\s+(\d+):(\d+)/;
-    const match = regex.exec(prompt);
-    return {
-        width: match ? parseInt(match[2]) : 1,
-        height: match ? parseInt(match[3]) : 1
-    }
-}
+export const getRatio = (prompt: string): { width: number; height: number } => {
+  const regex = / --(aspect|ar)\s+(\d+):(\d+)/;
+  const match = regex.exec(prompt);
+  return {
+    width: match ? parseInt(match[2]) : 1,
+    height: match ? parseInt(match[3]) : 1,
+  };
+};
 
 /**
  * 根据图片的宽高比，和图片的宽度，计算出图片的高度
  * @param ratio
  * @param width
  */
-export const getHeight = (ratio: { width: number, height: number }, baseWidth: number) => {
-    return Math.floor(baseWidth / ratio.width * ratio.height);
-}
+export const getHeight = (
+  ratio: { width: number; height: number },
+  baseWidth: number
+) => {
+  return Math.floor((baseWidth / ratio.width) * ratio.height);
+};
 
 /**
  * 随机获取一条绘画提示
  */
 export const getRandomPaintingTip = () => {
-    return paintingTips[Math.floor(Math.random() * paintingTips.length)];
-}
+  return paintingTips[Math.floor(Math.random() * paintingTips.length)];
+};

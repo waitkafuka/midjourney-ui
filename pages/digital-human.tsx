@@ -1,19 +1,21 @@
 import { useEffect, useMemo, useState } from "react";
 import { ImgCardModel, PaintingType } from '../scripts/types'
-import { getQueryString, hasChinese } from "../scripts/utils";
+import { getQueryString, getPkgList } from "../scripts/utils";
 import { QuestionCircleOutlined } from '@ant-design/icons';
-import { Button, Col, Form, Input, InputNumber, Row, Select, Slider, Tooltip, UploadFile, message } from "antd";
+import { Button, Col, Form, Input, InputNumber, Radio, Row, Select, Slider, Tooltip, UploadFile, message, Modal } from "antd";
 import jsQR from "jsqr";
 import { qrTemplates, trainingModes } from "../scripts/config";
 import PureImgCard from '../components/masonry/PureImgCard'
 import PaintingPoint from "../components/paintingPoint";
-import { requestAliyun, requestAliyunArtStream } from "../request/http";
+import { requestAliyun, requestAliyunArt, requestAliyunArtStream } from "../request/http";
 import store from '../store';
 import { useSelector } from 'react-redux';
 import Head from 'next/head';
 import { QRCODE_COST } from '../scripts/config'
 import { Html5Qrcode } from "html5-qrcode";
 import AliyunOSSUploader from "../components/OssUploader";
+import QRCode from 'qrcode.react';
+import { getDeviceType } from "../utils/app/env";
 
 const TextArea = Input.TextArea;
 
@@ -29,7 +31,20 @@ const DigitalHuman: React.FC = () => {
     const [showDemo, setShowDemo] = useState<boolean>(true); //是否显示示例
     const user = useSelector((state: any) => state.user.info)
     const [trainPrice, setTrainPrice] = useState<number>(0); //训练价格
+    const [normalTrainPrice, setNormalTrainPrice] = useState<number>(0); // 正常训练价格
+    const [imagePkgPrice, setImagePkgPrice] = useState<number>(0); // 形象训练价格  
+    const [voicePkgPrice, setVoicePkgPrice] = useState<number>(0); // 音色训练价格
     const [bd_vid, setBdVid] = useState<string>(''); //bd_vid
+    const [paymentModal, setPaymentModal] = useState<{
+        visible: boolean;
+        codeUrl: string;
+        outTradeNo: string;
+    }>({
+        visible: false,
+        codeUrl: '',
+        outTradeNo: ''
+    });
+    const [isProcessing, setIsProcessing] = useState(false);
 
     const setBDVid = () => {
         //从链接中取出bd_vid参数
@@ -44,30 +59,67 @@ const DigitalHuman: React.FC = () => {
     const [params, setParams] = useState<any>({
         trainingMode: trainingModes[0].value,
         trainingSource: '',
-        email: ''
+        name: '',
+        sex: '1',
+        language: 'zh-CN'
     });
+
+    //获取
 
     //trainingMode改变的时候，重新计算训练价格
     useEffect(() => {
-        setTrainPrice(params.trainingMode === trainingModes[0].value ? 288 : params.trainingMode === trainingModes[1].value ? 238 : 128);
+        setTrainPrice(params.trainingMode === trainingModes[0].value ? normalTrainPrice : params.trainingMode === trainingModes[1].value ? imagePkgPrice : voicePkgPrice);
     }, [params.trainingMode])
 
     const doSubmit = async () => {
+        //如果是微信端，提示不支持，到电脑端操作
+        if (getDeviceType() !== 'pc') {
+            message.error('模型训练暂不支持移动端，请在电脑端操作');
+            return;
+        }
+
         if (!params.trainingSource) {
             message.error('请上传训练素材');
             return;
         }
+        if (!params.name) {
+            message.error('请输入数字人名称');
+            return;
+        }
+        if (!params.sex) {
+            message.error('请选择性别');
+            return;
+        }
         //如果选择的是视频训练模式，但是上传的素材是音频，则提示错误  
         if (params.trainingMode !== '2' && (params.trainingSource.includes('.mp3') || params.trainingSource.includes('.wav'))) {
-            message.error('单音频无法训练形象，请上传视频，或在高级选项中选择“只训练声音”');
+            message.error('您上传的是音频，如仅需训练声音，请在"高级选项"中选择"只训练声音"', 10);
             return;
         }
 
+        setIsProcessing(true);
+        message.loading({ content: '正在处理素材，请稍后...', key: 'processing', duration: 0 });
+
+        //设置bd_vid
         params.bd_vid = bd_vid;
 
-        console.log('提交参数：', params);
-        const result = await requestAliyun('startDigitalHumanTraining', params);
-        console.log('result', result);
+        try {
+            console.log('提交参数：', params);
+            const result = await requestAliyunArt('digital-human/create-task', params);
+            if (result.code === 0) {
+                message.destroy('processing');
+                setPaymentModal({
+                    visible: true,
+                    codeUrl: result.code_url,
+                    outTradeNo: result.out_trade_no
+                });
+            } else {
+                message.error(result.message, 10);
+            }
+        } catch (error) {
+            message.error('处理失败，请重试');
+        } finally {
+            setIsProcessing(false);
+        }
     };
 
     const parseUrlParams = () => {
@@ -103,6 +155,68 @@ const DigitalHuman: React.FC = () => {
         console.log('setSource', fileList);
     }
 
+    const handleClosePaymentModal = () => {
+        setPaymentModal(prev => ({ ...prev, visible: false }));
+    };
+
+    // 定义套餐类型接口
+    interface Package {
+        pkg_type: number;
+        pkg_name: string;
+        tokenType: number;
+        price: number;
+    }
+
+    //查询正常训练、形象单独训练、音色单独训练的套餐价格
+    const queryPkgPrice = async () => {
+        try {
+            const result = await getPkgList();
+            console.log('result', result);
+
+            // 定义套餐类型映射
+            const packageTypes = {
+                normal: { tokenType: 0, name: '正常训练' },
+                image: { tokenType: 1, name: '形象单独训练' },
+                voice: { tokenType: 2, name: '音色单独训练' }
+            };
+
+            // 查找各类型套餐
+            const findPackage = (tokenType: number): Package | undefined => {
+                return result.find((item: Package) => 
+                    item.pkg_type === 3 && 
+                    item.tokenType === tokenType
+                );
+            };
+
+            // 获取各类型套餐
+            const normalPkg = findPackage(packageTypes.normal.tokenType);
+            const imagePkg = findPackage(packageTypes.image.tokenType);
+            const voicePkg = findPackage(packageTypes.voice.tokenType);
+
+            // 使用 Math.floor() 去掉小数部分
+            setNormalTrainPrice(normalPkg?.price ? Math.floor(normalPkg.price) : -1);
+            setImagePkgPrice(imagePkg?.price ? Math.floor(imagePkg.price) : -1);
+            setVoicePkgPrice(voicePkg?.price ? Math.floor(voicePkg.price) : -1);
+            setTrainPrice(normalPkg?.price ? Math.floor(normalPkg.price) : -1);
+
+        } catch (error) {
+            console.error('获取套餐价格失败:', error);
+            message.error('获取套餐价格失败，将使用默认价格');
+        }
+    };
+
+    useEffect(() => {
+        queryPkgPrice();
+        //模拟测试数据
+        // setParams({
+        //     trainingSource: 'https://oc.superx.chat/img/1733049585268.mov',
+        //     name: '小明',
+        //     sex: '1',
+        //     language: 'zh-CN',
+        //     trainingMode: '0'
+        // })
+    }, [])
+
     return <>
         <Head>
             <title>AI 数字人</title>
@@ -131,11 +245,43 @@ const DigitalHuman: React.FC = () => {
                             <a className="demo-toggle-button" href="javascript:void(0)" onClick={showDemoHandler}>显示示例</a>
                         )}
                     </div>
-                    <AliyunOSSUploader maxMP3Size={1024 * 1024 * 8} maxSize={1024 * 1024 * 500} accept=".mp4,.mov,.mp3,.wav" onChange={setSource} buttonText="上传训练素材" style={{ width: '100%', display: 'block' }}>
+                    <AliyunOSSUploader maxMP3Size={1024 * 1024 * 8} maxSize={1024 * 1024 * 500} accept=".mp4,.mov,.mp3,.wav" onChange={setSource} buttonText="上传训练视频" style={{ width: '100%', display: 'block' }}>
 
                     </AliyunOSSUploader>
 
                 </div>
+                <div className="art-form-item">
+                    <div className="form-item-label">
+                        <span className="input-label">数字人名称</span>
+                        <Tooltip title="为您的数字人模型起一个名字，方便后续识别">
+                            <QuestionCircleOutlined />
+                        </Tooltip>
+                    </div>
+                    <Input
+                        placeholder="为你的数字人模型起一个名字，比如：小明"
+                        value={params.name}
+                        onChange={e => setParams({ ...params, name: e.target.value })}
+                        style={{ width: '100%' }}
+                    />
+                </div>
+
+                <div className="art-form-item horizontal">
+                    <div className="form-item-label">
+                        <span className="input-label">性别</span>
+                        <Tooltip title="性别会影响模型效果，请按真实情况进行勾选">
+                            <QuestionCircleOutlined />
+                        </Tooltip>
+                    </div>
+                    <Radio.Group
+                        value={params.sex}
+                        onChange={e => setParams({ ...params, sex: e.target.value })}
+                        style={{ marginLeft: "10px" }}
+                    >
+                        <Radio value="1">男</Radio>
+                        <Radio value="2">女</Radio>
+                    </Radio.Group>
+                </div>
+
                 {/* 更多选项 */}
                 <div className="art-form-item">
                     <div className="form-item-label cp inline-block" onClick={() => {
@@ -172,11 +318,30 @@ const DigitalHuman: React.FC = () => {
                             }))}
                         />
                     </div>
+                    <div className="art-form-item horizontal">
+                        <div className="form-item-label">
+                            <span className="input-label">语言</span>
+                            <Tooltip title="选择数字人说话的语言">
+                                <QuestionCircleOutlined />
+                            </Tooltip>
+                        </div>
+                        <Select
+                            value={params.language}
+                            style={{ width: 180, marginLeft: "10px" }}
+                            onChange={v => {
+                                setParams({ ...params, language: v })
+                            }}
+                            options={[
+                                { value: 'zh-CN', label: '中文' },
+                                { value: 'en-US', label: '英文' }
+                            ]}
+                        />
+                    </div>
                 </div>
 
                 <div className="train-price">训练价格：{trainPrice}元</div>
-                <Button type="primary" loading={isGenerating} onClick={doSubmit} style={{ width: "100%", marginTop: "10px" }}>
-                    支付并训练
+                <Button type="primary" loading={isProcessing} onClick={doSubmit} style={{ width: "100%", marginTop: "10px" }}>
+                    {isProcessing ? '正在处理' : '确认支付并开始训练'}
                 </Button>
                 <div className="form-tips-box">
                     <div className="form-tips-title">使用前须知</div>
@@ -201,16 +366,16 @@ const DigitalHuman: React.FC = () => {
 
                         <h3>费用说明：</h3>
                         <ul>
-                            <li>音色单独训练：128元</li>
-                            <li>形象单独训练：238元</li>
-                            <li>正常训练（包含形象和音色）：288元</li>
+                            <li>音色单独训练：{voicePkgPrice}元</li>
+                            <li>形象单独训练：{imagePkgPrice}元</li>
+                            <li>正常训练（包含形象和音色）：{normalTrainPrice}元</li>
                         </ul>
 
                         <h3>训练时间：</h3>
                         <p>训练过程大约需要 5 分钟，完成后将通过绑定的邮箱通知您。</p>
 
                         <h3>后续操作：</h3>
-                        <p>训练完成后，您可以通过点击左侧菜单中的"我的 -> 我的数字人"，填写您要生成视频的台词，即可驱动数字人模型直接生成口播视频。</p>
+                        <p>训练完成后，您可以通过点击左侧菜单中的"我的 {'->'} 我的数字人"，填写您要生成视频的台词，即可驱动数字人模型直接生成口播视频。</p>
 
                         <h3>生成费用：</h3>
                         <p>后续视频生成按生成时长计费，价格为 80 点数/分钟。</p>
@@ -231,6 +396,30 @@ const DigitalHuman: React.FC = () => {
                 </>
             </div>}
         </div>
+        <Modal
+            title="微信支付"
+            open={paymentModal.visible}
+            onCancel={handleClosePaymentModal}
+            footer={null}
+            centered
+        >
+            <div style={{ textAlign: 'center', padding: '20px 0' }}>
+                <QRCode
+                    value={paymentModal.codeUrl}
+                    size={200}
+                    level="H"
+                />
+                <div style={{ marginTop: '15px', color: '#666' }}>
+                    <img style={{ marginRight: '5px', width: '20px', verticalAlign: 'middle' }} src='https://c.superx.chat/wechatlogo.png' /> 请使用微信扫码支付
+                </div>
+                <div style={{ marginTop: '10px', fontSize: '12px', color: '#999' }}>
+                    订单号: {paymentModal.outTradeNo}
+                </div>
+                <div style={{ marginTop: '15px', fontSize: '13px', color: '#666', padding: '0 20px' }}>
+                    支付完成后将立即开始训练，训练时间大约5分钟，可点击左侧"我的{'->'}我的数字人"查看进度。
+                </div>
+            </div>
+        </Modal>
     </>
 }
 

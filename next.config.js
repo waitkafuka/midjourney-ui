@@ -6,6 +6,9 @@ const nextConfig = {
   transpilePackages: ['antd'],
   assetPrefix: isDev ? '' : 'https://c.superx.chat/art/',
   trailingSlash: true,
+  images: {
+    domains: ['oss.iiii.com'],
+  },
   async rewrites() {
     return [
       {

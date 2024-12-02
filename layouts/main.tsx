@@ -118,13 +118,13 @@ const ROUTES: Route = {
       children: [
         {
           key: 'guide',
-          path: '/art/guide/',
+          path: 'guide/',
           target: "_blank",
           name: '入门指引',
           icon: <BulbOutlined />,
         },
         {
-          path: '/art/cookbook/',
+          path: 'cookbook/',
           target: "_blank",
           name: '参数大全',
           key: 'cookbook',
@@ -142,25 +142,30 @@ const ROUTES: Route = {
       key: 'my',
       icon: <i className='iconfont icon-huihua'></i>,
       children: [{
-        path: '/art/mypaintings',
+        path: 'mypaintings',
         name: '我的绘画',
         key: 'mypaintings',
         icon: <i className='iconfont icon-huihua'></i>,
       }, {
-        path: '/art/my/thumbup',
+        path: 'my/thumbup',
         name: '我的点赞',
         key: 'myThumbUp',
         icon: <i className='iconfont icon-huihua'></i>,
       },
       {
-        path: '/art/my/music/',
+        path: 'my/music/',
         name: '我的音乐',
         key: 'my-music',
         icon: <i className='iconfont icon-huihua'></i>,
       },{
-        path: '/art/my/digital-human/',
-        name: '我的数字人',
+        path: 'my/digital-human/',
+        name: '数字人模型',
         key: 'my-digital-human',
+        icon: <i className='iconfont icon-huihua'></i>,
+      },{
+        path: 'my/digital-videos/',
+        name: '数字人视频',
+        key: 'my-digital-videos',
         icon: <i className='iconfont icon-huihua'></i>,
       }]
     },
@@ -449,13 +454,13 @@ export default function Main(children: JSX.Element) {
           children: [
             {
               key: 'guide',
-              path: '/art/guide/',
+              path: 'guide/',
               target: "_blank",
               name: '入门指引',
               icon: <BulbOutlined />,
             },
             {
-              path: '/art/cookbook/',
+              path: 'cookbook/',
               target: "_blank",
               name: '参数大全',
               key: 'cookbook',
@@ -473,25 +478,30 @@ export default function Main(children: JSX.Element) {
           key: 'myp',
           icon: <i className='iconfont icon-huihua'></i>,
           children: [{
-            path: '/art/mypaintings',
+            path: 'mypaintings',
             name: '我的绘画',
             key: 'mypaintings',
             icon: <i className='iconfont icon-huihua'></i>,
           }, {
-            path: '/art/my/thumbup',
+            path: 'my/thumbup',
             name: '我的点赞',
             key: 'myThumbUp',
             icon: <i className='iconfont icon-huihua'></i>,
           },
           {
-            path: '/art/my/music/',
+            path: 'my/music/',
             name: '我的音乐',
             key: 'my-music',
             icon: <i className='iconfont icon-huihua'></i>,
           },{
-            path: '/art/my/digital-human/',
-            name: '我的数字人',
+            path: 'my/digital-human/',
+            name: '数字人模型',
             key: 'my-digital-human',
+            icon: <i className='iconfont icon-huihua'></i>,
+          },{
+            path: 'my/digital-videos/',
+            name: '数字人视频',
+            key: 'my-digital-videos',
             icon: <i className='iconfont icon-huihua'></i>,
           }]
         },
@@ -534,13 +544,13 @@ export default function Main(children: JSX.Element) {
           children: [
             {
               key: 'guide',
-              path: '/art/guide/',
+              path: 'guide/',
               target: "_blank",
               name: '入门指引',
               icon: <BulbOutlined />,
             },
             {
-              path: '/art/cookbook/',
+              path: 'cookbook/',
               target: "_blank",
               name: '参数大全',
               key: 'cookbook',
@@ -558,25 +568,30 @@ export default function Main(children: JSX.Element) {
           key: 'myp',
           icon: <i className='iconfont icon-huihua'></i>,
           children: [{
-            path: '/art/mypaintings',
+            path: 'mypaintings',
             name: '我的绘画',
             key: 'mypaintings',
             icon: <i className='iconfont icon-huihua'></i>,
           }, {
-            path: '/art/my/thumbup',
+            path: 'my/thumbup',
             name: '我的点赞',
             key: 'myThumbUp',
             icon: <i className='iconfont icon-huihua'></i>,
           },
           {
-            path: '/art/my/music/',
+            path: 'my/music/',
             name: '我的音乐',
             key: 'my-music',
             icon: <i className='iconfont icon-huihua'></i>,
           },{
-            path: '/art/my/digital-human/',
-            name: '我的数字人',
+            path: 'my/digital-human/',
+            name: '数字人模型',
             key: 'my-digital-human',
+            icon: <i className='iconfont icon-huihua'></i>,
+          },{
+            path: 'my/digital-videos/',
+            name: '数字人视频',
+            key: 'my-digital-videos',
             icon: <i className='iconfont icon-huihua'></i>,
           }]
         },
@@ -694,13 +709,13 @@ export default function Main(children: JSX.Element) {
           children: [
             // {
             //   key: 'guide',
-            //   path: '/art/guide/',
+            //   path: 'guide/',
             //   target: "_blank",
             //   name: '入门指引',
             //   icon: <BulbOutlined />,
             // },
             {
-              path: '/art/cookbook/',
+              path: 'cookbook/',
               target: "_blank",
               name: '参数大全',
               key: 'cookbook',
@@ -718,24 +733,29 @@ export default function Main(children: JSX.Element) {
           key: 'myp',
           icon: <i className='iconfont icon-huihua'></i>,
           children: [{
-            path: '/art/mypaintings',
+            path: 'mypaintings',
             name: '我的绘画',
             key: 'mypaintings',
             icon: <i className='iconfont icon-huihua'></i>,
           }, {
-            path: '/art/my/thumbup',
+            path: 'my/thumbup',
             name: '我的点赞',
             key: 'myThumbUp',
             icon: <i className='iconfont icon-huihua'></i>,
           },{
-            path: '/art/my/music/',
+            path: 'my/music/',
             name: '我的音乐',
             key: 'my-music',
             icon: <i className='iconfont icon-huihua'></i>,
           },{
-            path: '/art/my/digital-human/',
-            name: '我的数字人',
+            path: 'my/digital-human/',
+            name: '数字人模型',
             key: 'my-digital-human',
+            icon: <i className='iconfont icon-huihua'></i>,
+          },{
+            path: 'my/digital-videos/',
+            name: '数字人视频',
+            key: 'my-digital-videos',
             icon: <i className='iconfont icon-huihua'></i>,
           }]
         },
@@ -843,13 +863,13 @@ export default function Main(children: JSX.Element) {
           children: [
             {
               key: 'guide',
-              path: '/art/guide/',
+              path: 'guide/',
               target: "_blank",
               name: '入门指引',
               icon: <BulbOutlined />,
             },
             {
-              path: '/art/cookbook/',
+              path: 'cookbook/',
               target: "_blank",
               name: '参数大全',
               key: 'cookbook',
@@ -867,25 +887,30 @@ export default function Main(children: JSX.Element) {
           key: 'myp',
           icon: <i className='iconfont icon-huihua'></i>,
           children: [{
-            path: '/art/mypaintings',
+            path: 'mypaintings',
             name: '我的绘画',
             key: 'mypaintings',
             icon: <i className='iconfont icon-huihua'></i>,
           }, {
-            path: '/art/my/thumbup',
+            path: 'my/thumbup',
             name: '我的点赞',
             key: 'myThumbUp',
             icon: <i className='iconfont icon-huihua'></i>,
           },{
-            path: '/art/my/music/',
+            path: 'my/music/',
             name: '我的音乐',
             key: 'my-music',
             icon: <i className='iconfont icon-huihua'></i>,
           },
           {
-            path: '/art/my/digital-human/',
-            name: '我的数字人',
+            path: 'my/digital-human/',
+            name: '数字人模型',
             key: 'my-digital-human',
+            icon: <i className='iconfont icon-huihua'></i>,
+          },{
+            path: 'my/digital-videos/',
+            name: '数字人视频',
+            key: 'my-digital-videos',
             icon: <i className='iconfont icon-huihua'></i>,
           }]
         },

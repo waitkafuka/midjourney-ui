@@ -1382,3 +1382,57 @@ button.ant-btn-primary:not(:disabled):hover {
     }
   }
 }
+
+.digital-playground-container {
+  padding: 20px;
+  width: 95%;
+  max-width: 800px;
+  margin: 0 auto;
+
+  .main-card {
+    width: 100%;
+    max-width: 800px;
+    margin: 30px auto 0;
+
+    .ant-alert {
+      margin-bottom: 24px;
+      border-radius: 6px;
+      
+      .ant-alert-description {
+        line-height: 1.8;
+      }
+    }
+  }
+
+  .page-title {
+    text-align: center;
+    font-size: 24px;
+    margin-bottom: 30px;
+  }
+
+  .form-item {
+    margin-bottom: 24px;
+  }
+
+  // 响应式布局
+  @media (max-width: 768px) {
+    padding: 15px;
+    width: 100%;
+    
+    .main-card {
+      width: 100%;
+    }
+
+    .page-title {
+      font-size: 20px;
+      margin-bottom: 20px;
+    }
+  }
+
+  // 添加点数组件样式
+  .mb-4 {
+    margin-bottom: 1rem;
+    display: flex;
+    justify-content: flex-end;
+  }
+}

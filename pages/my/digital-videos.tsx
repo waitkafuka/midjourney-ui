@@ -1,20 +1,20 @@
 import { NextPage } from 'next'
-import Link from 'next/link'
 import { useEffect, useRef, useState } from 'react'
-import { Input, Radio, DatePicker, Spin, Button } from 'antd'
+import { Input, Radio, DatePicker, Spin } from 'antd'
 import VideoCard from '../../components/VideoCard'
 import AudioCard from '../../components/AudioCard'
 import { requestAliyunArt } from '../../request/http'
 import dayjs from 'dayjs'
+import Link from 'next/link'
 
 const { Search } = Input
 const { RangePicker } = DatePicker
 const format = 'YYYY-MM-DD'
 
-const DigitalHuman: NextPage = () => {
+const DigitalVideos: NextPage = () => {
     const [loading, setLoading] = useState(false)
-    const [digitalHumans, setDigitalHumans] = useState<any[]>([])
-    const [activeTab, setActiveTab] = useState('image')
+    const [videos, setVideos] = useState<any[]>([])
+    const [activeTab, setActiveTab] = useState('video')
     const [keywords, setKeywords] = useState('')
     const [count, setCount] = useState(0)
 
@@ -34,26 +34,25 @@ const DigitalHuman: NextPage = () => {
 
     const containerRef = useRef<HTMLDivElement>(null)
 
-    const fetchDigitalHumans = async () => {
+    const fetchVideos = async () => {
         if (isLockRequest.current) return
         isLockRequest.current = true
         setLoading(true)
 
         try {
-            const result = await requestAliyunArt('digital-human/my-digital-humans', {
+            const result = await requestAliyunArt('digital-human/my-digital-human-videos', {
                 page: pageRef.current,
-                type: activeTab,
                 startDate: `${dateRange.startDate} 00:00:00`,
                 endDate: `${dateRange.endDate} 23:59:59`,
                 keywords: keywordsRef.current
             })
 
             if (result.rows) {
-                setDigitalHumans(prev => [...prev, ...result.rows])
+                setVideos(prev => [...prev, ...result.rows])
                 setCount(result.count)
             }
         } catch (error) {
-            console.error('Failed to fetch digital humans:', error)
+            console.error('Failed to fetch videos:', error)
         } finally {
             setLoading(false)
             isLockRequest.current = false
@@ -64,8 +63,8 @@ const DigitalHuman: NextPage = () => {
         pageRef.current = 1
         keywordsRef.current = value
         setKeywords(value)
-        setDigitalHumans([])
-        fetchDigitalHumans()
+        setVideos([])
+        fetchVideos()
     }
 
     const handleDateRangeChange = (_: any, dateStrings: [string, string]) => {
@@ -74,26 +73,16 @@ const DigitalHuman: NextPage = () => {
             endDate: dateStrings[1]
         })
         pageRef.current = 1
-        setDigitalHumans([])
-        fetchDigitalHumans()
+        setVideos([])
+        fetchVideos()
     }
 
     const handleTabChange = (key: string) => {
         setActiveTab(key)
-        pageRef.current = 1
-        setDigitalHumans([])
-        fetchDigitalHumans()
-    }
-
-    const loadMore = () => {
-        if (!loading) {
-            pageRef.current += 1
-            fetchDigitalHumans()
-        }
     }
 
     useEffect(() => {
-        fetchDigitalHumans()
+        fetchVideos()
     }, [])
 
     useEffect(() => {
@@ -101,18 +90,31 @@ const DigitalHuman: NextPage = () => {
         if (!container) return
 
         const handleScroll = () => {
-            if (loading || digitalHumans.length >= count) return
+            if (loading || videos.length >= count) return
 
             const { scrollTop, scrollHeight, clientHeight } = container
             if (scrollHeight - scrollTop - clientHeight < 100) {
                 pageRef.current += 1
-                fetchDigitalHumans()
+                fetchVideos()
             }
         }
 
         container.addEventListener('scroll', handleScroll)
         return () => container.removeEventListener('scroll', handleScroll)
-    }, [loading, digitalHumans.length, count])
+    }, [loading, videos.length, count])
+
+    const getVideoState = (result: number) => {
+        switch (result) {
+            case 0:
+                return '合成中'
+            case 1:
+                return '成功'
+            case 2:
+                return '失败'
+            default:
+                return '未知'
+        }
+    }
 
     return (
         <div className="container mx-auto px-4 py-8">
@@ -123,17 +125,14 @@ const DigitalHuman: NextPage = () => {
                     buttonStyle="solid"
                     className="flex"
                 >
-                    <Radio.Button value="image" className="px-8">形象</Radio.Button>
-                    <Radio.Button value="voice" className="px-8">声音</Radio.Button>
+                    <Radio.Button value="video" className="px-8">视频</Radio.Button>
+                    <Radio.Button value="audio" className="px-8">音频</Radio.Button>
                 </Radio.Group>
-
-
             </div>
 
-            <div className="flex justify-center mb-6 gap-4 items-center">
-
+            <div className="flex justify-center mb-6 gap-4">
                 <Search
-                    placeholder="搜索数字人..."
+                    placeholder="搜索视频..."
                     value={keywords}
                     onChange={(e) => setKeywords(e.target.value)}
                     onSearch={handleSearch}
@@ -144,15 +143,6 @@ const DigitalHuman: NextPage = () => {
                     onChange={handleDateRangeChange}
                     defaultValue={defaultPickerValue}
                 />
-
-                <Link
-                    href="/digital-human/"
-                    className="ml-2.5 text-[#424242] dark:text-gray-300 hover:text-[#595959] dark:hover:text-white underline hover:no-underline"
-                >
-                    <Button type="primary">
-                        创建我的模型
-                    </Button>
-                </Link>
             </div>
 
             <div
@@ -160,30 +150,30 @@ const DigitalHuman: NextPage = () => {
                 className="overflow-auto"
                 style={{ height: 'calc(100vh - 250px)' }}
             >
-                {digitalHumans.length > 0 ? (
+                {videos.length > 0 ? (
                     <div className="flex flex-wrap gap-6" style={{
-                        justifyContent: 'space-evenly'
+                        justifyContent: 'space-evenly',
+                        padding: '20px 0 0'
                     }}>
-                        {digitalHumans.map((item) => (
-                            <div key={item.digital_human_id} style={{
+                        {videos.map((item) => (
+                            <div key={item.id} style={{
                                 flexBasis: '300px',
                                 flexGrow: 0,
                                 flexShrink: 0,
                             }}>
-                                {activeTab === 'image' ? (
+                                {activeTab === 'video' ? (
                                     <VideoCard
-                                        title={item.digital_name}
+                                        title={item.video_name}
                                         coverUrl={item.cover_url}
                                         videoUrl={item.video_url}
-                                        createdAt={new Date(item.create_time)}
-                                        onUse={() => console.log('使用数字人模型', item.digital_human_id)}
+                                        createdAt={new Date(item.creation_date)}
+                                        state={item.result}
                                     />
                                 ) : (
                                     <AudioCard
-                                        title={item.voice_local_name}
-                                        audioUrl={item.training_audio_url}
-                                        createdAt={new Date(item.create_time)}
-                                        onUse={() => console.log('使用声音模型', item.digital_human_id)}
+                                        title={item.video_name}
+                                        audioUrl={item.audio_url}
+                                        createdAt={new Date(item.creation_date)}
                                     />
                                 )}
                             </div>
@@ -193,12 +183,12 @@ const DigitalHuman: NextPage = () => {
                     !loading && (
                         <div className="flex items-center justify-center h-full text-gray-500 dark:text-gray-400">
                             <p>
-                                您暂无数字人形象，快去
-                                <Link
-                                    href="/digital-human/"
+                                您暂无数字人视频，快去
+                                <Link 
+                                    href="/my/digital-human/" 
                                     className="text-[#424242] dark:text-gray-300 hover:text-[#595959] dark:hover:text-white mx-1 font-medium"
                                 >
-                                    制作
+                                    生成
                                 </Link>
                                 一个吧~
                             </p>
@@ -212,7 +202,7 @@ const DigitalHuman: NextPage = () => {
                     </div>
                 )}
 
-                {!loading && digitalHumans.length >= count && count > 0 && (
+                {!loading && videos.length >= count && count > 0 && (
                     <div className="text-center py-4 text-gray-500">
                         没有更多数据了
                     </div>
@@ -222,4 +212,4 @@ const DigitalHuman: NextPage = () => {
     )
 }
 
-export default DigitalHuman
+export default DigitalVideos
